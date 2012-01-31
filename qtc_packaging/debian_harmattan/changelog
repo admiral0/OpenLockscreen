@@ -1,10 +1,11 @@
-widgets (0.0.90) unstable; urgency=low
-  * RC1 version
-
- -- Lucien XU <sfietkonstantin@free.fr>  Mon, 30 Jan 2012 18:12:58 +0100
-
 widgets (0.1.0) stable; urgency=low
 
   * Initial Release.
 
  -- Lucien XU <sfietkonstantin@free.fr>  Sun, 31 Jan 2012 16:33:01 +0100
+
+widgets (0.0.90) unstable; urgency=low
+  * RC1 version
+
+ -- Lucien XU <sfietkonstantin@free.fr>  Mon, 30 Jan 2012 18:12:58 +0100
+
