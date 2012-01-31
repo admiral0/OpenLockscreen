@@ -1,0 +1,10 @@
+<package id="internalwidgets"
+         name="Internal widgets"
+         description="Set of widgets that are used internally."
+         visible="false">
+    <widget name="Icon"
+            qmlfile="Icon.qml"
+            hassettings="false">
+        <size width="110" height="110" />
+    </widget>
+</package>
