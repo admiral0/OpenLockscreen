@@ -14,31 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file global.h
- * @short Global declarations
- */
+#ifndef WIDGETSAPI_GLOBAL_H
+#define WIDGETSAPI_GLOBAL_H
 
-#ifndef WIDGETS_GLOBAL_H
-#define WIDGETS_GLOBAL_H
+#include <QtCore/QtGlobal>
 
-/**
- * @short Namespace associated to %Widgets
- */
-namespace Widgets
-{
-    /**
-     * @short Major version
-     */
-    static const int VERSION_MAJOR = 0;
-    /**
-     * @short Minor version
-     */
-    static const int VERSION_MINOR = 1;
-    /**
-     * @short Patch version
-     */
-    static const int VERSION_PATCH = 0;
-}
+#if defined(WIDGETSAPI_LIBRARY)
+#  define WIDGETSAPI_EXPORT Q_DECL_EXPORT
+#else
+#  define WIDGETSAPI_EXPORT Q_DECL_IMPORT
+#endif
 
-#endif // WIDGETS_GLOBAL_H
+#endif // WIDGETSAPI_GLOBAL_H

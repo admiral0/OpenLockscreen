@@ -16,7 +16,4 @@ dataFiles.files = $${DATA_FILES}
 export(dataFiles.path)
 export(dataFiles.files)
 
-#target.path = $${installPath}
-#export(target.path)
-
 INSTALLS += qmlFiles dataFiles

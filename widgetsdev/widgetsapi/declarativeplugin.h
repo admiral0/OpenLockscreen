@@ -14,31 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file global.h
- * @short Global declarations
- */
+#ifndef WIDGETS_DECLARATIVEPLUGIN_H
+#define WIDGETS_DECLARATIVEPLUGIN_H
 
-#ifndef WIDGETS_GLOBAL_H
-#define WIDGETS_GLOBAL_H
-
-/**
- * @short Namespace associated to %Widgets
- */
 namespace Widgets
 {
-    /**
-     * @short Major version
-     */
-    static const int VERSION_MAJOR = 0;
-    /**
-     * @short Minor version
-     */
-    static const int VERSION_MINOR = 1;
-    /**
-     * @short Patch version
-     */
-    static const int VERSION_PATCH = 0;
+
+class WIDGETSAPI_EXPORT DeclarativePlugin {
+public:
+    virtual void registerTypes(const char *uri);
+};
+
 }
 
-#endif // WIDGETS_GLOBAL_H
+#endif // WIDGETS_DECLARATIVEPLUGIN_H

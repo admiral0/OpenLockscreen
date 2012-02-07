@@ -6,6 +6,8 @@ TARGET =        basicwidgets
 
 CONFIG +=       qt plugin
 
+HEADERS +=      basicwidgets_plugin.h
+
 OTHER_FILES =   basicwidgets.xml \
                 AnalogicClock.qml \
                 PictureFrame.qml \

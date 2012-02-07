@@ -4,6 +4,7 @@ TEMPLATE =          app
 TARGET =            widgets
 
 QT =                core gui declarative xml
+INCLUDEPATH += ../widgetsdev/widgetsapi/
 
 HEADERS +=          global.h \
                     app.h \
@@ -30,6 +31,7 @@ HEADERS +=          global.h \
                     applicationsmodel.h \
                     viewmanager.h \
                     launchermanager.h \
+    pluginmanager.h
 
 
 SOURCES +=          main.cpp \
@@ -55,7 +57,8 @@ SOURCES +=          main.cpp \
                     applicationinformations.cpp \
                     applicationsmodel.cpp \
                     viewmanager.cpp \
-                    launchermanager.cpp
+                    launchermanager.cpp \
+    pluginmanager.cpp
 
 QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \

@@ -14,31 +14,29 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file global.h
- * @short Global declarations
- */
+#ifndef WIDGETS_PROVIDEROBJECT_H
+#define WIDGETS_PROVIDEROBJECT_H
 
-#ifndef WIDGETS_GLOBAL_H
-#define WIDGETS_GLOBAL_H
+#include <QtCore/QObject>
+#include "widgetsapi_global.h"
+#include "providerinterface.h"
 
-/**
- * @short Namespace associated to %Widgets
- */
 namespace Widgets
 {
-    /**
-     * @short Major version
-     */
-    static const int VERSION_MAJOR = 0;
-    /**
-     * @short Minor version
-     */
-    static const int VERSION_MINOR = 1;
-    /**
-     * @short Patch version
-     */
-    static const int VERSION_PATCH = 0;
+
+class WIDGETSAPI_EXPORT ProviderObject :
+        public QObject , public ProviderInterface
+{
+    Q_OBJECT
+public:
+    ProviderObject(QObject * parent = 0):
+        QObject(parent)
+    {
+    }
+Q_SIGNALS:
+    void dataChanged(const QString & key , const QVariant & value);
+};
+
 }
 
-#endif // WIDGETS_GLOBAL_H
+#endif // WIDGETS_PROVIDEROBJECT_H

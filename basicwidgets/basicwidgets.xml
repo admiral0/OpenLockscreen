@@ -16,12 +16,6 @@
             hassettings="false">
         <size width="400" height="100" />
     </widget>
-
-    <!--<widget name="Minimalist analogic clock"
-            qmlfile="MinimalistClock.qml"
-            hassettings="false">
-        <size width="200" height="200" />
-    </widget>-->
     <dock name="Android dock"
           qmlfile="AndroidDock.qml">
         <size height="100" />

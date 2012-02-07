@@ -25,31 +25,31 @@
 #ifndef WIDGETS_SETTINGSMANAGER_H
 #define WIDGETS_SETTINGSMANAGER_H
 
-#include "../widgets/settingswithdefault.h"
+#include "settingswithdefault.h"
 
 namespace Widgets
 {
 
 /**
  * @short Settings with management capabilities
- * 
+ *
  * This class is used to control specific
  * settings. It can control specific settings
  * associated to some keys.
- * 
+ *
  * It is possible to control these parameters
  * - wallpaperSource()
- * 
+ *
  * This class is used in QML context. Accessing
  * it is done using the "settingsManager" global object.
- * 
+ *
  */
 class SettingsManager : public SettingsWithDefault
 {
     Q_OBJECT
     /**
      * @short The wallpaper source
-     * 
+     *
      * The wallpaper source is associated to the
      * key wallpaper/source.
      */
@@ -58,7 +58,7 @@ class SettingsManager : public SettingsWithDefault
 public:
     /**
      * @short Default constructor
-     * 
+     *
      * @param parent parent object.
      */
     explicit SettingsManager(QObject *parent = 0);
@@ -68,10 +68,10 @@ public:
     virtual ~SettingsManager();
     /**
      * @short Wallpaper source
-     * 
+     *
      * This method is used to retrive the current wallpaper
      * source that is stored in the settings.
-     * 
+     *
      * @return path to the current wallpaper source.
      */
     QString wallpaperSource() const;
@@ -79,7 +79,7 @@ Q_SIGNALS:
     /**
      * @short Wallpaper changed
      *
-     * This signal is emitted when the wallpaper 
+     * This signal is emitted when the wallpaper
      * changed.
      *
      * @param wallpaperSource path to the new wallpaper source.
@@ -88,9 +88,9 @@ Q_SIGNALS:
 public Q_SLOTS:
     /**
      * @short Set wallpaper source
-     * 
+     *
      * This method is used to set the wallpaper source.
-     * 
+     *
      * @param wallpaperSource path to the wallpaper to set.
      */
     void setWallpaperSource(const QString &wallpaperSource);

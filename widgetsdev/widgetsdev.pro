@@ -1,5 +1,4 @@
 TEMPLATE =  subdirs
 
-message($$CONFIG)
-
-CONFIG(release, debug|release):SUBDIRS = widgetsextension
+SUBDIRS += widgetsapi
+CONFIG(release, debug|release):SUBDIRS += widgetsextension

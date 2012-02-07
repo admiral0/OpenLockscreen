@@ -350,9 +350,9 @@ Dock {
  *
  * The models are
  * - Widgets::DisplayedPagesModel
- * - Widgets::DisplayedPage%WidgetsModel
+ * - Widgets::DisplayedPageWidgetsModel
  * - Widgets::DisplayedDocksModel
- * - Widgets::Available%WidgetsModel
+ * - Widgets::AvailableWidgetsModel
  * - Widgets::AvailableDocksModel
  * - Widgets::ApplicationsModel
  *
@@ -385,9 +385,9 @@ Dock {
  *  - Widgets::WidgetProperties
  *  - Widgets::DockBaseProperties
  *  - Widgets::DockProperties
- *  - Widgets::ApplicationProperties
- *  - Widgets::DisplayedPage%WidgetsModel.
- *    - Remark : Widgets::DisplayedPage%WidgetsModel has to be declared because
+ *  - Widgets::ApplicationInformations
+ *  - Widgets::DisplayedPageWidgetsModel.
+ *    - Remark : Widgets::DisplayedPageWidgetsModel has to be declared because
  *      it is returned as a model data from Widgets::DisplayedPagesModel. If
  *      this class is not registered, it will not be identified in a QML
  *      context.
@@ -398,7 +398,7 @@ Dock {
  *  - Widgets::OxygenColors
  *  - Widgets::PackageManager
  *   - When the package manager is initialized, it automatically loads all
- *     available packages and initialize the Widgets::Available%WidgetsModel
+ *     available packages and initialize the Widgets::AvailableWidgetsModel
  *     and Widgets::AvailableDocksModel.
  *  - Widgets::DisplayedPagesModel
  *   - When the displayed pages model is initialized, it creates all the
@@ -452,7 +452,7 @@ Dock {
  *    available on the current screen, using
  *    Widgets::ViewManager::availableRect()
  * -# If space is available the widget is added using
- *    Widgets::DisplayedPage%WidgetsModel::addWidget().
+ *    Widgets::DisplayedPageWidgetsModel::addWidget().
  * -# The model is updated and updates the view. The new
  *    widget is displayed.
  * -# The model notifies the view manager that a new
@@ -464,7 +464,7 @@ Dock {
  * When the user clicks on the remove widget button, the
  * drag manager only needs to do two things :
  * -# Remove the widget by calling
- *    Widgets::DisplayedPage%WidgetsModel::removeWidget()
+ *    Widgets::DisplayedPageWidgetsModel::removeWidget()
  * -# Unregister the associated dragger, by calling
  *    Widgets::ViewManager::unregisterDragger()
  *

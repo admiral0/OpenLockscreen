@@ -2,6 +2,7 @@ include(../globals.pri)
 
 TEMPLATE =          app
 TARGET =            widgets-settings
+INCLUDEPATH += ../widgets/
 
 QT =                core gui declarative
 

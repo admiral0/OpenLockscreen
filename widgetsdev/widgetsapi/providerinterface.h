@@ -14,31 +14,25 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file global.h
- * @short Global declarations
- */
+#ifndef WIDGETS_PROVIDERINTERFACE_H
+#define WIDGETS_PROVIDERINTERFACE_H
 
-#ifndef WIDGETS_GLOBAL_H
-#define WIDGETS_GLOBAL_H
+#include "widgetsapi_global.h"
+#include <QtCore/QtPlugin>
 
-/**
- * @short Namespace associated to %Widgets
- */
 namespace Widgets
 {
-    /**
-     * @short Major version
-     */
-    static const int VERSION_MAJOR = 0;
-    /**
-     * @short Minor version
-     */
-    static const int VERSION_MINOR = 1;
-    /**
-     * @short Patch version
-     */
-    static const int VERSION_PATCH = 0;
+
+class WIDGETSAPI_EXPORT ProviderInterface {
+public:
+    virtual ~ProviderInterface() {}
+    virtual QString identifier() const = 0;
+    virtual QVariant data(const QString & key) const = 0;
+    virtual void setData(const QString & key , const QVariant & value) = 0;
+};
+
 }
 
-#endif // WIDGETS_GLOBAL_H
+Q_DECLARE_INTERFACE(Widgets::ProviderInterface, "org.sk.widgets.ProviderInterface/1.0")
+
+#endif // WIDGETS_PROVIDERINTERFACE_H
