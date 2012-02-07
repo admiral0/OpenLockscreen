@@ -38,7 +38,7 @@ namespace Widgets
     /**
      * @short Patch version
      */
-    static const int VERSION_PATCH = 0;
+    static const int VERSION_PATCH = 50;
 }
 
 #endif // WIDGETS_GLOBAL_H
