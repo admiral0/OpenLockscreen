@@ -1,5 +1,3 @@
-DEFINES += HARMATTAN_BOOSTER
-
 # Path for the desktop file
 desktopfile.files = $${TARGET}.desktop
 desktopfile.path = $${DEPLOYMENT_PREFIX}/usr/share/applications

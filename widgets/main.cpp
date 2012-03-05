@@ -20,7 +20,9 @@
  */
 
 #include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
+#include <MDeclarativeCache>
 
 /**
  * @short Main
@@ -31,13 +33,15 @@
  * @param argv argv
  * @return exit code.
  */
-int main(int argc, char *argv[])
+Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-    QApplication a (argc, argv);
+    QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
+    QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
 
-    QDeclarativeView *view = new QDeclarativeView();
     view->setSource(QUrl(MAIN_QML_PATH));
+
+    QObject::connect(view->engine(), SIGNAL(quit()), view.data(), SLOT(close()));
     view->showFullScreen();
 
-    return a.exec();
+    return app->exec();
 }

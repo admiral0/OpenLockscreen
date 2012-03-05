@@ -4,6 +4,7 @@ TEMPLATE =          app
 TARGET =            widgets
 
 QT =                core gui declarative xml
+CONFIG +=           qdeclarative-boostable
 #INCLUDEPATH += ../widgetsdev/widgetsapi/
 
 DEFINES +=          'MAIN_QML_PATH=\'\"$${APPLICATION_FOLDER}/qml/main.qml\"\''
