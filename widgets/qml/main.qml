@@ -16,43 +16,22 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import org.sk.widgets 1.0
 
-// Entry point for the QML program
-PageStackWindow {
-    id: window
+PageStackWindow
+{
     initialPage: mainPage
 
-    // When in landscape, the status bar must be hidden
-    // in order to save space
-    showStatusBar: settingsWrapper.orientation == "landscape" ? false : true
-
-    Component.onCompleted: {
-        // Because inverted theme is more beautiful
-        // and saves power
-        theme.inverted = true
-
-        // Toolbar on pageStack is
-        // not needed
-        pageStack.toolBar = null
-    }
-
-    // Testing
-    // Simulating pinch / unpinch to lock / unlock
-    Keys.onPressed: {
-        if(event.key == Qt.Key_U) {
-            viewManager.locked = false
-            event.accepted = true
-        } else if(event.key == Qt.Key_L) {
-            viewManager.locked = true
-            event.accepted = true
-        }
-    }
-
-    Api {
-        id: api
-    }
-
-    MainPage {
+    Page {
         id: mainPage
+
+        Colors {
+            id: colors
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: colors.emeraldGreen1
+        }
     }
 }

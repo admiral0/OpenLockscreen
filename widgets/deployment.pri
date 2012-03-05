@@ -1,47 +1,32 @@
-unix {
-    !isEmpty(MEEGO_VERSION_MAJOR) {
-        DEFINES += HARMATTAN_BOOSTER
+DEFINES += HARMATTAN_BOOSTER
 
-        desktopfile.files = $${TARGET}.desktop
-        desktopfile.path = $${DEPLOYMENT_PREFIX}/usr/share/applications
-        icon.files = $${TARGET}.png
-        icon.path = $${DEPLOYMENT_PREFIX}/usr/share/icons/hicolor/80x80/apps
+# Path for the desktop file
+desktopfile.files = $${TARGET}.desktop
+desktopfile.path = $${DEPLOYMENT_PREFIX}/usr/share/applications
+export(desktopfile.files)
+export(desktopfile.path)
 
-        qmlInstallPath = $${DEPLOYMENT_PREFIX}/opt/$${APP_FOLDER}/qml
-        dataInstallPath = $${DEPLOYMENT_PREFIX}/opt/$${APP_FOLDER}/data
-        targetInstallPath = $${DEPLOYMENT_PREFIX}/opt/$${APP_FOLDER}/bin
-    } else {
-        qmlInstallPath = $${DEPLOYMENT_PREFIX}/$${TARGET}/qml
-        dataInstallPath = $${DEPLOYMENT_PREFIX}/$${TARGET}/data
-        targetInstallPath = $${DEPLOYMENT_PREFIX}/$${TARGET}/bin
-    }
-}
+# Path for the icon file
+icon.files = $${TARGET}.png
+icon.path = $${DEPLOYMENT_PREFIX}/usr/share/icons/hicolor/80x80/apps
+export(icon.files)
+export(icon.path)
 
-!isEmpty(desktopfile.path) {
-    export(desktopfile.files)
-    export(desktopfile.path)
-
-    INSTALLS += desktopfile
-}
-
-!isEmpty(icon.path) {
-    export(icon.files)
-    export(icon.path)
-
-    INSTALLS += icon
-}
-
-qmlFiles.path = $${qmlInstallPath}
+# Path for QML files
+qmlFiles.path = $${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/qml
 qmlFiles.files = $${QML_FILES}
 export(qmlFiles.path)
 export(qmlFiles.files)
 
-dataFiles.path = $${dataInstallPath}
+# Path for data files
+dataFiles.path = $${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/data
 dataFiles.files = $${DATA_FILES}
 export(dataFiles.path)
 export(dataFiles.files)
 
-target.path = $${targetInstallPath}
+# Path for target
+target.path = $${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/bin
 export(target.path)
 
-INSTALLS += target qmlFiles dataFiles
+# Installs
+INSTALLS += target qmlFiles dataFiles desktopfile icon

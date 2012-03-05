@@ -14,30 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file widgets/main.cpp
- * @short Entry point of the application
- */
+import QtQuick 1.1
+import com.nokia.meego 1.0
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QDeclarativeView>
+// Entry point for the QML program
+PageStackWindow {
+    id: window
+    initialPage: mainPage
 
-/**
- * @short Main
- *
- * Entry point of the application.
- *
- * @param argc argc
- * @param argv argv
- * @return exit code.
- */
-int main(int argc, char *argv[])
-{
-    QApplication a (argc, argv);
+    // When in landscape, the status bar must be hidden
+    // in order to save space
+    showStatusBar: settingsWrapper.orientation == "landscape" ? false : true
 
-    QDeclarativeView *view = new QDeclarativeView();
-    view->setSource(QUrl(MAIN_QML_PATH));
-    view->showFullScreen();
+    Component.onCompleted: {
+        // Because inverted theme is more beautiful
+        // and saves power
+        theme.inverted = true
 
-    return a.exec();
+        // Toolbar on pageStack is
+        // not needed
+        pageStack.toolBar = null
+    }
+
+    // Testing
+    // Simulating pinch / unpinch to lock / unlock
+    Keys.onPressed: {
+        if(event.key == Qt.Key_U) {
+            viewManager.locked = false
+            event.accepted = true
+        } else if(event.key == Qt.Key_L) {
+            viewManager.locked = true
+            event.accepted = true
+        }
+    }
+
+    Api {
+        id: api
+    }
+
+    MainPage {
+        id: mainPage
+    }
 }

@@ -25,10 +25,12 @@
 #include <QtDeclarative/QtDeclarative>
 
 #include "widgets_plugin.h"
+#include "oxygencolors.h"
 
 void WidgetsPlugin::registerTypes(const char *uri)
 {
-
+    // @uri org.sk.widgets
+    qmlRegisterType<Widgets::OxygenColors>(uri, 1, 0, "Colors");
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
