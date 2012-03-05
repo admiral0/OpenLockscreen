@@ -9,10 +9,8 @@ CONFIG += plugin
 
 DEFINES += WIDGETSAPI_LIBRARY
 
-HEADERS +=	widgetsapi_global.h \
-            providerinterface.h \
-            providerobject.h \
-    declarativeplugin.h
+HEADERS +=  widgetsapi_global.h \
+            declarativeplugin.h
 
 include(deployment.pri)
 

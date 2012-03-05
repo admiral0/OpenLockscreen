@@ -17,6 +17,8 @@
 #ifndef WIDGETS_DECLARATIVEPLUGIN_H
 #define WIDGETS_DECLARATIVEPLUGIN_H
 
+#include "widgetsapi_global.h"
+
 namespace Widgets
 {
 
