@@ -14,23 +14,61 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_PLUGIN_H
+#define WIDGETS_PLUGIN_H
+
 /**
- * @file widgets_plugin.cpp
- * @short Implementation of WidgetsPlugin
+ * @file widgets_plugin.h
+ * @short Definition of WidgetsPlugin
  *
- * This file contains the implemetation of the
+ * This file contains the definition of the
  * WidgetsPlugin class.
  */
 
-#include "widgets_plugin.h"
-#include "selectormodel.h"
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-#include <QtDeclarative/qdeclarative.h>
-
-void WidgetsPlugin::registerTypes(const char *uri)
+/**
+ * @short QML plugin for Widgets
+ *
+ * This class registers all the types that are available
+ * in the QML plugin for %Widgets. Basically, this plugin
+ * contains all the components that can be used to build
+ * a widgets view.
+ *
+ * Declared classes and components are available in the
+ * "org.sk.widgets 1.0" import.
+ *
+ * @section pluginsComponents Plugin components
+ *
+ * This plugin provides these class
+ * -
+ *
+ * that are two models that made creation of selector
+ * and repeated elements easier.
+ *
+ * This plugin also provides QML components
+ * - %Widget
+ * - Dock
+ *
+ * Please see @ref basicApi for information on all these components.
+ *
+ * @todo update documentation.
+ */
+class WidgetsPlugin : public QDeclarativeExtensionPlugin
 {
-    qmlRegisterType<Widgets::SelectorModel>(uri, 1, 0, "SelectorModel");
-}
+    Q_OBJECT
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
+public:
+    /**
+     * @short Register types
+     *
+     * This method is used to register C++ classes
+     * into the QML context.
+     *
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
+
+#endif // WIDGETS_PLUGIN_H
 

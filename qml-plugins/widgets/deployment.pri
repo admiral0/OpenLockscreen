@@ -1,11 +1,4 @@
-unix {
-    !isEmpty(MEEGO_VERSION_MAJOR) {
-        installPath = $${EXTENSION_FOLDER}
-    } else {
-        installPath = $${EXTENSION_FOLDER}
-    }
-}
-
+installPath = $${QML_PLUGIN_FOLDER}
 qmlFiles.path = $${installPath}
 qmlFiles.files = $${OTHER_FILES}
 export(qmlFiles.path)

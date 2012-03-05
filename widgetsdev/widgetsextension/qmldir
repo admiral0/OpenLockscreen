@@ -1,6 +1,0 @@
-plugin widgetsextension
-Widget 1.0 Widget.qml
-Dock 1.0 Dock.qml
-ClickableEntry 1.0 ClickableEntry.qml
-GroupIndicator 1.0 GroupIndicator.qml
-HorizontalSeparator 1.0 HorizontalSeparator.qml
