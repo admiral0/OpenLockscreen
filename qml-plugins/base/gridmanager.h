@@ -14,46 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file settingswrapper.h
- * @short Definition of Widgets::SettingsWrapper
- *
- * This file contains the definition of the
- * Widgets::SettingsWrapper class.
- */
-
-#ifndef WIDGETS_SETTINGSWRAPPER_H
-#define WIDGETS_SETTINGSWRAPPER_H
+#ifndef WIDGETS_GRIDMANAGER_H
+#define WIDGETS_GRIDMANAGER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVariant>
+
+#include "settings.h"
 
 namespace Widgets
 {
 
 class Settings;
-/**
- * @short Wrapper around Settings
- *
- * This class is a wrapper around settings that is
- * used to provide easy access of a set of parameters.
- *
- * Since the parameters that are provided here
- * are very important for widgets display, they should
- * not be changed when the application is running, but
- * only when the application has restarted. That's why
- * all these properties are made constants.
- *
- * This class is used in QML context. Accessing
- * it is done using the "settingsWrapper" global object.
- */
-class SettingsWrapper : public QObject
+class GridManager : public QObject
 {
     Q_OBJECT
-    /**
-     * @short Orientation
-     */
-    Q_PROPERTY(QString orientation READ orientation CONSTANT)
     /**
      * @short Grid cell width
      */
@@ -71,42 +45,65 @@ class SettingsWrapper : public QObject
      */
     Q_PROPERTY(int gridCellVerticalMargin READ gridCellVerticalMargin CONSTANT)
     /**
-     * @short Initial page index
+     * @short Grid width
+     *
+     * The grid width is the number of columns in the grid.
      */
-    Q_PROPERTY(int pageInitialIndex READ pageInitialIndex CONSTANT)
+    Q_PROPERTY(int gridWidth READ gridWidth NOTIFY gridWidthChanged)
     /**
-     * @short Wallpaper source
+     * @short Grid height
+     *
+     * The grid width is the number of rows in the grid.
      */
-    Q_PROPERTY(QString wallpaperSource READ wallpaperSource CONSTANT)
-    /**
-     * @short Wallpaper width
-     */
-    Q_PROPERTY(int wallpaperWidth READ wallpaperWidth CONSTANT)
-    /**
-     * @short Wallpaper height
-     */
-    Q_PROPERTY(int wallpaperHeight READ wallpaperHeight CONSTANT)
+    Q_PROPERTY(int gridHeight READ gridHeight NOTIFY gridHeightChanged)
+    Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
 public:
+    explicit GridManager(QObject *parent = 0);
+    virtual ~GridManager();
     /**
-     * @short Default constructor
+     * @short Grid width
      *
-     * @param settings the Settings object to wrap.
-     * @param parent parent object.
+     * This method is used to retrieve the
+     * width of the grid (number of columns).
+     *
+     * @return width of the grid.
      */
-    explicit SettingsWrapper(Settings *settings = 0, QObject *parent = 0);
+    int gridWidth() const;
     /**
-     * @short Destructor
+     * @short Grid height
+     *
+     * This method is used to retrieve the
+     * height of the grid (number of rows).
+     *
+     * @return height of the grid.
      */
-    virtual ~SettingsWrapper();
+    int gridHeight() const;
+    Settings * settings() const;
+Q_SIGNALS:
+    void gridCellWidthChanged(int gridCellWidth);
+    void gridCellHeightChanged(int gridCellHeight);
+    void gridCellHorizontalMarginChanged(int gridCellHorizontalMargin);
+    void gridCellVerticalMarginChanged(int gridCellVerticalMargin);
     /**
-     * @short Orientation
+     * @short Grid width changed
      *
-     * This method is used to retrieve
-     * the value of "view/orientation" settings.
+     * Notify that the grid width
+     * has changed.
      *
-     * @return the orientation settings.
+     * @param gridWidth new grid width.
      */
-    QString orientation() const;
+    void gridWidthChanged(int gridWidth);
+    /**
+     * @short Grid height changed
+     *
+     * Notify that the grid height
+     * has changed.
+     *
+     * @param gridHeight new grid height.
+     */
+    void gridHeightChanged(int gridHeight);
+    void settingsChanged();
+public Q_SLOTS:
     /**
      * @short Grid cell width
      *
@@ -144,51 +141,34 @@ public:
      */
     int gridCellVerticalMargin() const;
     /**
-     * @short Initial page index
+     * @short Set view width
      *
-     * This method is used to retrieve
-     * the value of "view/pageInitialIndex" settings.
+     * This method is used to inform the ViewManager
+     * that the view width has changed, in order
+     * to recompute the grid size.
      *
-     * @return the initial page index.
+     * @param width new view width.
      */
-    int pageInitialIndex() const;
+    void setViewWidth(int width);
     /**
-     * @short Wallpaper source
-     * 
-     * This method is used to retrieve
-     * the value of "wallpaper/source" settings.
-     * 
-     * @return the wallpaper source
+     * @short Set view height
+     *
+     * This method is used to inform the ViewManager
+     * that the view height has changed, in order
+     * to recompute the grid size.
+     *
+     * @param height new view height.
      */
-    QString wallpaperSource() const;
-    /**
-     * @short Wallpaper width
-     * 
-     * This method is used to retrieve
-     * the value of "wallpaper/width" settings.
-     * 
-     * @return the wallpaper width
-     */
-    int wallpaperWidth() const;
-    /**
-     * @short Wallpaper height
-     * 
-     * This method is used to retrieve
-     * the value of "wallpaper/height" settings.
-     * 
-     * @return the wallpaper height
-     */
-    int wallpaperHeight() const;
-private:
-    class SettingsWrapperPrivate;
-    /**
-     * @short D-pointer
-     */
-    SettingsWrapperPrivate * const d;
+    void setViewHeight(int height);
 
+    void setSettings(Settings *settings);
+private:
+    class GridManagerPrivate;
+    GridManagerPrivate * const d;
+
+    Q_PRIVATE_SLOT(d, void slotValueChanged(const QString &key, const QVariant &value))
 };
 
 }
 
-#endif // WIDGETS_SETTINGSWRAPPER_H
-
+#endif // WIDGETS_GRIDMANAGER_H

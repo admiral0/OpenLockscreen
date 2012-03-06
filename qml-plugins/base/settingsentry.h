@@ -12,37 +12,39 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.sk.widgets 1.0
+#ifndef WIDGETS_SETTINGSENTRY_H
+#define WIDGETS_SETTINGSENTRY_H
 
-PageStackWindow
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
+
+namespace Widgets
 {
-    initialPage: mainPage
 
-    Page {
-        id: mainPage
+class SettingsEntry : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+public:
+    explicit SettingsEntry(QObject *parent = 0);
+    virtual ~SettingsEntry();
+    QString key() const;
+    QVariant value() const;
+Q_SIGNALS:
+    void keyChanged(const QString &key);
+    void valueChanged(const QVariant &value);
+public Q_SLOTS:
+    void setKey(const QString &key);
+    void setValue(const QVariant &value);
+private:
+    class SettingsEntryPrivate;
+    SettingsEntryPrivate * const d;
+    
+};
 
-        Settings {
-            id: settings
-        }
-
-        GridManager {
-            id: gridManager
-            settings: settings
-
-            onGridWidthChanged: console.debug("Width  : " + gridWidth)
-            onGridHeightChanged: console.debug("Height : " + gridHeight)
-        }
-
-        Rectangle {
-            id: rectangle
-            anchors.fill: parent
-//            color: colors.emeraldGreen1
-            onWidthChanged: gridManager.setViewWidth(width)
-            onHeightChanged: gridManager.setViewHeight(height)
-        }
-    }
 }
+
+#endif // WIDGETS_SETTINGSENTRY_H

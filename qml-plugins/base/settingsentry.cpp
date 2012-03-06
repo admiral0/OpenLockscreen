@@ -12,26 +12,56 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-/**
- * @file widgets_plugin.cpp
- * @short Implementation of WidgetsPlugin
- *
- * This file contains the implemetation of the
- * WidgetsPlugin class.
- */
+#include "settingsentry.h"
 
-#include <QtDeclarative/QtDeclarative>
-
-#include "widgets_plugin.h"
-#include "oxygencolors.h"
-
-void WidgetsPlugin::registerTypes(const char *uri)
+namespace Widgets
 {
-    // @uri org.sk.widgets
-    qmlRegisterType<Widgets::OxygenColors>(uri, 1, 0, "Colors");
+
+class SettingsEntry::SettingsEntryPrivate
+{
+public:
+    QString key;
+    QVariant value;
+};
+
+////// End of private class //////
+
+SettingsEntry::SettingsEntry(QObject *parent) :
+    QObject(parent), d(new SettingsEntryPrivate())
+{
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
+SettingsEntry::~SettingsEntry()
+{
+    delete d;
+}
 
+QString SettingsEntry::key() const
+{
+    return d->key;
+}
+
+QVariant SettingsEntry::value() const
+{
+    return d->value;
+}
+
+void SettingsEntry::setKey(const QString &key)
+{
+    if(d->key != key) {
+        d->key = key;
+        emit keyChanged(key);
+    }
+}
+
+void SettingsEntry::setValue(const QVariant &value)
+{
+    if(d->value != value) {
+        d->value = value;
+        emit valueChanged(value);
+    }
+}
+
+}
