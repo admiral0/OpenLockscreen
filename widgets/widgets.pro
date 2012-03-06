@@ -14,7 +14,7 @@ SOURCES +=          main.cpp \
 QML_FILES +=        qml/main.qml \
 
 
-# DATA_FILES +=       data/splash.jpg \
+DATA_FILES +=       data/wallpaper-1.jpg \
 
 
 include(deployment.pri)

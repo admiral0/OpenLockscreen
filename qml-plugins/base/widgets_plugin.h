@@ -59,7 +59,6 @@ class WidgetsPlugin : public QDeclarativeExtensionPlugin
     Q_OBJECT
 
 public:
-//    WidgetsPlugin(QObject *parent = 0);
     /**
      * @short Register types
      *
@@ -69,11 +68,6 @@ public:
      * @param uri uri used in the import.
      */
     void registerTypes(const char *uri);
-
-//    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
-private:
-//    class WidgetsPluginPrivate;
-//    WidgetsPluginPrivate * const d;
 };
 
 #endif // WIDGETS_PLUGIN_H

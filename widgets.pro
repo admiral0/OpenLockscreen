@@ -1,8 +1,8 @@
 TEMPLATE =      subdirs
 
-SUBDIRS +=      widgets
-CONFIG(release, debug|release): SUBDIRS +=  qml-plugins \
-                                            api \
+SUBDIRS +=      widgets qml-plugins api
+#CONFIG(release, debug|release): SUBDIRS +=  qml-plugins \
+#                                            api \
 
 
 OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \

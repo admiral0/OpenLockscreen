@@ -15,14 +15,15 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import "UiConstants.js" as UI
+import org.SfietKonstantin.widgets.background 1.0
 
 // Background with a parallax effect
 Item {
     id: container
     property Item view
     property real parallax: 0
+    property QtObject settings
+    clip: true
 
     anchors.fill: parent
 
@@ -31,7 +32,7 @@ Item {
     // of the view
     function updateParallax() {
         if(view.model.count > 1) {
-            var value = (view.contentX + settingsWrapper.pageInitialIndex * view.width) /
+            var value = (view.contentX /*+ settingsWrapper.pageInitialIndex * view.width*/) /
                         (view.contentWidth - view.width)
             container.parallax = Math.min(Math.max(value ,0) ,1)
         } else {
@@ -39,11 +40,18 @@ Item {
         }
     }
 
+    BackgroundManager {
+        id: backgroundManager
+        settings: container.settings
+    }
+
     Rectangle {
         id: background
         height: container.height
-        width: settingsWrapper.wallpaperWidth / settingsWrapper.wallpaperHeight * height
-        color: colors.skyBlue6
+        width: backgroundManager.wallpaperHeight != 0 ?
+                   backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
+                   0
+        color: "black"
         x: - container.parallax * (background.width - container.width)
 
         Image {
@@ -55,7 +63,7 @@ Item {
             clip: true
             fillMode: Image.PreserveAspectCrop
             smooth: true
-            source: settingsWrapper.wallpaperSource
+            source: backgroundManager.wallpaperSource
         }
     }
 

@@ -1,4 +1,4 @@
-installPath = $${QML_PLUGIN_FOLDER}
+installPath = $${QML_PLUGIN_FOLDER}/background
 
 # Path for QML files
 qmlFiles.path = $${installPath}

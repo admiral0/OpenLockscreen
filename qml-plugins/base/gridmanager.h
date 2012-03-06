@@ -24,7 +24,6 @@
 namespace Widgets
 {
 
-class Settings;
 class GridManager : public QObject
 {
     Q_OBJECT

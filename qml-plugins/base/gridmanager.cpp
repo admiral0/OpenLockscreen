@@ -194,6 +194,10 @@ void GridManager::setViewHeight(int height)
 
 void GridManager::setSettings(Settings *settings)
 {
+    if(settings == 0) {
+        return;
+    }
+
     if(d->settings == 0) {
         d->settings = settings;
         d->loadSettings();

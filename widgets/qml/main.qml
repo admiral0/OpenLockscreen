@@ -16,7 +16,8 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.sk.widgets 1.0
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.background 1.0
 
 PageStackWindow
 {
@@ -32,15 +33,44 @@ PageStackWindow
         GridManager {
             id: gridManager
             settings: settings
-
-            onGridWidthChanged: console.debug("Width  : " + gridWidth)
-            onGridHeightChanged: console.debug("Height : " + gridHeight)
         }
 
-        Rectangle {
-            id: rectangle
+        HorizontalParallaxBackground {
+            id: background
+            view: view
+            settings: settings
+        }
+
+        ListView {
+            id: view
             anchors.fill: parent
-//            color: colors.emeraldGreen1
+            model: ListModel {
+                ListElement {
+                }
+                ListElement {
+                }
+                ListElement {
+                }
+                ListElement {
+                }
+                ListElement {
+                }
+                ListElement {
+                }
+            }
+            orientation: ListView.Horizontal
+            snapMode: ListView.SnapToItem
+            delegate: Item {
+                width: view.width
+                height: view.height
+
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 100
+                    height: 100
+                }
+            }
+
             onWidthChanged: gridManager.setViewWidth(width)
             onHeightChanged: gridManager.setViewHeight(height)
         }

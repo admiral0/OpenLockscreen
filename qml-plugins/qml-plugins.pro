@@ -1,3 +1,3 @@
 TEMPLATE =  subdirs
 
-SUBDIRS +=  base
+SUBDIRS +=  base background

@@ -1,5 +1,5 @@
 # QML plugins
-QML_PLUGIN_FOLDER =         /usr/lib/qt4/imports/org/sk/widgets/
+QML_PLUGIN_FOLDER =         /usr/lib/qt4/imports/org/SfietKonstantin/widgets/
 
 # Widgets API
 INCLUDE_FOLDER =            /usr/include/widgets/

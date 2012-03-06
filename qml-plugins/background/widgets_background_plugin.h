@@ -14,33 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_BACKGROUND_PLUGIN_H
+#define WIDGETS_BACKGROUND_PLUGIN_H
+
 /**
- * @file widgets_plugin.cpp
- * @short Implementation of WidgetsPlugin
+ * @file widgets_background_plugin.h
+ * @short Definition of WidgetsPlugin
  *
- * This file contains the implemetation of the
+ * This file contains the definition of the
  * WidgetsPlugin class.
  */
 
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-#include "widgets_plugin.h"
-
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-
-#include "oxygencolors.h"
-#include "settings.h"
-#include "settingsentry.h"
-#include "gridmanager.h"
-
-void WidgetsPlugin::registerTypes(const char *uri)
+class WidgetsBackgroundPlugin : public QDeclarativeExtensionPlugin
 {
-    // @uri org.SfietKonstantin.widgets
-    qmlRegisterType<Widgets::OxygenColors>(uri, 1, 0, "Colors");
-    qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
-    qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
-    qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
-}
+    Q_OBJECT
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
+public:
+    /**
+     * @short Register types
+     *
+     * This method is used to register C++ classes
+     * into the QML context.
+     *
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
+
+#endif // WIDGETS_BACKGROUND_PLUGIN_H
 

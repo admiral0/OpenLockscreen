@@ -23,24 +23,18 @@
  */
 
 
-#include "widgets_plugin.h"
+#include "widgets_background_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
 
-#include "oxygencolors.h"
-#include "settings.h"
-#include "settingsentry.h"
-#include "gridmanager.h"
+#include "backgroundmanager.h"
 
-void WidgetsPlugin::registerTypes(const char *uri)
+
+void WidgetsBackgroundPlugin::registerTypes(const char *uri)
 {
-    // @uri org.SfietKonstantin.widgets
-    qmlRegisterType<Widgets::OxygenColors>(uri, 1, 0, "Colors");
-    qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
-    qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
-    qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
+    // @uri org.SfietKonstantin.widgets.background
+    qmlRegisterType<Widgets::BackgroundManager>(uri, 1, 0, "BackgroundManager");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
+Q_EXPORT_PLUGIN2(Widgets, WidgetsBackgroundPlugin)
 
