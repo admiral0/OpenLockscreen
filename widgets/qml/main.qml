@@ -28,11 +28,20 @@ PageStackWindow
 
         Settings {
             id: settings
+            defaultSettings: SettingsEntry {
+                key: "wallpaper/source"
+                value: "/home/sk/Code/Qt/Harmattan/widgets/widgets/data/wallpaper-1.jpg"
+            }
         }
 
         GridManager {
             id: gridManager
             settings: settings
+        }
+
+        PackageManager {
+            id: packageManager
+            onDatabaseError: Qt.quit()
         }
 
         HorizontalParallaxBackground {

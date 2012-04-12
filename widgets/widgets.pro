@@ -7,7 +7,7 @@ QT =                core gui declarative xml
 CONFIG +=           qdeclarative-boostable
 #INCLUDEPATH += ../widgetsdev/widgetsapi/
 
-DEFINES +=          'MAIN_QML_PATH=\'\"$${APPLICATION_FOLDER}/qml/main.qml\"\''
+DEFINES +=          'MAIN_QML_PATH=\'\"$${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/qml/main.qml\"\''
 
 SOURCES +=          main.cpp \
 

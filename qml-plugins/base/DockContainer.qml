@@ -15,7 +15,6 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import "UiConstants.js" as UI
 
 // Dock container
 // This component is used to create
@@ -107,17 +106,5 @@ Item {
         if(content != null) {
             content.destroy()
         }
-    }
-
-    states: State {
-        name: "hidden"; when: !viewManager.locked
-        PropertyChanges {
-            target: container
-            opacity: 0
-        }
-    }
-
-    Behavior on opacity {
-        NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
     }
 }

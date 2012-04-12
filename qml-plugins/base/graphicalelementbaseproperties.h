@@ -14,38 +14,41 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
+#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H
+#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include "xmlserializableinterface.h"
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
+class GraphicalElementBasePropertiesPrivate;
+class GraphicalElementBaseProperties : public QObject, public XmlSerializableInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString packageName READ packageName CONSTANT)
+    Q_PROPERTY(QString qmlFile READ qmlFile CONSTANT)
+    Q_PROPERTY(bool hasSettings READ hasSettings CONSTANT)
 public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
+    explicit GraphicalElementBaseProperties(QObject *parent = 0);
+    explicit GraphicalElementBaseProperties(const QString &name, const QString &packageName,
+                                            const QString &qmlFile, bool hasSettings);
+    virtual ~GraphicalElementBaseProperties();
+    QString name() const;
+    QString packageName() const;
+    QString qmlFile() const;
+    bool hasSettings() const;
+    virtual bool fromXmlElement(const QDomElement &element);
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
+protected:
+    const QScopedPointer<GraphicalElementBasePropertiesPrivate> d_ptr;
+    GraphicalElementBaseProperties(GraphicalElementBasePropertiesPrivate *dd, QObject *parent);
 private:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
+    Q_DECLARE_PRIVATE(GraphicalElementBaseProperties)
 };
 
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H

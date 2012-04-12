@@ -12,39 +12,32 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGS
-#define WIDGETS_SETTINGS
+#ifndef WIDGETS_PACKAGEMANAGER_H
+#define WIDGETS_PACKAGEMANAGER_H
 
 #include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeListProperty>
-
-#include "settingsentry.h"
 
 namespace Widgets
 {
 
-class SettingsPrivate;
-class Settings : public QObject
+class PackageManagerPrivate;
+class PackageManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
-               READ defaultSettings)
 public:
-    explicit Settings(QObject *parent = 0);
-    virtual ~Settings();
-    Q_INVOKABLE QVariant value(const QString &key) const;
-    QDeclarativeListProperty<SettingsEntry> defaultSettings();
+    explicit PackageManager(QObject *parent = 0);
+    virtual ~PackageManager();
 Q_SIGNALS:
-    void valueChanged(const QString &key, const QVariant &value);
+    void databaseError();
+public Q_SLOTS:
+//    void update();
 private:
-    const QScopedPointer<SettingsPrivate> d_ptr;
-    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                      SettingsEntry *entry);
-    Q_DECLARE_PRIVATE(Settings)
+    const QScopedPointer<PackageManagerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PackageManager)
 };
 
 }
 
-#endif // WIDGETS_SETTINGS
+#endif // WIDGETS_PACKAGEMANAGER_H

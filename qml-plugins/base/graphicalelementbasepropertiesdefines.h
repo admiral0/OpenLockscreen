@@ -12,39 +12,17 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGS
-#define WIDGETS_SETTINGS
-
-#include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeListProperty>
-
-#include "settingsentry.h"
+#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H
+#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H
 
 namespace Widgets
 {
-
-class SettingsPrivate;
-class Settings : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
-               READ defaultSettings)
-public:
-    explicit Settings(QObject *parent = 0);
-    virtual ~Settings();
-    Q_INVOKABLE QVariant value(const QString &key) const;
-    QDeclarativeListProperty<SettingsEntry> defaultSettings();
-Q_SIGNALS:
-    void valueChanged(const QString &key, const QVariant &value);
-private:
-    const QScopedPointer<SettingsPrivate> d_ptr;
-    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                      SettingsEntry *entry);
-    Q_DECLARE_PRIVATE(Settings)
-};
-
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE = "name";
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE = "package_name";
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE = "qml_file";
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_HASSETTINGS_ATTRIBUTE = "has_settings";
 }
 
-#endif // WIDGETS_SETTINGS
+#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H

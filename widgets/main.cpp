@@ -22,7 +22,15 @@
 #include <QtGui/QApplication>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
+#include "qplatformdefs.h"
+
+#ifdef MEEGO_EDITION_HARMATTAN
 #include <MDeclarativeCache>
+#endif
+
+#ifdef QML_PLUGIN_PATH
+#include <QtDeclarative/QDeclarativeEngine>
+#endif
 
 /**
  * @short Main
@@ -35,13 +43,26 @@
  */
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+#ifdef MEEGO_EDITION_HARMATTAN
     QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
     QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
+#else
+    QApplication *app = new QApplication(argc, argv);
+    QDeclarativeView *view = new QDeclarativeView();
+#endif
+
+#ifdef QML_PLUGIN_PATH
+    view->engine()->addImportPath(QML_PLUGIN_PATH);
+#endif
 
     view->setSource(QUrl(MAIN_QML_PATH));
 
-    QObject::connect(view->engine(), SIGNAL(quit()), view.data(), SLOT(close()));
+    QObject::connect(view->engine(), SIGNAL(quit()), view, SLOT(close()));
+#ifdef MEEGO_EDITION_HARMATTAN
     view->showFullScreen();
+#else
+    view->show();
+#endif
 
     return app->exec();
 }

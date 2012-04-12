@@ -24,6 +24,7 @@
 namespace Widgets
 {
 
+class GridManagerPrivate;
 class GridManager : public QObject
 {
     Q_OBJECT
@@ -59,6 +60,42 @@ class GridManager : public QObject
 public:
     explicit GridManager(QObject *parent = 0);
     virtual ~GridManager();
+    /**
+     * @short Grid cell width
+     *
+     * This method is used to retrieve
+     * the value of "view/gridCellWidth" settings.
+     *
+     * @return the grid cell width settings.
+     */
+    int gridCellWidth() const;
+    /**
+     * @short Grid cell height
+     *
+     * This method is used to retrieve
+     * the value of "view/gridCellHeight" settings.
+     *
+     * @return the grid cell height settings.
+     */
+    int gridCellHeight() const;
+    /**
+     * @short Grid cell horizontal margin
+     *
+     * This method is used to retrieve
+     * the value of "view/gridCellHorizontalMargin" settings.
+     *
+     * @return the grid cell horizontal margin.
+     */
+    int gridCellHorizontalMargin() const;
+     /**
+     * @short Grid cell vertical margin
+     *
+     * This method is used to retrieve
+     * the value of "view/gridCellVerticalMargin" settings.
+     *
+     * @return the grid cell vertical margin.
+     */
+    int gridCellVerticalMargin() const;
     /**
      * @short Grid width
      *
@@ -104,42 +141,6 @@ Q_SIGNALS:
     void settingsChanged();
 public Q_SLOTS:
     /**
-     * @short Grid cell width
-     *
-     * This method is used to retrieve
-     * the value of "view/gridCellWidth" settings.
-     *
-     * @return the grid cell width settings.
-     */
-    int gridCellWidth() const;
-    /**
-     * @short Grid cell height
-     *
-     * This method is used to retrieve
-     * the value of "view/gridCellHeight" settings.
-     *
-     * @return the grid cell height settings.
-     */
-    int gridCellHeight() const;
-    /**
-     * @short Grid cell horizontal margin
-     *
-     * This method is used to retrieve
-     * the value of "view/gridCellHorizontalMargin" settings.
-     *
-     * @return the grid cell horizontal margin.
-     */
-    int gridCellHorizontalMargin() const;
-     /**
-     * @short Grid cell vertical margin
-     *
-     * This method is used to retrieve
-     * the value of "view/gridCellVerticalMargin" settings.
-     *
-     * @return the grid cell vertical margin.
-     */
-    int gridCellVerticalMargin() const;
-    /**
      * @short Set view width
      *
      * This method is used to inform the ViewManager
@@ -162,10 +163,9 @@ public Q_SLOTS:
 
     void setSettings(Settings *settings);
 private:
-    class GridManagerPrivate;
-    GridManagerPrivate * const d;
-
-    Q_PRIVATE_SLOT(d, void slotValueChanged(const QString &key, const QVariant &value))
+    const QScopedPointer<GridManagerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(GridManager)
+    Q_PRIVATE_SLOT(d_func(), void slotValueChanged(const QString &key, const QVariant &value))
 };
 
 }

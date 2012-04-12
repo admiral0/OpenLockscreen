@@ -12,39 +12,26 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGS
-#define WIDGETS_SETTINGS
+/**
+ * @file xmlserializableinterface.h
+ * @short Definition of XmlSerializableInterface
+ *
+ * This file contains the definition of the
+ * XmlSerializableInterface interface.
+ */
 
-#include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeListProperty>
+#ifndef XMLSERIALIZABLEINTERFACE_H
+#define XMLSERIALIZABLEINTERFACE_H
 
-#include "settingsentry.h"
+#include <QtXml/QDomElement>
 
-namespace Widgets
+class XmlSerializableInterface
 {
-
-class SettingsPrivate;
-class Settings : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
-               READ defaultSettings)
 public:
-    explicit Settings(QObject *parent = 0);
-    virtual ~Settings();
-    Q_INVOKABLE QVariant value(const QString &key) const;
-    QDeclarativeListProperty<SettingsEntry> defaultSettings();
-Q_SIGNALS:
-    void valueChanged(const QString &key, const QVariant &value);
-private:
-    const QScopedPointer<SettingsPrivate> d_ptr;
-    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                      SettingsEntry *entry);
-    Q_DECLARE_PRIVATE(Settings)
+    virtual bool fromXmlElement(const QDomElement &element) = 0;
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const = 0;
 };
 
-}
-
-#endif // WIDGETS_SETTINGS
+#endif // XMLSERIALIZABLEINTERFACE_H

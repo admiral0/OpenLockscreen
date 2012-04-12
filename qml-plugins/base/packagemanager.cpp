@@ -12,39 +12,69 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGS
-#define WIDGETS_SETTINGS
+#include "packagemanager.h"
 
-#include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeListProperty>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtGui/QDesktopServices>
+#include <QtSql/QSqlDatabase>
 
-#include "settingsentry.h"
+static const char * CACHE_FOLDER = "Widgets";
 
 namespace Widgets
 {
 
-class SettingsPrivate;
-class Settings : public QObject
+class PackageManagerPrivate
 {
-    Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
-               READ defaultSettings)
 public:
-    explicit Settings(QObject *parent = 0);
-    virtual ~Settings();
-    Q_INVOKABLE QVariant value(const QString &key) const;
-    QDeclarativeListProperty<SettingsEntry> defaultSettings();
-Q_SIGNALS:
-    void valueChanged(const QString &key, const QVariant &value);
+    PackageManagerPrivate(PackageManager *q);
+    static QString databasePath();
+    void prepareDatabase();
 private:
-    const QScopedPointer<SettingsPrivate> d_ptr;
-    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                      SettingsEntry *entry);
-    Q_DECLARE_PRIVATE(Settings)
+    Q_DECLARE_PUBLIC(PackageManager)
+    PackageManager * const q_ptr;
 };
+
+PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
+    q_ptr(q)
+{
+    prepareDatabase();
+}
+
+QString PackageManagerPrivate::databasePath()
+{
+    QDir dir (QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
+    if(!dir.cd(CACHE_FOLDER)) {
+        dir.mkdir(CACHE_FOLDER);
+        dir.cd(CACHE_FOLDER);
+    }
+
+    return dir.absolutePath();
+}
+
+void PackageManagerPrivate::prepareDatabase()
+{
+    Q_Q(PackageManager);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "init");
+    db.setHostName(databasePath());
+    if(!db.open()) {
+        emit q->databaseError();
+        return;
+    }
 
 }
 
-#endif // WIDGETS_SETTINGS
+////// End of private class //////
+
+PackageManager::PackageManager(QObject *parent) :
+    QObject(parent), d_ptr(new PackageManagerPrivate(this))
+{
+}
+
+PackageManager::~PackageManager()
+{
+}
+
+}

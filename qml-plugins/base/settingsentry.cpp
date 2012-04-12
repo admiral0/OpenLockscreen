@@ -19,7 +19,7 @@
 namespace Widgets
 {
 
-class SettingsEntry::SettingsEntryPrivate
+class SettingsEntryPrivate
 {
 public:
     QString key;
@@ -29,27 +29,29 @@ public:
 ////// End of private class //////
 
 SettingsEntry::SettingsEntry(QObject *parent) :
-    QObject(parent), d(new SettingsEntryPrivate())
+    QObject(parent), d_ptr(new SettingsEntryPrivate())
 {
 }
 
 SettingsEntry::~SettingsEntry()
 {
-    delete d;
 }
 
 QString SettingsEntry::key() const
 {
+    Q_D(const SettingsEntry);
     return d->key;
 }
 
 QVariant SettingsEntry::value() const
 {
+    Q_D(const SettingsEntry);
     return d->value;
 }
 
 void SettingsEntry::setKey(const QString &key)
 {
+    Q_D(SettingsEntry);
     if(d->key != key) {
         d->key = key;
         emit keyChanged(key);
@@ -58,6 +60,7 @@ void SettingsEntry::setKey(const QString &key)
 
 void SettingsEntry::setValue(const QVariant &value)
 {
+    Q_D(SettingsEntry);
     if(d->value != value) {
         d->value = value;
         emit valueChanged(value);

@@ -12,39 +12,25 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGS
-#define WIDGETS_SETTINGS
+#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
+#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
 
-#include <QtCore/QObject>
-#include <QtDeclarative/QDeclarativeListProperty>
-
-#include "settingsentry.h"
+#include <QtCore/QString>
 
 namespace Widgets
 {
 
-class SettingsPrivate;
-class Settings : public QObject
+class GraphicalElementBasePropertiesPrivate
 {
-    Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
-               READ defaultSettings)
 public:
-    explicit Settings(QObject *parent = 0);
-    virtual ~Settings();
-    Q_INVOKABLE QVariant value(const QString &key) const;
-    QDeclarativeListProperty<SettingsEntry> defaultSettings();
-Q_SIGNALS:
-    void valueChanged(const QString &key, const QVariant &value);
-private:
-    const QScopedPointer<SettingsPrivate> d_ptr;
-    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                      SettingsEntry *entry);
-    Q_DECLARE_PRIVATE(Settings)
+    QString name;
+    QString packageName;
+    QString qmlFile;
+    bool hasSettings;
 };
 
 }
 
-#endif // WIDGETS_SETTINGS
+#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H

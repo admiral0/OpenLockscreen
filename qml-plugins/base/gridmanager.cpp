@@ -29,16 +29,16 @@ static const char *GRID_CELL_VMARGIN_KEY = "view/gridCellVerticalMargin";
 namespace Widgets
 {
 
-class GridManager::GridManagerPrivate
+class GridManagerPrivate
 {
 public:
     /**
      * @short Default constructor
      *
      * @param settingsWrapper SettingsWrapper object used provide settings.
-     * @param parent parent Q-pointer.
+     * @param q Q-pointer.
      */
-    GridManagerPrivate(GridManager *parent);
+    GridManagerPrivate(GridManager *q);
     /**
      * @short Recompute the grid count
      *
@@ -64,14 +64,15 @@ public:
      */
     Settings * settings;
 private:
+    Q_DECLARE_PUBLIC(GridManager)
     /**
      * @short Q-pointer
      */
-    GridManager * const q;
+    GridManager * const q_ptr;
 };
 
-GridManager::GridManagerPrivate::GridManagerPrivate(GridManager *parent):
-    q(parent)
+GridManagerPrivate::GridManagerPrivate(GridManager *q):
+    q_ptr(q)
 {
     viewSize = QSize(0, 0);
     gridCellSize = QSize(0, 0);
@@ -80,8 +81,9 @@ GridManager::GridManagerPrivate::GridManagerPrivate(GridManager *parent):
     settings = 0;
 }
 
-void GridManager::GridManagerPrivate::recomputeGridCount()
+void GridManagerPrivate::recomputeGridCount()
 {
+    Q_Q(GridManager);
     int cellWidth = gridCellSize.width();
     int cellHeight = gridCellSize.height();
     int cellHMargin = gridCellMarginsSize.width();
@@ -106,7 +108,7 @@ void GridManager::GridManagerPrivate::recomputeGridCount()
     }
 }
 
-void GridManager::GridManagerPrivate::loadSettings()
+void GridManagerPrivate::loadSettings()
 {
     int cellWidth = settings->value(GRID_CELL_WIDTH_KEY).toInt();
     int cellHeight = settings->value(GRID_CELL_HEIGHT_KEY).toInt();
@@ -122,7 +124,7 @@ void GridManager::GridManagerPrivate::loadSettings()
     recomputeGridCount();
 }
 
-void GridManager::GridManagerPrivate::slotValueChanged(const QString &key, const QVariant &value)
+void GridManagerPrivate::slotValueChanged(const QString &key, const QVariant &value)
 {
     if(key == GRID_CELL_WIDTH_KEY) {
         gridCellSize.setWidth(value.toInt());
@@ -142,42 +144,47 @@ void GridManager::GridManagerPrivate::slotValueChanged(const QString &key, const
 ////// End of private class //////
 
 GridManager::GridManager(QObject *parent):
-    QObject(parent), d(new GridManagerPrivate(this))
+    QObject(parent), d_ptr(new GridManagerPrivate(this))
 {
 }
 
 GridManager::~GridManager()
 {
-    delete d;
 }
 
 int GridManager::gridCellWidth() const
 {
+    Q_D(const GridManager);
     return d->gridCellSize.width();
 }
 
 int GridManager::gridCellHeight() const
 {
+    Q_D(const GridManager);
     return d->gridCellSize.height();
 }
 
 int GridManager::gridWidth() const
 {
+    Q_D(const GridManager);
     return d->gridSize.width();
 }
 
 int GridManager::gridHeight() const
 {
+    Q_D(const GridManager);
     return d->gridSize.height();
 }
 
 Settings * GridManager::settings() const
 {
+    Q_D(const GridManager);
     return d->settings;
 }
 
 void GridManager::setViewWidth(int width)
 {
+    Q_D(GridManager);
     if (d->viewSize.width() != width) {
         d->viewSize.setWidth(width);
         d->recomputeGridCount();
@@ -186,6 +193,7 @@ void GridManager::setViewWidth(int width)
 
 void GridManager::setViewHeight(int height)
 {
+    Q_D(GridManager);
     if (d->viewSize.height() != height) {
         d->viewSize.setHeight(height);
         d->recomputeGridCount();
@@ -194,6 +202,7 @@ void GridManager::setViewHeight(int height)
 
 void GridManager::setSettings(Settings *settings)
 {
+    Q_D(GridManager);
     if(settings == 0) {
         return;
     }

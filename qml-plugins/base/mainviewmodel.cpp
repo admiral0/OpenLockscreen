@@ -24,7 +24,7 @@
  * and Widgets::WidgetViewModelItem.
  */
 
-#include "displayedpagesmodel.h"
+#include "mainviewmodel.h"
 #include "settings.h"
 #include "packagemanager.h"
 

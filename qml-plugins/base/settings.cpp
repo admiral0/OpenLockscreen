@@ -25,10 +25,10 @@ static const char *APPLICATION_NAME = "Widgets";
 namespace Widgets
 {
 
-class Settings::SettingsPrivate
+class SettingsPrivate
 {
 public:
-    SettingsPrivate(Settings *parent = 0);
+    SettingsPrivate(Settings *q = 0);
     void setDefaultValue(const QString &key, const QVariant &value);
     QSettings *settings;
     int gridCellWidth;
@@ -36,22 +36,19 @@ public:
     int gridCellHorizontalMargin;
     int gridCellVerticalMargin;
 private:
-    Settings * const q;
+    Q_DECLARE_PUBLIC(Settings)
+    Settings * const q_ptr;
 };
 
-Settings::SettingsPrivate::SettingsPrivate(Settings *parent):
-    q(parent)
+SettingsPrivate::SettingsPrivate(Settings *q):
+    q_ptr(q)
 {
-    settings = new QSettings(ORGANIZATION_NAME, APPLICATION_NAME, parent);
+    settings = new QSettings(ORGANIZATION_NAME, APPLICATION_NAME, q);
 }
 
-QVariant Settings::value(const QString &key) const
+void SettingsPrivate::setDefaultValue(const QString &key, const QVariant &value)
 {
-    return d->settings->value(key);
-}
-
-void Settings::SettingsPrivate::setDefaultValue(const QString &key, const QVariant &value)
-{
+    Q_Q(Settings);
     if(!settings->contains(key)) {
         settings->setValue(key, value);
         emit q->valueChanged(key, value);
@@ -61,13 +58,18 @@ void Settings::SettingsPrivate::setDefaultValue(const QString &key, const QVaria
 ////// End of private class //////
 
 Settings::Settings(QObject *parent):
-    QObject(parent), d(new SettingsPrivate(this))
+    QObject(parent), d_ptr(new SettingsPrivate(this))
 {
 }
 
 Settings::~Settings()
 {
-    delete d;
+}
+
+QVariant Settings::value(const QString &key) const
+{
+    Q_D(const Settings);
+    return d->settings->value(key);
 }
 
 QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
@@ -81,7 +83,7 @@ void Settings::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *li
 {
     Settings *settings = qobject_cast<Settings *>(list->object);
     if(settings) {
-        settings->d->setDefaultValue(entry->key(), entry->value());
+        settings->d_func()->setDefaultValue(entry->key(), entry->value());
     }
 }
 

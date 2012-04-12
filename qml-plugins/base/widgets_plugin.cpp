@@ -32,6 +32,7 @@
 #include "settings.h"
 #include "settingsentry.h"
 #include "gridmanager.h"
+#include "packagemanager.h"
 
 void WidgetsPlugin::registerTypes(const char *uri)
 {
@@ -40,6 +41,7 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
     qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
+    qmlRegisterType<Widgets::PackageManager>(uri, 1, 0, "PackageManager");
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)

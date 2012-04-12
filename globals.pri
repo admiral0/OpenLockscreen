@@ -11,3 +11,17 @@ USER_WIDGETS_FOLDER =       /opt/widgets/widgets/
 
 # Application folder
 APPLICATION_FOLDER  =       /opt/widgets/
+
+unix {
+    !contains(MEEGO_EDITION,harmattan):CONFIG(debug, debug|release): {
+        QML_PLUGIN_FOLDER = $${DEPLOYMENT_PREFIX}/usr/lib/qt4/imports/org/SfietKonstantin/widgets/
+        INCLUDE_FOLDER = $${DEPLOYMENT_PREFIX}/usr/include/widgets/
+        LIB_FOLDER = $${DEPLOYMENT_PREFIX}/usr/lib/widgets/
+        SYSTEM_WIDGETS_FOLDER = $${DEPLOYMENT_PREFIX}/usr/share/widgets/
+        USER_WIDGETS_FOLDER = $${DEPLOYMENT_PREFIX}/opt/widgets/widgets/
+
+        QML_PLUGIN_ROOT_FOLDER = $${DEPLOYMENT_PREFIX}/usr/lib/qt4/imports/
+        DEFINES += 'QML_PLUGIN_PATH=\'\"$${QML_PLUGIN_ROOT_FOLDER}\"\''
+        message($${DEFINES})
+    }
+}
