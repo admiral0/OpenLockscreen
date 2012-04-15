@@ -26,8 +26,8 @@ class VersionPrivate;
 class Version
 {
 public:
-    Version();
-    Version(int major, int minor = 0, int patch = 0);
+    explicit Version();
+    explicit Version(int major, int minor = 0, int patch = 0);
     Version(const Version &other);
     Version &operator=(const Version &other);
     ~Version();

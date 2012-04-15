@@ -23,12 +23,11 @@ HEADERS +=      widgets_plugin.h \
                 dockproperties.h \
                 dockproperties_p.h \
                 dockpropertiesdefines.h \
-                desktopparserbase.h \
+                desktopparser.h \
                 gridmanager.h \
 #                mainviewmodel.h \
                 packagemanager.h \
-    desktopparserpackage.h \
-    desktopparserbase_p.h \
+    package.h \
     desktopparserdefines.h \
     packagemanagerupdaterunnable.h
 
@@ -41,11 +40,11 @@ SOURCES +=      widgets_plugin.cpp \
                 graphicalelementbaseproperties.cpp \
                 dockbaseproperties.cpp \
                 dockproperties.cpp \
-                desktopparserbase.cpp \
+                desktopparser.cpp \
                 gridmanager.cpp \
 #                mainviewmodel.cpp \
                 packagemanager.cpp \
-    desktopparserpackage.cpp \
+    package.cpp \
     packagemanagerupdaterunnable.cpp
 
 OTHER_FILES =   qmldir \

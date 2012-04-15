@@ -14,35 +14,49 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_DESKTOPPARSERPACKAGE_H
-#define WIDGETS_DESKTOPPARSERPACKAGE_H
+#include "packagemodel.h"
 
-#include "desktopparserbase.h"
-#include "version.h"
+#include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 namespace Widgets
 {
 
-class DesktopParserPackagePrivate;
-class DesktopParserPackage: private DesktopParserBase
+namespace Extra
 {
-public:
-    DesktopParserPackage(const QString &file);
-    bool isValid() const;
-    QString identifier() const;
-    QString name(const QString &lang) const;
-    QString comment(const QString &lang) const;
-    QStringList languages() const;
-    QString icon() const;
-    QString plugin() const;
-    QString author() const;
-    QString email() const;
-    QString webSite() const;
-    Version version() const;
-private:
-    Q_DECLARE_PRIVATE(DesktopParserPackage)
+
+class PackageModelPrivate
+{
+
 };
+
+////// End of private class //////
+
+PackageModel::PackageModel(QObject *parent) :
+    QAbstractListModel(parent), d_ptr(new PackageModelPrivate)
+{
+}
+
+PackageModel::~PackageModel()
+{
 
 }
 
-#endif // WIDGETS_DESKTOPPARSERPACKAGE_H
+int PackageModel::rowCount(const QModelIndex &parent) const
+{
+    return 0;
+}
+
+int PackageModel::count() const
+{
+    return rowCount();
+}
+
+QVariant PackageModel::data(const QModelIndex &index, int role) const
+{
+    return QVariant();
+}
+
+}
+
+}

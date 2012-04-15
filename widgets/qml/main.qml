@@ -18,6 +18,7 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
+import org.SfietKonstantin.widgets.extra 1.0
 
 PageStackWindow
 {

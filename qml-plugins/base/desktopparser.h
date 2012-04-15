@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_DESKTOPPARSERBASE_H
-#define WIDGETS_DESKTOPPARSERBASE_H
+#ifndef WIDGETS_DESKTOPPARSER_H
+#define WIDGETS_DESKTOPPARSER_H
 
 #include <QtCore/QScopedPointer>
 #include <QtCore/QStringList>
@@ -23,24 +23,24 @@
 namespace Widgets
 {
 
-class DesktopParserBasePrivate;
-class DesktopParserBase
+class DesktopParserPrivate;
+class DesktopParser
 {
 public:
-    DesktopParserBase(const QString &file);
-    virtual ~DesktopParserBase();
+    explicit DesktopParser(const QString &file);
+    virtual ~DesktopParser();
     void beginGroup(const QString &group);
     void endGroup();
     QStringList keys() const;
     bool contains(const QString &key, const QString &lang = QString()) const;
     QVariant value(const QString &key, const QString &lang = QString()) const;
 protected:
-    DesktopParserBase(DesktopParserBasePrivate * dd);
-    const QScopedPointer<DesktopParserBasePrivate> d_ptr;
+    DesktopParser(DesktopParserPrivate * dd);
+    const QScopedPointer<DesktopParserPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(DesktopParserBase)
+    Q_DECLARE_PRIVATE(DesktopParser)
 };
 
 }
 
-#endif // WIDGETS_DESKTOPPARSERBASE_H
+#endif // WIDGETS_DESKTOPPARSER_H

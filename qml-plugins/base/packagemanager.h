@@ -19,6 +19,8 @@
 
 #include <QtCore/QObject>
 
+#include "package.h"
+
 namespace Widgets
 {
 
@@ -29,6 +31,7 @@ class PackageManager : public QObject
 public:
     explicit PackageManager(QObject *parent = 0);
     virtual ~PackageManager();
+//    Package package(const QString &identifier);
 Q_SIGNALS:
     void databaseError();
 //    void

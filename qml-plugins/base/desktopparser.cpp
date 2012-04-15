@@ -14,37 +14,81 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_DESKTOPPARSERBASE_P_H
-#define WIDGETS_DESKTOPPARSERBASE_P_H
-
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#include "desktopparser.h"
 
 #include <QtCore/QSettings>
 
 namespace Widgets
 {
 
-class DesktopParserBasePrivate
+class DesktopParserPrivate
 {
 public:
-    DesktopParserBasePrivate(const QString &file): settings(file, QSettings::IniFormat) {}
-    static QString trueKey(const QString &key, const QString &lang) {
-        if (lang.isEmpty()) {
-            return key;
-        } else {
-            QString trueKey = QString("%1[%2]").arg(key).arg(lang);
-            return trueKey;
-        }
-    }
+    DesktopParserPrivate(const QString &file);
+    static QString trueKey(const QString &key, const QString &lang);
 
     QSettings settings;
 };
 
+DesktopParserPrivate::DesktopParserPrivate(const QString &file):
+    settings(file, QSettings::IniFormat)
+{
 }
 
-#endif // WIDGETS_DESKTOPPARSERBASE_P_H
+QString DesktopParserPrivate::trueKey(const QString &key, const QString &lang)
+{
+    if (lang.isEmpty()) {
+        return key;
+    } else {
+        QString trueKey = QString("%1[%2]").arg(key).arg(lang);
+        return trueKey;
+    }
+}
+
+////// End of private class //////
+
+DesktopParser::DesktopParser(const QString &file):
+    d_ptr(new DesktopParserPrivate(file))
+{
+}
+
+DesktopParser::DesktopParser(DesktopParserPrivate *dd):
+    d_ptr(dd)
+{
+}
+
+DesktopParser::~DesktopParser()
+{
+}
+
+void DesktopParser::beginGroup(const QString &group)
+{
+    Q_D(DesktopParser);
+    d->settings.beginGroup(group);
+}
+
+void DesktopParser::endGroup()
+{
+    Q_D(DesktopParser);
+    d->settings.endGroup();
+}
+
+QStringList DesktopParser::keys() const
+{
+    Q_D(const DesktopParser);
+    return d->settings.childKeys();
+}
+
+bool DesktopParser::contains(const QString &key, const QString &lang) const
+{
+    Q_D(const DesktopParser);
+    return d->settings.contains(d->trueKey(key, lang));
+}
+
+QVariant DesktopParser::value(const QString &key, const QString &lang) const
+{
+    Q_D(const DesktopParser);
+    return d->settings.value(d->trueKey(key, lang));
+}
+
+}

@@ -25,7 +25,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 
-#include "desktopparserpackage.h"
+#include "package.h"
 #include "version.h"
 
 static const char *CACHE_FOLDER = "Widgets";
@@ -34,6 +34,7 @@ static const char *PACKAGE_INFORMATION_EMAIL = "email";
 static const char *PACKAGE_INFORMATION_ICON = "icon";
 static const char *PACKAGE_INFORMATION_WEBSITE = "website";
 static const char *PACKAGE_INFORMATION_VERSION = "version";
+static const char *PACKAGE_INFORMATION_DEFAULT_LANGUAGE = "default";
 
 namespace Widgets
 {
@@ -201,7 +202,7 @@ void PackageManagerPrivate::prepareDatabase()
             }
         }
 
-//        if (needToRescan) {
+        if (needToRescan) {
             query.prepare("UPDATE version SET major=:major, minor=:minor, patch=:patch");
             query.bindValue(":major", WIDGETS_VERSION_MAJOR);
             query.bindValue(":minor", WIDGETS_VERSION_MINOR);
@@ -210,7 +211,7 @@ void PackageManagerPrivate::prepareDatabase()
             query.finish();
 
             q->update();
-//        }
+        }
 
         db.close();
     }
@@ -226,8 +227,9 @@ void PackageManagerPrivate::addPackage(const QString &path)
         return;
     }
 
-    DesktopParserPackage parser (dir.absoluteFilePath("package.desktop"));
-    if (!parser.isValid()) {
+    QString filePath = dir.absoluteFilePath("package.desktop");
+    Package package = Package::fromDesktopFile(filePath);
+    if (!package.isValid()) {
         return;
     }
 
@@ -241,9 +243,9 @@ void PackageManagerPrivate::addPackage(const QString &path)
 
         QSqlQuery query = QSqlQuery(db);
         query.prepare("INSERT INTO packages (id, identifier, folder, plugin) VALUES (NULL, :identifier, :folder, :plugin)");
-        query.bindValue(":identifier", parser.identifier());
+        query.bindValue(":identifier", package.identifier());
         query.bindValue(":folder", dir.absolutePath());
-        query.bindValue(":plugin", parser.plugin());
+        query.bindValue(":plugin", package.plugin());
         executeQuery(&query);
         int packageId = query.lastInsertId().toInt();
         query.finish();
@@ -253,11 +255,16 @@ void PackageManagerPrivate::addPackage(const QString &path)
         QVariantList names;
         QVariantList descriptions;
 
-        foreach(QString lang, parser.languages()) {
+        packageIdList.append(packageId);
+        languages.append(PACKAGE_INFORMATION_DEFAULT_LANGUAGE);
+        names.append(package.defaultName());
+        descriptions.append(package.defaultDesription());
+
+        foreach(QString language, package.languages()) {
             packageIdList.append(packageId);
-            languages.append(lang);
-            names.append(parser.name(lang));
-            descriptions.append(parser.comment(lang));
+            languages.append(language);
+            names.append(package.name(language));
+            descriptions.append(package.description(language));
         }
         query.prepare("INSERT INTO localizedPackageInformations (packageId, language, name, description) VALUES (:packageId, ?, ?, ?)");
         query.addBindValue(packageIdList);
@@ -267,11 +274,11 @@ void PackageManagerPrivate::addPackage(const QString &path)
         executeQueryBatch(&query);
         query.finish();
         QVariantMap informations;
-        informations.insert(PACKAGE_INFORMATION_AUTHOR, parser.author());
-        informations.insert(PACKAGE_INFORMATION_EMAIL, parser.email());
-        informations.insert(PACKAGE_INFORMATION_ICON, parser.icon());
-        informations.insert(PACKAGE_INFORMATION_WEBSITE, parser.webSite());
-        informations.insert(PACKAGE_INFORMATION_VERSION, parser.version().toString());
+        informations.insert(PACKAGE_INFORMATION_AUTHOR, package.author());
+        informations.insert(PACKAGE_INFORMATION_EMAIL, package.email());
+        informations.insert(PACKAGE_INFORMATION_ICON, package.icon());
+        informations.insert(PACKAGE_INFORMATION_WEBSITE, package.website());
+        informations.insert(PACKAGE_INFORMATION_VERSION, package.version().toString());
         addPackageInformations(packageId, informations);
 
         db.close();
@@ -340,6 +347,30 @@ PackageManager::~PackageManager()
 {
 }
 
+//Package PackageManager::package(const QString &identifier)
+//{
+//    Q_D(PackageManager);
+//    Package value;
+
+//    {
+//        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_package");
+//        db.setDatabaseName(d->databasePath());
+//        if(!db.open()) {
+//            emit databaseError();
+//            return value;
+//        }
+
+//        QSqlQuery query = QSqlQuery(db);
+//        query.prepare("SELECT folder, plugin");
+//        d->executeQuery(&query);
+//        query.finish();
+
+//    }
+//    QSqlDatabase::removeDatabase("get_package");
+
+//    return value;
+//}
+
 void PackageManager::update()
 {
     Q_D(PackageManager);
@@ -353,6 +384,10 @@ void PackageManager::update()
 
         QSqlQuery query = QSqlQuery(db);
         query.prepare("DELETE FROM packages");
+        d->executeQuery(&query);
+        query.finish();
+
+        query.prepare("DELETE FROM packageInformations");
         d->executeQuery(&query);
         query.finish();
 

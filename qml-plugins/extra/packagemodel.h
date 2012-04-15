@@ -14,54 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#include "desktopparserbase.h"
-#include "desktopparserbase_p.h"
+#ifndef WIDGETS_EXTRA_PACKAGEMODEL_H
+#define WIDGETS_EXTRA_PACKAGEMODEL_H
+
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QScopedPointer>
 
 namespace Widgets
 {
 
-DesktopParserBase::DesktopParserBase(const QString &file):
-    d_ptr(new DesktopParserBasePrivate(file))
+namespace Extra
 {
-}
 
-DesktopParserBase::DesktopParserBase(DesktopParserBasePrivate *dd):
-    d_ptr(dd)
+class PackageModelPrivate;
+class PackageModel : public QAbstractListModel
 {
-}
+    Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+public:
+    enum PackageRole
+    {
 
-DesktopParserBase::~DesktopParserBase()
-{
-}
+    };
 
-void DesktopParserBase::beginGroup(const QString &group)
-{
-    Q_D(DesktopParserBase);
-    d->settings.beginGroup(group);
-}
+    explicit PackageModel(QObject *parent = 0);
+    virtual ~PackageModel();
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+Q_SIGNALS:
+    void countChanged(int count);
+public Q_SLOTS:
+protected:
+    const QScopedPointer<PackageModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(PackageModel)
+};
 
-void DesktopParserBase::endGroup()
-{
-    Q_D(DesktopParserBase);
-    d->settings.endGroup();
-}
-
-QStringList DesktopParserBase::keys() const
-{
-    Q_D(const DesktopParserBase);
-    return d->settings.childKeys();
-}
-
-bool DesktopParserBase::contains(const QString &key, const QString &lang) const
-{
-    Q_D(const DesktopParserBase);
-    return d->settings.contains(d->trueKey(key, lang));
-}
-
-QVariant DesktopParserBase::value(const QString &key, const QString &lang) const
-{
-    Q_D(const DesktopParserBase);
-    return d->settings.value(d->trueKey(key, lang));
 }
 
 }
+
+#endif // WIDGETS_EXTRA_PACKAGEMODEL_H
