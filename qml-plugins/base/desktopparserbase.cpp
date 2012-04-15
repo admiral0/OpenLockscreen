@@ -14,39 +14,54 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
-
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include "desktopparserbase.h"
+#include "desktopparserbase_p.h"
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
+DesktopParserBase::DesktopParserBase(const QString &file):
+    d_ptr(new DesktopParserBasePrivate(file))
 {
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
-};
-
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+DesktopParserBase::DesktopParserBase(DesktopParserBasePrivate *dd):
+    d_ptr(dd)
+{
+}
+
+DesktopParserBase::~DesktopParserBase()
+{
+}
+
+void DesktopParserBase::beginGroup(const QString &group)
+{
+    Q_D(DesktopParserBase);
+    d->settings.beginGroup(group);
+}
+
+void DesktopParserBase::endGroup()
+{
+    Q_D(DesktopParserBase);
+    d->settings.endGroup();
+}
+
+QStringList DesktopParserBase::keys() const
+{
+    Q_D(const DesktopParserBase);
+    return d->settings.childKeys();
+}
+
+bool DesktopParserBase::contains(const QString &key, const QString &lang) const
+{
+    Q_D(const DesktopParserBase);
+    return d->settings.contains(d->trueKey(key, lang));
+}
+
+QVariant DesktopParserBase::value(const QString &key, const QString &lang) const
+{
+    Q_D(const DesktopParserBase);
+    return d->settings.value(d->trueKey(key, lang));
+}
+
+}

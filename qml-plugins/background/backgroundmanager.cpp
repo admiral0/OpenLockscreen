@@ -26,6 +26,9 @@ static const char * WALLPAPER_HEIGHT = "wallpaper/height";
 namespace Widgets
 {
 
+namespace Background
+{
+
 class BackgroundManager::BackgroundManagerPrivate
 {
 public:
@@ -135,6 +138,8 @@ void BackgroundManager::setSettings(Settings *settings)
 
         emit settingsChanged();
     }
+}
+
 }
 
 }

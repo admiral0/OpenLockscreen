@@ -14,39 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
+#ifndef WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H
+#define WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include <QtCore/QString>
+#include <QtCore/QVariantMap>
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
+struct GraphicalElementProperties
 {
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
+    QString identifier;
+    QVariantMap settings;
 };
 
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H

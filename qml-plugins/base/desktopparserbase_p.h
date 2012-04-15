@@ -14,39 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
+#ifndef WIDGETS_DESKTOPPARSERBASE_P_H
+#define WIDGETS_DESKTOPPARSERBASE_P_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include <QtCore/QSettings>
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
+class DesktopParserBasePrivate
 {
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
+    DesktopParserBasePrivate(const QString &file): settings(file, QSettings::IniFormat) {}
+    static QString trueKey(const QString &key, const QString &lang) {
+        if (lang.isEmpty()) {
+            return key;
+        } else {
+            QString trueKey = QString("%1[%2]").arg(key).arg(lang);
+            return trueKey;
+        }
+    }
+
+    QSettings settings;
 };
 
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_DESKTOPPARSERBASE_P_H

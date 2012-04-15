@@ -33,7 +33,7 @@
 void WidgetsBackgroundPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.background
-    qmlRegisterType<Widgets::BackgroundManager>(uri, 1, 0, "BackgroundManager");
+    qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsBackgroundPlugin)

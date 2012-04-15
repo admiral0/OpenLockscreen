@@ -22,17 +22,18 @@
  * WidgetsPlugin class.
  */
 
-
 #include "widgets_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 #include <QtDeclarative/QDeclarativeEngine>
 
+#include "dockbaseproperties.h"
+#include "dockproperties.h"
+#include "gridmanager.h"
 #include "oxygencolors.h"
+#include "packagemanager.h"
 #include "settings.h"
 #include "settingsentry.h"
-#include "gridmanager.h"
-#include "packagemanager.h"
 
 void WidgetsPlugin::registerTypes(const char *uri)
 {
@@ -42,6 +43,7 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
     qmlRegisterType<Widgets::PackageManager>(uri, 1, 0, "PackageManager");
+//    qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)

@@ -31,10 +31,12 @@ public:
     virtual ~PackageManager();
 Q_SIGNALS:
     void databaseError();
+//    void
 public Q_SLOTS:
-//    void update();
-private:
+    void update();
+protected:
     const QScopedPointer<PackageManagerPrivate> d_ptr;
+private:
     Q_DECLARE_PRIVATE(PackageManager)
 };
 

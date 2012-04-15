@@ -28,29 +28,19 @@
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
 /**
- * @short QML plugin for Widgets
+ * @short Base QML plugin for Widgets
  *
  * This class registers all the types that are available
- * in the QML plugin for %Widgets. Basically, this plugin
- * contains all the components that can be used to build
- * a widgets view.
+ * in the QML plugin for %Widgets. This plugin ships
+ * all the basic components that are required to build
+ * a %Widgets view.
  *
  * Declared classes and components are available in the
- * "org.sk.widgets 1.0" import.
+ * "org.SfietKonstantin.widgets 1.0" import.
  *
  * @section pluginsComponents Plugin components
  *
- * This plugin provides these class
- * -
  *
- * that are two models that made creation of selector
- * and repeated elements easier.
- *
- * This plugin also provides QML components
- * - %Widget
- * - Dock
- *
- * Please see @ref basicApi for information on all these components.
  *
  * @todo update documentation.
  */

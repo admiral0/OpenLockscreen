@@ -14,39 +14,18 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
-
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#ifndef WIDGETS_DOCKBASEPROPERTIESDEFINES_H
+#define WIDGETS_DOCKBASEPROPERTIESDEFINES_H
 
 namespace Widgets
 {
-
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
-};
-
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_TAGNAME = "geometry";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE = "width";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE = "height";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE = "anchors_top";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE = "anchors_bottom";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE = "anchors_left";
+static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE = "anchors_right";
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_DOCKBASEPROPERTIESDEFINES_H

@@ -14,39 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
-
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#ifndef WIDGETS_DESKTOPPARSERDEFINES_H
+#define WIDGETS_DESKTOPPARSERDEFINES_H
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
-};
+static const char *DESKTOP_FILE_NAME = "Name";
+static const char *DESKTOP_FILE_COMMENT = "Comment";
+static const char *DESKTOP_FILE_ICON = "Icon";
+static const char *DESKTOP_FILE_TYPE = "Type";
+static const char *DESKTOP_FILE_TYPE_VALUE = "Service";
+static const char *DESKTOP_FILE_SERVICE_TYPE = "X-Widgets-ServiceType";
+
 
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_DESKTOPPARSERDEFINES_H

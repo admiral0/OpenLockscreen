@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.sk.widgets 1.0
+import org.SfietKonstantin.widgets 1.0
 
 Dock {
     id: container
@@ -41,10 +41,10 @@ Dock {
             id: callButton
             width: 90
             height: 90
-            icon: "data/android-call.png"
-            onClicked: {
-                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/call-history")
-            }
+            icon: "android-call.png"
+//            onClicked: {
+//                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/call-history")
+//            }
         }
 
         AndroidDockButton {
@@ -52,58 +52,58 @@ Dock {
             anchors.left: callButton.right
             width: 90
             height: 90
-            icon: "data/android-menu.png"
-            onClicked: launcherManager.launcherVisible = true
+            icon: "android-menu.png"
+//            onClicked: launcherManager.launcherVisible = true
         }
         AndroidDockButton {
             id: internetButton
             anchors.left: menuButton.right
             width: 90
             height: 90
-            icon: "data/android-internet.png"
-            onClicked: {
-                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/grob")
-            }
+            icon: "android-internet.png"
+//            onClicked: {
+//                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/grob")
+//            }
         }
     }
 
-    Item {
-        id: leftDesktopCountcontainer
-        height: parent.height
-        anchors.left: parent.left; anchors.right: bar.left
+//    Item {
+//        id: leftDesktopCountcontainer
+//        height: parent.height
+//        anchors.left: parent.left; anchors.right: bar.left
 
-        Row {
-            anchors.centerIn: parent
-            spacing: 5
-            Repeater {
-                model: api.currentPage
-                delegate: Rectangle {
-                    width: 10; height: 10
-                    radius: 5
-                    opacity: 0.8
-                    smooth: true
-                }
-            }
-        }
-    }
+//        Row {
+//            anchors.centerIn: parent
+//            spacing: 5
+//            Repeater {
+//                model: api.currentPage
+//                delegate: Rectangle {
+//                    width: 10; height: 10
+//                    radius: 5
+//                    opacity: 0.8
+//                    smooth: true
+//                }
+//            }
+//        }
+//    }
 
-    Item {
-        id: rightDesktopCountcontainer
-        height: parent.height
-        anchors.left: bar.right; anchors.right: parent.right
+//    Item {
+//        id: rightDesktopCountcontainer
+//        height: parent.height
+//        anchors.left: bar.right; anchors.right: parent.right
 
-        Row {
-            anchors.centerIn: parent
-            spacing: 5
-            Repeater {
-                model: api.pagesCount - api.currentPage - 1
-                delegate: Rectangle {
-                    width: 10; height: 10
-                    radius: 5
-                    opacity: 0.8
-                    smooth: true
-                }
-            }
-        }
-    }
+//        Row {
+//            anchors.centerIn: parent
+//            spacing: 5
+//            Repeater {
+//                model: api.pagesCount - api.currentPage - 1
+//                delegate: Rectangle {
+//                    width: 10; height: 10
+//                    radius: 5
+//                    opacity: 0.8
+//                    smooth: true
+//                }
+//            }
+//        }
+//    }
 }

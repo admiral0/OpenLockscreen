@@ -14,39 +14,35 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_SETTINGSENTRY_H
-#define WIDGETS_SETTINGSENTRY_H
+#ifndef WIDGETS_DESKTOPPARSERPACKAGE_H
+#define WIDGETS_DESKTOPPARSERPACKAGE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include "desktopparserbase.h"
+#include "version.h"
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate;
-class SettingsEntry : public QObject
+class DesktopParserPackagePrivate;
+class DesktopParserPackage: private DesktopParserBase
 {
-    Q_OBJECT
-    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 public:
-    explicit SettingsEntry(QObject *parent = 0);
-    virtual ~SettingsEntry();
-    QString key() const;
-    QVariant value() const;
-Q_SIGNALS:
-    void keyChanged(const QString &key);
-    void valueChanged(const QVariant &value);
-public Q_SLOTS:
-    void setKey(const QString &key);
-    void setValue(const QVariant &value);
-protected:
-    const QScopedPointer<SettingsEntryPrivate> d_ptr;
+    DesktopParserPackage(const QString &file);
+    bool isValid() const;
+    QString identifier() const;
+    QString name(const QString &lang) const;
+    QString comment(const QString &lang) const;
+    QStringList languages() const;
+    QString icon() const;
+    QString plugin() const;
+    QString author() const;
+    QString email() const;
+    QString webSite() const;
+    Version version() const;
 private:
-    Q_DECLARE_PRIVATE(SettingsEntry)
-    
+    Q_DECLARE_PRIVATE(DesktopParserPackage)
 };
 
 }
 
-#endif // WIDGETS_SETTINGSENTRY_H
+#endif // WIDGETS_DESKTOPPARSERPACKAGE_H

@@ -16,8 +16,8 @@
 
 #include "gridmanager.h"
 
-#include <QtCore/QSize>
 #include <QtCore/QDebug>
+#include <QtCore/QSize>
 
 #include "settings.h"
 

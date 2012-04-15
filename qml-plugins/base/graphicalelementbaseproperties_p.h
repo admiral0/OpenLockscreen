@@ -17,6 +17,13 @@
 #ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
 #define WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
 #include <QtCore/QString>
 
 namespace Widgets
@@ -27,8 +34,8 @@ class GraphicalElementBasePropertiesPrivate
 public:
     QString name;
     QString packageName;
-    QString qmlFile;
-    bool hasSettings;
+//    QString qmlFile;
+    bool settingsEnabled;
 };
 
 }

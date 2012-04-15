@@ -14,14 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_BACKGROUNDMANAGER_H
-#define WIDGETS_BACKGROUNDMANAGER_H
+#ifndef WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H
+#define WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H
 
 #include <QObject>
 
 #include "settings.h"
 
 namespace Widgets
+{
+
+namespace Background
 {
 
 class BackgroundManager : public QObject
@@ -54,4 +57,6 @@ private:
 
 }
 
-#endif // WIDGETS_BACKGROUNDMANAGER_H
+}
+
+#endif // WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H

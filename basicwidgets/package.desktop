@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Basic widgets
+Name[en_GB]=Basic widgets
+Name[fr]=Widgets basiques
+Comment=Package containing basic widgets
+Comment[en_GB]=Package containing basic widgets
+Comment[fr]=Paquet contenant des widgets basiques
+Icon=
+Type=Service
+X-Widgets-ServiceType=plugin
+X-Widgets-PluginInfo-Id=org.SfietKonstantin.basicwidgets
+X-Widgets-PluginInfo-Author=Lucien XU
+X-Widgets-PluginInfo-Email=sfietkonstantin@free.fr
+X-Widgets-PluginInfo-Website=https://gitorious.org/~sfietkonstantin
+X-Widgets-PluginInfo-Name=basicwidgets
+X-Widgets-PluginInfo-Version=1.0.0

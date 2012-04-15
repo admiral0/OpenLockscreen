@@ -162,8 +162,9 @@ public Q_SLOTS:
     void setViewHeight(int height);
 
     void setSettings(Settings *settings);
-private:
+protected:
     const QScopedPointer<GridManagerPrivate> d_ptr;
+private:
     Q_DECLARE_PRIVATE(GridManager)
     Q_PRIVATE_SLOT(d_func(), void slotValueChanged(const QString &key, const QVariant &value))
 };

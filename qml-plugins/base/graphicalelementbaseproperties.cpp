@@ -24,6 +24,22 @@ namespace Widgets
 GraphicalElementBaseProperties::GraphicalElementBaseProperties(QObject *parent) :
     QObject(parent), d_ptr(new GraphicalElementBasePropertiesPrivate)
 {
+    Q_D(GraphicalElementBaseProperties);
+    d->settingsEnabled = false;
+}
+
+GraphicalElementBaseProperties::GraphicalElementBaseProperties(const QString &name,
+                                                               const QString &packageName,
+//                                                               const QString &qmlFile,
+                                                               bool settingsEnabled,
+                                                               QObject *parent):
+    QObject(parent), d_ptr(new GraphicalElementBasePropertiesPrivate)
+{
+    Q_D(GraphicalElementBaseProperties);
+    d->name = name;
+    d->packageName = packageName;
+//    d->qmlFile = qmlFile;
+    d->settingsEnabled = settingsEnabled;
 }
 
 GraphicalElementBaseProperties::GraphicalElementBaseProperties(
@@ -48,39 +64,39 @@ QString GraphicalElementBaseProperties::packageName() const
     return d->packageName;
 }
 
-QString GraphicalElementBaseProperties::qmlFile() const
-{
-    Q_D(const GraphicalElementBaseProperties);
-    return d->qmlFile;
-}
+//QString GraphicalElementBaseProperties::qmlFile() const
+//{
+//    Q_D(const GraphicalElementBaseProperties);
+//    return d->qmlFile;
+//}
 
-bool GraphicalElementBaseProperties::hasSettings() const
+bool GraphicalElementBaseProperties::isSettingsEnabled() const
 {
     Q_D(const GraphicalElementBaseProperties);
-    return d->hasSettings;
+    return d->settingsEnabled;
 }
 
 bool GraphicalElementBaseProperties::fromXmlElement(const QDomElement &element)
 {
-    Q_D(GraphicalElementBaseProperties);
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE)) {
         return false;
     }
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE)) {
         return false;
     }
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE)) {
-        return false;
-    }
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HASSETTINGS_ATTRIBUTE)) {
+//    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE)) {
+//        return false;
+//    }
+    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE)) {
         return false;
     }
 
-    d->name = element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE);
-    d->packageName = element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE);
-    d->qmlFile = element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE);
-    d->hasSettings =
-            (element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HASSETTINGS_ATTRIBUTE) == "true");
+    setName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE));
+    setPackageName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE));
+//    setQmlFile(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE));
+    QString hasSettingsString =
+            element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE);
+    setSettingsEnabled(stringToBool(hasSettingsString));
 
     return true;
 }
@@ -88,21 +104,50 @@ bool GraphicalElementBaseProperties::fromXmlElement(const QDomElement &element)
 QDomElement GraphicalElementBaseProperties::toXmlElement(const QString &tagName,
                                                          QDomDocument *document) const
 {
-    Q_D(const GraphicalElementBaseProperties);
     QDomElement element = document->createElement(tagName);
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE, d->name);
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE, d->packageName);
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE, d->qmlFile);
-    QString hasSettingsString;
-    if (d->hasSettings) {
-        hasSettingsString = "true";
-    } else {
-        hasSettingsString = "false";
-    }
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HASSETTINGS_ATTRIBUTE,
-                         hasSettingsString);
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE, name());
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE, packageName());
+//    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE, d->qmlFile);
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE,
+                         boolToString(isSettingsEnabled()));
 
-    return QDomElement();
+    return element;
+}
+
+void GraphicalElementBaseProperties::setName(const QString &name)
+{
+    Q_D(GraphicalElementBaseProperties);
+    if (d->name != name) {
+        d->name = name;
+        emit nameChanged(name);
+    }
+}
+
+void GraphicalElementBaseProperties::setPackageName(const QString &packageName)
+{
+    Q_D(GraphicalElementBaseProperties);
+    if (d->packageName != packageName) {
+        d->packageName = packageName;
+        emit packageNameChanged(packageName);
+    }
+}
+
+//void GraphicalElementBaseProperties::setQmlFile(const QString &qmlFile)
+//{
+//    Q_D(GraphicalElementBaseProperties);
+//    if (d->qmlFile != qmlFile) {
+//        d->qmlFile = qmlFile;
+//        emit qmlFileChanged(qmlFile);
+//    }
+//}
+
+void GraphicalElementBaseProperties::setSettingsEnabled(bool settingsEnabled)
+{
+    Q_D(GraphicalElementBaseProperties);
+    if (d->settingsEnabled != settingsEnabled) {
+        d->settingsEnabled = settingsEnabled;
+        emit settingsEnabledChanged(settingsEnabled);
+    }
 }
 
 }

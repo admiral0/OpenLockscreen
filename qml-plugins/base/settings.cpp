@@ -16,14 +16,14 @@
 
 #include "settings.h"
 
-#include <QtCore/QSettings>
 #include <QtCore/QDebug>
-
-static const char *ORGANIZATION_NAME = "SfietKonstantin";
-static const char *APPLICATION_NAME = "Widgets";
+#include <QtCore/QSettings>
 
 namespace Widgets
 {
+
+static const char *ORGANIZATION_NAME = "SfietKonstantin";
+static const char *APPLICATION_NAME = "Widgets";
 
 class SettingsPrivate
 {

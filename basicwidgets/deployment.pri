@@ -1,19 +1,23 @@
-unix {
-    !isEmpty(MEEGO_VERSION_MAJOR) {
-        installPath = $${DEPLOYMENT_PREFIX}/opt/$${APP_FOLDER}/$${WIDGETS_FOLDER}/$${TARGET}
-    } else {
-        installPath = $${DEPLOYMENT_PREFIX}/$${WIDGETS_FOLDER}/$${TARGET}
-    }
-}
+INSTALL_PATH = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
 
-qmlFiles.path = $${installPath}
-qmlFiles.files = $${OTHER_FILES}
-export(qmlFiles.path)
-export(qmlFiles.files)
+# Path for target
+target.path = $${INSTALL_PATH}
+export(target.path)
 
-dataFiles.path = $${installPath}/data
-dataFiles.files = $${DATA_FILES}
-export(dataFiles.path)
-export(dataFiles.files)
+# Path for desktop file
+desktopFile.path = $${INSTALL_PATH}
+desktopFile.files = $${DESKTOP_FILES}
+export(desktopFile.path)
+export(desktopFile.files)
 
-INSTALLS += qmlFiles dataFiles
+INSTALLS += target desktopFile
+
+# Subdirs
+ANDROID_DOCK_FILES = android-dock/*
+
+androidDockFiles.path = $${INSTALL_PATH}/android-dock
+androidDockFiles.files = $${ANDROID_DOCK_FILES}
+export(androidDockFiles.path)
+export(androidDockFiles.files)
+
+INSTALLS += androidDockFiles

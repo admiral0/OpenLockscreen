@@ -1,6 +1,6 @@
 TEMPLATE =      subdirs
 
-SUBDIRS +=      widgets qml-plugins api
+SUBDIRS +=      widgets qml-plugins api basicwidgets
 
 OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \
                 qtc_packaging/debian_harmattan/README \

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Android dock
+Name[en_GB]=Android dock
+Name[fr]=Dock Android
+Comment=The classic Android Gingerbread dock
+Comment[en_GB]=The classic Android Gingerbread dock
+Comment[fr]=Le dock classique Android Gingerbread
+Icon=
+Type=Service
+X-Widgets-ServiceType=dock
+X-Widgets-DockInfo-Name=AndroidDock.qml

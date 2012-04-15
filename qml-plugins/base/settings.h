@@ -17,6 +17,14 @@
 #ifndef WIDGETS_SETTINGS
 #define WIDGETS_SETTINGS
 
+/**
+ * @file settings.h
+ * @short Definition of Settings
+ *
+ * This file contains the definition of the
+ * Settings class.
+ */
+
 #include <QtCore/QObject>
 #include <QtDeclarative/QDeclarativeListProperty>
 
