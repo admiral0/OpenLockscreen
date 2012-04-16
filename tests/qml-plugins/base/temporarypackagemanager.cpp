@@ -14,36 +14,48 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_PACKAGEMANAGER_H
-#define WIDGETS_PACKAGEMANAGER_H
+#include "temporarypackagemanager.h"
+#include "../../../qml-plugins/base/packagemanager_p.h"
 
-#include <QtCore/QObject>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtGui/QDesktopServices>
 
-#include "package.h"
+static const char *CACHE_DIRECTORY = "Widgets";
 
-namespace Widgets
+class TemporaryPackageManagerPrivate: public Widgets::PackageManagerPrivate
 {
-
-class PackageManagerPrivate;
-class PackageManager : public QObject
-{
-    Q_OBJECT
 public:
-    explicit PackageManager(QObject *parent = 0);
-    virtual ~PackageManager();
-    Package package(const QString &identifier) const;
-    QStringList registeredPackages() const;
-Q_SIGNALS:
-//    void
-public Q_SLOTS:
-    void update();
-protected:
-    PackageManager(PackageManagerPrivate * dd, QObject *parent = 0);
-    const QScopedPointer<PackageManagerPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(PackageManager)
+    TemporaryPackageManagerPrivate(Widgets::PackageManager *q);
+    virtual QString databasePath() const;
 };
 
+TemporaryPackageManagerPrivate::TemporaryPackageManagerPrivate(Widgets::PackageManager *q):
+    Widgets::PackageManagerPrivate(q)
+{
 }
 
-#endif // WIDGETS_PACKAGEMANAGER_H
+QString TemporaryPackageManagerPrivate::databasePath() const
+{
+    QDir dir (QDesktopServices::storageLocation(QDesktopServices::TempLocation));
+    if(!dir.cd(CACHE_DIRECTORY)) {
+        dir.mkdir(CACHE_DIRECTORY);
+        dir.cd(CACHE_DIRECTORY);
+    }
+    return dir.absoluteFilePath("packagemanager.db");
+}
+
+////// End of private class //////
+
+
+TemporaryPackageManager::TemporaryPackageManager():
+    Widgets::PackageManager(new TemporaryPackageManagerPrivate(this))
+{
+}
+
+void TemporaryPackageManager::deleteDb()
+{
+    QDir dir (QDesktopServices::storageLocation(QDesktopServices::TempLocation));
+    dir.cd(CACHE_DIRECTORY);
+    dir.remove("packagemanager.db");
+}

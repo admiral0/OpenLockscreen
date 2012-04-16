@@ -46,6 +46,7 @@ public:
     static Version fromString(const QString &version);
     QString toString() const;
 protected:
+    Version(VersionPrivate * dd);
     const QScopedPointer<VersionPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(Version)

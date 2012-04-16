@@ -42,7 +42,6 @@ PageStackWindow
 
         PackageManager {
             id: packageManager
-            onDatabaseError: Qt.quit()
         }
 
         HorizontalParallaxBackground {

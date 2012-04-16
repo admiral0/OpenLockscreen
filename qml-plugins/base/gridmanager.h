@@ -163,6 +163,7 @@ public Q_SLOTS:
 
     void setSettings(Settings *settings);
 protected:
+    GridManager(GridManagerPrivate * dd, QObject *parent = 0);
     const QScopedPointer<GridManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(GridManager)

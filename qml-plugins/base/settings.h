@@ -46,8 +46,10 @@ public:
     QDeclarativeListProperty<SettingsEntry> defaultSettings();
 Q_SIGNALS:
     void valueChanged(const QString &key, const QVariant &value);
-private:
+protected:
+    Settings(SettingsPrivate * dd, QObject *parent = 0);
     const QScopedPointer<SettingsPrivate> d_ptr;
+private:
     static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
                                       SettingsEntry *entry);
     Q_DECLARE_PRIVATE(Settings)

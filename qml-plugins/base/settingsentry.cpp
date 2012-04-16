@@ -33,6 +33,11 @@ SettingsEntry::SettingsEntry(QObject *parent) :
 {
 }
 
+SettingsEntry::SettingsEntry(SettingsEntryPrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
+{
+}
+
 SettingsEntry::~SettingsEntry()
 {
 }

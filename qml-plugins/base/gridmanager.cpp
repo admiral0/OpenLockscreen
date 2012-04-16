@@ -148,6 +148,11 @@ GridManager::GridManager(QObject *parent):
 {
 }
 
+GridManager::GridManager(GridManagerPrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
+{
+}
+
 GridManager::~GridManager()
 {
 }

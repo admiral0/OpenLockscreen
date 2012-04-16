@@ -41,6 +41,7 @@ public Q_SLOTS:
     void setKey(const QString &key);
     void setValue(const QVariant &value);
 protected:
+    SettingsEntry(SettingsEntryPrivate * dd, QObject *parent);
     const QScopedPointer<SettingsEntryPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(SettingsEntry)

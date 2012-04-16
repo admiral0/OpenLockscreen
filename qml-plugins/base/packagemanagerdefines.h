@@ -14,36 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_PACKAGEMANAGER_H
-#define WIDGETS_PACKAGEMANAGER_H
-
-#include <QtCore/QObject>
-
-#include "package.h"
+#ifndef PACKAGEMANAGERDEFINES_H
+#define PACKAGEMANAGERDEFINES_H
 
 namespace Widgets
 {
 
-class PackageManagerPrivate;
-class PackageManager : public QObject
-{
-    Q_OBJECT
-public:
-    explicit PackageManager(QObject *parent = 0);
-    virtual ~PackageManager();
-    Package package(const QString &identifier) const;
-    QStringList registeredPackages() const;
-Q_SIGNALS:
-//    void
-public Q_SLOTS:
-    void update();
-protected:
-    PackageManager(PackageManagerPrivate * dd, QObject *parent = 0);
-    const QScopedPointer<PackageManagerPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(PackageManager)
-};
+static const char *PACKAGE_INFORMATION_AUTHOR = "author";
+static const char *PACKAGE_INFORMATION_EMAIL = "email";
+static const char *PACKAGE_INFORMATION_ICON = "icon";
+static const char *PACKAGE_INFORMATION_WEBSITE = "website";
+static const char *PACKAGE_INFORMATION_VERSION = "version";
+static const char *PACKAGE_INFORMATION_DEFAULT_LANGUAGE = "default";
 
 }
 
-#endif // WIDGETS_PACKAGEMANAGER_H
+#endif // PACKAGEMANAGERDEFINES_H

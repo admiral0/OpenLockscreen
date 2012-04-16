@@ -12,6 +12,9 @@ USER_WIDGETS_FOLDER =       /opt/widgets/widgets/
 # Application folder
 APPLICATION_FOLDER  =       /opt/widgets/
 
+# Test folder
+TEST_FOLDER =               /opt/widgets/tests/
+
 # Testing on Unix
 unix {
     !contains(MEEGO_EDITION,harmattan):CONFIG(debug, debug|release): {

@@ -24,12 +24,14 @@ HEADERS +=      widgets_plugin.h \
                 dockproperties_p.h \
                 dockpropertiesdefines.h \
                 desktopparser.h \
+                desktopparserdefines.h \
                 gridmanager.h \
 #                mainviewmodel.h \
+                package.h \
                 packagemanager.h \
-    package.h \
-    desktopparserdefines.h \
-    packagemanagerupdaterunnable.h
+                packagemanager_p.h \
+                packagemanagerdefines.h
+                packagemanagerupdaterunnable.h \
 
 SOURCES +=      widgets_plugin.cpp \
                 version.cpp \
@@ -43,14 +45,15 @@ SOURCES +=      widgets_plugin.cpp \
                 desktopparser.cpp \
                 gridmanager.cpp \
 #                mainviewmodel.cpp \
+                package.cpp \
                 packagemanager.cpp \
-    package.cpp \
-    packagemanagerupdaterunnable.cpp
+                packagemanager_p.cpp
+                packagemanagerupdaterunnable.cpp \
 
 OTHER_FILES =   qmldir \
                 Widget.qml \
                 Dock.qml \
-    DockedView.qml \
-    DockContainer.qml
+                DockContainer.qml \
+                DockedView.qml \
 
 include(deployment.pri)

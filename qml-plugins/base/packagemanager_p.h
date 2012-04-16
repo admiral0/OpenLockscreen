@@ -14,36 +14,41 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_PACKAGEMANAGER_H
-#define WIDGETS_PACKAGEMANAGER_H
+#ifndef WIDGETS_PACKAGEMANAGER_P_H
+#define WIDGETS_PACKAGEMANAGER_P_H
 
-#include <QtCore/QObject>
+#include "packagemanager.h"
 
-#include "package.h"
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include <QtCore/QVariantMap>
+#include <QtSql/QSqlQuery>
+
 
 namespace Widgets
 {
 
-class PackageManagerPrivate;
-class PackageManager : public QObject
+class PackageManagerPrivate
 {
-    Q_OBJECT
 public:
-    explicit PackageManager(QObject *parent = 0);
-    virtual ~PackageManager();
-    Package package(const QString &identifier) const;
-    QStringList registeredPackages() const;
-Q_SIGNALS:
-//    void
-public Q_SLOTS:
-    void update();
-protected:
-    PackageManager(PackageManagerPrivate * dd, QObject *parent = 0);
-    const QScopedPointer<PackageManagerPrivate> d_ptr;
+    PackageManagerPrivate(PackageManager *q);
+    virtual QString databasePath() const;
+    bool executeQuery(QSqlQuery *query) const;
+    bool executeQueryBatch(QSqlQuery *query) const;
+    void addUniquePackageInformationsProperties(const QStringList &names);
+    void prepareDatabase();
+    void addPackage(const QString &path);
+    void addPackageInformations(int packageId, const QVariantMap &informations);
 private:
-    Q_DECLARE_PRIVATE(PackageManager)
+    Q_DECLARE_PUBLIC(PackageManager)
+    PackageManager * const q_ptr;
 };
 
 }
 
-#endif // WIDGETS_PACKAGEMANAGER_H
+#endif // WIDGETS_PACKAGEMANAGER_P_H

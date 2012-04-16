@@ -66,6 +66,11 @@ Version::Version(const Version &other):
     d->patch = other.patch();
 }
 
+Version::Version(VersionPrivate *dd):
+    d_ptr(dd)
+{
+}
+
 Version & Version::operator=(const Version &other)
 {
     Q_D(Version);
@@ -123,6 +128,19 @@ bool Version::operator <(const Version &other)
     }
 
     if (major() == other.major() && minor() < other.minor()) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Version::operator <=(const Version &other)
+{
+    if (major() < other.major()) {
+        return true;
+    }
+
+    if (major() == other.major() && minor() <= other.minor()) {
         return true;
     }
 

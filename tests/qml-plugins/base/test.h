@@ -14,36 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_PACKAGEMANAGER_H
-#define WIDGETS_PACKAGEMANAGER_H
+#ifndef TESTVERSION_H
+#define TESTVERSION_H
 
-#include <QtCore/QObject>
+#include <QtTest/QtTest>
 
-#include "package.h"
-
-namespace Widgets
-{
-
-class PackageManagerPrivate;
-class PackageManager : public QObject
+class Test : public QObject
 {
     Q_OBJECT
-public:
-    explicit PackageManager(QObject *parent = 0);
-    virtual ~PackageManager();
-    Package package(const QString &identifier) const;
-    QStringList registeredPackages() const;
-Q_SIGNALS:
-//    void
-public Q_SLOTS:
-    void update();
-protected:
-    PackageManager(PackageManagerPrivate * dd, QObject *parent = 0);
-    const QScopedPointer<PackageManagerPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(PackageManager)
+private slots:
+    void testCreateVersion_data();
+    void testCreateVersion();
+    void testCompareVersion_data();
+    void testCompareVersion();
+    void testPackageManagerCreateTableAndUpdate();
+    void testPackageManagerUpdate();
+    void testPackageManagerDefault();
+    void testPackageManagerGetPackage();
+    void cleanupTestCase();
 };
 
-}
-
-#endif // WIDGETS_PACKAGEMANAGER_H
+#endif // TESTVERSION_H

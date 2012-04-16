@@ -62,6 +62,11 @@ Settings::Settings(QObject *parent):
 {
 }
 
+Settings::Settings(SettingsPrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
+{
+}
+
 Settings::~Settings()
 {
 }

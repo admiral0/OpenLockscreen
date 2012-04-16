@@ -38,8 +38,8 @@ public:
     bool isValid() const;
     QString identifier() const;
     void setIdentifier(const QString &identifier);
-    QString folder() const;
-    void setFolder(const QString &folder);
+    QString directory() const;
+    void setDirectory(const QString &directory);
     QString defaultName() const;
     void setDefaultName(const QString &name);
     QString name() const;
@@ -66,6 +66,7 @@ public:
     void setVersion(const Version &version);
     static Package fromDesktopFile(const QString &file);
 protected:
+    Package(PackagePrivate * dd);
     const QScopedPointer<PackagePrivate> d_ptr;
 private:
     explicit Package(const QString &file);

@@ -32,7 +32,10 @@ namespace Widgets
 QString IdentifiedElementInterface::generateIdentifier()
 {
     QString uuid = QUuid::createUuid().toString();
-    return uuid.remove("{").remove("}");
+    uuid = uuid.remove(0, 1);
+    uuid.chop(1);
+
+    return uuid;
 }
 
 }

@@ -17,6 +17,7 @@
 #include "package.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
 #include <QtCore/QLocale>
 
 #include "desktopparser.h"
@@ -40,7 +41,7 @@ public:
     void checkValid(const DesktopParser &parser);
     void copyFrom(const Package &other);
     QString identifier;
-    QString folder;
+    QString directory;
     QString defaultName;
     QString defaultDescription;
     QHash<QString, QPair<QString, QString> > nameAndDescription;
@@ -141,17 +142,12 @@ Package::Package(const QString &file):
 
             QString language = commentRegEx.cap(1);
             addDescription(language, parser.value(DESKTOP_FILE_COMMENT, language).toString());
-//            QPair<QString, QString> data;
-
-//            if (d->nameAndDescription.contains(lang)) {
-//                data = d->nameAndDescription.value(lang);
-//            }
-//            data.second = parser.value(DESKTOP_FILE_COMMENT, lang).toString();
-//            d->nameAndDescription.insert(lang, data);
         }
     }
 
     // Fetch plugin informations
+    QFileInfo fileInfo (file);
+    setDirectory(fileInfo.absolutePath());
     setIdentifier(parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString());
     setPlugin(parser.value(DESKTOP_FILE_PLUGIN_INFO_NAME).toString());
     setIcon(parser.value(DESKTOP_FILE_ICON).toString());
@@ -162,6 +158,11 @@ Package::Package(const QString &file):
     setVersion(Version::fromString(version));
 
     parser.endGroup();
+}
+
+Package::Package(PackagePrivate *dd):
+    d_ptr(dd)
+{
 }
 
 Package::~Package()
@@ -192,8 +193,21 @@ QString Package::identifier() const
 void Package::setIdentifier(const QString &identifier)
 {
     Q_D(Package);
-    d->valid = !identifier.isEmpty();
+    d->valid = !identifier.isEmpty() && !directory().isEmpty();
     d->identifier = identifier;
+}
+
+QString Package::directory() const
+{
+    Q_D(const Package);
+    return d->directory;
+}
+
+void Package::setDirectory(const QString &directory)
+{
+    Q_D(Package);
+    d->valid = !identifier().isEmpty() && !directory.isEmpty();
+    d->directory = directory;
 }
 
 QString Package::defaultName() const
