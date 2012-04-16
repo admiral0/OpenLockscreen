@@ -30,7 +30,7 @@ HEADERS +=      widgets_plugin.h \
                 package.h \
                 packagemanager.h \
                 packagemanager_p.h \
-                packagemanagerdefines.h
+                packagemanagerdefines.h \
                 packagemanagerupdaterunnable.h \
 
 SOURCES +=      widgets_plugin.cpp \
@@ -47,8 +47,9 @@ SOURCES +=      widgets_plugin.cpp \
 #                mainviewmodel.cpp \
                 package.cpp \
                 packagemanager.cpp \
-                packagemanager_p.cpp
+                packagemanager_p.cpp \
                 packagemanagerupdaterunnable.cpp \
+    dockbaseproperties_p.cpp
 
 OTHER_FILES =   qmldir \
                 Widget.qml \
