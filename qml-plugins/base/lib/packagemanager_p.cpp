@@ -31,6 +31,7 @@
 #include <QtSql/QSqlError>
 
 #include "debug.h"
+#include "dockbaseproperties.h"
 
 namespace Widgets
 {
@@ -193,6 +194,7 @@ void PackageManagerPrivate::prepareDatabase()
 
 void PackageManagerPrivate::addPackage(const QString &path)
 {
+    Q_Q(PackageManager);
     QDir dir = QDir(path);
     if (!dir.exists("package.desktop")) {
         return;
@@ -250,6 +252,8 @@ void PackageManagerPrivate::addPackage(const QString &path)
         addPackageInformations(packageId, informations);
     }
     QSqlDatabase::removeDatabase("add_package");
+
+    scanPackageFolder(path, package.identifier(), q);
 }
 
 void PackageManagerPrivate::addPackageInformations(int packageId,
@@ -287,6 +291,21 @@ void PackageManagerPrivate::addPackageInformations(int packageId,
         query.finish();
     }
     QSqlDatabase::removeDatabase("add_package_informations");
+}
+
+void PackageManagerPrivate::scanPackageFolder(const QString &path,
+                                              const QString &packageIdentifier,
+                                              QObject *parent)
+{
+    QDir packageFolder (path);
+    QFileInfoList folders = packageFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
+
+    foreach (QFileInfo folderInfo, folders) {
+        QDir folder (folderInfo.absoluteFilePath());
+        DockBaseProperties *properties =
+                DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
+                                                    packageIdentifier, parent);
+    }
 }
 
 }

@@ -28,32 +28,29 @@ class GraphicalElementBasePropertiesPrivate;
 class GraphicalElementBaseProperties : public QObject, public XmlSerializableInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString packageName READ packageName NOTIFY packageNameChanged)
-//    Q_PROPERTY(QString qmlFile READ qmlFile NOTIFY qmlFileChanged)
+    Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
+    Q_PROPERTY(QString packageIdentifier READ packageIdentifier NOTIFY packageIdentifierChanged)
     Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
 public:
     explicit GraphicalElementBaseProperties(QObject *parent = 0);
-    explicit GraphicalElementBaseProperties(const QString &name, const QString &packageName,
-                                            /*const QString &qmlFile,*/ bool settingsEnabled,
+    explicit GraphicalElementBaseProperties(const QString &fileName,
+                                            const QString &packageIdentifier,
+                                            bool settingsEnabled,
                                             QObject *parent = 0);
     virtual ~GraphicalElementBaseProperties();
-    QString name() const;
-    QString packageName() const;
-//    QString qmlFile() const;
+    QString fileName() const;
+    QString packageIdentifier() const;
     bool isSettingsEnabled() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
 Q_SIGNALS:
-    void nameChanged(const QString &name);
-    void packageNameChanged(const QString &packageName);
-//    void qmlFileChanged(const QString &qmlFile);
+    void fileNameChanged(const QString &fileName);
+    void packageIdentifierChanged(const QString &packageIdentifier);
     void settingsEnabledChanged(bool settingsEnabled);
 protected:
     GraphicalElementBaseProperties(GraphicalElementBasePropertiesPrivate *dd, QObject *parent);
-    void setName(const QString &name);
-    void setPackageName(const QString &packageName);
-//    void setQmlFile(const QString &qmlFile);
+    void setFileName(const QString &fileName);
+    void setPackageIdentifier(const QString &packageIdentifier);
     void setSettingsEnabled(bool settingsEnabled);
     const QScopedPointer<GraphicalElementBasePropertiesPrivate> d_ptr;
 private:

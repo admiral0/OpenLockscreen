@@ -7,6 +7,7 @@ TARGET = widgetsbase
 QT = core gui sql xml
 
 HEADERS +=      debug.h \
+                tools.h \
                 version.h \
                 oxygencolors.h \
                 identifiedelementinterface.h \
@@ -38,6 +39,7 @@ SOURCES +=      version.cpp \
                 settingsentry.cpp \
                 graphicalelementbaseproperties.cpp \
                 dockbaseproperties.cpp \
+                dockbaseproperties_p.cpp \
                 dockproperties.cpp \
                 desktopparser.cpp \
                 package.cpp \

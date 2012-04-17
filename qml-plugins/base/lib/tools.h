@@ -1,4 +1,4 @@
- /****************************************************************************************
+/****************************************************************************************
  * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
@@ -12,17 +12,33 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-import QtQuick 1.1
+#ifndef WIDGETS_TOOLS_H
+#define WIDGETS_TOOLS_H
 
-Item {
-    id: container
-    property string identifier
-    property bool enabled
-    property bool settingsEnabled
-    property variant settings
-    signal showSettings
-    width: 50
-    height: 50
+namespace Widgets
+{
+
+class Tools
+{
+public:
+    inline static bool stringToBool(const QString &value) {
+        if (value == QString("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    inline static QString boolToString(bool value) {
+        if (value) {
+            return QString("true");
+        } else {
+            return QString("false");
+        }
+    }
+};
+
 }
+
+#endif // WIDGETS_TOOLS_H

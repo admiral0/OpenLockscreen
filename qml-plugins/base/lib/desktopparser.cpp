@@ -27,12 +27,14 @@ public:
     DesktopParserPrivate(const QString &file);
     static QString trueKey(const QString &key, const QString &lang);
 
+    QString file;
     QSettings settings;
 };
 
 DesktopParserPrivate::DesktopParserPrivate(const QString &file):
     settings(file, QSettings::IniFormat)
 {
+    this->file = file;
 }
 
 QString DesktopParserPrivate::trueKey(const QString &key, const QString &lang)
@@ -59,6 +61,12 @@ DesktopParser::DesktopParser(DesktopParserPrivate *dd):
 
 DesktopParser::~DesktopParser()
 {
+}
+
+QString DesktopParser::file() const
+{
+    Q_D(const DesktopParser);
+    return d->file;
 }
 
 void DesktopParser::beginGroup(const QString &group)

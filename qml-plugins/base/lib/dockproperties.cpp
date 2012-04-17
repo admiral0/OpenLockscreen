@@ -26,7 +26,7 @@ DockProperties::DockProperties(QObject *parent):
 {
 }
 
-DockProperties::DockProperties(const QString &name, const QString &packageName,
+DockProperties::DockProperties(const QString &fileName, const QString &packageIdentifier,
                                bool settingsEnabled,
                                int width, int height,
                                bool anchorsTop, bool anchorsBottom,
@@ -35,9 +35,8 @@ DockProperties::DockProperties(const QString &name, const QString &packageName,
     DockBaseProperties(new DockPropertiesPrivate, parent)
 {
     Q_D(DockProperties);
-    d->name = name;
-    d->packageName = packageName;
-//    d->qmlFile = qmlFile;
+    d->fileName = fileName;
+    d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
     d->size = QSize(width, height);
     d->anchorsTop = anchorsTop;
@@ -48,7 +47,7 @@ DockProperties::DockProperties(const QString &name, const QString &packageName,
     d->settings = settings;
 }
 
-DockProperties::DockProperties(const QString &name, const QString &packageName,
+DockProperties::DockProperties(const QString &fileName, const QString &packageIdentifier,
                                bool settingsEnabled,
                                int width, int height,
                                bool anchorsTop, bool anchorsBottom,
@@ -58,9 +57,8 @@ DockProperties::DockProperties(const QString &name, const QString &packageName,
     DockBaseProperties(new DockPropertiesPrivate, parent)
 {
     Q_D(DockProperties);
-    d->name = name;
-    d->packageName = packageName;
-//    d->qmlFile = qmlFile;
+    d->fileName = fileName;
+    d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
     d->size = QSize(width, height);
     d->anchorsTop = anchorsTop;

@@ -18,6 +18,8 @@
 #include "graphicalelementbaseproperties_p.h"
 #include "graphicalelementbasepropertiesdefines.h"
 
+#include "tools.h"
+
 namespace Widgets
 {
 
@@ -28,17 +30,15 @@ GraphicalElementBaseProperties::GraphicalElementBaseProperties(QObject *parent) 
     d->settingsEnabled = false;
 }
 
-GraphicalElementBaseProperties::GraphicalElementBaseProperties(const QString &name,
-                                                               const QString &packageName,
-//                                                               const QString &qmlFile,
+GraphicalElementBaseProperties::GraphicalElementBaseProperties(const QString &fileName,
+                                                               const QString &packageIdentifier,
                                                                bool settingsEnabled,
                                                                QObject *parent):
     QObject(parent), d_ptr(new GraphicalElementBasePropertiesPrivate)
 {
     Q_D(GraphicalElementBaseProperties);
-    d->name = name;
-    d->packageName = packageName;
-//    d->qmlFile = qmlFile;
+    d->fileName = fileName;
+    d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
 }
 
@@ -52,23 +52,17 @@ GraphicalElementBaseProperties::~GraphicalElementBaseProperties()
 {
 }
 
-QString GraphicalElementBaseProperties::name() const
+QString GraphicalElementBaseProperties::fileName() const
 {
     Q_D(const GraphicalElementBaseProperties);
-    return d->name;
+    return d->fileName;
 }
 
-QString GraphicalElementBaseProperties::packageName() const
+QString GraphicalElementBaseProperties::packageIdentifier() const
 {
     Q_D(const GraphicalElementBaseProperties);
-    return d->packageName;
+    return d->packageIdentifier;
 }
-
-//QString GraphicalElementBaseProperties::qmlFile() const
-//{
-//    Q_D(const GraphicalElementBaseProperties);
-//    return d->qmlFile;
-//}
 
 bool GraphicalElementBaseProperties::isSettingsEnabled() const
 {
@@ -78,25 +72,22 @@ bool GraphicalElementBaseProperties::isSettingsEnabled() const
 
 bool GraphicalElementBaseProperties::fromXmlElement(const QDomElement &element)
 {
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE)) {
+    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE)) {
         return false;
     }
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE)) {
+    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE)) {
         return false;
     }
-//    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE)) {
-//        return false;
-//    }
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE)) {
         return false;
     }
 
-    setName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE));
-    setPackageName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE));
-//    setQmlFile(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE));
+    setFileName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE));
+    setPackageIdentifier(
+                element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE));
     QString hasSettingsString =
             element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE);
-    setSettingsEnabled(stringToBool(hasSettingsString));
+    setSettingsEnabled(Tools::stringToBool(hasSettingsString));
 
     return true;
 }
@@ -105,41 +96,31 @@ QDomElement GraphicalElementBaseProperties::toXmlElement(const QString &tagName,
                                                          QDomDocument *document) const
 {
     QDomElement element = document->createElement(tagName);
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE, name());
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE, packageName());
-//    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE, d->qmlFile);
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE, fileName());
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE, packageIdentifier());
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE,
-                         boolToString(isSettingsEnabled()));
+                         Tools::boolToString(isSettingsEnabled()));
 
     return element;
 }
 
-void GraphicalElementBaseProperties::setName(const QString &name)
+void GraphicalElementBaseProperties::setFileName(const QString &name)
 {
     Q_D(GraphicalElementBaseProperties);
-    if (d->name != name) {
-        d->name = name;
-        emit nameChanged(name);
+    if (d->fileName != name) {
+        d->fileName = name;
+        emit fileNameChanged(name);
     }
 }
 
-void GraphicalElementBaseProperties::setPackageName(const QString &packageName)
+void GraphicalElementBaseProperties::setPackageIdentifier(const QString &packageName)
 {
     Q_D(GraphicalElementBaseProperties);
-    if (d->packageName != packageName) {
-        d->packageName = packageName;
-        emit packageNameChanged(packageName);
+    if (d->packageIdentifier != packageName) {
+        d->packageIdentifier = packageName;
+        emit packageIdentifierChanged(packageName);
     }
 }
-
-//void GraphicalElementBaseProperties::setQmlFile(const QString &qmlFile)
-//{
-//    Q_D(GraphicalElementBaseProperties);
-//    if (d->qmlFile != qmlFile) {
-//        d->qmlFile = qmlFile;
-//        emit qmlFileChanged(qmlFile);
-//    }
-//}
 
 void GraphicalElementBaseProperties::setSettingsEnabled(bool settingsEnabled)
 {

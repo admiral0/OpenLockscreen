@@ -19,9 +19,9 @@
 
 namespace Widgets
 {
-static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_NAME_ATTRIBUTE = "name";
-static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGENAME_ATTRIBUTE = "package_name";
-//static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_QMLFILE_ATTRIBUTE = "qml_file";
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE = "file_name";
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE
+                    = "package_identifier";
 static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE = "has_settings";
 }
 

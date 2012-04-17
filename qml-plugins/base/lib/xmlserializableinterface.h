@@ -22,31 +22,21 @@
  * XmlSerializableInterface interface.
  */
 
-#ifndef XMLSERIALIZABLEINTERFACE_H
-#define XMLSERIALIZABLEINTERFACE_H
+#ifndef WIDGETS_XMLSERIALIZABLEINTERFACE_H
+#define WIDGETS_XMLSERIALIZABLEINTERFACE_H
 
 #include <QtXml/QDomElement>
+
+namespace Widgets
+{
 
 class XmlSerializableInterface
 {
 public:
     virtual bool fromXmlElement(const QDomElement &element) = 0;
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const = 0;
-protected:
-    inline static bool stringToBool(const QString &value) {
-        if (value == QString("true")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    inline static QString boolToString(bool value) {
-        if (value) {
-            return QString("true");
-        } else {
-            return QString("false");
-        }
-    }
 };
 
-#endif // XMLSERIALIZABLEINTERFACE_H
+}
+
+#endif // WIDGETS_XMLSERIALIZABLEINTERFACE_H

@@ -160,8 +160,8 @@ void PackageManager::update()
     QSqlDatabase::removeDatabase("update");
 
     // First search in system widgets directories
-    QDir systemDir = QDir(SYSTEM_WIDGETS);
-    QFileInfoList folders = systemDir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
+    QDir systemWidgetsFolder = QDir(SYSTEM_WIDGETS);
+    QFileInfoList folders = systemWidgetsFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
 
     foreach (QFileInfo folder, folders) {
         d->addPackage(folder.absoluteFilePath());

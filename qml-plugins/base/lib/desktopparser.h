@@ -29,6 +29,7 @@ class DesktopParser
 public:
     explicit DesktopParser(const QString &file);
     virtual ~DesktopParser();
+    QString file() const;
     void beginGroup(const QString &group);
     void endGroup();
     QStringList keys() const;

@@ -31,13 +31,12 @@
 namespace Widgets
 {
 
-class DesktopParser;
 class DockBasePropertiesPrivate: public GraphicalElementBasePropertiesPrivate
 {
 public:
     DockBasePropertiesPrivate();
     void checkValid();
-    bool checkDesktopFileValid(const DesktopParser &parser);
+    void fromDesktopFile(const QString &file, const QString &packageIdentifier);
     QSize size;
     bool anchorsTop;
     bool anchorsBottom;

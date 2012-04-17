@@ -24,7 +24,6 @@ Dock {
     anchors.left: parent.left
     anchors.right: parent.right
 
-
     Item {
         id: bar
         width: 270

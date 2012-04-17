@@ -20,8 +20,7 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.extra 1.0
 
-PageStackWindow
-{
+PageStackWindow {
     initialPage: mainPage
 
     Page {

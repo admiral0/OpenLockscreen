@@ -33,9 +33,8 @@ class GraphicalElementBasePropertiesPrivate
 {
 public:
     GraphicalElementBasePropertiesPrivate() {settingsEnabled = false;}
-    QString name;
-    QString packageName;
-//    QString qmlFile;
+    QString fileName;
+    QString packageIdentifier;
     bool settingsEnabled;
 };
 

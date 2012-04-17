@@ -18,7 +18,10 @@
 #include "dockbaseproperties_p.h"
 #include "dockbasepropertiesdefines.h"
 
+#include <QtCore/QDebug>
+
 #include "desktopparser.h"
+#include "tools.h"
 
 namespace Widgets
 {
@@ -28,8 +31,8 @@ DockBaseProperties::DockBaseProperties(QObject *parent):
 {
 }
 
-DockBaseProperties::DockBaseProperties(const QString &name, const QString &packageName,
-                                       /*const QString &qmlFile,*/ bool settingsEnabled,
+DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
+                                       bool settingsEnabled,
                                        int width, int height,
                                        bool anchorsTop, bool anchorsBottom,
                                        bool anchorsLeft, bool anchorsRight,
@@ -37,9 +40,8 @@ DockBaseProperties::DockBaseProperties(const QString &name, const QString &packa
     GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
 {
     Q_D(DockBaseProperties);
-    d->name = name;
-    d->packageName = packageName;
-//    d->qmlFile = qmlFile;
+    d->fileName = fileName;
+    d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
     d->size = QSize(width, height);
     d->anchorsTop = anchorsTop;
@@ -53,17 +55,13 @@ DockBaseProperties::DockBaseProperties(DockBasePropertiesPrivate *dd, QObject *p
 {
 }
 
-DockBaseProperties::DockBaseProperties(const QString &file, QObject *parent):
+DockBaseProperties::DockBaseProperties(const QString &file,
+                                       const QString &packageIdentifier,
+                                       QObject *parent):
     GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
 {
     Q_D(DockBaseProperties);
-    DesktopParser parser (file);
-    parser.beginGroup("Desktop Entry");
-
-    d->checkDesktopFileValid(parser);
-    if (!d->valid) {
-        return;
-    }
+    d->fromDesktopFile(file, packageIdentifier);
 }
 
 bool DockBaseProperties::isValid() const
@@ -147,10 +145,10 @@ bool DockBaseProperties::fromXmlElement(const QDomElement &element)
             geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE);
     QString anchorsRightString =
             geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE);
-    setAnchorsTop(stringToBool(anchorsTopString));
-    setAnchorsBottom(stringToBool(anchorsBottomString));
-    setAnchorsLeft(stringToBool(anchorsLeftString));
-    setAnchorsRight(stringToBool(anchorsRightString));
+    setAnchorsTop(Tools::stringToBool(anchorsTopString));
+    setAnchorsBottom(Tools::stringToBool(anchorsBottomString));
+    setAnchorsLeft(Tools::stringToBool(anchorsLeftString));
+    setAnchorsRight(Tools::stringToBool(anchorsRightString));
 
     return true;
 }
@@ -162,20 +160,22 @@ QDomElement DockBaseProperties::toXmlElement(const QString &tagName, QDomDocumen
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE, width());
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE, height());
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE,
-                                 boolToString(anchorsTop()));
+                                 Tools::boolToString(anchorsTop()));
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE,
-                                 boolToString(anchorsBottom()));
+                                 Tools::boolToString(anchorsBottom()));
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE,
-                                 boolToString(anchorsLeft()));
+                                 Tools::boolToString(anchorsLeft()));
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE,
-                                 boolToString(anchorsRight()));
+                                 Tools::boolToString(anchorsRight()));
     element.appendChild(geometryElement);
     return element;
 }
 
-DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &file, QObject *parent)
+DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &file,
+                                                         const QString &packageIdentifier,
+                                                         QObject *parent)
 {
-    return new DockBaseProperties(file, parent);
+    return new DockBaseProperties(file, packageIdentifier, parent);
 }
 
 void DockBaseProperties::setWidth(int width)

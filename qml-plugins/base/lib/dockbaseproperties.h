@@ -52,8 +52,8 @@ class DockBaseProperties: public GraphicalElementBaseProperties
     Q_PROPERTY(bool anchorsRight READ anchorsRight CONSTANT)
 public:
     explicit DockBaseProperties(QObject *parent = 0);
-    explicit DockBaseProperties(const QString &name, const QString &packageName,
-                                /*const QString &qmlFile,*/ bool settingsEnabled,
+    explicit DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
+                                bool settingsEnabled,
                                 int width, int height,
                                 bool anchorsTop, bool anchorsBottom,
                                 bool anchorsLeft, bool anchorsRight,
@@ -67,7 +67,9 @@ public:
     bool anchorsRight() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
-    static DockBaseProperties * fromDesktopFile(const QString &file, QObject *parent = 0);
+    static DockBaseProperties * fromDesktopFile(const QString &file,
+                                                const QString &packageIdentifier,
+                                                QObject *parent = 0);
 Q_SIGNALS:
     void widthChanged(int width);
     void heightChanged(int height);
@@ -84,7 +86,8 @@ protected:
     void setAnchorsLeft(bool anchorsLeft);
     void setAnchorsRight(bool anchorsRight);
 private:
-    explicit DockBaseProperties(const QString &file, QObject *parent = 0);
+    explicit DockBaseProperties(const QString &file, const QString &packageIdentifier,
+                                QObject *parent = 0);
     Q_DECLARE_PRIVATE(DockBaseProperties)
 };
 

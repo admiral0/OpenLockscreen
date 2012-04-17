@@ -44,6 +44,8 @@ public:
     void prepareDatabase();
     void addPackage(const QString &path);
     void addPackageInformations(int packageId, const QVariantMap &informations);
+    void scanPackageFolder(const QString &path, const QString &packageIdentifier,
+                           QObject *parent = 0);
 private:
     Q_DECLARE_PUBLIC(PackageManager)
     PackageManager * const q_ptr;
