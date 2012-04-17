@@ -2,6 +2,9 @@ include(../../../globals.pri)
 
 QT += sql
 CONFIG  += qtestlib
+LIBS +=     ../../../qml-plugins/base/lib/
+
+
 HEADERS +=  test.h \
             ../../../qml-plugins/base/version.h \
             ../../../qml-plugins/base/package.h \

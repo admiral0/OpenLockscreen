@@ -30,6 +30,8 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
 
+#include "debug.h"
+
 namespace Widgets
 {
 
@@ -78,7 +80,7 @@ void PackageManagerPrivate::addUniquePackageInformationsProperties(const QString
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package_info_properties");
         db.setDatabaseName(databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
 
         QVariantList trueNames;
         QSqlQuery query = QSqlQuery(db);
@@ -86,10 +88,10 @@ void PackageManagerPrivate::addUniquePackageInformationsProperties(const QString
             query.prepare("SELECT COUNT(*) FROM packageInformationsProperties WHERE name=:name");
             query.bindValue(":name", name);
             executeQuery(&query);
-            Q_ASSERT(query.next());
+            W_ASSERT(query.next());
             int count = query.value(0).toInt();
             query.finish();
-            Q_ASSERT(count == 0 || count == 1);
+            W_ASSERT(count == 0 || count == 1);
             if (count == 0) {
                 trueNames.append(name);
             }
@@ -109,7 +111,7 @@ void PackageManagerPrivate::prepareDatabase()
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "init");
         db.setDatabaseName(databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
 
         // Create tables if they do not exist
         QSqlQuery query = QSqlQuery(db);
@@ -144,7 +146,7 @@ void PackageManagerPrivate::prepareDatabase()
         // Check version
         query.prepare("SELECT COUNT(*) FROM version");
         executeQuery(&query);
-        Q_ASSERT(query.next());
+        W_ASSERT(query.next());
         int count = query.value(0).toInt();
         query.finish();
         bool needToRescan = false;
@@ -164,7 +166,7 @@ void PackageManagerPrivate::prepareDatabase()
         } else {
             query.prepare("SELECT major, minor, patch FROM version");
             executeQuery(&query);
-            Q_ASSERT(query.next());
+            W_ASSERT(query.next());
             int major = query.value(0).toInt();
             int minor = query.value(1).toInt();
             int patch = query.value(2).toInt();
@@ -205,7 +207,7 @@ void PackageManagerPrivate::addPackage(const QString &path)
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package");
         db.setDatabaseName(databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
         query.prepare("INSERT INTO packages (id, identifier, directory, plugin) VALUES (NULL, :identifier, :directory, :plugin)");
@@ -256,7 +258,7 @@ void PackageManagerPrivate::addPackageInformations(int packageId,
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package_informations");
         db.setDatabaseName(databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
         QVariantList packageIdList;

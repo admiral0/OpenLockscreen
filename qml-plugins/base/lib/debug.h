@@ -14,19 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef TEMPORARYPACKAGEMANAGER_H
-#define TEMPORARYPACKAGEMANAGER_H
+#ifndef DEBUG_H
+#define DEBUG_H
 
-#include "../../../qml-plugins/base/plugin/packagemanager.h"
+#include <QtCore/QtGlobal>
 
-class TemporaryPackageManagerPrivate;
-class TemporaryPackageManager: public Widgets::PackageManager
-{
-public:
-    TemporaryPackageManager();
-    static void deleteDb();
-private:
-    Q_DECLARE_PRIVATE(TemporaryPackageManager)
-};
+#if !defined(W_ASSERT)
+#  ifndef QT_NO_DEBUG
+#    define W_ASSERT(cond) Q_ASSERT(cond)
+#  else
+#    define W_ASSERT(cond) cond
+#  endif
+#endif
 
-#endif // TEMPORARYPACKAGEMANAGER_H
+#endif // DEBUG_H

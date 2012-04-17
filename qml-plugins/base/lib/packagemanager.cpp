@@ -21,6 +21,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 
+#include "debug.h"
 #include "package.h"
 #include "version.h"
 
@@ -56,7 +57,7 @@ Package PackageManager::package(const QString &identifier) const
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_package");
         db.setDatabaseName(d->databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
         query.prepare("SELECT id, directory, plugin FROM packages WHERE identifier=:identifier");
@@ -122,7 +123,7 @@ QStringList PackageManager::registeredPackages() const
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_registered_packages");
         db.setDatabaseName(d->databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
         QSqlQuery query = QSqlQuery(db);
         query.prepare("SELECT identifier FROM packages");
         d->executeQuery(&query);
@@ -142,7 +143,7 @@ void PackageManager::update()
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "update");
         db.setDatabaseName(d->databasePath());
-        Q_ASSERT(db.open());
+        W_ASSERT(db.open());
         QSqlQuery query = QSqlQuery(db);
         query.prepare("DELETE FROM packages");
         d->executeQuery(&query);
