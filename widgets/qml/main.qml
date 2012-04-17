@@ -74,7 +74,7 @@ PageStackWindow
                 height: view.height
 
                 Rectangle {
-                    anchors.centerIn: parent
+                    anchors.top: parent.top
                     width: 100
                     height: 100
                 }

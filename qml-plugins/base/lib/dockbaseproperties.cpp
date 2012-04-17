@@ -18,6 +18,8 @@
 #include "dockbaseproperties_p.h"
 #include "dockbasepropertiesdefines.h"
 
+#include "desktopparser.h"
+
 namespace Widgets
 {
 
@@ -49,6 +51,25 @@ DockBaseProperties::DockBaseProperties(const QString &name, const QString &packa
 DockBaseProperties::DockBaseProperties(DockBasePropertiesPrivate *dd, QObject *parent):
     GraphicalElementBaseProperties(dd, parent)
 {
+}
+
+DockBaseProperties::DockBaseProperties(const QString &file, QObject *parent):
+    GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
+{
+    Q_D(DockBaseProperties);
+    DesktopParser parser (file);
+    parser.beginGroup("Desktop Entry");
+
+    d->checkDesktopFileValid(parser);
+    if (!d->valid) {
+        return;
+    }
+}
+
+bool DockBaseProperties::isValid() const
+{
+    Q_D(const DockBaseProperties);
+    return d->valid;
 }
 
 int DockBaseProperties::width() const
@@ -150,6 +171,11 @@ QDomElement DockBaseProperties::toXmlElement(const QString &tagName, QDomDocumen
                                  boolToString(anchorsRight()));
     element.appendChild(geometryElement);
     return element;
+}
+
+DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &file, QObject *parent)
+{
+    return new DockBaseProperties(file, parent);
 }
 
 void DockBaseProperties::setWidth(int width)

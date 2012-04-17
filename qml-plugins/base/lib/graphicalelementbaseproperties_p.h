@@ -32,6 +32,7 @@ namespace Widgets
 class GraphicalElementBasePropertiesPrivate
 {
 public:
+    GraphicalElementBasePropertiesPrivate() {settingsEnabled = false;}
     QString name;
     QString packageName;
 //    QString qmlFile;

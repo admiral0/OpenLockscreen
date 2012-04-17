@@ -31,13 +31,20 @@
 namespace Widgets
 {
 
-struct DockBasePropertiesPrivate: GraphicalElementBasePropertiesPrivate
+class DesktopParser;
+class DockBasePropertiesPrivate: public GraphicalElementBasePropertiesPrivate
 {
+public:
+    DockBasePropertiesPrivate();
+    void checkValid();
+    bool checkDesktopFileValid(const DesktopParser &parser);
     QSize size;
     bool anchorsTop;
     bool anchorsBottom;
     bool anchorsLeft;
     bool anchorsRight;
+    bool valid;
+
 };
 
 }

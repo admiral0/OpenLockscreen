@@ -20,6 +20,9 @@ import org.SfietKonstantin.widgets 1.0
 Dock {
     id: container
     height: 100
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
 
 
     Item {

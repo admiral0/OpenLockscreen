@@ -58,6 +58,7 @@ public:
                                 bool anchorsTop, bool anchorsBottom,
                                 bool anchorsLeft, bool anchorsRight,
                                 QObject *parent = 0);
+    bool isValid() const;
     int width() const;
     int height() const;
     bool anchorsTop() const;
@@ -66,6 +67,7 @@ public:
     bool anchorsRight() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
+    static DockBaseProperties * fromDesktopFile(const QString &file, QObject *parent = 0);
 Q_SIGNALS:
     void widthChanged(int width);
     void heightChanged(int height);
@@ -82,6 +84,7 @@ protected:
     void setAnchorsLeft(bool anchorsLeft);
     void setAnchorsRight(bool anchorsRight);
 private:
+    explicit DockBaseProperties(const QString &file, QObject *parent = 0);
     Q_DECLARE_PRIVATE(DockBaseProperties)
 };
 
