@@ -14,47 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+#ifndef WIDGETS_GRAPHICALCOMPONENT_P_H
+#define WIDGETS_GRAPHICALCOMPONENT_P_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QScopedPointer>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include <QtCore/QString>
+#include <QtCore/QVariantMap>
 
 namespace Widgets
 {
 
-class VersionPrivate;
-class Version
+struct GraphicalComponentPrivate
 {
-public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
-protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(Version)
+    QString identifier;
+    QVariantMap settings;
 };
 
 }
 
-Q_DECLARE_METATYPE(Widgets::Version)
-
-#endif // WIDGETS_VERSION_H
+#endif // WIDGETS_GRAPHICALCOMPONENT_P_H

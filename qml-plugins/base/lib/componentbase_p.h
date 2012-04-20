@@ -14,47 +14,44 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+#ifndef WIDGETS_COMPONENTBASE_P_H
+#define WIDGETS_COMPONENTBASE_P_H
 
-#include <QtCore/QMetaType>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include <QtCore/QHash>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QStringList>
+
+#include "componentbase.h"
 
 namespace Widgets
 {
 
-class VersionPrivate;
-class Version
+class DesktopParser;
+class ComponentBasePrivate
 {
 public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
+    ComponentBasePrivate(ComponentBase *q);
+    QString defaultName;
+    QString defaultDescription;
+    QHash<QString, QPair<QString, QString> > nameAndDescription;
+    QString icon;
+    bool valid;
+    void fromDesktopFile(const QString &file);
 protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
+    virtual void parseDesktopFile(const DesktopParser &parser);
+    virtual bool checkValid(const DesktopParser &parser);
+    ComponentBase *q_ptr;
 private:
-    Q_DECLARE_PRIVATE(Version)
+    Q_DECLARE_PUBLIC(ComponentBase)
 };
 
 }
 
-Q_DECLARE_METATYPE(Widgets::Version)
-
-#endif // WIDGETS_VERSION_H
+#endif // WIDGETS_COMPONENTBASE_P_H

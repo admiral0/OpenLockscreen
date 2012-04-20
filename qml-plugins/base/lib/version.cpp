@@ -87,7 +87,7 @@ Version::~Version()
 
 bool Version::operator==(const Version &other)
 {
-    return (major() == other.major() && minor() == other.minor());
+    return (major() == other.major() && minor() == other.minor() && patch() == other.patch());
 }
 
 bool Version::operator !=(const Version &other)

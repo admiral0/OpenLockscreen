@@ -27,7 +27,7 @@ namespace Widgets
 {
 
 DockBaseProperties::DockBaseProperties(QObject *parent):
-    GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
+    GraphicalComponentBase(new DockBasePropertiesPrivate(this), parent)
 {
 }
 
@@ -37,7 +37,7 @@ DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &p
                                        bool anchorsTop, bool anchorsBottom,
                                        bool anchorsLeft, bool anchorsRight,
                                        QObject *parent):
-    GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
+    GraphicalComponentBase(new DockBasePropertiesPrivate(this), parent)
 {
     Q_D(DockBaseProperties);
     d->fileName = fileName;
@@ -51,17 +51,18 @@ DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &p
 }
 
 DockBaseProperties::DockBaseProperties(DockBasePropertiesPrivate *dd, QObject *parent):
-    GraphicalElementBaseProperties(dd, parent)
+    GraphicalComponentBase(dd, parent)
 {
 }
 
-DockBaseProperties::DockBaseProperties(const QString &file,
+DockBaseProperties::DockBaseProperties(const QString &desktopFile,
                                        const QString &packageIdentifier,
                                        QObject *parent):
-    GraphicalElementBaseProperties(new DockBasePropertiesPrivate, parent)
+    GraphicalComponentBase(new DockBasePropertiesPrivate(this), parent)
 {
     Q_D(DockBaseProperties);
-    d->fromDesktopFile(file, packageIdentifier);
+    d->packageIdentifier = packageIdentifier;
+    d->fromDesktopFile(desktopFile);
 }
 
 bool DockBaseProperties::isValid() const
@@ -131,7 +132,7 @@ bool DockBaseProperties::fromXmlElement(const QDomElement &element)
         return false;
     }
 
-    if (!GraphicalElementBaseProperties::fromXmlElement(element)) {
+    if (!GraphicalComponentBase::fromXmlElement(element)) {
         return false;
     }
 
@@ -155,7 +156,7 @@ bool DockBaseProperties::fromXmlElement(const QDomElement &element)
 
 QDomElement DockBaseProperties::toXmlElement(const QString &tagName, QDomDocument *document) const
 {
-    QDomElement element = GraphicalElementBaseProperties::toXmlElement(tagName, document);
+    QDomElement element = GraphicalComponentBase::toXmlElement(tagName, document);
     QDomElement geometryElement = document->createElement(DOCK_BASE_PROPERTIES_GEOMETRY_TAGNAME);
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE, width());
     geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE, height());
@@ -171,11 +172,11 @@ QDomElement DockBaseProperties::toXmlElement(const QString &tagName, QDomDocumen
     return element;
 }
 
-DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &file,
+DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &desktopFile,
                                                          const QString &packageIdentifier,
                                                          QObject *parent)
 {
-    return new DockBaseProperties(file, packageIdentifier, parent);
+    return new DockBaseProperties(desktopFile, packageIdentifier, parent);
 }
 
 void DockBaseProperties::setWidth(int width)

@@ -17,13 +17,13 @@
 #ifndef WIDGETS_DOCKBASEPROPERTIES_H
 #define WIDGETS_DOCKBASEPROPERTIES_H
 
-#include "graphicalelementbaseproperties.h"
+#include "graphicalcomponentbase.h"
 
 namespace Widgets
 {
 
 class DockBasePropertiesPrivate;
-class DockBaseProperties: public GraphicalElementBaseProperties
+class DockBaseProperties: public GraphicalComponentBase
 {
     Q_OBJECT
     /**
@@ -52,12 +52,6 @@ class DockBaseProperties: public GraphicalElementBaseProperties
     Q_PROPERTY(bool anchorsRight READ anchorsRight CONSTANT)
 public:
     explicit DockBaseProperties(QObject *parent = 0);
-    explicit DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
-                                bool settingsEnabled,
-                                int width, int height,
-                                bool anchorsTop, bool anchorsBottom,
-                                bool anchorsLeft, bool anchorsRight,
-                                QObject *parent = 0);
     bool isValid() const;
     int width() const;
     int height() const;
@@ -67,7 +61,7 @@ public:
     bool anchorsRight() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
-    static DockBaseProperties * fromDesktopFile(const QString &file,
+    static DockBaseProperties * fromDesktopFile(const QString &desktopFile,
                                                 const QString &packageIdentifier,
                                                 QObject *parent = 0);
 Q_SIGNALS:
@@ -78,15 +72,23 @@ Q_SIGNALS:
     void anchorsLeftChanged(bool anchorsLeft);
     void anchorsRightChanged(bool anchorsRight);
 protected:
-    DockBaseProperties(DockBasePropertiesPrivate *dd, QObject *parent);
+    explicit DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
+                                bool settingsEnabled,
+                                int width, int height,
+                                bool anchorsTop, bool anchorsBottom,
+                                bool anchorsLeft, bool anchorsRight,
+                                QObject *parent = 0);
+    explicit DockBaseProperties(DockBasePropertiesPrivate *dd, QObject *parent);
     void setWidth(int width);
     void setHeight(int height);
     void setAnchorsTop(bool anchorsTop);
     void setAnchorsBottom(bool anchorsBottom);
     void setAnchorsLeft(bool anchorsLeft);
     void setAnchorsRight(bool anchorsRight);
+    friend class PackageManager;
 private:
-    explicit DockBaseProperties(const QString &file, const QString &packageIdentifier,
+    explicit DockBaseProperties(const QString &desktopFile,
+                                const QString &packageIdentifier,
                                 QObject *parent = 0);
     Q_DECLARE_PRIVATE(DockBaseProperties)
 };

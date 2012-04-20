@@ -16,48 +16,51 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.sk.widgets 1.0
-import "../../widgets/qml/UiConstants.js" as UI
+import "UiConstants.js" as Ui
 
 AbstractPage {
     id: container
     title: qsTr("About")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
     content: Flickable {
         clip: true
         anchors.fill: parent
         contentWidth: container.width
-        contentHeight: UI.MARGIN_XLARGE + icon.height + UI.MARGIN_LARGE + aboutText.height +
-                       UI.MARGIN_DEFAULT + copyrightText.height + UI.MARGIN_DEFAULT +
-                       separator1.height + UI.MARGIN_DEFAULT + oxygenText.height +
-                       UI.MARGIN_DEFAULT + separator2.height + UI.MARGIN_DEFAULT +
-                       artworkText.height + UI.MARGIN_DEFAULT + separator3.height +
-                       UI.MARGIN_DEFAULT + tangoText.height
+        contentHeight: Ui.MARGIN_XLARGE + icon.height + Ui.MARGIN_LARGE + aboutText.height +
+                       Ui.MARGIN_DEFAULT + copyrightText.height + Ui.MARGIN_DEFAULT +
+                       separator1.height + Ui.MARGIN_DEFAULT + oxygenText.height +
+                       Ui.MARGIN_DEFAULT + separator2.height + Ui.MARGIN_DEFAULT +
+                       artworkText.height + Ui.MARGIN_DEFAULT + separator3.height +
+                       Ui.MARGIN_DEFAULT + tangoText.height + Ui.MARGIN_LARGE
 
 
         Image {
             id: icon
             width: 80; height: 80
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top; anchors.topMargin: UI.MARGIN_XLARGE
-            source: "/usr/share/icons/hicolor/80x80/apps/widgets.png"
+            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_XLARGE
+//            source: "/usr/share/icons/hicolor/80x80/apps/widgets.png"
         }
 
         Label {
             id: aboutText
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-            anchors.top: icon.bottom; anchors.topMargin: UI.MARGIN_LARGE
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.top: icon.bottom; anchors.topMargin: Ui.MARGIN_LARGE
             wrapMode: Text.WordWrap
-            text: qsTr("Widgets is an application that tries to implement a\
-widget system that is simple and enjoyable to use. It also tries to be\
-adaptative and tries to mimic some well-known interfaces.")
+            text: qsTr("Widgets tries to bring you a better experience \
+for your Harmattan device. Developed to be extensible and reusable, it \
+provides a friendly UI, and many useful elements that informs you and made \
+your phone easy to use.")
         }
 
         Label {
             id: copyrightText
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-            anchors.top: aboutText.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.top: aboutText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             wrapMode: Text.WordWrap
             text: "(C) 2011 - Lucien XU"
         }
@@ -65,14 +68,14 @@ adaptative and tries to mimic some well-known interfaces.")
 
         HorizontalSeparator {
             id: separator1
-            anchors.top: copyrightText.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.top: copyrightText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         }
 
         Label {
             id: oxygenText
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-            anchors.top: separator1.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.top: separator1.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
             text: "Oxygen icons <br/>(Plasma and System settings)<br/>(C) The Oxygen team : \
@@ -81,14 +84,14 @@ adaptative and tries to mimic some well-known interfaces.")
 
         HorizontalSeparator {
             id: separator2
-            anchors.top: oxygenText.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.top: oxygenText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         }
 
         Label {
             id: artworkText
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-            anchors.top: separator2.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.top: separator2.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
             text: "Wallpapers <br/>(\"Emotion\", \"Field\", \"Leafs Labyrinth\" \
@@ -98,14 +101,14 @@ and \"The Rings of Saturn\")<br/>\
 
         HorizontalSeparator {
             id: separator3
-            anchors.top: artworkText.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.top: artworkText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         }
 
         Label {
             id: tangoText
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-            anchors.top: separator3.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+            anchors.top: separator3.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
             text: "Tango icons <br/>(Phone and Internet)<br/>The Tango team : \
@@ -113,8 +116,5 @@ and \"The Rings of Saturn\")<br/>\
         }
 
 
-    }
-    tools: ToolBarLayout {
-        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop()}
     }
 }

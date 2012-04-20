@@ -19,15 +19,7 @@
 
 namespace Widgets
 {
-
-static const char *DESKTOP_FILE_NAME = "Name";
-static const char *DESKTOP_FILE_COMMENT = "Comment";
-static const char *DESKTOP_FILE_ICON = "Icon";
-static const char *DESKTOP_FILE_TYPE = "Type";
-static const char *DESKTOP_FILE_TYPE_VALUE = "Service";
 static const char *DESKTOP_FILE_SERVICE_TYPE = "X-Widgets-ServiceType";
-
-
 }
 
 #endif // WIDGETS_DESKTOPPARSERDEFINES_H

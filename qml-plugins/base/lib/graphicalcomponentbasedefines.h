@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H
-#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H
+#ifndef WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H
+#define WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H
 
 namespace Widgets
 {
@@ -25,4 +25,4 @@ static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE
 static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE = "has_settings";
 }
 
-#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIESDEFINES_H
+#endif // WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H

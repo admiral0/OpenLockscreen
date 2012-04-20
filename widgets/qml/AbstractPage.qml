@@ -16,28 +16,28 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.sk.widgets 1.0
-import "../../widgets/qml/UiConstants.js" as UI
+import "UiConstants.js" as Ui
 
 Page {
     id: container
     property string title
     property alias content: content.children
+    signal back()
 
     Item {
         id: header
         anchors.top: parent.top
         anchors.left: parent.left; anchors.right: parent.right
-        height: window.inPortrait ? UI.HEADER_HEIGHT_PORTRAIT : UI.HEADER_HEIGHT_LANDSCAPE
+        height: window.inPortrait ? Ui.HEADER_HEIGHT_PORTRAIT : Ui.HEADER_HEIGHT_LANDSCAPE
 
         Label {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
+            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
             verticalAlignment: Text.AlignVCenter
             text: title
-            font.pixelSize: UI.FONT_SIZE_XLARGE
+            font.pixelSize: Ui.FONT_SIZE_XLARGE
         }
     }
 
@@ -48,7 +48,7 @@ Page {
 
     Item {
         id: content
-        anchors.top: horizontalSeparator.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+        anchors.top: horizontalSeparator.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         anchors.left: parent.left; anchors.right: parent.right
         anchors.bottom: parent.bottom
     }

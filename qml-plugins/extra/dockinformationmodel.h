@@ -14,50 +14,55 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+#ifndef WIDGETS_EXTRA_DOCKMODEL_H
+#define WIDGETS_EXTRA_DOCKMODEL_H
 
-PageStackWindow {
-    id: window
-    initialPage: mainPage
-    Component.onCompleted: {
-        theme.inverted = true
-    }
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QScopedPointer>
 
-    MainPage {
-        id: mainPage
-        onShow: {
-            if(page == "showWallpaper") {
-                window.pageStack.push(backgroundSourcePage)
-            }
-            if(page == "showAbout") {
-                window.pageStack.push(aboutPage)
-            }
-        }
-    }
+#include "packagemanager.h"
 
-    WallpaperSourcePage {
-        id: backgroundSourcePage
-        onShow: {
-            if(page == "showWallpaperDefault") {
-                wallpaperDefaultPage.selected = settingsManager.wallpaperSource
-                window.pageStack.push(wallpaperDefaultPage)
-            } else if(page == "showWallpaperPictures") {
-                wallpaperPicturesPage.selected = settingsManager.wallpaperSource
-                window.pageStack.push(wallpaperPicturesPage)
-            }
-        }
-    }
+namespace Widgets
+{
 
-    WallpaperDefaultPage {
-        id: wallpaperDefaultPage
-    }
+namespace Extra
+{
 
-    WallpaperPicturesPage {
-        id: wallpaperPicturesPage
-    }
+class DockInformationModelPrivate;
+class DockInformationModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
+               WRITE setPackageManager NOTIFY packageManagerChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+public:
+    enum PackageRole
+    {
+        NameRole,
+        DescriptionRole,
+        FileRole
+    };
+    explicit DockInformationModel(QObject *parent = 0);
+    virtual ~DockInformationModel();
+    PackageManager * packageManager() const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void clear();
+Q_SIGNALS:
+    void packageManagerChanged();
+    void countChanged(int count);
+public Q_SLOTS:
+    void setPackageManager(PackageManager *packageManager);
+    void update();
+protected:
+    const QScopedPointer<DockInformationModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(DockInformationModel)
+};
 
-    AboutPage {
-        id: aboutPage
-    }
 }
+
+}
+
+#endif // WIDGETS_EXTRA_DOCKMODEL_H

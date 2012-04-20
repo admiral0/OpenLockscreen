@@ -1,0 +1,217 @@
+/****************************************************************************************
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ *                                                                                      *
+ * This program is free software; you can redistribute it and/or modify it under        *
+ * the terms of the GNU General Public License as published by the Free Software        *
+ * Foundation; either version 3 of the License, or (at your option) any later           *
+ * version.                                                                             *
+ *                                                                                      *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
+ *                                                                                      *
+ * You should have received a copy of the GNU General Public License along with         *
+ * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
+ ****************************************************************************************/ 
+
+#include "componentbase.h"
+#include "componentbase_p.h"
+
+#include <QtCore/QDebug>
+#include <QtCore/QLocale>
+
+#include "qplatformdefs.h"
+#ifdef MEEGO_EDITION_HARMATTAN
+#include <MLocale>
+#endif
+
+namespace Widgets
+{
+
+ComponentBase::ComponentBase(QObject *parent):
+    QObject(parent), d_ptr(new ComponentBasePrivate(this))
+{
+}
+
+ComponentBase::ComponentBase(ComponentBasePrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
+{
+}
+
+ComponentBase::~ComponentBase()
+{
+}
+
+bool ComponentBase::isValid() const
+{
+    Q_D(const ComponentBase);
+    return d->valid;
+}
+
+QString ComponentBase::icon() const
+{
+    Q_D(const ComponentBase);
+    return d->icon;
+}
+
+QStringList ComponentBase::languages() const
+{
+    Q_D(const ComponentBase);
+    return d->nameAndDescription.keys();
+}
+
+QString ComponentBase::defaultName() const
+{
+    Q_D(const ComponentBase);
+    return d->defaultName;
+}
+
+QString ComponentBase::name() const
+{
+    Q_D(const ComponentBase);
+#ifndef MEEGO_EDITION_HARMATTAN
+    QStringList languages = QLocale::system().uiLanguages();
+#else
+    MLocale locale = MLocale();
+    QStringList languages = locale.localeScripts();
+#endif
+    QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
+
+    QString value = QString();
+    QRegExp languageRegExp = QRegExp("(\\w+)(\\..+){0,1}");
+
+    while (languagesIterator.hasNext() && value.isEmpty()) {
+        QString language = languagesIterator.next();
+        if (language.indexOf(languageRegExp) != -1) {
+            QString trueLanguage = languageRegExp.cap(1);
+            value = d->nameAndDescription.value(trueLanguage).first;
+        }
+    }
+
+    if (value.isEmpty()) {
+        value = d->defaultName;
+    }
+    return value;
+}
+
+QString ComponentBase::name(const QString &language) const
+{
+    Q_D(const ComponentBase);
+
+    QString value = d->nameAndDescription.value(language).first;
+    if (value.isEmpty()) {
+        value = d->defaultName;
+    }
+
+    return value;
+}
+
+QString ComponentBase::defaultDesription() const
+{
+    Q_D(const ComponentBase);
+    return d->defaultDescription;
+}
+
+QString ComponentBase::description() const
+{
+    Q_D(const ComponentBase);
+#ifndef MEEGO_EDITION_HARMATTAN
+    QStringList languages = QLocale::system().uiLanguages();
+#else
+    MLocale locale = MLocale();
+    QStringList languages = locale.localeScripts();
+#endif
+    QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
+
+    QString value = QString();
+    QRegExp languageRegExp = QRegExp("(\\w+)(\\..+){0,1}");
+
+    while (languagesIterator.hasNext() && value.isEmpty()) {
+        QString language = languagesIterator.next();
+        if (language.indexOf(languageRegExp) != -1) {
+            QString trueLanguage = languageRegExp.cap(1);
+            value = d->nameAndDescription.value(trueLanguage).second;
+        }
+    }
+
+    if (value.isEmpty()) {
+        value = d->defaultDescription;
+    }
+    return value;
+}
+
+QString ComponentBase::description(const QString &language) const
+{
+    Q_D(const ComponentBase);
+    QString value = d->nameAndDescription.value(language).second;
+    if (value.isEmpty()) {
+        value = d->defaultDescription;
+    }
+
+    return value;
+}
+
+void ComponentBase::setIcon(const QString &icon)
+{
+    Q_D(ComponentBase);
+    if (d->icon != icon) {
+        d->icon = icon;
+        emit iconChanged();
+    }
+}
+
+void ComponentBase::setDefaultName(const QString &name)
+{
+    Q_D(ComponentBase);
+    if (d->defaultName != name) {
+        d->defaultName = name;
+        emit defaultNameChanged();
+    }
+}
+
+void ComponentBase::addName(const QString &language, const QString &name)
+{
+    Q_D(ComponentBase);
+    QPair<QString, QString> data;
+
+    if (d->nameAndDescription.contains(language)) {
+        data = d->nameAndDescription.value(language);
+    }
+
+    data.first = name;
+    d->nameAndDescription.insert(language, data);
+    emit nameChanged();
+}
+
+void ComponentBase::setDefaultDescription(const QString &description)
+{
+    Q_D(ComponentBase);
+
+    if (d->defaultDescription != description) {
+        d->defaultDescription = description;
+        emit descriptionChanged();
+    }
+}
+
+void ComponentBase::addDescription(const QString &language, const QString &description)
+{
+    Q_D(ComponentBase);
+    QPair<QString, QString> data;
+
+    if (d->nameAndDescription.contains(language)) {
+        data = d->nameAndDescription.value(language);
+    }
+    data.second = description;
+    d->nameAndDescription.insert(language, data);
+    emit descriptionChanged();
+}
+
+void ComponentBase::clearNamesAndDescriptions()
+{
+    Q_D(ComponentBase);
+    d->nameAndDescription.clear();
+    emit nameChanged();
+    emit descriptionChanged();
+}
+
+}

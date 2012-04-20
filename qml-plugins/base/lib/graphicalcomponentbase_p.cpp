@@ -14,9 +14,6 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
-#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
-
 // Warning
 //
 // This file exists for the convenience
@@ -24,20 +21,49 @@
 // file may change from version to version
 // without notice or even be removed.
 
-#include <QtCore/QString>
+#include "graphicalcomponentbase_p.h"
+
+#include <QtCore/QVariant>
+
+#include "desktopparser.h"
+#include "tools.h"
 
 namespace Widgets
 {
 
-class GraphicalElementBasePropertiesPrivate
-{
-public:
-    GraphicalElementBasePropertiesPrivate() {settingsEnabled = false;}
-    QString fileName;
-    QString packageIdentifier;
-    bool settingsEnabled;
-};
+static const char *DESKTOP_FILE_COMPONENT_SETTINGS_ENABLED =
+        "X-Widgets-ComponentInfo-SettingsEnabled";
 
+GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
+    ComponentBasePrivate(q)
+{
+    settingsEnabled = false;
 }
 
-#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_P_H
+GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
+                                                             const QString &packageIdentifier,
+                                                             GraphicalComponentBase *q):
+    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
+{
+    settingsEnabled = false;
+}
+
+bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
+{
+    if (!parser.contains(DESKTOP_FILE_COMPONENT_SETTINGS_ENABLED)) {
+        return false;
+    }
+    return ComponentBasePrivate::checkValid(parser);
+}
+
+void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
+{
+    Q_Q(GraphicalComponentBase);
+    ComponentBasePrivate::parseDesktopFile(parser);
+
+    QString settingsEnabledString =
+            parser.value(DESKTOP_FILE_COMPONENT_SETTINGS_ENABLED).toString();
+    q->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
+}
+
+}

@@ -22,7 +22,7 @@ namespace Widgets
 {
 
 DockProperties::DockProperties(QObject *parent):
-    DockBaseProperties(new DockPropertiesPrivate, parent)
+    DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
 }
 
@@ -32,7 +32,7 @@ DockProperties::DockProperties(const QString &fileName, const QString &packageId
                                bool anchorsTop, bool anchorsBottom,
                                bool anchorsLeft, bool anchorsRight,
                                const QVariantMap &settings, QObject *parent):
-    DockBaseProperties(new DockPropertiesPrivate, parent)
+    DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
     Q_D(DockProperties);
     d->fileName = fileName;
@@ -54,7 +54,7 @@ DockProperties::DockProperties(const QString &fileName, const QString &packageId
                                bool anchorsLeft, bool anchorsRight,
                                const QString &identifier, const QVariantMap &settings,
                                QObject *parent):
-    DockBaseProperties(new DockPropertiesPrivate, parent)
+    DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
     Q_D(DockProperties);
     d->fileName = fileName;

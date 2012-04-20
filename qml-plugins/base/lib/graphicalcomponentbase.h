@@ -14,30 +14,30 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H
-#define WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H
+#ifndef WIDGETS_GRAPHICALCOMPONENTBASE_H
+#define WIDGETS_GRAPHICALCOMPONENTBASE_H
 
 #include <QtCore/QObject>
 
 #include "xmlserializableinterface.h"
+#include "componentbase.h"
 
 namespace Widgets
 {
 
-class GraphicalElementBasePropertiesPrivate;
-class GraphicalElementBaseProperties : public QObject, public XmlSerializableInterface
+class GraphicalComponentBasePrivate;
+class GraphicalComponentBase: public ComponentBase,
+        public XmlSerializableInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
     Q_PROPERTY(QString packageIdentifier READ packageIdentifier NOTIFY packageIdentifierChanged)
     Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
 public:
-    explicit GraphicalElementBaseProperties(QObject *parent = 0);
-    explicit GraphicalElementBaseProperties(const QString &fileName,
-                                            const QString &packageIdentifier,
-                                            bool settingsEnabled,
-                                            QObject *parent = 0);
-    virtual ~GraphicalElementBaseProperties();
+    explicit GraphicalComponentBase(QObject *parent = 0);
+    explicit GraphicalComponentBase(const QString &fileName, const QString &packageIdentifier,
+                                    bool settingsEnabled, QObject *parent = 0);
+    virtual ~GraphicalComponentBase();
     QString fileName() const;
     QString packageIdentifier() const;
     bool isSettingsEnabled() const;
@@ -48,15 +48,14 @@ Q_SIGNALS:
     void packageIdentifierChanged(const QString &packageIdentifier);
     void settingsEnabledChanged(bool settingsEnabled);
 protected:
-    GraphicalElementBaseProperties(GraphicalElementBasePropertiesPrivate *dd, QObject *parent);
+    explicit GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent);
     void setFileName(const QString &fileName);
     void setPackageIdentifier(const QString &packageIdentifier);
     void setSettingsEnabled(bool settingsEnabled);
-    const QScopedPointer<GraphicalElementBasePropertiesPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(GraphicalElementBaseProperties)
+    Q_DECLARE_PRIVATE(GraphicalComponentBase)
 };
 
 }
 
-#endif // WIDGETS_GRAPHICALELEMENTBASEPROPERTIES_H
+#endif // WIDGETS_GRAPHICALCOMPONENTBASE_H

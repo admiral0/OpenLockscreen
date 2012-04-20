@@ -16,17 +16,30 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.sk.widgets 1.0
-import "../../widgets/qml/UiConstants.js" as UI
+import org.SfietKonstantin.widgets.extra 1.0
+import "UiConstants.js" as Ui
 
-AbstractNavigationPage{
+AbstractPage {
     id: container
-    title: qsTr("Widgets settings")
-    model: SelectorModel {
-        Component.onCompleted: {
-//            addEntry("showGeneral", qsTr("General configurations"))
-            addEntry("showWallpaper", qsTr("Wallpaper selection"))
-            addEntry("showAbout", qsTr("About Widgets"))
+    title: qsTr("Docks informations")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
+    content: ListView {
+        id: view
+        anchors.fill: parent
+        model: dockInformationModel
+        clip: true
+        delegate: ClickableEntry {
+            enabled: false
+            text: model.name
+            subText: model.description
+            indicatorIcon: ""
         }
+    }
+
+    DockInformationModel {
+        id: dockInformationModel
+        packageManager: packageManagerInstance
     }
 }

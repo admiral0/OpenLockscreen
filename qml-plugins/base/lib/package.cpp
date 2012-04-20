@@ -18,8 +18,9 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFileInfo>
-#include <QtCore/QLocale>
+#include <QtCore/QVariant>
 
+#include "componentbase_p.h"
 #include "desktopparser.h"
 #include "desktopparserdefines.h"
 
@@ -34,154 +35,78 @@ static const char *DESKTOP_FILE_PLUGIN_INFO_WEBSITE = "X-Widgets-PluginInfo-Webs
 static const char *DESKTOP_FILE_PLUGIN_INFO_NAME = "X-Widgets-PluginInfo-Name";
 static const char *DESKTOP_FILE_PLUGIN_INFO_VERSION = "X-Widgets-PluginInfo-Version";
 
-class PackagePrivate
+class PackagePrivate: public ComponentBasePrivate
 {
 public:
-    PackagePrivate();
-    void checkValid(const DesktopParser &parser);
-    void copyFrom(const Package &other);
+    PackagePrivate(Package *q);
     QString identifier;
     QString directory;
-    QString defaultName;
-    QString defaultDescription;
-    QHash<QString, QPair<QString, QString> > nameAndDescription;
     QString plugin;
-    QString icon;
     QString author;
     QString email;
     QString website;
     Version version;
-    bool valid;
+protected:
+    virtual void parseDesktopFile(const DesktopParser &parser);
+    virtual bool checkValid(const DesktopParser &parser);
+private:
+    Q_DECLARE_PUBLIC(Package)
 };
 
-PackagePrivate::PackagePrivate()
+PackagePrivate::PackagePrivate(Package *q):
+    ComponentBasePrivate(q)
 {
-    valid = false;
 }
 
-void PackagePrivate::checkValid(const DesktopParser &parser)
+void PackagePrivate::parseDesktopFile(const DesktopParser &parser)
 {
-    if (!parser.contains(DESKTOP_FILE_NAME)) {
-        return;
-    }
-    if (!parser.contains(DESKTOP_FILE_COMMENT)) {
-        return;
-    }
-    if (parser.value(DESKTOP_FILE_TYPE).toString() != DESKTOP_FILE_TYPE_VALUE) {
-        return;
-    }
+    Q_Q(Package);
+    ComponentBasePrivate::parseDesktopFile(parser);
+
+    QFileInfo fileInfo (parser.file());
+    q->setDirectory(fileInfo.absolutePath());
+    q->setIdentifier(parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString());
+    q->setPlugin(parser.value(DESKTOP_FILE_PLUGIN_INFO_NAME).toString());
+    q->setAuthor(parser.value(DESKTOP_FILE_PLUGIN_INFO_AUTHOR).toString());
+    q->setEmail(parser.value(DESKTOP_FILE_PLUGIN_INFO_EMAIL).toString());
+    q->setWebsite(parser.value(DESKTOP_FILE_PLUGIN_INFO_WEBSITE).toString());
+    QString version = parser.value(DESKTOP_FILE_PLUGIN_INFO_VERSION).toString();
+    q->setVersion(Version::fromString(version));
+}
+
+bool PackagePrivate::checkValid(const DesktopParser &parser)
+{
     if (parser.value(DESKTOP_FILE_SERVICE_TYPE).toString() != DESKTOP_FILE_SERVICE_VALUE) {
-        return;
+        return false;
     }
     if (parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString().isEmpty()) {
-        return;
+        return false;
     }
 
-    valid = true;
-}
-
-void PackagePrivate::copyFrom(const Package &other)
-{
-    identifier = other.identifier();
-    defaultName = other.defaultName();
-    defaultDescription = other.defaultDesription();
-    nameAndDescription = other.nameAndDescription();
-    plugin = other.plugin();
-    icon = other.icon();
-    author = other.author();
-    email = other.email();
-    website = other.website();
-    version = other.version();
-    valid = other.isValid();
+    return ComponentBasePrivate::checkValid(parser);
 }
 
 ////// End of private class //////
 
-Package::Package():
-    d_ptr(new PackagePrivate())
+Package::Package(QObject *parent):
+    ComponentBase(new PackagePrivate(this), parent)
 {
 }
 
-Package::Package(const Package &other):
-    d_ptr(new PackagePrivate())
-{
-    Q_D(Package);
-    d->copyFrom(other);
-}
-
-Package::Package(const QString &file):
-    d_ptr(new PackagePrivate())
+Package::Package(const QString &desktopFile, QObject *parent):
+    ComponentBase(new PackagePrivate(this), parent)
 {
     Q_D(Package);
-    DesktopParser parser (file);
-    parser.beginGroup("Desktop Entry");
-
-    d->checkValid(parser);
-    if (!d->valid) {
-        return;
-    }
-
-    QStringList keyList = parser.keys();
-    int count = keyList.count();
-
-    // Fetch names and comments
-    setDefaultName(parser.value(DESKTOP_FILE_NAME).toString());
-    setDefaultDescription(parser.value(DESKTOP_FILE_COMMENT).toString());
-    d->nameAndDescription.reserve(count / 2);
-
-    QRegExp nameRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_NAME));
-    QRegExp commentRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_COMMENT));
-
-    foreach (QString key, keyList) {
-        if (nameRegEx.indexIn(key) != -1) {
-
-            QString language = nameRegEx.cap(1);
-            addName(language, parser.value(DESKTOP_FILE_NAME, language).toString());
-        }
-        if (commentRegEx.indexIn(key) != -1) {
-
-            QString language = commentRegEx.cap(1);
-            addDescription(language, parser.value(DESKTOP_FILE_COMMENT, language).toString());
-        }
-    }
-
-    // Fetch plugin informations
-    QFileInfo fileInfo (file);
-    setDirectory(fileInfo.absolutePath());
-    setIdentifier(parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString());
-    setPlugin(parser.value(DESKTOP_FILE_PLUGIN_INFO_NAME).toString());
-    setIcon(parser.value(DESKTOP_FILE_ICON).toString());
-    setAuthor(parser.value(DESKTOP_FILE_PLUGIN_INFO_AUTHOR).toString());
-    setEmail(parser.value(DESKTOP_FILE_PLUGIN_INFO_EMAIL).toString());
-    setWebsite(parser.value(DESKTOP_FILE_PLUGIN_INFO_WEBSITE).toString());
-    QString version = parser.value(DESKTOP_FILE_PLUGIN_INFO_VERSION).toString();
-    setVersion(Version::fromString(version));
-
-    parser.endGroup();
+    d->fromDesktopFile(desktopFile);
 }
 
-Package::Package(PackagePrivate *dd):
-    d_ptr(dd)
+Package::Package(PackagePrivate *dd, QObject *parent):
+    ComponentBase(dd, parent)
 {
 }
 
 Package::~Package()
 {
-}
-
-Package & Package::operator=(const Package &other)
-{
-    Q_D(Package);
-    d->copyFrom(other);
-
-    return *this;
-}
-
-
-bool Package::isValid() const
-{
-    Q_D(const Package);
-    return d->valid;
 }
 
 QString Package::identifier() const
@@ -190,166 +115,10 @@ QString Package::identifier() const
     return d->identifier;
 }
 
-void Package::setIdentifier(const QString &identifier)
-{
-    Q_D(Package);
-    d->valid = !identifier.isEmpty() && !directory().isEmpty();
-    d->identifier = identifier;
-}
-
 QString Package::directory() const
 {
     Q_D(const Package);
     return d->directory;
-}
-
-void Package::setDirectory(const QString &directory)
-{
-    Q_D(Package);
-    d->valid = !identifier().isEmpty() && !directory.isEmpty();
-    d->directory = directory;
-}
-
-QString Package::defaultName() const
-{
-    Q_D(const Package);
-    return d->defaultName;
-}
-
-void Package::setDefaultName(const QString &name)
-{
-    Q_D(Package);
-    d->defaultName = name;
-}
-
-QString Package::name() const
-{
-    Q_D(const Package);
-    QStringList languages = QLocale::system().uiLanguages();
-    QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
-
-    QString value = QString();
-    QRegExp languageRegExp = QRegExp("(\\w+)(\\..+){0,1}");
-
-    while (languagesIterator.hasNext() && value.isEmpty()) {
-        QString language = languagesIterator.next();
-        if (language.indexOf(languageRegExp) != -1) {
-            QString trueLanguage = languageRegExp.cap(1);
-            value = d->nameAndDescription.value(trueLanguage).first;
-        }
-    }
-
-    if (value.isEmpty()) {
-        value = d->defaultName;
-    }
-    return value;
-}
-
-QString Package::name(const QString &language) const
-{
-    Q_D(const Package);
-
-    QString value = d->nameAndDescription.value(language).first;
-    if (value.isEmpty()) {
-        value = d->defaultName;
-    }
-
-    return value;
-}
-
-void Package::addName(const QString &language, const QString &name)
-{
-    Q_D(Package);
-    QPair<QString, QString> data;
-
-    if (d->nameAndDescription.contains(language)) {
-        data = d->nameAndDescription.value(language);
-    }
-    data.first = name;
-    d->nameAndDescription.insert(language, data);
-}
-
-QString Package::defaultDesription() const
-{
-    Q_D(const Package);
-    return d->defaultDescription;
-}
-
-void Package::setDefaultDescription(const QString &description)
-{
-    Q_D(Package);
-    d->defaultDescription = description;
-}
-
-QString Package::description() const
-{
-    Q_D(const Package);
-    QStringList languages = QLocale::system().uiLanguages();
-    QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
-
-    QString value = QString();
-    QRegExp languageRegExp = QRegExp("(\\w+)(\\..+){0,1}");
-
-    while (languagesIterator.hasNext() && value.isEmpty()) {
-        QString language = languagesIterator.next();
-        if (language.indexOf(languageRegExp) != -1) {
-            QString trueLanguage = languageRegExp.cap(1);
-            value = d->nameAndDescription.value(trueLanguage).second;
-        }
-    }
-
-    if (value.isEmpty()) {
-        value = d->defaultDescription;
-    }
-    return value;
-}
-
-QString Package::description(const QString &language) const
-{
-    Q_D(const Package);
-    QString value = d->nameAndDescription.value(language).second;
-    if (value.isEmpty()) {
-        value = d->defaultDescription;
-    }
-
-    return value;
-}
-
-void Package::addDescription(const QString &language, const QString &description)
-{
-    Q_D(Package);
-    QPair<QString, QString> data;
-
-    if (d->nameAndDescription.contains(language)) {
-        data = d->nameAndDescription.value(language);
-    }
-    data.second = description;
-    d->nameAndDescription.insert(language, data);
-}
-
-
-QStringList Package::languages() const
-{
-    Q_D(const Package);
-    return d->nameAndDescription.keys();
-}
-
-void Package::clearNamesAndDescriptions()
-{
-    Q_D(Package);
-    d->nameAndDescription.clear();
-}
-
-QString Package::icon() const
-{
-    Q_D(const Package);
-    return d->icon;
-}
-
-void Package::setIcon(const QString &icon)
-{
-    Q_D(Package);
-    d->icon = icon;
 }
 
 QString Package::plugin() const
@@ -358,22 +127,10 @@ QString Package::plugin() const
     return d->plugin;
 }
 
-void Package::setPlugin(const QString &plugin)
-{
-    Q_D(Package);
-    d->plugin = plugin;
-}
-
 QString Package::author() const
 {
     Q_D(const Package);
     return d->author;
-}
-
-void Package::setAuthor(const QString &author)
-{
-    Q_D(Package);
-    d->author = author;
 }
 
 QString Package::email() const
@@ -382,22 +139,10 @@ QString Package::email() const
     return d->email;
 }
 
-void Package::setEmail(const QString &email)
-{
-    Q_D(Package);
-    d->email = email;
-}
-
 QString Package::website() const
 {
     Q_D(const Package);
     return d->website;
-}
-
-void Package::setWebsite(const QString &website)
-{
-    Q_D(Package);
-    d->website = website;
 }
 
 Version Package::version() const
@@ -406,21 +151,74 @@ Version Package::version() const
     return d->version;
 }
 
+void Package::setIdentifier(const QString &identifier)
+{
+    Q_D(Package);
+    d->valid = !identifier.isEmpty() && !directory().isEmpty();
+    if (d->identifier != identifier) {
+        d->identifier = identifier;
+        emit identifierChanged();
+    }
+}
+
+void Package::setDirectory(const QString &directory)
+{
+    Q_D(Package);
+    d->valid = !identifier().isEmpty() && !directory.isEmpty();
+    if (d->directory != directory) {
+        d->directory = directory;
+        emit directoryChanged();
+    }
+}
+
+void Package::setPlugin(const QString &plugin)
+{
+    Q_D(Package);
+    if (d->plugin != plugin) {
+        d->plugin = plugin;
+        emit pluginChanged();
+    }
+}
+
+void Package::setAuthor(const QString &author)
+{
+    Q_D(Package);
+    if (d->author != author) {
+        d->author = author;
+        emit authorChanged();
+    }
+}
+
+void Package::setEmail(const QString &email)
+{
+    Q_D(Package);
+    if (d->email != email) {
+        d->email = email;
+        emit emailChanged();
+    }
+}
+
+void Package::setWebsite(const QString &website)
+{
+    Q_D(Package);
+    if (d->website != website) {
+        d->website = website;
+        emit websiteChanged();
+    }
+}
+
 void Package::setVersion(const Version &version)
 {
     Q_D(Package);
-    d->version = version;
+    if (d->version != version) {
+        d->version = version;
+        emit versionChanged();
+    }
 }
 
-Package Package::fromDesktopFile(const QString &file)
+Package * Package::fromDesktopFile(const QString &desktopFile, QObject *parent)
 {
-    return Package(file);
-}
-
-QHash<QString, QPair<QString, QString> > Package::nameAndDescription() const
-{
-    Q_D(const Package);
-    return d->nameAndDescription;
+    return new Package(desktopFile, parent);
 }
 
 }

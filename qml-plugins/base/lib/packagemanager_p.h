@@ -33,6 +33,7 @@
 namespace Widgets
 {
 
+class DockBaseProperties;
 class PackageManagerPrivate
 {
 public:
@@ -40,12 +41,17 @@ public:
     virtual QString databasePath() const;
     bool executeQuery(QSqlQuery *query) const;
     bool executeQueryBatch(QSqlQuery *query) const;
-    void addUniquePackageInformationsProperties(const QStringList &names);
+    void addComponentType(const QStringList &names);
+    void addComponentInformationProperties(const QStringList &names);
     void prepareDatabase();
+    int componentTypeId(const char *type) const;
+    void addInformation(const char *type, int componentId, const QVariantMap &informations);
+    void addLocalizedInformation(const char *type, int componentId,
+                                 const QStringList &languages, const QStringList &names,
+                                 const QStringList &descriptions);
     void addPackage(const QString &path);
-    void addPackageInformations(int packageId, const QVariantMap &informations);
-    void scanPackageFolder(const QString &path, const QString &packageIdentifier,
-                           QObject *parent = 0);
+    void scanPackageFolder(int packageId, const QString &path, const QString &packageIdentifier);
+    void addDock(int packageId, DockBaseProperties *dock);
 private:
     Q_DECLARE_PUBLIC(PackageManager)
     PackageManager * const q_ptr;

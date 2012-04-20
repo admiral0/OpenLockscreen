@@ -20,6 +20,7 @@
  */
 
 #include <QtGui/QApplication>
+#include <QtDeclarative/QtDeclarative>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
 #include "qplatformdefs.h"
@@ -31,6 +32,8 @@
 #ifdef QML_PLUGIN_PATH
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
+
+#include "webandmailhandler.h"
 
 /**
  * @short Main
@@ -45,11 +48,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 #ifdef MEEGO_EDITION_HARMATTAN
     QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
-    QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
+    QScopedPointer<QDeclarativeView> scopedView (MDeclarativeCache::qDeclarativeView());
+    QDeclarativeView *view = scopedView.data();
 #else
     QApplication *app = new QApplication(argc, argv);
     QDeclarativeView *view = new QDeclarativeView();
 #endif
+
+    qmlRegisterType<WebAndMailHandler>("org.SfietKonstantin.widgets.app", 1, 0,
+                                       "WebAndMailHandler");
 
 #ifdef QML_PLUGIN_PATH
     view->engine()->addImportPath(QML_PLUGIN_PATH);

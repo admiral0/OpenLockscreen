@@ -17,70 +17,56 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.extra 1.0
 
 PageStackWindow {
+    id: window
     initialPage: mainPage
+    Component.onCompleted: {
+        theme.inverted = true
+    }
 
-    Page {
+    MainPage {
         id: mainPage
-
-        Settings {
-            id: settings
-            defaultSettings: SettingsEntry {
-                key: "wallpaper/source"
-                value: "/home/sk/Code/Qt/Harmattan/widgets/widgets/data/wallpaper-1.jpg"
+        onShow: {
+            if(page == "showInfo") {
+                window.pageStack.push(infoPage)
+            }
+            if(page == "showAbout") {
+                window.pageStack.push(aboutPage)
             }
         }
+    }
 
-        GridManager {
-            id: gridManager
-            settings: settings
-        }
+//    WallpaperSourcePage {
+//        id: backgroundSourcePage
+//        onShow: {
+//            if(page == "showWallpaperDefault") {
+//                wallpaperDefaultPage.selected = settingsManager.wallpaperSource
+//                window.pageStack.push(wallpaperDefaultPage)
+//            } else if(page == "showWallpaperPictures") {
+//                wallpaperPicturesPage.selected = settingsManager.wallpaperSource
+//                window.pageStack.push(wallpaperPicturesPage)
+//            }
+//        }
+//    }
 
-        PackageManager {
-            id: packageManager
-        }
+//    WallpaperDefaultPage {
+//        id: wallpaperDefaultPage
+//    }
 
-        HorizontalParallaxBackground {
-            id: background
-            view: view
-            settings: settings
-        }
+//    WallpaperPicturesPage {
+//        id: wallpaperPicturesPage
+//    }
 
-        ListView {
-            id: view
-            anchors.fill: parent
-            model: ListModel {
-                ListElement {
-                }
-                ListElement {
-                }
-                ListElement {
-                }
-                ListElement {
-                }
-                ListElement {
-                }
-                ListElement {
-                }
-            }
-            orientation: ListView.Horizontal
-            snapMode: ListView.SnapToItem
-            delegate: Item {
-                width: view.width
-                height: view.height
+    InformationsPage {
+        id: infoPage
+    }
 
-                Rectangle {
-                    anchors.top: parent.top
-                    width: 100
-                    height: 100
-                }
-            }
+    AboutPage {
+        id: aboutPage
+    }
 
-            onWidthChanged: gridManager.setViewWidth(width)
-            onHeightChanged: gridManager.setViewHeight(height)
-        }
+    PackageManager {
+        id: packageManagerInstance
     }
 }

@@ -14,8 +14,14 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
 #include "dockbaseproperties_p.h"
-#include "desktopparserdefines.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -24,6 +30,7 @@
 #include <QtCore/QVariant>
 
 #include "desktopparser.h"
+#include "desktopparserdefines.h"
 #include "tools.h"
 
 namespace Widgets
@@ -32,8 +39,8 @@ namespace Widgets
 static const char *DESKTOP_FILE_SERVICE_VALUE = "dock";
 static const char *DESKTOP_FILE_DOCK_INFO_FILE = "X-Widgets-DockInfo-File";
 
-DockBasePropertiesPrivate::DockBasePropertiesPrivate():
-    GraphicalElementBasePropertiesPrivate()
+DockBasePropertiesPrivate::DockBasePropertiesPrivate(DockBaseProperties *q):
+    GraphicalComponentBasePrivate(q)
 {
     anchorsTop = false;
     anchorsBottom = false;
@@ -42,53 +49,33 @@ DockBasePropertiesPrivate::DockBasePropertiesPrivate():
     valid = false;
 }
 
-void DockBasePropertiesPrivate::checkValid()
+DockBasePropertiesPrivate::DockBasePropertiesPrivate(const QString &fileName,
+                                                     const QString &packageIdentifier,
+                                                     DockBaseProperties *q):
+    GraphicalComponentBasePrivate(fileName, packageIdentifier, q)
 {
-    // Width and height and no anchors are set
-    if (size.width() > 0 && size.height() > 0 &&
-        !anchorsTop && !anchorsBottom && !anchorsLeft && !anchorsRight) {
-        valid = true;
-        return;
-    }
-
-    // Width is set and either top or bottom anchored
-    if (size.width() > 0 && size.height() <= 0 &&
-        ((anchorsTop && !anchorsBottom) || (!anchorsTop && anchorsBottom)) &&
-        !anchorsLeft && !anchorsRight) {
-        valid = true;
-        return;
-    }
-
-    // Height is set and either left or right anchored
-    if (size.height() > 0 && size.width() <= 0 &&
-        ((anchorsLeft && !anchorsRight) || (!anchorsRight && anchorsLeft)) &&
-        !anchorsTop && !anchorsBottom) {
-        valid = true;
-        return;
-    }
+    anchorsTop = false;
+    anchorsBottom = false;
+    anchorsLeft = false;
+    anchorsRight = false;
 }
 
-void DockBasePropertiesPrivate::fromDesktopFile(const QString &file,
-                                                const QString &packageIdentifier)
+bool DockBasePropertiesPrivate::checkValid(const DesktopParser &parser)
 {
-    DesktopParser parser (file);
-    parser.beginGroup("Desktop Entry");
-
-    if (!parser.contains(DESKTOP_FILE_NAME)) {
-        return;
-    }
-    if (!parser.contains(DESKTOP_FILE_COMMENT)) {
-        return;
-    }
-    if (parser.value(DESKTOP_FILE_TYPE).toString() != DESKTOP_FILE_TYPE_VALUE) {
-        return;
-    }
     if (parser.value(DESKTOP_FILE_SERVICE_TYPE).toString() != DESKTOP_FILE_SERVICE_VALUE) {
-        return;
+        return false;
     }
-    if (parser.value(DESKTOP_FILE_DOCK_INFO_FILE).toString().isEmpty()) {
-        return;
+
+    if (!parser.contains(DESKTOP_FILE_DOCK_INFO_FILE)) {
+        return false;
     }
+
+    return GraphicalComponentBasePrivate::checkValid(parser);
+}
+
+void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
+{
+    GraphicalComponentBasePrivate::parseDesktopFile(parser);
 
     QFileInfo fileInfo = QFileInfo(parser.file());
     QDir folder = fileInfo.absoluteDir();
@@ -161,6 +148,7 @@ void DockBasePropertiesPrivate::fromDesktopFile(const QString &file,
     }
 
     if (!haveImport || !haveDock) {
+        valid = false;
         return;
     }
 
@@ -194,7 +182,7 @@ void DockBasePropertiesPrivate::fromDesktopFile(const QString &file,
     anchorsBottom = anchorsOk.value("bottom");
     anchorsLeft = anchorsOk.value("left");
     anchorsRight = anchorsOk.value("right");
-    checkValid();
+    checkAnchorsValid();
 
     // Has settings
     QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
@@ -206,11 +194,31 @@ void DockBasePropertiesPrivate::fromDesktopFile(const QString &file,
 
 
     fileName = parser.value(DESKTOP_FILE_DOCK_INFO_FILE).toString();
-    this->packageIdentifier = packageIdentifier;
+}
 
-    parser.endGroup();
+void DockBasePropertiesPrivate::checkAnchorsValid()
+{
+    // Width and height and no anchors are set
+    if (size.width() > 0 && size.height() > 0 &&
+        !anchorsTop && !anchorsBottom && !anchorsLeft && !anchorsRight) {
+        return;
+    }
 
-    return;
+    // Width is set and either top or bottom anchored
+    if (size.width() > 0 && size.height() <= 0 &&
+        ((anchorsTop && !anchorsBottom) || (!anchorsTop && anchorsBottom)) &&
+        !anchorsLeft && !anchorsRight) {
+        return;
+    }
+
+    // Height is set and either left or right anchored
+    if (size.height() > 0 && size.width() <= 0 &&
+        ((anchorsLeft && !anchorsRight) || (!anchorsRight && anchorsLeft)) &&
+        !anchorsTop && !anchorsBottom) {
+        return;
+    }
+
+    valid = false;
 }
 
 }

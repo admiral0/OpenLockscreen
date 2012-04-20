@@ -12,49 +12,43 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import "UiConstants.js" as Ui
 
-#include <QtCore/QMetaType>
-#include <QtCore/QScopedPointer>
+AbstractNavigationPage {
+    id: container
+    title: qsTr("Informations")
+    model: ListModel {
+        ListElement {
+            identifier: "showPackageList"
+            text: QT_TR_NOOP("Installed packages")
+        }
+        ListElement {
+            identifier: "showDockList"
+            text: QT_TR_NOOP("Installed docks")
+        }
+    }
+    onShow: {
+        if(page == "showPackageList") {
+            window.pageStack.push(packageListPage)
+        }
+        if(page == "showDockList") {
+            window.pageStack.push(dockListPage)
+        }
+    }
 
-namespace Widgets
-{
+    PackageListPage {
+        id: packageListPage
+    }
+    DockListPage {
+        id: dockListPage
+    }
 
-class VersionPrivate;
-class Version
-{
-public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
-protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(Version)
-};
-
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
 }
 
-Q_DECLARE_METATYPE(Widgets::Version)
-
-#endif // WIDGETS_VERSION_H

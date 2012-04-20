@@ -12,26 +12,25 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-import QtQuick 1.1
-import org.sk.widgets 1.0
+#include "webandmailhandler.h"
 
-AbstractPage {
-    id: container
-    signal show(string page)
-    property variant model
+#include <QtCore/QUrl>
+#include <QtGui/QDesktopServices>
 
-    content: Item {
-        anchors.fill: parent
-        ListView {
-            anchors.fill: parent
-            model: container.model
-            clip: true
-            delegate: ClickableEntry {
-                text: model.text
-                onClicked: container.show(model.identifier)
-            }
-        }
-    }
+WebAndMailHandler::WebAndMailHandler(QObject *parent) :
+    QObject(parent)
+{
+}
+
+void WebAndMailHandler::openWebpage(const QString &webpage)
+{
+    QDesktopServices::openUrl(QUrl(webpage));
+}
+
+void WebAndMailHandler::openMailEditor(const QString &mail)
+{
+    QString mailUrl = QString("mailto:%1").arg(mail);
+    QDesktopServices::openUrl(QUrl(mailUrl));
 }

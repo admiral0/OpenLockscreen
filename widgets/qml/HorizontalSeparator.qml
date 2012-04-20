@@ -12,51 +12,22 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#include "packagemodel.h"
+import QtQuick 1.0
+import "UiConstants.js" as Ui
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
+// This is a simple horizontal separator
+// that have the Harmattan look and feel
+//
+// Width, height do not need to be set for
+// this item.
 
-namespace Widgets
-{
-
-namespace Extra
-{
-
-class PackageModelPrivate
-{
-
-};
-
-////// End of private class //////
-
-PackageModel::PackageModel(QObject *parent) :
-    QAbstractListModel(parent), d_ptr(new PackageModelPrivate)
-{
-}
-
-PackageModel::~PackageModel()
-{
-
-}
-
-int PackageModel::rowCount(const QModelIndex &parent) const
-{
-    return 0;
-}
-
-int PackageModel::count() const
-{
-    return rowCount();
-}
-
-QVariant PackageModel::data(const QModelIndex &index, int role) const
-{
-    return QVariant();
-}
-
-}
-
+BorderImage {
+    id: container
+    width: parent.width - 2 * Ui.MARGIN_DEFAULT; height: 2
+    anchors.horizontalCenter: parent.horizontalCenter
+    source: "image://theme/meegotouch-separator" + (theme.inverted ? "-inverted" : "") +
+            "-background-horizontal"
+    border {left: 0; top: 2; right: 0; bottom: 0}
 }

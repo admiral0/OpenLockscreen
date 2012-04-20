@@ -25,13 +25,20 @@
 // without notice or even be removed.
 
 #include "dockbaseproperties_p.h"
-#include "graphicalelementproperties_p.h"
+#include "graphicalcomponent_p.h"
+
+#include "dockproperties.h"
 
 namespace Widgets
 {
 
-struct DockPropertiesPrivate: DockBasePropertiesPrivate, GraphicalElementProperties
+class DockPropertiesPrivate: DockBasePropertiesPrivate, GraphicalComponentPrivate
 {
+public:
+    DockPropertiesPrivate(DockProperties *q):
+        DockBasePropertiesPrivate(q), GraphicalComponentPrivate() {}
+private:
+    Q_DECLARE_PUBLIC(DockProperties)
 };
 
 }

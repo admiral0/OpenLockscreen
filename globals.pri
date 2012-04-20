@@ -5,7 +5,7 @@ VERSION_PATCH = 0
 
 # 64 bits if needed
 contains(QMAKE_HOST.arch, x86_64): {
-    64_BITS = 64
+    !contains(MEEGO_EDITION,harmattan):64_BITS = 64
 }
 
 # QML plugins

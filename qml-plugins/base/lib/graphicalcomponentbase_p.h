@@ -14,47 +14,40 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+#ifndef WIDGETS_GRAPHICALCOMPONENTBASE_P_H
+#define WIDGETS_GRAPHICALCOMPONENTBASE_P_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QScopedPointer>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+#include "componentbase_p.h"
+#include "graphicalcomponentbase.h"
+
+#include <QtCore/QString>
 
 namespace Widgets
 {
 
-class VersionPrivate;
-class Version
+class GraphicalComponentBasePrivate: public ComponentBasePrivate
 {
 public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
+    GraphicalComponentBasePrivate(GraphicalComponentBase *q);
+    GraphicalComponentBasePrivate(const QString &fileName, const QString &packageIdentifier,
+                                  GraphicalComponentBase *q);
+    QString fileName;
+    QString packageIdentifier;
+    bool settingsEnabled;
 protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
+    virtual void parseDesktopFile(const DesktopParser &parser);
+    virtual bool checkValid(const DesktopParser &parser);
 private:
-    Q_DECLARE_PRIVATE(Version)
+    Q_DECLARE_PUBLIC(GraphicalComponentBase)
 };
 
 }
 
-Q_DECLARE_METATYPE(Widgets::Version)
-
-#endif // WIDGETS_VERSION_H
+#endif // WIDGETS_GRAPHICALCOMPONENTBASE_P_H

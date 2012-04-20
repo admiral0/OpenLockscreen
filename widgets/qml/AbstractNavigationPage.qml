@@ -12,19 +12,25 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef DEBUG_H
-#define DEBUG_H
+import QtQuick 1.1
 
-#include <QtCore/QtGlobal>
+AbstractPage {
+    id: container
+    signal show(string page)
+    property variant model
 
-#if !defined(W_ASSERT)
-#  ifndef QT_NO_DEBUG
-#    define W_ASSERT(cond) Q_ASSERT(cond)
-#  else
-#    define W_ASSERT(cond) cond
-#  endif
-#endif
-
-#endif // DEBUG_H
+    content: Item {
+        anchors.fill: parent
+        ListView {
+            anchors.fill: parent
+            model: container.model
+            clip: true
+            delegate: ClickableEntry {
+                text: qsTranslate("", model.text)
+                onClicked: container.show(model.identifier)
+            }
+        }
+    }
+}

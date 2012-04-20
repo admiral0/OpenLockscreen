@@ -14,63 +14,64 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#include "graphicalelementbaseproperties.h"
-#include "graphicalelementbaseproperties_p.h"
-#include "graphicalelementbasepropertiesdefines.h"
+#include "graphicalcomponentbase.h"
+#include "graphicalcomponentbase_p.h"
+#include "graphicalcomponentbasedefines.h"
 
 #include "tools.h"
 
 namespace Widgets
 {
 
-GraphicalElementBaseProperties::GraphicalElementBaseProperties(QObject *parent) :
-    QObject(parent), d_ptr(new GraphicalElementBasePropertiesPrivate)
+GraphicalComponentBase::GraphicalComponentBase(QObject *parent) :
+    ComponentBase(new GraphicalComponentBasePrivate(this), parent),
+    XmlSerializableInterface()
 {
-    Q_D(GraphicalElementBaseProperties);
+    Q_D(GraphicalComponentBase);
     d->settingsEnabled = false;
 }
 
-GraphicalElementBaseProperties::GraphicalElementBaseProperties(const QString &fileName,
-                                                               const QString &packageIdentifier,
-                                                               bool settingsEnabled,
-                                                               QObject *parent):
-    QObject(parent), d_ptr(new GraphicalElementBasePropertiesPrivate)
+GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
+                                               const QString &packageIdentifier,
+                                               bool settingsEnabled,
+                                               QObject *parent):
+    ComponentBase(new GraphicalComponentBasePrivate(fileName, packageIdentifier, this), parent),
+    XmlSerializableInterface()
 {
-    Q_D(GraphicalElementBaseProperties);
-    d->fileName = fileName;
-    d->packageIdentifier = packageIdentifier;
+    Q_D(GraphicalComponentBase);
     d->settingsEnabled = settingsEnabled;
 }
 
-GraphicalElementBaseProperties::GraphicalElementBaseProperties(
-        GraphicalElementBasePropertiesPrivate *dd, QObject *parent):
-    QObject(parent), d_ptr(dd)
+GraphicalComponentBase::GraphicalComponentBase(
+        GraphicalComponentBasePrivate *dd, QObject *parent):
+    ComponentBase(dd, parent),
+    XmlSerializableInterface()
 {
 }
 
-GraphicalElementBaseProperties::~GraphicalElementBaseProperties()
+GraphicalComponentBase::~GraphicalComponentBase()
 {
 }
 
-QString GraphicalElementBaseProperties::fileName() const
+QString GraphicalComponentBase::fileName() const
 {
-    Q_D(const GraphicalElementBaseProperties);
+    Q_D(const GraphicalComponentBase);
     return d->fileName;
 }
 
-QString GraphicalElementBaseProperties::packageIdentifier() const
+QString GraphicalComponentBase::packageIdentifier() const
 {
-    Q_D(const GraphicalElementBaseProperties);
+    Q_D(const GraphicalComponentBase);
     return d->packageIdentifier;
 }
 
-bool GraphicalElementBaseProperties::isSettingsEnabled() const
+bool GraphicalComponentBase::isSettingsEnabled() const
 {
-    Q_D(const GraphicalElementBaseProperties);
+    Q_D(const GraphicalComponentBase);
     return d->settingsEnabled;
 }
 
-bool GraphicalElementBaseProperties::fromXmlElement(const QDomElement &element)
+bool GraphicalComponentBase::fromXmlElement(const QDomElement &element)
 {
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE)) {
         return false;
@@ -92,7 +93,7 @@ bool GraphicalElementBaseProperties::fromXmlElement(const QDomElement &element)
     return true;
 }
 
-QDomElement GraphicalElementBaseProperties::toXmlElement(const QString &tagName,
+QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
                                                          QDomDocument *document) const
 {
     QDomElement element = document->createElement(tagName);
@@ -104,27 +105,27 @@ QDomElement GraphicalElementBaseProperties::toXmlElement(const QString &tagName,
     return element;
 }
 
-void GraphicalElementBaseProperties::setFileName(const QString &name)
+void GraphicalComponentBase::setFileName(const QString &name)
 {
-    Q_D(GraphicalElementBaseProperties);
+    Q_D(GraphicalComponentBase);
     if (d->fileName != name) {
         d->fileName = name;
         emit fileNameChanged(name);
     }
 }
 
-void GraphicalElementBaseProperties::setPackageIdentifier(const QString &packageName)
+void GraphicalComponentBase::setPackageIdentifier(const QString &packageName)
 {
-    Q_D(GraphicalElementBaseProperties);
+    Q_D(GraphicalComponentBase);
     if (d->packageIdentifier != packageName) {
         d->packageIdentifier = packageName;
         emit packageIdentifierChanged(packageName);
     }
 }
 
-void GraphicalElementBaseProperties::setSettingsEnabled(bool settingsEnabled)
+void GraphicalComponentBase::setSettingsEnabled(bool settingsEnabled)
 {
-    Q_D(GraphicalElementBaseProperties);
+    Q_D(GraphicalComponentBase);
     if (d->settingsEnabled != settingsEnabled) {
         d->settingsEnabled = settingsEnabled;
         emit settingsEnabledChanged(settingsEnabled);

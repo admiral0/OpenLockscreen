@@ -14,45 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_EXTRA_PACKAGEMODEL_H
-#define WIDGETS_EXTRA_PACKAGEMODEL_H
+#ifndef WEBANDMAILHANDLER_H
+#define WEBANDMAILHANDLER_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QScopedPointer>
+#include <QObject>
 
-namespace Widgets
-{
-
-namespace Extra
-{
-
-class PackageModelPrivate;
-class PackageModel : public QAbstractListModel
+class WebAndMailHandler : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    enum PackageRole
-    {
-
-    };
-
-    explicit PackageModel(QObject *parent = 0);
-    virtual ~PackageModel();
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-Q_SIGNALS:
-    void countChanged(int count);
-public Q_SLOTS:
-protected:
-    const QScopedPointer<PackageModelPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(PackageModel)
+    explicit WebAndMailHandler(QObject *parent = 0);
+    
+signals:
+    
+public slots:
+    void openWebpage(const QString &webpage);
+    void openMailEditor(const QString &mail);
 };
 
-}
-
-}
-
-#endif // WIDGETS_EXTRA_PACKAGEMODEL_H
+#endif // WEBANDMAILHANDLER_H

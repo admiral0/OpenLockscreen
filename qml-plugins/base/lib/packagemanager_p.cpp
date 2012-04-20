@@ -30,7 +30,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
 
-#include "debug.h"
+#include "widgets_global.h"
 #include "dockbaseproperties.h"
 
 namespace Widgets
@@ -76,17 +76,17 @@ bool PackageManagerPrivate::executeQueryBatch(QSqlQuery *query) const
     return true;
 }
 
-void PackageManagerPrivate::addUniquePackageInformationsProperties(const QStringList &names)
+void PackageManagerPrivate::addComponentType(const QStringList &names)
 {
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package_info_properties");
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_component_type");
         db.setDatabaseName(databasePath());
         W_ASSERT(db.open());
 
         QVariantList trueNames;
         QSqlQuery query = QSqlQuery(db);
         foreach (QString name, names) {
-            query.prepare("SELECT COUNT(*) FROM packageInformationsProperties WHERE name=:name");
+            query.prepare("SELECT COUNT(*) FROM componentType WHERE name=:name");
             query.bindValue(":name", name);
             executeQuery(&query);
             W_ASSERT(query.next());
@@ -98,12 +98,43 @@ void PackageManagerPrivate::addUniquePackageInformationsProperties(const QString
             }
         }
 
-        query.prepare("INSERT INTO packageInformationsProperties (id, name) VALUES (NULL, :name)");
+        query.prepare("INSERT INTO componentType (id, name) VALUES (NULL, :name)");
         query.addBindValue(trueNames);
         executeQueryBatch(&query);
         query.finish();
     }
-    QSqlDatabase::removeDatabase("add_package_info_properties");
+    QSqlDatabase::removeDatabase("add_component_type");
+}
+
+void PackageManagerPrivate::addComponentInformationProperties(const QStringList &names)
+{
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE",
+                                                    "add_component_information_properties");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QVariantList trueNames;
+        QSqlQuery query = QSqlQuery(db);
+        foreach (QString name, names) {
+            query.prepare("SELECT COUNT(*) FROM componentInformationProperties WHERE name=:name");
+            query.bindValue(":name", name);
+            executeQuery(&query);
+            W_ASSERT(query.next());
+            int count = query.value(0).toInt();
+            query.finish();
+            W_ASSERT(count == 0 || count == 1);
+            if (count == 0) {
+                trueNames.append(name);
+            }
+        }
+
+        query.prepare("INSERT INTO componentInformationProperties (id, name) VALUES (NULL, :name)");
+        query.addBindValue(trueNames);
+        executeQueryBatch(&query);
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_component_information_properties");
 }
 
 void PackageManagerPrivate::prepareDatabase()
@@ -120,29 +151,49 @@ void PackageManagerPrivate::prepareDatabase()
         executeQuery(&query);
         query.finish();
 
-        query.prepare("CREATE TABLE IF NOT EXISTS packages (id INTEGER PRIMARY KEY AUTOINCREMENT, identifier STRING, directory STRING, plugin STRING)");
+        query.prepare("CREATE TABLE IF NOT EXISTS packages (id INTEGER PRIMARY KEY, identifier STRING, directory STRING, plugin STRING)");
         executeQuery(&query);
         query.finish();
 
-        query.prepare("CREATE TABLE IF NOT EXISTS packageInformationsProperties (id INTEGER PRIMARY KEY, name STRING)");
+        query.prepare("CREATE TABLE IF NOT EXISTS componentType (id INTEGER PRIMARY KEY, name STRING)");
         executeQuery(&query);
         query.finish();
 
-        query.prepare("CREATE TABLE IF NOT EXISTS packageInformations (packageId INTEGER, informationId INTEGER, value STRING)");
+        query.prepare("CREATE TABLE IF NOT EXISTS componentInformationProperties (id INTEGER PRIMARY KEY, name STRING)");
         executeQuery(&query);
         query.finish();
 
-        query.prepare("CREATE TABLE IF NOT EXISTS localizedPackageInformations (packageId INTEGER, language STRING, name STRING, description STRING)");
+        query.prepare("CREATE TABLE IF NOT EXISTS componentInformation (componentTypeId INTEGER, componentId INTEGER, informationId INTEGER, value STRING)");
         executeQuery(&query);
         query.finish();
 
-        QStringList names;
-        names.append(PACKAGE_INFORMATION_AUTHOR);
-        names.append(PACKAGE_INFORMATION_EMAIL);
-        names.append(PACKAGE_INFORMATION_ICON);
-        names.append(PACKAGE_INFORMATION_WEBSITE);
-        names.append(PACKAGE_INFORMATION_VERSION);
-        addUniquePackageInformationsProperties(names);
+        query.prepare("CREATE TABLE IF NOT EXISTS componentLocalizedInformation (componentTypeId INTEGER, componentId INTEGER, language STRING, name STRING, description STRING)");
+        executeQuery(&query);
+        query.finish();
+
+        query.prepare("CREATE TABLE IF NOT EXISTS docks (id INTEGER PRIMARY KEY, packageId INTEGER, file STRING)");
+        executeQuery(&query);
+        query.finish();
+
+        QStringList componentTypes;
+        componentTypes.append(COMPONENT_TYPE_PACKAGE);
+        componentTypes.append(COMPONENT_TYPE_DOCK);
+        addComponentType(componentTypes);
+
+        QStringList componentInformationProperties;
+        componentInformationProperties.append(COMPONENT_INFORMATION_ICON);
+        componentInformationProperties.append(COMPONENT_INFORMATION_SETTINGS_ENABLED);
+        componentInformationProperties.append(PACKAGE_INFORMATION_AUTHOR);
+        componentInformationProperties.append(PACKAGE_INFORMATION_EMAIL);
+        componentInformationProperties.append(PACKAGE_INFORMATION_WEBSITE);
+        componentInformationProperties.append(PACKAGE_INFORMATION_VERSION);
+        componentInformationProperties.append(DOCK_INFORMATION_WIDTH);
+        componentInformationProperties.append(DOCK_INFORMATION_HEIGHT);
+        componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_TOP);
+        componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_BOTTOM);
+        componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_LEFT);
+        componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_RIGHT);
+        addComponentInformationProperties(componentInformationProperties);
 
         // Check version
         query.prepare("SELECT COUNT(*) FROM version");
@@ -192,20 +243,125 @@ void PackageManagerPrivate::prepareDatabase()
     QSqlDatabase::removeDatabase("init");
 }
 
+int PackageManagerPrivate::componentTypeId(const char *type) const
+{
+    int id = -1;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_component_type_id");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT id FROM componentType WHERE name=:name");
+        query.bindValue(":name", QString(type));
+        executeQuery(&query);
+        if (query.next()) {
+            id = query.value(0).toInt();
+        }
+
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("get_component_type_id");
+    return id;
+}
+
+void PackageManagerPrivate::addInformation(const char *type,
+                                            int componentId,
+                                            const QVariantMap &informations)
+{
+    int typeId = componentTypeId(type);
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_information");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        QVariantList typeIdList;
+        QVariantList componentIdList;
+        QVariantList informationIdList;
+        QVariantList realValues;
+
+        foreach(QString key, informations.keys()) {
+
+            query.prepare("SELECT id FROM componentInformationProperties WHERE name=:name");
+            query.bindValue(":name", key);
+            executeQuery(&query);
+            if (query.next()) {
+                int id = query.value(0).toInt();
+                typeIdList.append(typeId);
+                componentIdList.append(componentId);
+                informationIdList.append(id);
+                realValues.append(informations.value(key));
+            }
+            query.finish();
+        }
+
+        query.prepare("INSERT INTO componentInformation (componentTypeId, componentId, informationId, value) VALUES (?, ?, ?, ?)");
+        query.addBindValue(typeIdList);
+        query.addBindValue(componentIdList);
+        query.addBindValue(informationIdList);
+        query.addBindValue(realValues);
+        executeQueryBatch(&query);
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_information");
+}
+
+void PackageManagerPrivate::addLocalizedInformation(const char *type, int componentId,
+                                                    const QStringList &languages,
+                                                    const QStringList &names,
+                                                    const QStringList &descriptions)
+{
+    Q_ASSERT(languages.count() == names.count());
+    Q_ASSERT(languages.count() == descriptions.count());
+
+    int typeId = componentTypeId(type);
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_localized_information");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        QVariantList typeIdList;
+        QVariantList componentIdList;
+        QVariantList languageList;
+        QVariantList nameList;
+        QVariantList descriptionList;
+
+        for (int i = 0; i < languages.count(); i++) {
+            typeIdList.append(typeId);
+            componentIdList.append(componentId);
+            languageList.append(languages.at(i));
+            nameList.append(names.at(i));
+            descriptionList.append(descriptions.at(i));
+        }
+
+
+        query.prepare("INSERT INTO componentLocalizedInformation (componentTypeId, componentId, language, name, description) VALUES (?, ?, ?, ?, ?)");
+        query.addBindValue(typeIdList);
+        query.addBindValue(componentIdList);
+        query.addBindValue(languageList);
+        query.addBindValue(nameList);
+        query.addBindValue(descriptionList);
+        executeQueryBatch(&query);
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_localized_information");
+}
+
 void PackageManagerPrivate::addPackage(const QString &path)
 {
-    Q_Q(PackageManager);
     QDir dir = QDir(path);
     if (!dir.exists("package.desktop")) {
         return;
     }
 
     QString filePath = dir.absoluteFilePath("package.desktop");
-    Package package = Package::fromDesktopFile(filePath);
-    if (!package.isValid()) {
+    Package *package = Package::fromDesktopFile(filePath);
+    if (!package->isValid()) {
         return;
     }
 
+    int packageId = -1;
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package");
         db.setDatabaseName(databasePath());
@@ -213,99 +369,102 @@ void PackageManagerPrivate::addPackage(const QString &path)
 
         QSqlQuery query = QSqlQuery(db);
         query.prepare("INSERT INTO packages (id, identifier, directory, plugin) VALUES (NULL, :identifier, :directory, :plugin)");
-        query.bindValue(":identifier", package.identifier());
+        query.bindValue(":identifier", package->identifier());
         query.bindValue(":directory", dir.absolutePath());
-        query.bindValue(":plugin", package.plugin());
+        query.bindValue(":plugin", package->plugin());
         executeQuery(&query);
-        int packageId = query.lastInsertId().toInt();
+        packageId = query.lastInsertId().toInt();
         query.finish();
-
-        QVariantList packageIdList;
-        QVariantList languages;
-        QVariantList names;
-        QVariantList descriptions;
-
-        packageIdList.append(packageId);
-        languages.append(PACKAGE_INFORMATION_DEFAULT_LANGUAGE);
-        names.append(package.defaultName());
-        descriptions.append(package.defaultDesription());
-
-        foreach(QString language, package.languages()) {
-            packageIdList.append(packageId);
-            languages.append(language);
-            names.append(package.name(language));
-            descriptions.append(package.description(language));
-        }
-        query.prepare("INSERT INTO localizedPackageInformations (packageId, language, name, description) VALUES (:packageId, ?, ?, ?)");
-        query.addBindValue(packageIdList);
-        query.addBindValue(languages);
-        query.addBindValue(names);
-        query.addBindValue(descriptions);
-        executeQueryBatch(&query);
-        query.finish();
-        QVariantMap informations;
-        informations.insert(PACKAGE_INFORMATION_AUTHOR, package.author());
-        informations.insert(PACKAGE_INFORMATION_EMAIL, package.email());
-        informations.insert(PACKAGE_INFORMATION_ICON, package.icon());
-        informations.insert(PACKAGE_INFORMATION_WEBSITE, package.website());
-        informations.insert(PACKAGE_INFORMATION_VERSION, package.version().toString());
-        addPackageInformations(packageId, informations);
     }
     QSqlDatabase::removeDatabase("add_package");
 
-    scanPackageFolder(path, package.identifier(), q);
-}
+    QStringList languages;
+    QStringList names;
+    QStringList descriptions;
 
-void PackageManagerPrivate::addPackageInformations(int packageId,
-                                                   const QVariantMap &informations)
-{
-    {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_package_informations");
-        db.setDatabaseName(databasePath());
-        W_ASSERT(db.open());
+    languages.append(COMPONENT_INFORMATION_DEFAULT_LANGUAGE);
+    names.append(package->defaultName());
+    descriptions.append(package->defaultDesription());
 
-        QSqlQuery query = QSqlQuery(db);
-        QVariantList packageIdList;
-        QVariantList informationIdList;
-        QVariantList realValues;
-
-        foreach(QString key, informations.keys()) {
-
-            query.prepare("SELECT id FROM packageInformationsProperties WHERE name=:name");
-            query.bindValue(":name", key);
-            executeQuery(&query);
-            if (query.next()) {
-                int id = query.value(0).toInt();
-                packageIdList.append(packageId);
-                informationIdList.append(id);
-                realValues.append(informations.value(key));
-            }
-            query.finish();
-        }
-
-        query.prepare("INSERT INTO packageInformations (packageId, informationId, value) VALUES (?, ?, ?)");
-        query.addBindValue(packageIdList);
-        query.addBindValue(informationIdList);
-        query.addBindValue(realValues);
-        executeQueryBatch(&query);
-        query.finish();
+    foreach(QString language, package->languages()) {
+        languages.append(language);
+        names.append(package->name(language));
+        descriptions.append(package->description(language));
     }
-    QSqlDatabase::removeDatabase("add_package_informations");
+    addLocalizedInformation(COMPONENT_TYPE_PACKAGE, packageId, languages, names, descriptions);
+
+    QVariantMap informations;
+    informations.insert(COMPONENT_INFORMATION_ICON, package->icon());
+    informations.insert(PACKAGE_INFORMATION_AUTHOR, package->author());
+    informations.insert(PACKAGE_INFORMATION_EMAIL, package->email());
+    informations.insert(PACKAGE_INFORMATION_WEBSITE, package->website());
+    informations.insert(PACKAGE_INFORMATION_VERSION, package->version().toString());
+    addInformation(COMPONENT_TYPE_PACKAGE, packageId, informations);
+
+    scanPackageFolder(packageId, path, package->identifier());
+    package->deleteLater();
 }
 
-void PackageManagerPrivate::scanPackageFolder(const QString &path,
-                                              const QString &packageIdentifier,
-                                              QObject *parent)
+void PackageManagerPrivate::scanPackageFolder(int packageId, const QString &path,
+                                              const QString &packageIdentifier)
 {
     QDir packageFolder (path);
     QFileInfoList folders = packageFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
 
     foreach (QFileInfo folderInfo, folders) {
         QDir folder (folderInfo.absoluteFilePath());
-        DockBaseProperties *properties =
+        DockBaseProperties *dock =
                 DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
-                                                    packageIdentifier, parent);
+                                                    packageIdentifier);
+        addDock(packageId, dock);
     }
+}
+
+void PackageManagerPrivate::addDock(int packageId, DockBaseProperties *dock)
+{
+    int dockId = -1;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_dock");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("INSERT INTO docks (id, packageId, file) VALUES (NULL, :packageId, :file)");
+        query.bindValue(":packageId", packageId);
+        query.bindValue(":file", dock->fileName());
+        executeQuery(&query);
+        dockId = query.lastInsertId().toInt();
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_dock");
+
+    QStringList languages;
+    QStringList names;
+    QStringList descriptions;
+
+    languages.append(COMPONENT_INFORMATION_DEFAULT_LANGUAGE);
+    names.append(dock->defaultName());
+    descriptions.append(dock->defaultDesription());
+
+    foreach(QString language, dock->languages()) {
+        languages.append(language);
+        names.append(dock->name(language));
+        descriptions.append(dock->description(language));
+    }
+    addLocalizedInformation(COMPONENT_TYPE_DOCK, dockId, languages, names, descriptions);
+
+    QVariantMap informations;
+    informations.insert(COMPONENT_INFORMATION_ICON, dock->icon());
+    informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, dock->isSettingsEnabled());
+    informations.insert(DOCK_INFORMATION_WIDTH, dock->width());
+    informations.insert(DOCK_INFORMATION_HEIGHT, dock->height());
+    informations.insert(DOCK_INFORMATION_ANCHORS_TOP, dock->anchorsTop());
+    informations.insert(DOCK_INFORMATION_ANCHORS_BOTTOM, dock->anchorsBottom());
+    informations.insert(DOCK_INFORMATION_ANCHORS_LEFT, dock->anchorsLeft());
+    informations.insert(DOCK_INFORMATION_ANCHORS_RIGHT, dock->anchorsRight());
+    addInformation(COMPONENT_TYPE_DOCK, dockId, informations);
+
+    dock->deleteLater();
 }
 
 }

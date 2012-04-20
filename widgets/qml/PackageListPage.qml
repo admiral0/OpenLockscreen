@@ -12,49 +12,44 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.widgets.extra 1.0
+import "UiConstants.js" as Ui
 
-#include <QtCore/QMetaType>
-#include <QtCore/QScopedPointer>
+AbstractPage {
+    id: container
+    title: qsTr("Packages informations")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
+    content: ListView {
+        id: view
+        anchors.fill: parent
+        model: packageInformationModel
+        clip: true
+        delegate: ClickableEntry {
+            text: model.name
+            onClicked: {
+                packageDetailPage.title = model.name
+                packageDetailPage.description = model.description
+                packageDetailPage.author = model.author
+                packageDetailPage.email = model.email
+                packageDetailPage.website = model.website
+                packageDetailPage.version = model.version
+                window.pageStack.push(packageDetailPage)
+            }
+        }
+    }
 
-namespace Widgets
-{
+    PackageInformationModel {
+        id: packageInformationModel
+        packageManager: packageManagerInstance
+    }
 
-class VersionPrivate;
-class Version
-{
-public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
-protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(Version)
-};
-
+    PackageDetailPage {
+        id: packageDetailPage
+    }
 }
-
-Q_DECLARE_METATYPE(Widgets::Version)
-
-#endif // WIDGETS_VERSION_H

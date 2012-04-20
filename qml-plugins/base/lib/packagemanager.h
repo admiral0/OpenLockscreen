@@ -20,6 +20,7 @@
 #include <QtCore/QObject>
 
 #include "package.h"
+#include "dockbaseproperties.h"
 
 namespace Widgets
 {
@@ -31,8 +32,11 @@ class PackageManager : public QObject
 public:
     explicit PackageManager(QObject *parent = 0);
     virtual ~PackageManager();
-    Package package(const QString &identifier) const;
+    Package * package(const QString &identifier);
     QStringList registeredPackages() const;
+    Q_INVOKABLE DockBaseProperties * dock(const QString &packageIdentifier,
+                                          const QString &dockName);
+    QStringList registeredDocks(const QString &packageIdentifier) const;
 Q_SIGNALS:
 //    void
 public Q_SLOTS:

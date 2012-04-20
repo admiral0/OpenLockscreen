@@ -14,28 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H
-#define WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H
+#ifndef WIDGETS_GLOBAL_H
+#define WIDGETS_GLOBAL_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#include <QtCore/QtGlobal>
 
-#include <QtCore/QString>
-#include <QtCore/QVariantMap>
+#if !defined(W_ASSERT)
+#  ifndef QT_NO_DEBUG
+#    define W_ASSERT(cond) Q_ASSERT(cond)
+#  else
+#    define W_ASSERT(cond) cond
+#  endif
+#endif
 
-namespace Widgets
-{
-
-struct GraphicalElementProperties
-{
-    QString identifier;
-    QVariantMap settings;
-};
-
-}
-
-#endif // WIDGETS_GRAPHICALELEMENTPROPERTIES_P_H
+#endif // WIDGETS_GLOBAL_H

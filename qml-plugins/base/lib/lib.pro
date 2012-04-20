@@ -6,7 +6,9 @@ VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 TARGET = widgetsbase
 QT = core gui sql xml
 
-HEADERS +=      debug.h \
+contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
+
+HEADERS +=      widgets_global.h \
                 tools.h \
                 version.h \
                 oxygencolors.h \
@@ -14,10 +16,12 @@ HEADERS +=      debug.h \
                 xmlserializableinterface.h \
                 settings.h \
                 settingsentry.h \
-                graphicalelementbaseproperties.h \
-                graphicalelementbaseproperties_p.h \
-                graphicalelementbasepropertiesdefines.h \
-                graphicalelementproperties_p.h \
+                componentbase.h \
+                componentbase_p.h \
+                graphicalcomponentbase.h \
+                graphicalcomponentbase_p.h \
+                graphicalcomponentbasedefines.h \
+                graphicalcomponent_p.h \
                 dockbaseproperties.h \
                 dockbaseproperties_p.h \
                 dockbasepropertiesdefines.h \
@@ -37,7 +41,10 @@ SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
                 settings.cpp \
                 settingsentry.cpp \
-                graphicalelementbaseproperties.cpp \
+                componentbase.cpp \
+                componentbase_p.cpp \
+                graphicalcomponentbase.cpp \
+                graphicalcomponentbase_p.cpp \
                 dockbaseproperties.cpp \
                 dockbaseproperties_p.cpp \
                 dockproperties.cpp \

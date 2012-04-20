@@ -14,47 +14,58 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/ 
 
-#ifndef WIDGETS_VERSION_H
-#define WIDGETS_VERSION_H
+#ifndef WIDGETS_EXTRA_PACKAGEINFORMATIONMODEL_H
+#define WIDGETS_EXTRA_PACKAGEINFORMATIONMODEL_H
 
-#include <QtCore/QMetaType>
+#include <QtCore/QAbstractListModel>
 #include <QtCore/QScopedPointer>
+
+#include "packagemanager.h"
 
 namespace Widgets
 {
 
-class VersionPrivate;
-class Version
+namespace Extra
 {
+
+class PackageInformationModelPrivate;
+class PackageInformationModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
+               WRITE setPackageManager NOTIFY packageManagerChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit Version();
-    explicit Version(int major, int minor = 0, int patch = 0);
-    Version(const Version &other);
-    Version &operator=(const Version &other);
-    ~Version();
-    bool operator==(const Version &other);
-    bool operator!=(const Version &other);
-    bool operator>(const Version &other);
-    bool operator>=(const Version &other);
-    bool operator<(const Version &other);
-    bool operator<=(const Version &other);
-    int major() const;
-    int minor() const;
-    int patch() const;
-    bool isValid() const;
-    bool isBeta() const;
-    static Version currentVersion();
-    static Version fromString(const QString &version);
-    QString toString() const;
+    enum PackageRole
+    {
+        NameRole,
+        DescriptionRole,
+        AuthorRole,
+        EmailRole,
+        WebsiteRole,
+        VersionRole
+    };
+    explicit PackageInformationModel(QObject *parent = 0);
+    virtual ~PackageInformationModel();
+    PackageManager * packageManager() const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void clear();
+Q_SIGNALS:
+    void packageManagerChanged();
+    void countChanged(int count);
+public Q_SLOTS:
+    void setPackageManager(PackageManager *packageManager);
+    void update();
 protected:
-    Version(VersionPrivate * dd);
-    const QScopedPointer<VersionPrivate> d_ptr;
+    const QScopedPointer<PackageInformationModelPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(Version)
+    Q_DECLARE_PRIVATE(PackageInformationModel)
 };
 
 }
 
-Q_DECLARE_METATYPE(Widgets::Version)
+}
 
-#endif // WIDGETS_VERSION_H
+#endif // WIDGETS_EXTRA_PACKAGEINFORMATIONMODEL_H

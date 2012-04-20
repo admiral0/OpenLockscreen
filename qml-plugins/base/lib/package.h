@@ -17,6 +17,8 @@
 #ifndef WIDGETS_PACKAGE_H
 #define WIDGETS_PACKAGE_H
 
+#include "componentbase.h"
+
 #include <QtCore/QPair>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QStringList>
@@ -28,50 +30,48 @@ namespace Widgets
 
 class PackageManager;
 class PackagePrivate;
-class Package
+class Package: public ComponentBase
 {
+    Q_OBJECT
+    Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(QString directory READ directory NOTIFY directoryChanged)
+    Q_PROPERTY(QString plugin READ plugin NOTIFY pluginChanged)
+    Q_PROPERTY(QString author READ author NOTIFY authorChanged)
+    Q_PROPERTY(QString email READ email NOTIFY emailChanged)
+    Q_PROPERTY(QString website READ website NOTIFY websiteChanged)
+    Q_PROPERTY(Version version READ version NOTIFY versionChanged)
 public:
-    explicit Package();
-    Package(const Package &other);
-    Package & operator=(const Package &other);
+    explicit Package(QObject *parent = 0);
     virtual ~Package();
-    bool isValid() const;
     QString identifier() const;
-    void setIdentifier(const QString &identifier);
     QString directory() const;
-    void setDirectory(const QString &directory);
-    QString defaultName() const;
-    void setDefaultName(const QString &name);
-    QString name() const;
-    QString name(const QString &language) const;
-    void addName(const QString &language, const QString &name);
-    QString defaultDesription() const;
-    void setDefaultDescription(const QString &description);
-    QString description() const;
-    QString description(const QString &language) const;
-    void addDescription(const QString &language, const QString &description);
-    QStringList languages() const;
-    void clearNamesAndDescriptions();
-    QString icon() const;
-    void setIcon(const QString &icon);
     QString plugin() const;
-    void setPlugin(const QString &plugin);
     QString author() const;
-    void setAuthor(const QString &author);
     QString email() const;
-    void setEmail(const QString &email);
     QString website() const;
-    void setWebsite(const QString &website);
     Version version() const;
-    void setVersion(const Version &version);
-    static Package fromDesktopFile(const QString &file);
+    static Package * fromDesktopFile(const QString &desktopFile, QObject *parent = 0);
+Q_SIGNALS:
+    void identifierChanged();
+    void directoryChanged();
+    void pluginChanged();
+    void authorChanged();
+    void emailChanged();
+    void websiteChanged();
+    void versionChanged();
 protected:
-    Package(PackagePrivate * dd);
-    const QScopedPointer<PackagePrivate> d_ptr;
+    Package(PackagePrivate *dd, QObject *parent = 0);
 private:
-    explicit Package(const QString &file);
-    QHash<QString, QPair<QString, QString> > nameAndDescription() const;
+    explicit Package(const QString &desktopFile, QObject *parent = 0);
+    void setIdentifier(const QString &identifier);
+    void setDirectory(const QString &directory);
+    void setPlugin(const QString &plugin);
+    void setAuthor(const QString &author);
+    void setEmail(const QString &email);
+    void setWebsite(const QString &website);
+    void setVersion(const Version &version);
     Q_DECLARE_PRIVATE(Package)
+    friend class PackageManager;
 };
 
 }

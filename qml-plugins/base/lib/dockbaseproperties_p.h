@@ -26,24 +26,29 @@
 
 #include <QtCore/QSize>
 
-#include "graphicalelementbaseproperties_p.h"
+#include "graphicalcomponentbase_p.h"
+#include "dockbaseproperties.h"
 
 namespace Widgets
 {
 
-class DockBasePropertiesPrivate: public GraphicalElementBasePropertiesPrivate
+class DockBasePropertiesPrivate: public GraphicalComponentBasePrivate
 {
 public:
-    DockBasePropertiesPrivate();
-    void checkValid();
-    void fromDesktopFile(const QString &file, const QString &packageIdentifier);
+    DockBasePropertiesPrivate(DockBaseProperties *q);
+    DockBasePropertiesPrivate(const QString &fileName,
+                              const QString &packageIdentifier,
+                              DockBaseProperties *q);
+    virtual void parseDesktopFile(const DesktopParser &parser);
+    virtual bool checkValid(const DesktopParser &parser);
+    void checkAnchorsValid();
     QSize size;
     bool anchorsTop;
     bool anchorsBottom;
     bool anchorsLeft;
     bool anchorsRight;
-    bool valid;
-
+private:
+    Q_DECLARE_PUBLIC(DockBaseProperties)
 };
 
 }
