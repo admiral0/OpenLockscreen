@@ -46,7 +46,7 @@ AbstractPage {
 
     PackageInformationModel {
         id: packageInformationModel
-        packageManager: packageManagerInstance
+        packageManager: widgetManager.packageManager
     }
 
     PackageDetailPage {

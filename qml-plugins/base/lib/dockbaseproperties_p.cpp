@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 // Warning
 //
@@ -86,6 +86,7 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
 
     QFile qmlFile (qmlFilePath);
     if (!qmlFile.open(QIODevice::ReadOnly)) {
+        valid = false;
         return;
     }
 
@@ -192,29 +193,31 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     }
 
 
-
     fileName = parser.value(DESKTOP_FILE_DOCK_INFO_FILE).toString();
 }
 
 void DockBasePropertiesPrivate::checkAnchorsValid()
 {
-    // Width and height and no anchors are set
+    // If width and height are set, must be anchored in a corner
     if (size.width() > 0 && size.height() > 0 &&
-        !anchorsTop && !anchorsBottom && !anchorsLeft && !anchorsRight) {
+        ((anchorsTop && !anchorsBottom && anchorsLeft && !anchorsRight) ||
+         (anchorsTop && !anchorsBottom && !anchorsLeft && anchorsRight) ||
+         (!anchorsTop && anchorsBottom && anchorsLeft && !anchorsRight) ||
+         (!anchorsTop && anchorsBottom && !anchorsLeft && anchorsRight))) {
         return;
     }
 
-    // Width is set and either top or bottom anchored
+    // If only width is set, must be either anchored at left or right side
     if (size.width() > 0 && size.height() <= 0 &&
-        ((anchorsTop && !anchorsBottom) || (!anchorsTop && anchorsBottom)) &&
-        !anchorsLeft && !anchorsRight) {
+        ((anchorsTop && anchorsBottom && anchorsLeft && !anchorsRight) ||
+         (anchorsTop && anchorsBottom && !anchorsLeft && anchorsRight))) {
         return;
     }
 
-    // Height is set and either left or right anchored
-    if (size.height() > 0 && size.width() <= 0 &&
-        ((anchorsLeft && !anchorsRight) || (!anchorsRight && anchorsLeft)) &&
-        !anchorsTop && !anchorsBottom) {
+    // If only height is set, must be either anchored at top or bottom side
+    if (size.width() <= 0 && size.height() > 0 &&
+        ((anchorsTop && !anchorsBottom && anchorsLeft && anchorsRight) ||
+         (!anchorsTop && anchorsBottom && anchorsLeft && anchorsRight))) {
         return;
     }
 

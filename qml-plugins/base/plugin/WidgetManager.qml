@@ -18,42 +18,10 @@ import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
 
 Item {
-    id: container
-    anchors.fill: parent
-    property variant packageManager
-    property alias content: contentsContainer.children
+   id: container
+   property variant packageManager: packageManagerInstance
 
-    DockModel {
-        id: dockModelInstance
-    }
-
-    DockManager {
-        id: dockManagerInstance
-        dockModel: dockModelInstance
-    }
-
-    Component.onCompleted: {
-        var settings;
-        var dock1 = container.packageManager.dock("org.SfietKonstantin.basicwidgets", "AndroidDock.qml")
-        dockModelInstance.addDock(dock1, settings)
-    }
-
-    Item {
-        id: contentsContainer
-        anchors.top: parent.top; anchors.topMargin: dockManagerInstance.topMargin
-        anchors.bottom: parent.bottom; anchors.bottomMargin: dockManagerInstance.bottomMargin
-        anchors.left: parent.left; anchors.leftMargin: dockManagerInstance.leftMargin
-        anchors.right: parent.right; anchors.rightMargin: dockManagerInstance.rightMargin
-    }
-
-    Repeater {
-        anchors.fill: parent
-        model: dockModelInstance
-        DockContainer {
-            width: container.width
-            height: container.height
-            qmlFile: container.packageManager.dockFile(model.dock.packageIdentifier,
-                                                       model.dock.fileName)
-        }
-    }
+   PackageManager {
+       id: packageManagerInstance
+   }
 }

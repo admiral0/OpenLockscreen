@@ -12,16 +12,17 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "backgroundmanager.h"
 
 #include <QtCore/QSize>
 #include <QtCore/QDebug>
 
-static const char * WALLPAPER_SOURCE = "wallpaper/source";
-static const char * WALLPAPER_WIDTH = "wallpaper/width";
-static const char * WALLPAPER_HEIGHT = "wallpaper/height";
+static const char *BACKGROUND_GROUP = "background";
+static const char *BACKGROUND_WALLPAPER_SOURCE = "wallpaperSource";
+static const char *BACKGROUND_WALLPAPER_WIDTH = "wallpaperWidth";
+static const char *BACKGROUND_WALLPAPER_HEIGHT = "wallpaperHeight";
 
 namespace Widgets
 {
@@ -29,61 +30,71 @@ namespace Widgets
 namespace Background
 {
 
-class BackgroundManager::BackgroundManagerPrivate
+class BackgroundManagerPrivate
 {
 public:
-    BackgroundManagerPrivate(BackgroundManager *parent);
+    BackgroundManagerPrivate(BackgroundManager *q);
     void loadSettings();
-    void slotValueChanged(const QString &key, const QVariant &value);
+    void slotValueChanged(const QString &group, const QString &key, const QVariant &value);
     QString wallpaperSource;
     QSize wallpaperSize;
     Settings *settings;
 private:
-    BackgroundManager * const q;
+    BackgroundManager * const q_ptr;
+    Q_DECLARE_PUBLIC(BackgroundManager)
 };
 
-BackgroundManager::BackgroundManagerPrivate::BackgroundManagerPrivate(BackgroundManager *parent):
-    q(parent)
+BackgroundManagerPrivate::BackgroundManagerPrivate(BackgroundManager *q):
+    q_ptr(q)
 {
     wallpaperSource = QString();
     wallpaperSize = QSize(0, 0);
     settings = 0;
 }
 
-void BackgroundManager::BackgroundManagerPrivate::loadSettings()
+void BackgroundManagerPrivate::loadSettings()
 {
-    wallpaperSource = settings->value(WALLPAPER_SOURCE).toString();
+    Q_Q(BackgroundManager);
+
+    settings->setGroup(BACKGROUND_GROUP);
+    wallpaperSource = settings->value(BACKGROUND_WALLPAPER_SOURCE).toString();
     emit q->wallpaperSourceChanged(wallpaperSource);
 
-    int wallPaperWidth = settings->value(WALLPAPER_WIDTH).toInt();
+    int wallPaperWidth = settings->value(BACKGROUND_WALLPAPER_WIDTH).toInt();
     if(wallpaperSize.width() != wallPaperWidth) {
         wallpaperSize.setWidth(wallPaperWidth);
         emit q->wallpaperWidthChanged(wallPaperWidth);
     }
 
-    int wallPaperHeight = settings->value(WALLPAPER_HEIGHT).toInt();
+    int wallPaperHeight = settings->value(BACKGROUND_WALLPAPER_HEIGHT).toInt();
     if(wallpaperSize.height() != wallPaperHeight) {
         wallpaperSize.setHeight(wallPaperHeight);
         emit q->wallpaperHeightChanged(wallPaperHeight);
     }
+    settings->clearGroup();
 }
 
-void BackgroundManager::BackgroundManagerPrivate::slotValueChanged(const QString &key,
-                                                                   const QVariant &value)
+void BackgroundManagerPrivate::slotValueChanged(const QString &group, const QString &key,
+                                                const QVariant &value)
 {
-    if(key == WALLPAPER_SOURCE) {
+    Q_Q(BackgroundManager);
+    if (group != BACKGROUND_GROUP) {
+        return;
+    }
+
+    if(key == BACKGROUND_WALLPAPER_SOURCE) {
         QString newWallpaperSource = value.toString();
         if(wallpaperSource != newWallpaperSource) {
             wallpaperSource = newWallpaperSource;
             emit q->wallpaperSourceChanged(newWallpaperSource);
         }
-    } else if(key == WALLPAPER_WIDTH) {
+    } else if(key == BACKGROUND_WALLPAPER_WIDTH) {
         int wallPaperWidth = value.toInt();
         if(wallpaperSize.width() != wallPaperWidth) {
             wallpaperSize.setWidth(wallPaperWidth);
             emit q->wallpaperWidthChanged(wallPaperWidth);
         }
-    } else if(key == WALLPAPER_HEIGHT) {
+    } else if(key == BACKGROUND_WALLPAPER_HEIGHT) {
         int wallPaperHeight = value.toInt();
         if(wallpaperSize.height() != wallPaperHeight) {
             wallpaperSize.setHeight(wallPaperHeight);
@@ -95,49 +106,51 @@ void BackgroundManager::BackgroundManagerPrivate::slotValueChanged(const QString
 ////// End of private class /////
 
 BackgroundManager::BackgroundManager(QObject *parent) :
-    QObject(parent), d(new BackgroundManagerPrivate(this))
+    QObject(parent), d_ptr(new BackgroundManagerPrivate(this))
 {
 }
 
 BackgroundManager::~BackgroundManager()
 {
-    delete d;
 }
 
 QString BackgroundManager::wallpaperSource() const
 {
+    Q_D(const BackgroundManager);
     return d->wallpaperSource;
 }
 
 int BackgroundManager::wallpaperWidth() const
 {
+    Q_D(const BackgroundManager);
     return d->wallpaperSize.width();
 }
 
 int BackgroundManager::wallpaperHeight() const
 {
+    Q_D(const BackgroundManager);
     return d->wallpaperSize.height();
 }
 
 Settings * BackgroundManager::settings() const
 {
+    Q_D(const BackgroundManager);
     return d->settings;
 }
 
 void BackgroundManager::setSettings(Settings *settings)
 {
+    Q_D(BackgroundManager);
     if(settings == 0) {
         return;
     }
 
-    if(d->settings == 0) {
-        d->settings = settings;
-        d->loadSettings();
-        connect(d->settings, SIGNAL(valueChanged(QString,QVariant)),
-                this, SLOT(slotValueChanged(QString,QVariant)));
+    d->settings = settings;
+    d->loadSettings();
+    connect(d->settings, SIGNAL(valueChanged(QString,QString,QVariant)),
+            this, SLOT(slotValueChanged(QString,QString,QVariant)));
 
-        emit settingsChanged();
-    }
+    emit settingsChanged();
 }
 
 }

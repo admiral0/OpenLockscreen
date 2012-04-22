@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_SETTINGSENTRY_H
 #define WIDGETS_SETTINGSENTRY_H
@@ -27,25 +27,29 @@ class SettingsEntryPrivate;
 class SettingsEntry : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString group READ group WRITE setGroup NOTIFY groupChanged)
     Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 public:
     explicit SettingsEntry(QObject *parent = 0);
     virtual ~SettingsEntry();
+    QString group() const;
     QString key() const;
     QVariant value() const;
 Q_SIGNALS:
+    void groupChanged(const QString &group);
     void keyChanged(const QString &key);
     void valueChanged(const QVariant &value);
 public Q_SLOTS:
+    void setGroup(const QString &group);
     void setKey(const QString &key);
     void setValue(const QVariant &value);
 protected:
-    SettingsEntry(SettingsEntryPrivate * dd, QObject *parent);
+    SettingsEntry(SettingsEntryPrivate *dd, QObject *parent);
     const QScopedPointer<SettingsEntryPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(SettingsEntry)
-    
+
 };
 
 }

@@ -14,55 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#ifndef WIDGETS_EXTRA_PLUGIN_H
+#define WIDGETS_EXTRA_PLUGIN_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QScopedPointer>
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-#include "packagemanager.h"
-
-namespace Widgets
-{
-
-namespace Extra
-{
-
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
+class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
+
 public:
-    enum PackageRole
-    {
-        NameRole,
-        DescriptionRole,
-        FileRole
-    };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
-Q_SIGNALS:
-    void packageManagerChanged();
-    void countChanged(int count);
-public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
-protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    /**
+     * @short Register types
+     *
+     * This method is used to register C++ classes
+     * into the QML context.
+     *
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
 };
 
-}
+#endif // WIDGETS_EXTRA_PLUGIN_H
 
-}
-
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H

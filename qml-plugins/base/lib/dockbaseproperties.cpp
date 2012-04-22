@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "dockbaseproperties.h"
 #include "dockbaseproperties_p.h"
@@ -39,7 +39,7 @@ DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &p
                                        QObject *parent):
     GraphicalComponentBase(new DockBasePropertiesPrivate(this), parent)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
@@ -60,50 +60,50 @@ DockBaseProperties::DockBaseProperties(const QString &desktopFile,
                                        QObject *parent):
     GraphicalComponentBase(new DockBasePropertiesPrivate(this), parent)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     d->packageIdentifier = packageIdentifier;
     d->fromDesktopFile(desktopFile);
 }
 
 bool DockBaseProperties::isValid() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->valid;
 }
 
 int DockBaseProperties::width() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->size.width();
 }
 
 int DockBaseProperties::height() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->size.height();
 }
 
 bool DockBaseProperties::anchorsTop() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->anchorsTop;
 }
 
 bool DockBaseProperties::anchorsBottom() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->anchorsBottom;
 }
 
 bool DockBaseProperties::anchorsLeft() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->anchorsLeft;
 }
 
 bool DockBaseProperties::anchorsRight() const
 {
-    Q_D(const DockBaseProperties);
+    W_D(const DockBaseProperties);
     return d->anchorsRight;
 }
 
@@ -181,7 +181,7 @@ DockBaseProperties * DockBaseProperties::fromDesktopFile(const QString &desktopF
 
 void DockBaseProperties::setWidth(int width)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->size.width() != width) {
         d->size.setWidth(width);
         emit widthChanged(width);
@@ -190,7 +190,7 @@ void DockBaseProperties::setWidth(int width)
 
 void DockBaseProperties::setHeight(int height)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->size.height() != height) {
         d->size.setHeight(height);
         emit heightChanged(height);
@@ -199,7 +199,7 @@ void DockBaseProperties::setHeight(int height)
 
 void DockBaseProperties::setAnchorsTop(bool anchorsTop)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->anchorsTop != anchorsTop) {
         d->anchorsTop = anchorsTop;
         emit anchorsTopChanged(anchorsTop);
@@ -208,7 +208,7 @@ void DockBaseProperties::setAnchorsTop(bool anchorsTop)
 
 void DockBaseProperties::setAnchorsBottom(bool anchorsBottom)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->anchorsBottom != anchorsBottom) {
         d->anchorsBottom = anchorsBottom;
         emit anchorsBottomChanged(anchorsBottom);
@@ -217,7 +217,7 @@ void DockBaseProperties::setAnchorsBottom(bool anchorsBottom)
 
 void DockBaseProperties::setAnchorsLeft(bool anchorsLeft)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->anchorsLeft != anchorsLeft) {
         d->anchorsLeft = anchorsLeft;
         emit anchorsLeftChanged(anchorsLeft);
@@ -226,7 +226,7 @@ void DockBaseProperties::setAnchorsLeft(bool anchorsLeft)
 
 void DockBaseProperties::setAnchorsRight(bool anchorsRight)
 {
-    Q_D(DockBaseProperties);
+    W_D(DockBaseProperties);
     if (d->anchorsRight != anchorsRight) {
         d->anchorsRight = anchorsRight;
         emit anchorsRightChanged(anchorsRight);

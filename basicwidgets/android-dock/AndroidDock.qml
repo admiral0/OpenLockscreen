@@ -16,6 +16,7 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.colors 1.0
 
 Dock {
     id: container
@@ -35,7 +36,7 @@ Dock {
         Rectangle {
             id: barBackground
             anchors.fill: parent
-            color: colors.gray6
+            color: Colors.gray6
             radius: 6
         }
 

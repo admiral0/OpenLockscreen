@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 // Warning
 //
@@ -23,6 +23,7 @@
 
 #include "componentbase_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QVariant>
 
 #include "desktopparser.h"
@@ -67,8 +68,24 @@ void ComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
     q->setIcon(parser.value(DESKTOP_FILE_ICON).toString());
 
     // Fetch names and comments
-    q->setDefaultName(parser.value(DESKTOP_FILE_NAME).toString());
-    q->setDefaultDescription(parser.value(DESKTOP_FILE_COMMENT).toString());
+    QVariant nameVariant = parser.value(DESKTOP_FILE_NAME);
+    if (nameVariant.type() == QVariant::String) {
+        q->setDefaultName(nameVariant.toString());
+    } else if (nameVariant.type() == QVariant::StringList) {
+        QString name = nameVariant.toStringList().join(", ");
+        q->setDefaultName(name);
+    } else {
+        q->setDefaultName("");
+    }
+    QVariant descriptionVariant = parser.value(DESKTOP_FILE_COMMENT);
+    if (descriptionVariant.type() == QVariant::String) {
+        q->setDefaultDescription(descriptionVariant.toString());
+    } else if (descriptionVariant.type() == QVariant::StringList) {
+        QString name = descriptionVariant.toStringList().join(", ");
+        q->setDefaultDescription(name);
+    } else {
+        q->setDefaultDescription("");
+    }
 
     QRegExp nameRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_NAME));
     QRegExp commentRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_COMMENT));
@@ -77,12 +94,28 @@ void ComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
         if (nameRegEx.indexIn(key) != -1) {
 
             QString language = nameRegEx.cap(1);
-            q->addName(language, parser.value(DESKTOP_FILE_NAME, language).toString());
+            nameVariant = parser.value(DESKTOP_FILE_NAME, language);
+            if (nameVariant.type() == QVariant::String) {
+                q->addName(language, nameVariant.toString());
+            } else if (nameVariant.type() == QVariant::StringList) {
+                QString name = nameVariant.toStringList().join(", ");
+                q->addName(language, name);
+            } else {
+                q->addName(language, "");
+            }
         }
         if (commentRegEx.indexIn(key) != -1) {
 
             QString language = commentRegEx.cap(1);
-            q->addDescription(language, parser.value(DESKTOP_FILE_COMMENT, language).toString());
+            descriptionVariant = parser.value(DESKTOP_FILE_COMMENT, language);
+            if (descriptionVariant.type() == QVariant::String) {
+                q->addDescription(language, descriptionVariant.toString());
+            } else if (descriptionVariant.type() == QVariant::StringList) {
+                QString name = descriptionVariant.toStringList().join(", ");
+                q->addDescription(language, name);
+            } else {
+                q->addDescription(language, "");
+            }
         }
     }
 

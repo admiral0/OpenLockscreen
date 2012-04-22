@@ -20,8 +20,26 @@ import "UiConstants.js" as Ui
 
 AbstractNavigationPage {
     id: container
+    orientationLock: PageOrientation.LockPortrait
+
     title: qsTr("Widgets settings")
+    onShow: {
+        if(page == "showPreview") {
+            window.pageStack.push(previewPage)
+        }
+        if(page == "showInfo") {
+            window.pageStack.push(infoPage)
+        }
+        if(page == "showAbout") {
+            window.pageStack.push(aboutPage)
+        }
+    }
     model: ListModel {
+        ListElement {
+            identifier: "showPreview"
+            text: QT_TR_NOOP("Preview")
+        }
+
         ListElement {
             identifier: "showInfo"
             text: QT_TR_NOOP("Informations")
@@ -31,5 +49,17 @@ AbstractNavigationPage {
             identifier: "showAbout"
             text: QT_TR_NOOP("About")
         }
+    }
+
+    PreviewPage {
+        id: previewPage
+    }
+
+    InformationsPage {
+        id: infoPage
+    }
+
+    AboutPage {
+        id: aboutPage
     }
 }

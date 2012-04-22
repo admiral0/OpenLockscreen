@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "componentbase.h"
 #include "componentbase_p.h"
@@ -29,12 +29,12 @@ namespace Widgets
 {
 
 ComponentBase::ComponentBase(QObject *parent):
-    QObject(parent), d_ptr(new ComponentBasePrivate(this))
+    QObject(parent), d_pointer(new ComponentBasePrivate(this))
 {
 }
 
 ComponentBase::ComponentBase(ComponentBasePrivate *dd, QObject *parent):
-    QObject(parent), d_ptr(dd)
+    QObject(parent), d_pointer(dd)
 {
 }
 
@@ -44,36 +44,44 @@ ComponentBase::~ComponentBase()
 
 bool ComponentBase::isValid() const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     return d->valid;
 }
 
 QString ComponentBase::icon() const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     return d->icon;
 }
 
 QStringList ComponentBase::languages() const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     return d->nameAndDescription.keys();
 }
 
 QString ComponentBase::defaultName() const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     return d->defaultName;
 }
 
 QString ComponentBase::name() const
 {
-    Q_D(const ComponentBase);
-#ifndef MEEGO_EDITION_HARMATTAN
-    QStringList languages = QLocale::system().uiLanguages();
-#else
+    W_D(const ComponentBase);
+
+#if (QT_VERSION < QT_VERSION_CHECK(4, 8, 0))
+#  ifndef MEEGO_EDITION_HARMATTAN
+    QStringList languages;
+#  else
     MLocale locale = MLocale();
-    QStringList languages = locale.localeScripts();
+    QStringList languages;
+    languages.append(locale.name());
+    languages.append(locale.language());
+    languages.append(QString("%1_%2").arg(locale.language()).arg(locale.country()));
+#  endif
+#else
+    QStringList languages = QLocale::system().uiLanguages();
 #endif
     QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
 
@@ -96,7 +104,7 @@ QString ComponentBase::name() const
 
 QString ComponentBase::name(const QString &language) const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
 
     QString value = d->nameAndDescription.value(language).first;
     if (value.isEmpty()) {
@@ -106,20 +114,27 @@ QString ComponentBase::name(const QString &language) const
     return value;
 }
 
-QString ComponentBase::defaultDesription() const
+QString ComponentBase::defaultDescription() const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     return d->defaultDescription;
 }
 
 QString ComponentBase::description() const
 {
-    Q_D(const ComponentBase);
-#ifndef MEEGO_EDITION_HARMATTAN
-    QStringList languages = QLocale::system().uiLanguages();
-#else
+    W_D(const ComponentBase);
+#if (QT_VERSION < QT_VERSION_CHECK(4, 8, 0))
+#  ifndef MEEGO_EDITION_HARMATTAN
+    QStringList languages;
+#  else
     MLocale locale = MLocale();
-    QStringList languages = locale.localeScripts();
+    QStringList languages;
+    languages.append(locale.name());
+    languages.append(locale.language());
+    languages.append(QString("%1_%2").arg(locale.language()).arg(locale.country()));
+#  endif
+#else
+    QStringList languages = QLocale::system().uiLanguages();
 #endif
     QListIterator<QString> languagesIterator = QListIterator<QString>(languages);
 
@@ -142,7 +157,7 @@ QString ComponentBase::description() const
 
 QString ComponentBase::description(const QString &language) const
 {
-    Q_D(const ComponentBase);
+    W_D(const ComponentBase);
     QString value = d->nameAndDescription.value(language).second;
     if (value.isEmpty()) {
         value = d->defaultDescription;
@@ -153,7 +168,7 @@ QString ComponentBase::description(const QString &language) const
 
 void ComponentBase::setIcon(const QString &icon)
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
     if (d->icon != icon) {
         d->icon = icon;
         emit iconChanged();
@@ -162,7 +177,7 @@ void ComponentBase::setIcon(const QString &icon)
 
 void ComponentBase::setDefaultName(const QString &name)
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
     if (d->defaultName != name) {
         d->defaultName = name;
         emit defaultNameChanged();
@@ -171,7 +186,7 @@ void ComponentBase::setDefaultName(const QString &name)
 
 void ComponentBase::addName(const QString &language, const QString &name)
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
     QPair<QString, QString> data;
 
     if (d->nameAndDescription.contains(language)) {
@@ -185,7 +200,7 @@ void ComponentBase::addName(const QString &language, const QString &name)
 
 void ComponentBase::setDefaultDescription(const QString &description)
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
 
     if (d->defaultDescription != description) {
         d->defaultDescription = description;
@@ -195,7 +210,7 @@ void ComponentBase::setDefaultDescription(const QString &description)
 
 void ComponentBase::addDescription(const QString &language, const QString &description)
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
     QPair<QString, QString> data;
 
     if (d->nameAndDescription.contains(language)) {
@@ -208,10 +223,22 @@ void ComponentBase::addDescription(const QString &language, const QString &descr
 
 void ComponentBase::clearNamesAndDescriptions()
 {
-    Q_D(ComponentBase);
+    W_D(ComponentBase);
     d->nameAndDescription.clear();
     emit nameChanged();
     emit descriptionChanged();
+}
+
+QDebug operator<<(QDebug debug, ComponentBase *component)
+{
+    debug.nospace() << "ComponentBase (";
+    debug.nospace() << "defaultName: " << component->defaultName() << " ";
+    debug.nospace() << "defaultDesription: " << component->defaultDescription() << " ";
+    debug.nospace() << "name: " << component->name() << " ";
+    debug.nospace() << "desription: " << component->description() << " ";
+    debug.nospace() << "icon: " << component->icon();
+    debug.nospace() << ")";
+    return debug.space();
 }
 
 }

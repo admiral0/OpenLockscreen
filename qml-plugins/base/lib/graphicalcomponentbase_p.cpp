@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 // Warning
 //
@@ -23,6 +23,7 @@
 
 #include "graphicalcomponentbase_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QVariant>
 
 #include "desktopparser.h"

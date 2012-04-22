@@ -12,11 +12,13 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "graphicalcomponentbase.h"
 #include "graphicalcomponentbase_p.h"
 #include "graphicalcomponentbasedefines.h"
+
+#include <QtCore/QDebug>
 
 #include "tools.h"
 
@@ -27,7 +29,7 @@ GraphicalComponentBase::GraphicalComponentBase(QObject *parent) :
     ComponentBase(new GraphicalComponentBasePrivate(this), parent),
     XmlSerializableInterface()
 {
-    Q_D(GraphicalComponentBase);
+    W_D(GraphicalComponentBase);
     d->settingsEnabled = false;
 }
 
@@ -38,12 +40,11 @@ GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
     ComponentBase(new GraphicalComponentBasePrivate(fileName, packageIdentifier, this), parent),
     XmlSerializableInterface()
 {
-    Q_D(GraphicalComponentBase);
+    W_D(GraphicalComponentBase);
     d->settingsEnabled = settingsEnabled;
 }
 
-GraphicalComponentBase::GraphicalComponentBase(
-        GraphicalComponentBasePrivate *dd, QObject *parent):
+GraphicalComponentBase::GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent):
     ComponentBase(dd, parent),
     XmlSerializableInterface()
 {
@@ -55,19 +56,19 @@ GraphicalComponentBase::~GraphicalComponentBase()
 
 QString GraphicalComponentBase::fileName() const
 {
-    Q_D(const GraphicalComponentBase);
+    W_D(const GraphicalComponentBase);
     return d->fileName;
 }
 
 QString GraphicalComponentBase::packageIdentifier() const
 {
-    Q_D(const GraphicalComponentBase);
+    W_D(const GraphicalComponentBase);
     return d->packageIdentifier;
 }
 
 bool GraphicalComponentBase::isSettingsEnabled() const
 {
-    Q_D(const GraphicalComponentBase);
+    W_D(const GraphicalComponentBase);
     return d->settingsEnabled;
 }
 
@@ -98,7 +99,8 @@ QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
 {
     QDomElement element = document->createElement(tagName);
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE, fileName());
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE, packageIdentifier());
+    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE,
+                         packageIdentifier());
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE,
                          Tools::boolToString(isSettingsEnabled()));
 
@@ -107,7 +109,7 @@ QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
 
 void GraphicalComponentBase::setFileName(const QString &name)
 {
-    Q_D(GraphicalComponentBase);
+    W_D(GraphicalComponentBase);
     if (d->fileName != name) {
         d->fileName = name;
         emit fileNameChanged(name);
@@ -116,7 +118,7 @@ void GraphicalComponentBase::setFileName(const QString &name)
 
 void GraphicalComponentBase::setPackageIdentifier(const QString &packageName)
 {
-    Q_D(GraphicalComponentBase);
+    W_D(GraphicalComponentBase);
     if (d->packageIdentifier != packageName) {
         d->packageIdentifier = packageName;
         emit packageIdentifierChanged(packageName);
@@ -125,11 +127,26 @@ void GraphicalComponentBase::setPackageIdentifier(const QString &packageName)
 
 void GraphicalComponentBase::setSettingsEnabled(bool settingsEnabled)
 {
-    Q_D(GraphicalComponentBase);
+    W_D(GraphicalComponentBase);
     if (d->settingsEnabled != settingsEnabled) {
         d->settingsEnabled = settingsEnabled;
         emit settingsEnabledChanged(settingsEnabled);
     }
+}
+
+QDebug operator<<(QDebug debug, GraphicalComponentBase *component)
+{
+    debug.nospace() << "Package (";
+    debug.nospace() << "defaultName: " << component->defaultName() << " ";
+    debug.nospace() << "defaultDesription: " << component->defaultDescription() << " ";
+    debug.nospace() << "name: " << component->name() << " ";
+    debug.nospace() << "desription: " << component->description() << " ";
+    debug.nospace() << "icon: " << component->icon() << " ";
+    debug.nospace() << "fileName: " << component->fileName() << " ";
+    debug.nospace() << "packageIdentifier: " << component->packageIdentifier() << " ";
+    debug.nospace() << "settingsEnabled: " << component->isSettingsEnabled();
+    debug.nospace() << ")";
+    return debug.space();
 }
 
 }

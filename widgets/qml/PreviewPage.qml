@@ -14,55 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.background 1.0
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QScopedPointer>
+Page {
+    id: mainPage
+    orientationLock: PageOrientation.LockPortrait
 
-#include "packagemanager.h"
+    PinchArea {
+        anchors.fill: parent
+        onPinchFinished: window.pageStack.pop()
+    }
 
-namespace Widgets
-{
+    Background {
+        anchors.fill: parent
+        id: background
+        view: view
+    }
 
-namespace Extra
-{
+    DockedView {
+        packageManager: widgetManager.packageManager
+        content: ListView {
+            id: view
+            anchors.fill: parent
+            orientation: ListView.Horizontal
+            delegate: Item {
+                width: view.width
+                height: view.height
+            }
 
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
-{
-    Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
-public:
-    enum PackageRole
-    {
-        NameRole,
-        DescriptionRole,
-        FileRole
-    };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
-Q_SIGNALS:
-    void packageManagerChanged();
-    void countChanged(int count);
-public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
-protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
-};
-
+            model: ListModel {
+                ListElement {}
+                ListElement {}
+                ListElement {}
+            }
+        }
+    }
 }
-
-}
-
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H

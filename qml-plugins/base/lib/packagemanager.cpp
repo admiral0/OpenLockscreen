@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "packagemanager.h"
 #include "packagemanager_p.h"
@@ -138,8 +138,38 @@ QStringList PackageManager::registeredPackages() const
     return values;
 }
 
+QString PackageManager::dockFile(const QString &packageIdentifier, const QString &dockFilename)
+{
+    Q_D(const PackageManager);
+
+    QString value;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_dock_file");
+        db.setDatabaseName(d->databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT packages.directory, docks.directory FROM packages INNER JOIN docks ON packages.id=docks.packageId WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":dockFile", dockFilename);
+        d->executeQuery(&query);
+        if (query.next()) {
+            QString subdir = query.value(1).toString();
+            QDir dir = QDir(query.value(0).toString());
+            if (dir.cd(subdir)) {
+                if (dir.exists(dockFilename)) {
+                    value = dir.absoluteFilePath(dockFilename);
+                }
+            }
+        }
+    }
+    QSqlDatabase::removeDatabase("get_dock_file");
+
+    return value;
+}
+
 DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
-                                          const QString &dockName)
+                                          const QString &dockFilename)
 {
     Q_D(const PackageManager);
     DockBaseProperties *value = 0;
@@ -154,7 +184,7 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         QSqlQuery query = QSqlQuery(db);
         query.prepare("SELECT docks.id FROM docks INNER JOIN packages ON docks.packageId=packages.id WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
         query.bindValue(":packageIdentifier", packageIdentifier);
-        query.bindValue(":dockFile", dockName + ".qml");
+        query.bindValue(":dockFile", dockFilename);
         d->executeQuery(&query);
         if (!query.next()) {
             return value;
@@ -163,7 +193,7 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         value = new DockBaseProperties(this);
         int dockId = query.value(0).toInt();
 
-        value->setFileName(dockName);
+        value->setFileName(dockFilename);
         value->setPackageIdentifier(packageIdentifier);
 
         query.prepare("SELECT language, name, description FROM componentLocalizedInformation WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
@@ -233,7 +263,6 @@ QStringList PackageManager::registeredDocks(const QString &packageIdentifier) co
         d->executeQuery(&query);
         while (query.next()) {
             QString name = query.value(0).toString();
-            name.remove(".qml");
             values.append(name);
         }
         query.finish();

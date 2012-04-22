@@ -14,52 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H
-#define WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H
+#ifndef WIDGETS_DOCKMODEL_H
+#define WIDGETS_DOCKMODEL_H
 
-#include <QObject>
-
-#include "settings.h"
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QScopedPointer>
 
 namespace Widgets
 {
 
-namespace Background
-{
-
-class BackgroundManagerPrivate;
-class BackgroundManager : public QObject
+class DockBaseProperties;
+class DockModelPrivate;
+class DockModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString wallpaperSource READ wallpaperSource NOTIFY wallpaperSourceChanged)
-    Q_PROPERTY(int wallpaperWidth READ wallpaperWidth NOTIFY wallpaperWidthChanged)
-    Q_PROPERTY(int wallpaperHeight READ wallpaperHeight NOTIFY wallpaperHeightChanged)
-    Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit BackgroundManager(QObject *parent = 0);
-    virtual ~BackgroundManager();
-    QString wallpaperSource() const;
-    int wallpaperWidth() const;
-    int wallpaperHeight() const;
-    Settings * settings() const;
+    enum PackageRole
+    {
+        DockRole
+    };
+    explicit DockModel(QObject *parent = 0);
+    virtual ~DockModel();
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void clear();
 Q_SIGNALS:
-    void wallpaperSourceChanged(const QString &wallpaperSource);
-    void wallpaperWidthChanged(int wallpaperWidth);
-    void wallpaperHeightChanged(int wallpaperHeight);
-    void settingsChanged();
+    void countChanged(int count);
 public Q_SLOTS:
-    void setSettings(Settings *settings);
+    void addDock(Widgets::DockBaseProperties *dockBase, const QVariantMap &settings);
 protected:
-    const QScopedPointer<BackgroundManagerPrivate> d_ptr;
+    const QScopedPointer<DockModelPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(BackgroundManager)
-
-    Q_PRIVATE_SLOT(d_func(), void slotValueChanged(const QString &group, const QString &key,
-                                                   const QVariant &value))
+    Q_DECLARE_PRIVATE(DockModel)
 };
 
 }
 
-}
-
-#endif // WIDGETS_BACKGROUND_BACKGROUNDMANAGER_H
+#endif // WIDGETS_DOCKMODEL_H

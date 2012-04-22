@@ -27,7 +27,7 @@ TEST_FOLDER =               /opt/widgets/tests/
 
 # Testing on Unix
 unix {
-    !contains(MEEGO_EDITION,harmattan):CONFIG(debug, debug|release): {
+    CONFIG(debug, debug|release): {
         QML_PLUGIN_FOLDER =     $${DEPLOYMENT_PREFIX}/usr/lib$${64_BITS}/qt4/imports/org/SfietKonstantin/widgets/
         INCLUDE_FOLDER =        $${DEPLOYMENT_PREFIX}/usr/include/widgets/
         LIB_FOLDER =            $${DEPLOYMENT_PREFIX}/usr/lib$${64_BITS}/

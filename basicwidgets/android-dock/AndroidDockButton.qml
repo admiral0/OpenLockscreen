@@ -15,6 +15,8 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
+import org.SfietKonstantin.widgets.colors 1.0
+
 
 Item {
     id: container
@@ -26,7 +28,7 @@ Item {
         anchors.fill: parent
         visible: false
         opacity: 0.9
-        color: colors.gray2
+        color: Colors.gray2
         radius: 6
     }
 

@@ -25,48 +25,12 @@ PageStackWindow {
         theme.inverted = true
     }
 
+
+    WidgetManager {
+        id: widgetManager
+    }
+
     MainPage {
         id: mainPage
-        onShow: {
-            if(page == "showInfo") {
-                window.pageStack.push(infoPage)
-            }
-            if(page == "showAbout") {
-                window.pageStack.push(aboutPage)
-            }
-        }
-    }
-
-//    WallpaperSourcePage {
-//        id: backgroundSourcePage
-//        onShow: {
-//            if(page == "showWallpaperDefault") {
-//                wallpaperDefaultPage.selected = settingsManager.wallpaperSource
-//                window.pageStack.push(wallpaperDefaultPage)
-//            } else if(page == "showWallpaperPictures") {
-//                wallpaperPicturesPage.selected = settingsManager.wallpaperSource
-//                window.pageStack.push(wallpaperPicturesPage)
-//            }
-//        }
-//    }
-
-//    WallpaperDefaultPage {
-//        id: wallpaperDefaultPage
-//    }
-
-//    WallpaperPicturesPage {
-//        id: wallpaperPicturesPage
-//    }
-
-    InformationsPage {
-        id: infoPage
-    }
-
-    AboutPage {
-        id: aboutPage
-    }
-
-    PackageManager {
-        id: packageManagerInstance
     }
 }

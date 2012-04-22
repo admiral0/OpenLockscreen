@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "package.h"
 
@@ -96,7 +96,7 @@ Package::Package(QObject *parent):
 Package::Package(const QString &desktopFile, QObject *parent):
     ComponentBase(new PackagePrivate(this), parent)
 {
-    Q_D(Package);
+    W_D(Package);
     d->fromDesktopFile(desktopFile);
 }
 
@@ -111,49 +111,49 @@ Package::~Package()
 
 QString Package::identifier() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->identifier;
 }
 
 QString Package::directory() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->directory;
 }
 
 QString Package::plugin() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->plugin;
 }
 
 QString Package::author() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->author;
 }
 
 QString Package::email() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->email;
 }
 
 QString Package::website() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->website;
 }
 
 Version Package::version() const
 {
-    Q_D(const Package);
+    W_D(const Package);
     return d->version;
 }
 
 void Package::setIdentifier(const QString &identifier)
 {
-    Q_D(Package);
+    W_D(Package);
     d->valid = !identifier.isEmpty() && !directory().isEmpty();
     if (d->identifier != identifier) {
         d->identifier = identifier;
@@ -163,7 +163,7 @@ void Package::setIdentifier(const QString &identifier)
 
 void Package::setDirectory(const QString &directory)
 {
-    Q_D(Package);
+    W_D(Package);
     d->valid = !identifier().isEmpty() && !directory.isEmpty();
     if (d->directory != directory) {
         d->directory = directory;
@@ -173,7 +173,7 @@ void Package::setDirectory(const QString &directory)
 
 void Package::setPlugin(const QString &plugin)
 {
-    Q_D(Package);
+    W_D(Package);
     if (d->plugin != plugin) {
         d->plugin = plugin;
         emit pluginChanged();
@@ -182,7 +182,7 @@ void Package::setPlugin(const QString &plugin)
 
 void Package::setAuthor(const QString &author)
 {
-    Q_D(Package);
+    W_D(Package);
     if (d->author != author) {
         d->author = author;
         emit authorChanged();
@@ -191,7 +191,7 @@ void Package::setAuthor(const QString &author)
 
 void Package::setEmail(const QString &email)
 {
-    Q_D(Package);
+    W_D(Package);
     if (d->email != email) {
         d->email = email;
         emit emailChanged();
@@ -200,7 +200,7 @@ void Package::setEmail(const QString &email)
 
 void Package::setWebsite(const QString &website)
 {
-    Q_D(Package);
+    W_D(Package);
     if (d->website != website) {
         d->website = website;
         emit websiteChanged();
@@ -209,7 +209,7 @@ void Package::setWebsite(const QString &website)
 
 void Package::setVersion(const Version &version)
 {
-    Q_D(Package);
+    W_D(Package);
     if (d->version != version) {
         d->version = version;
         emit versionChanged();
@@ -219,6 +219,25 @@ void Package::setVersion(const Version &version)
 Package * Package::fromDesktopFile(const QString &desktopFile, QObject *parent)
 {
     return new Package(desktopFile, parent);
+}
+
+QDebug operator<<(QDebug debug, Package *package)
+{
+    debug.nospace() << "Package (";
+    debug.nospace() << "defaultName: " << package->defaultName() << " ";
+    debug.nospace() << "defaultDesription: " << package->defaultDescription() << " ";
+    debug.nospace() << "name: " << package->name() << " ";
+    debug.nospace() << "desription: " << package->description() << " ";
+    debug.nospace() << "icon: " << package->icon() << " ";
+    debug.nospace() << "identifier: " << package->identifier() << " ";
+    debug.nospace() << "directory: " << package->directory() << " ";
+    debug.nospace() << "plugin: " << package->plugin() << " ";
+    debug.nospace() << "author: " << package->author() << " ";
+    debug.nospace() << "email: " << package->email() << " ";
+    debug.nospace() << "website: " << package->website() << " ";
+    debug.nospace() << "version: " << package->version().toString();
+    debug.nospace() << ")";
+    return debug.space();
 }
 
 }

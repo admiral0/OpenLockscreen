@@ -16,16 +16,24 @@
 
 /**
  * @file oxygencolors.cpp
- * @short Implementation of Widgets::OxygenColors
+ * @short Implementation of Widgets::Colors::OxygenColors
  *
  * This file contains the implemetation of the
- * Widgets::OxygenColors class.
+ * Widgets::Colors::OxygenColors class.
  */
 
 #include "oxygencolors.h"
 
 namespace Widgets
 {
+
+namespace Colors
+{
+
+OxygenColors::OxygenColors(QObject *parent):
+    QObject(parent)
+{
+}
 
 QString OxygenColors::woodBrown6() const
 {
@@ -667,5 +675,6 @@ QString OxygenColors::black() const
     return "#000000";
 }
 
+}
 
 }

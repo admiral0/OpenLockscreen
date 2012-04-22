@@ -12,12 +12,14 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_DOCKBASEPROPERTIES_H
 #define WIDGETS_DOCKBASEPROPERTIES_H
 
 #include "graphicalcomponentbase.h"
+
+#include <QtCore/QMetaType>
 
 namespace Widgets
 {
@@ -90,9 +92,11 @@ private:
     explicit DockBaseProperties(const QString &desktopFile,
                                 const QString &packageIdentifier,
                                 QObject *parent = 0);
-    Q_DECLARE_PRIVATE(DockBaseProperties)
+    W_DECLARE_PRIVATE(DockBaseProperties)
 };
 
 }
+
+Q_DECLARE_METATYPE(Widgets::DockBaseProperties *)
 
 #endif // WIDGETS_DOCKBASEPROPERTIES_H

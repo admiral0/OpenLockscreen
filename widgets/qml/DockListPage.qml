@@ -40,6 +40,6 @@ AbstractPage {
 
     DockInformationModel {
         id: dockInformationModel
-        packageManager: packageManagerInstance
+        packageManager: widgetManager.packageManager
     }
 }

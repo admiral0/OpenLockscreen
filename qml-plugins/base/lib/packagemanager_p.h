@@ -51,7 +51,7 @@ public:
                                  const QStringList &descriptions);
     void addPackage(const QString &path);
     void scanPackageFolder(int packageId, const QString &path, const QString &packageIdentifier);
-    void addDock(int packageId, DockBaseProperties *dock);
+    void addDock(int packageId, const QString &subdirectory, DockBaseProperties *dock);
 private:
     Q_DECLARE_PUBLIC(PackageManager)
     PackageManager * const q_ptr;

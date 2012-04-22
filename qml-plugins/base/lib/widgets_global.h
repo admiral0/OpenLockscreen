@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_GLOBAL_H
 #define WIDGETS_GLOBAL_H
@@ -26,5 +26,12 @@
 #    define W_ASSERT(cond) cond
 #  endif
 #endif
+
+#define W_DECLARE_PRIVATE(Class) \
+    inline Class##Private* d_function() { return reinterpret_cast<Class##Private *>(qGetPtrHelper(d_pointer)); } \
+    inline const Class##Private* d_function() const { return reinterpret_cast<const Class##Private *>(qGetPtrHelper(d_pointer)); } \
+    friend class Class##Private;
+
+#define W_D(Class) Class##Private * const d = d_function()
 
 #endif // WIDGETS_GLOBAL_H

@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_COMPONENTBASE_H
 #define WIDGETS_COMPONENTBASE_H
@@ -21,6 +21,8 @@
 #include <QtCore/QPair>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QStringList>
+
+#include "widgets_global.h"
 
 namespace Widgets
 {
@@ -32,7 +34,7 @@ class ComponentBase: public QObject
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString defaultName READ defaultName NOTIFY defaultNameChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString defaultDesription READ defaultDesription NOTIFY defaultDescriptionChanged)
+    Q_PROPERTY(QString defaultDescription READ defaultDescription NOTIFY defaultDescriptionChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
 public:
     explicit ComponentBase(QObject *parent = 0);
@@ -43,7 +45,7 @@ public:
     QString defaultName() const;
     QString name() const;
     QString name(const QString &language) const;
-    QString defaultDesription() const;
+    QString defaultDescription() const;
     QString description() const;
     QString description(const QString &language) const;
 Q_SIGNALS:
@@ -60,11 +62,13 @@ protected:
     void setDefaultDescription(const QString &description);
     void addDescription(const QString &language, const QString &description);
     void clearNamesAndDescriptions();
-    const QScopedPointer<ComponentBasePrivate> d_ptr;
+    const QScopedPointer<ComponentBasePrivate> d_pointer;
 private:
-    Q_DECLARE_PRIVATE(ComponentBase)
+    W_DECLARE_PRIVATE(ComponentBase)
 
 };
+
+QDebug operator<<(QDebug debug, ComponentBase *component);
 
 }
 

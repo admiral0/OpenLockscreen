@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_GRAPHICALCOMPONENTBASE_H
 #define WIDGETS_GRAPHICALCOMPONENTBASE_H
@@ -53,8 +53,10 @@ protected:
     void setPackageIdentifier(const QString &packageIdentifier);
     void setSettingsEnabled(bool settingsEnabled);
 private:
-    Q_DECLARE_PRIVATE(GraphicalComponentBase)
+    W_DECLARE_PRIVATE(GraphicalComponentBase)
 };
+
+QDebug operator<<(QDebug debug, GraphicalComponentBase *component);
 
 }
 

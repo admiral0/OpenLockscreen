@@ -14,55 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#include "widgets_colors_plugin.h"
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QScopedPointer>
+#include <QtDeclarative/QtDeclarative>
 
-#include "packagemanager.h"
+#include "oxygencolors.h"
 
-namespace Widgets
+void WidgetsColorsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
+    Q_UNUSED(uri)
 
-namespace Extra
-{
-
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
-{
-    Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
-public:
-    enum PackageRole
-    {
-        NameRole,
-        DescriptionRole,
-        FileRole
-    };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
-Q_SIGNALS:
-    void packageManagerChanged();
-    void countChanged(int count);
-public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
-protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
-};
-
+    // @uri org.SfietKonstantin.widgets.colors
+    engine->rootContext()->setContextProperty("Colors",
+                                              new Widgets::Colors::OxygenColors(this));
 }
 
+void WidgetsColorsPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.colors
+    QString reason = "Only one instance of Colors is allowed.";
+    qmlRegisterUncreatableType<Widgets::Colors::OxygenColors>(uri, 1, 0, "OxygenColors", reason);
 }
 
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+Q_EXPORT_PLUGIN2(Widgets, WidgetsColorsPlugin)
+

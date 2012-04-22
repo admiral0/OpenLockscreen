@@ -47,13 +47,17 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 #ifdef MEEGO_EDITION_HARMATTAN
-    QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
+    QScopedPointer<QApplication> scopedApp(MDeclarativeCache::qApplication(argc, argv));
     QScopedPointer<QDeclarativeView> scopedView (MDeclarativeCache::qDeclarativeView());
+    QApplication *app = scopedApp.data();
     QDeclarativeView *view = scopedView.data();
 #else
     QApplication *app = new QApplication(argc, argv);
     QDeclarativeView *view = new QDeclarativeView();
 #endif
+    app->setApplicationName("Widgets");
+    app->setOrganizationName("SfietKonstantin");
+
 
     qmlRegisterType<WebAndMailHandler>("org.SfietKonstantin.widgets.app", 1, 0,
                                        "WebAndMailHandler");

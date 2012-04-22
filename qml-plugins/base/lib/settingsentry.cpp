@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "settingsentry.h"
 
@@ -22,6 +22,7 @@ namespace Widgets
 class SettingsEntryPrivate
 {
 public:
+    QString group;
     QString key;
     QVariant value;
 };
@@ -42,6 +43,12 @@ SettingsEntry::~SettingsEntry()
 {
 }
 
+QString SettingsEntry::group() const
+{
+    Q_D(const SettingsEntry);
+    return d->group;
+}
+
 QString SettingsEntry::key() const
 {
     Q_D(const SettingsEntry);
@@ -52,6 +59,15 @@ QVariant SettingsEntry::value() const
 {
     Q_D(const SettingsEntry);
     return d->value;
+}
+
+void SettingsEntry::setGroup(const QString &group)
+{
+    Q_D(SettingsEntry);
+    if(d->group != group) {
+        d->group = group;
+        emit groupChanged(group);
+    }
 }
 
 void SettingsEntry::setKey(const QString &key)

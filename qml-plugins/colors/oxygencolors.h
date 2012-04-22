@@ -16,20 +16,24 @@
 
 /**
  * @file oxygencolors.h
- * @short Definition of Widgets::OxygenColors
+ * @short Definition of Widgets::Colors::OxygenColors
  *
  * This file contains the definition of the
- * Widgets::OxygenColors class.
+ * Widgets::Colors::OxygenColors class.
  */
 
 
-#ifndef WIDGETS_OXYGENCOLORS_H
-#define WIDGETS_OXYGENCOLORS_H
+#ifndef WIDGETS_COLORS_OXYGENCOLORS_H
+#define WIDGETS_COLORS_OXYGENCOLORS_H
 
 #include <QtCore/QObject>
 
 namespace Widgets
 {
+
+namespace Colors
+{
+
 
 /**
  * @short Base colors
@@ -564,6 +568,7 @@ class OxygenColors : public QObject
     Q_PROPERTY(QString black READ black CONSTANT )
 
 public:
+    OxygenColors(QObject *parent = 0);
     /**
      * @short Color woodBrown6
      *
@@ -1590,6 +1595,7 @@ public:
     QString black() const;
 };
 
+}
 
 }
-#endif // WIDGETS_OXYGENCOLORS_H
+#endif // WIDGETS_COLORS_OXYGENCOLORS_H

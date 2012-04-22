@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 // Warning
 //
@@ -36,8 +36,6 @@
 namespace Widgets
 {
 
-static const char *CACHE_DIRECTORY = "Widgets";
-
 PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
     q_ptr(q)
 {
@@ -46,11 +44,7 @@ PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
 QString PackageManagerPrivate::databasePath() const
 {
     QDir dir (QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
-    if(!dir.cd(CACHE_DIRECTORY)) {
-        dir.mkdir(CACHE_DIRECTORY);
-        dir.cd(CACHE_DIRECTORY);
-    }
-
+    QDir::root().mkpath(dir.absolutePath());
     return dir.absoluteFilePath("packagemanager.db");
 }
 
@@ -171,7 +165,7 @@ void PackageManagerPrivate::prepareDatabase()
         executeQuery(&query);
         query.finish();
 
-        query.prepare("CREATE TABLE IF NOT EXISTS docks (id INTEGER PRIMARY KEY, packageId INTEGER, file STRING)");
+        query.prepare("CREATE TABLE IF NOT EXISTS docks (id INTEGER PRIMARY KEY, packageId INTEGER, directory STRING, file STRING)");
         executeQuery(&query);
         query.finish();
 
@@ -384,7 +378,7 @@ void PackageManagerPrivate::addPackage(const QString &path)
 
     languages.append(COMPONENT_INFORMATION_DEFAULT_LANGUAGE);
     names.append(package->defaultName());
-    descriptions.append(package->defaultDesription());
+    descriptions.append(package->defaultDescription());
 
     foreach(QString language, package->languages()) {
         languages.append(language);
@@ -402,6 +396,7 @@ void PackageManagerPrivate::addPackage(const QString &path)
     addInformation(COMPONENT_TYPE_PACKAGE, packageId, informations);
 
     scanPackageFolder(packageId, path, package->identifier());
+
     package->deleteLater();
 }
 
@@ -413,15 +408,20 @@ void PackageManagerPrivate::scanPackageFolder(int packageId, const QString &path
 
     foreach (QFileInfo folderInfo, folders) {
         QDir folder (folderInfo.absoluteFilePath());
+
         DockBaseProperties *dock =
                 DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
                                                     packageIdentifier);
-        addDock(packageId, dock);
+        if (dock->isValid()) {
+            addDock(packageId, folderInfo.fileName(), dock);
+        }
     }
 }
 
-void PackageManagerPrivate::addDock(int packageId, DockBaseProperties *dock)
+void PackageManagerPrivate::addDock(int packageId, const QString &subdirectory,
+                                    DockBaseProperties *dock)
 {
+
     int dockId = -1;
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_dock");
@@ -429,8 +429,9 @@ void PackageManagerPrivate::addDock(int packageId, DockBaseProperties *dock)
         W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
-        query.prepare("INSERT INTO docks (id, packageId, file) VALUES (NULL, :packageId, :file)");
+        query.prepare("INSERT INTO docks (id, packageId, directory, file) VALUES (NULL, :packageId, :packageDirectory, :file)");
         query.bindValue(":packageId", packageId);
+        query.bindValue(":packageDirectory", subdirectory);
         query.bindValue(":file", dock->fileName());
         executeQuery(&query);
         dockId = query.lastInsertId().toInt();
@@ -444,7 +445,7 @@ void PackageManagerPrivate::addDock(int packageId, DockBaseProperties *dock)
 
     languages.append(COMPONENT_INFORMATION_DEFAULT_LANGUAGE);
     names.append(dock->defaultName());
-    descriptions.append(dock->defaultDesription());
+    descriptions.append(dock->defaultDescription());
 
     foreach(QString language, dock->languages()) {
         languages.append(language);

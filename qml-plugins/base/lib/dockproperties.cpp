@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "dockproperties.h"
 #include "dockproperties_p.h"
@@ -34,7 +34,7 @@ DockProperties::DockProperties(const QString &fileName, const QString &packageId
                                const QVariantMap &settings, QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
-    Q_D(DockProperties);
+    W_D(DockProperties);
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
@@ -56,7 +56,7 @@ DockProperties::DockProperties(const QString &fileName, const QString &packageId
                                QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
-    Q_D(DockProperties);
+    W_D(DockProperties);
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
@@ -76,13 +76,13 @@ DockProperties::DockProperties(DockPropertiesPrivate *dd, QObject *parent):
 
 QString DockProperties::identifier() const
 {
-    Q_D(const DockProperties);
+    W_D(const DockProperties);
     return d->identifier;
 }
 
 QVariantMap DockProperties::settings() const
 {
-    Q_D(const DockProperties);
+    W_D(const DockProperties);
     return d->settings;
 }
 
@@ -139,7 +139,7 @@ QDomElement DockProperties::toXmlElement(const QString &tagName, QDomDocument *d
 
 void DockProperties::setSettings(const QVariantMap &settings)
 {
-    Q_D(DockProperties);
+    W_D(DockProperties);
     if (d->settings != settings) {
         d->settings = settings;
         emit settingsChanged(settings);
@@ -148,7 +148,7 @@ void DockProperties::setSettings(const QVariantMap &settings)
 
 void DockProperties::setIdentifier(const QString &identifier)
 {
-    Q_D(DockProperties);
+    W_D(DockProperties);
     if (d->identifier != identifier) {
         d->identifier = identifier;
         emit identifierChanged(identifier);

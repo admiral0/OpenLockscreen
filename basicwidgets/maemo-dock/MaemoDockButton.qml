@@ -14,55 +14,36 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+import QtQuick 1.1
+import org.SfietKonstantin.widgets.colors 1.0
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QScopedPointer>
 
-#include "packagemanager.h"
+Item {
+    id: container
+    signal clicked()
+    width: 100
 
-namespace Widgets
-{
+    Rectangle {
+        id: clickFeedback
+        anchors.fill: parent
+        visible: false
+        opacity: 0.9
+        color: Colors.gray2
+    }
 
-namespace Extra
-{
+    Image {
+        id: maemoMenuIcon
+        anchors.centerIn: parent
+        width: 60
+        height: 30
+        source: "maemo-menu.png"
+    }
 
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
-{
-    Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
-public:
-    enum PackageRole
-    {
-        NameRole,
-        DescriptionRole,
-        FileRole
-    };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
-Q_SIGNALS:
-    void packageManagerChanged();
-    void countChanged(int count);
-public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
-protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
-};
-
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onPressed: clickFeedback.visible = true
+        onReleased: clickFeedback.visible = false
+        onClicked: container.clicked()
+    }
 }
-
-}
-
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H

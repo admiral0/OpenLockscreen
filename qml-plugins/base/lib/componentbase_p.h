@@ -47,7 +47,7 @@ public:
 protected:
     virtual void parseDesktopFile(const DesktopParser &parser);
     virtual bool checkValid(const DesktopParser &parser);
-    ComponentBase *q_ptr;
+    ComponentBase *const q_ptr;
 private:
     Q_DECLARE_PUBLIC(ComponentBase)
 };

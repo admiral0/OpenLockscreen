@@ -34,8 +34,9 @@ public:
     virtual ~PackageManager();
     Package * package(const QString &identifier);
     QStringList registeredPackages() const;
-    Q_INVOKABLE DockBaseProperties * dock(const QString &packageIdentifier,
-                                          const QString &dockName);
+    Q_INVOKABLE QString dockFile(const QString &packageIdentifier, const QString &dockFilename);
+    Q_INVOKABLE Widgets::DockBaseProperties * dock(const QString &packageIdentifier,
+                                                   const QString &dockFilename);
     QStringList registeredDocks(const QString &packageIdentifier) const;
 Q_SIGNALS:
 //    void

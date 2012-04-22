@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_PACKAGE_H
 #define WIDGETS_PACKAGE_H
@@ -70,9 +70,12 @@ private:
     void setEmail(const QString &email);
     void setWebsite(const QString &website);
     void setVersion(const Version &version);
-    Q_DECLARE_PRIVATE(Package)
+    W_DECLARE_PRIVATE(Package)
     friend class PackageManager;
 };
+
+QDebug operator<<(QDebug debug, Package *package);
+
 
 }
 

@@ -5,12 +5,13 @@ TARGET =            widgets
 
 QT =                core gui declarative xml
 CONFIG +=           qdeclarative-boostable
-#INCLUDEPATH += ../widgetsdev/widgetsapi/
 
 DEFINES +=          'MAIN_QML_PATH=\'\"$${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/qml/main.qml\"\''
 
+HEADERS +=          webandmailhandler.h \
+
 SOURCES +=          main.cpp \
-    webandmailhandler.cpp
+                    webandmailhandler.cpp
 
 QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \
@@ -19,6 +20,8 @@ QML_FILES +=        qml/main.qml \
                     qml/AbstractPage.qml \
                     qml/AbstractNavigationPage.qml \
                     qml/MainPage.qml \
+                    qml/PreviewPage.qml \
+                    qml/Background.qml \
                     qml/InformationsPage.qml \
                     qml/PackageListPage.qml \
                     qml/PackageDetailPage.qml \
@@ -32,5 +35,4 @@ DATA_FILES +=       data/wallpaper-1.jpg \
 
 include(deployment.pri)
 
-HEADERS += \
-    webandmailhandler.h
+

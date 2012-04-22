@@ -12,13 +12,14 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_DOCKPROPERTIES_H
 #define WIDGETS_DOCKPROPERTIES_H
 
 #include "dockbaseproperties.h"
 
+#include <QtCore/QMetaType>
 #include <QtCore/QVariantMap>
 
 #include "identifiedelementinterface.h"
@@ -62,9 +63,11 @@ protected:
     DockProperties(DockPropertiesPrivate *dd, QObject *parent);
     void setIdentifier(const QString &identifier);
 private:
-    Q_DECLARE_PRIVATE(DockProperties)
+    W_DECLARE_PRIVATE(DockProperties)
 };
 
 }
+
+Q_DECLARE_METATYPE(Widgets::DockProperties *)
 
 #endif // WIDGETS_DOCKPROPERTIES_H

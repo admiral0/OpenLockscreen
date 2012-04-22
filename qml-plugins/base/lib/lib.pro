@@ -11,7 +11,6 @@ contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 HEADERS +=      widgets_global.h \
                 tools.h \
                 version.h \
-                oxygencolors.h \
                 identifiedelementinterface.h \
                 xmlserializableinterface.h \
                 settings.h \
@@ -34,10 +33,9 @@ HEADERS +=      widgets_global.h \
                 packagemanager.h \
                 packagemanager_p.h \
                 packagemanagerdefines.h \
-                packagemanagerupdaterunnable.h \
+                packagemanagerupdaterunnable.h
 
 SOURCES +=      version.cpp \
-                oxygencolors.cpp \
                 identifiedelementinterface.cpp \
                 settings.cpp \
                 settingsentry.cpp \

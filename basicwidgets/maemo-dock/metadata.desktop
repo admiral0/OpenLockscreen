@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Maemo dock
+Name[en_GB]=Maemo dock
+Name[fr]=Dock Maemo
+Comment=The Maemo dock, as on the N900
+Comment[en_GB]=The Maemo dock, as on the N900
+Comment[fr]=Le dock de Maemo, comme celui du N900
+Icon=
+Type=Service
+X-Widgets-ServiceType=dock
+X-Widgets-ComponentInfo-SettingsEnabled=false
+X-Widgets-DockInfo-File=MaemoDock.qml

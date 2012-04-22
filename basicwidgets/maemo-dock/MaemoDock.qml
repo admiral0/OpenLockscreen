@@ -15,7 +15,8 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.sk.widgets 1.0
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.colors 1.0
 import com.nokia.meego 1.0
 import QtMobility.systeminfo 1.2
 
@@ -23,6 +24,9 @@ Dock {
     id: container
     width: 480
     height: 60
+    anchors.top: parent.top
+    anchors.left: parent.left
+
     onEnabledChanged: {
         if(enabled) {
             timer.start()
@@ -34,38 +38,15 @@ Dock {
     Rectangle {
         id: bar
         width: 280
-        height: 80
-        color: colors.gray6
+        height: 60
+        color: Colors.gray6
         opacity: 0.9
         radius: 6
 
-        Item {
+        MaemoDockButton {
             id: maemoMenu
-            width: 100
             height: container.height
-
-            Rectangle {
-                id: clickFeedback
-                anchors.fill: parent
-                visible: false
-                opacity: 0.9
-                color: colors.gray2
-            }
-
-            Image {
-                id: maemoMenuIcon
-                anchors.centerIn: parent
-                width: 60
-                height: 30
-                source: "data/maemo-menu.png"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onPressed: clickFeedback.visible = true
-                onReleased: clickFeedback.visible = false
-                onClicked: launcherManager.launcherVisible = true
-            }
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         BorderImage {
@@ -181,13 +162,13 @@ Dock {
                     width: 17
                     height: 36
                     radius: 3
-                    color: colors.white
+                    color: Colors.white
 
                     Rectangle {
                         anchors.centerIn: parent
                         width: parent.width - 4
                         height: parent.height - 4
-                        color: colors.gray6
+                        color: Colors.gray6
 
                         Rectangle {
                             id: level
@@ -196,7 +177,7 @@ Dock {
                             width: parent.width - 2
                             height: batteryInfo.remainingCapacity / batteryInfo.nominalCapacity *
                                     (parent.height - 2)
-                            color: colors.green5
+                            color: Colors.green5
                         }
                     }
                 }
@@ -235,4 +216,6 @@ Dock {
     BatteryInfo {
          id: batteryInfo
     }
+
+
 }

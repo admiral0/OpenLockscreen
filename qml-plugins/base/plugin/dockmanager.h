@@ -12,57 +12,53 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+ ****************************************************************************************/ 
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#ifndef WIDGETS_DOCKMANAGER_H
+#define WIDGETS_DOCKMANAGER_H
 
-#include <QtCore/QAbstractListModel>
+#include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
 
-#include "packagemanager.h"
+#include "dockmodel.h"
 
 namespace Widgets
 {
 
-namespace Extra
-{
-
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
+class DockManagerPrivate;
+class DockManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(Widgets::DockModel *dockModel READ dockModel WRITE setDockModel
+               NOTIFY dockModelChanged)
+    Q_PROPERTY(int topMargin READ topMargin NOTIFY topMarginChanged)
+    Q_PROPERTY(int bottomMargin READ bottomMargin NOTIFY bottomMarginChanged)
+    Q_PROPERTY(int leftMargin READ leftMargin NOTIFY leftMarginChanged)
+    Q_PROPERTY(int rightMargin READ rightMargin NOTIFY rightMarginChanged)
 public:
-    enum PackageRole
-    {
-        NameRole,
-        DescriptionRole,
-        FileRole
-    };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int count() const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
-Q_SIGNALS:
-    void packageManagerChanged();
-    void countChanged(int count);
+    explicit DockManager(QObject *parent = 0);
+    virtual ~DockManager();
+    DockModel * dockModel() const;
+    int topMargin() const;
+    int bottomMargin() const;
+    int leftMargin() const;
+    int rightMargin() const;
 public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
+    void setDockModel(DockModel *dockModel);
+Q_SIGNALS:
+    void dockModelChanged();
+    void topMarginChanged(int topMargin);
+    void bottomMarginChanged(int bottomMargin);
+    void leftMarginChanged(int leftMargin);
+    void rightMarginChanged(int rightMargin);
 protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
+    const QScopedPointer<DockManagerPrivate> d_ptr;
+    
 private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
+    Q_DECLARE_PRIVATE(DockManager)
+    Q_PRIVATE_SLOT(d_func(), void slotRecomputeMargins())
 };
 
 }
 
-}
-
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#endif // WIDGETS_DOCKMANAGER_H
