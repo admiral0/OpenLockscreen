@@ -41,7 +41,7 @@ Item {
                 SettingsEntry {
                     group: "background"
                     key: "wallpaperSource"
-                    value: "/home/sk/Code/Qt/Harmattan/widgets/widgets/data/wallpaper-1.png"
+                    value: "/opt/widgets/data/wallpaper-1.jpg"
                 }
             ]
         }
