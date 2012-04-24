@@ -37,6 +37,8 @@ AbstractPage {
         property QtObject selectedDock
         anchors.fill: parent
         model: DockModelInstance
+        clip: true
+
 
         delegate: ClickableEntry {
             text: model.dock.name

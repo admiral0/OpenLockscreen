@@ -56,8 +56,6 @@ private:
     W_DECLARE_PRIVATE(GraphicalComponentBase)
 };
 
-QDebug operator<<(QDebug debug, GraphicalComponentBase *component);
-
 }
 
 #endif // WIDGETS_GRAPHICALCOMPONENTBASE_H

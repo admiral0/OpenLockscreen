@@ -39,7 +39,7 @@
 ****************************************************************************/
 
 import QtQuick 1.0
-import org.sk.widgets 1.0
+import org.SfietKonstantin.widgets 1.0
 import QtMobility.systeminfo 1.2
 
 Widget {
@@ -49,8 +49,8 @@ Widget {
     property int hours
     property int minutes
     property bool night: false
-    property string dayBackgroundSource: "data/analogic-clock-background.png"
-    property string nightBackgroundSource: "data/analogic-clock-night-background.png"
+    property string dayBackgroundSource: "analogic-clock-background.png"
+    property string nightBackgroundSource: "analogic-clock-night-background.png"
 
     Component.onCompleted: changeTime()
     function changeTime() {
@@ -76,7 +76,7 @@ Widget {
 
     Image {
         x: 92.5; y: 27
-        source: "data/analogic-clock-hour.png"
+        source: "analogic-clock-hour.png"
         smooth: true
         transform: Rotation {
             id: hourRotation
@@ -90,7 +90,7 @@ Widget {
 
     Image {
         x: 93.5; y: 17
-        source: "data/analogic-clock-minute.png"
+        source: "analogic-clock-minute.png"
         smooth: true
         transform: Rotation {
             id: minuteRotation
@@ -103,7 +103,7 @@ Widget {
     }
 
     Image {
-        anchors.centerIn: background; source: "data/analogic-clock-center.png"
+        anchors.centerIn: background; source: "analogic-clock-center.png"
     }
 
     Text {

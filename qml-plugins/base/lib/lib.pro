@@ -35,6 +35,8 @@ HEADERS +=      widgets_global.h \
                 packagemanagerdefines.h \
                 packagemanagerupdaterunnable.h \
 #                dockmodel.h \
+    widgetbaseproperties.h \
+    widgetbaseproperties_p.h
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
@@ -54,5 +56,7 @@ SOURCES +=      version.cpp \
                 packagemanager_p.cpp \
                 packagemanagerupdaterunnable.cpp \
 #                dockmodel.cpp \
+    widgetbaseproperties.cpp \
+    widgetbaseproperties_p.cpp
 
 include(deployment.pri)

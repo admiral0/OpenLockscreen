@@ -15,7 +15,6 @@ SOURCES +=      widgets_plugin.cpp \
                 gridmanager.cpp \
 
 OTHER_FILES =   qmldir \
-                WidgetManager.qml \
                 Widget.qml \
                 Dock.qml \
 

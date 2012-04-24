@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_PACKAGEMANAGER_P_H
 #define WIDGETS_PACKAGEMANAGER_P_H
@@ -34,6 +34,7 @@ namespace Widgets
 {
 
 class DockBaseProperties;
+class WidgetBaseProperties;
 class PackageManagerPrivate
 {
 public:
@@ -52,6 +53,7 @@ public:
     void addPackage(const QString &path);
     void scanPackageFolder(int packageId, const QString &path, const QString &packageIdentifier);
     void addDock(int packageId, const QString &subdirectory, DockBaseProperties *dock);
+    void addWidget(int packageId, const QString &subdirectory, WidgetBaseProperties *widget);
 private:
     Q_DECLARE_PUBLIC(PackageManager)
     PackageManager * const q_ptr;

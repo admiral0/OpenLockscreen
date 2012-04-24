@@ -14,12 +14,12 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "dockinformationmodel.h"
+#include "widgetinformationmodel.h"
 
 #include <QtCore/QList>
 #include <QtCore/QDebug>
 
-#include "dockbaseproperties.h"
+#include "widgetbaseproperties.h"
 
 namespace Widgets
 {
@@ -27,27 +27,27 @@ namespace Widgets
 namespace Extra
 {
 
-class DockInformationModelPrivate
+class WidgetInformationModelPrivate
 {
 public:
-    DockInformationModelPrivate();
-    ~DockInformationModelPrivate();
+    WidgetInformationModelPrivate();
+    ~WidgetInformationModelPrivate();
     void clear();
     PackageManager *packageManager;
-    QList<DockBaseProperties *> data;
+    QList<WidgetBaseProperties *> data;
 };
 
-DockInformationModelPrivate::DockInformationModelPrivate()
+WidgetInformationModelPrivate::WidgetInformationModelPrivate()
 {
     packageManager = 0;
 }
 
-DockInformationModelPrivate::~DockInformationModelPrivate()
+WidgetInformationModelPrivate::~WidgetInformationModelPrivate()
 {
     clear();
 }
 
-void DockInformationModelPrivate::clear()
+void WidgetInformationModelPrivate::clear()
 {
     while (!data.isEmpty()) {
         delete data.takeFirst();
@@ -56,8 +56,8 @@ void DockInformationModelPrivate::clear()
 
 ////// End of private class //////
 
-DockInformationModel::DockInformationModel(QObject *parent) :
-    QAbstractListModel(parent), d_ptr(new DockInformationModelPrivate)
+WidgetInformationModel::WidgetInformationModel(QObject *parent) :
+    QAbstractListModel(parent), d_ptr(new WidgetInformationModelPrivate)
 {
     QHash<int, QByteArray> roles;
     roles.insert(NameRole, "name");
@@ -67,58 +67,58 @@ DockInformationModel::DockInformationModel(QObject *parent) :
     setRoleNames(roles);
 }
 
-DockInformationModel::~DockInformationModel()
+WidgetInformationModel::~WidgetInformationModel()
 {
 }
 
-PackageManager * DockInformationModel::packageManager() const
+PackageManager * WidgetInformationModel::packageManager() const
 {
-    Q_D(const DockInformationModel);
+    Q_D(const WidgetInformationModel);
     return d->packageManager;
 }
 
-int DockInformationModel::rowCount(const QModelIndex &parent) const
+int WidgetInformationModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    Q_D(const DockInformationModel);
+    Q_D(const WidgetInformationModel);
     return d->data.count();
 }
 
-int DockInformationModel::count() const
+int WidgetInformationModel::count() const
 {
     return rowCount();
 }
 
-QVariant DockInformationModel::data(const QModelIndex &index, int role) const
+QVariant WidgetInformationModel::data(const QModelIndex &index, int role) const
 {
-    Q_D(const DockInformationModel);
+    Q_D(const WidgetInformationModel);
     int row = index.row();
     if (row < 0 || row >= rowCount()) {
         return QVariant();
     }
 
-    DockBaseProperties *dock = d->data.at(row);
+    WidgetBaseProperties *widget = d->data.at(row);
     switch(role) {
     case NameRole:
-        return dock->name();
+        return widget->name();
         break;
     case DescriptionRole:
-        return dock->description();
+        return widget->description();
         break;
     case PackageRole:
-        return dock->packageIdentifier();
+        return widget->packageIdentifier();
         break;
     case FileRole:
-        return dock->fileName();
+        return widget->fileName();
         break;
     default:
         return QVariant();
     }
 }
 
-void DockInformationModel::clear()
+void WidgetInformationModel::clear()
 {
-    Q_D(DockInformationModel);
+    Q_D(WidgetInformationModel);
     beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
 
     d->clear();
@@ -127,9 +127,9 @@ void DockInformationModel::clear()
     endRemoveRows();
 }
 
-void DockInformationModel::setPackageManager(PackageManager *packageManager)
+void WidgetInformationModel::setPackageManager(PackageManager *packageManager)
 {
-    Q_D(DockInformationModel);
+    Q_D(WidgetInformationModel);
     if (d->packageManager != packageManager) {
         d->packageManager = packageManager;
         emit packageManagerChanged();
@@ -138,9 +138,9 @@ void DockInformationModel::setPackageManager(PackageManager *packageManager)
     }
 }
 
-void DockInformationModel::update()
+void WidgetInformationModel::update()
 {
-    Q_D(DockInformationModel);
+    Q_D(WidgetInformationModel);
     if (packageManager() == 0) {
         return;
     }
@@ -148,12 +148,12 @@ void DockInformationModel::update()
 
     QStringList registeredPackages = d->packageManager->registeredPackages();
     foreach(QString identifier, registeredPackages) {
-        QStringList registeredDocks = d->packageManager->registeredDocks(identifier);
-        foreach(QString file, registeredDocks) {
+        QStringList registeredWidgets = d->packageManager->registeredWidgets(identifier);
+        foreach(QString file, registeredWidgets) {
             beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-            DockBaseProperties *dock = packageManager()->dock(identifier, file);
-            d->data.append(dock);
+            WidgetBaseProperties *widget = packageManager()->widget(identifier, file);
+            d->data.append(widget);
             endInsertRows();
         }
     }

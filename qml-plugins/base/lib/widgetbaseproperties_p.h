@@ -14,21 +14,38 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "widgets_extra_plugin.h"
+#ifndef WIDGETS_WIDGETBASEPROPERTIES_P_H
+#define WIDGETS_WIDGETBASEPROPERTIES_P_H
 
-#include <QtDeclarative/QtDeclarative>
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
 
-#include "dockinformationmodel.h"
-#include "widgetinformationmodel.h"
-#include "packageinformationmodel.h"
+#include "graphicalcomponentbase_p.h"
+#include "widgetbaseproperties.h"
 
-void WidgetsColorsPlugin::registerTypes(const char *uri)
+#include <QtCore/QSize>
+
+namespace Widgets
 {
-    // @uri org.SfietKonstantin.widgets.extra
-    qmlRegisterType<Widgets::Extra::PackageInformationModel>(uri, 1, 0, "PackageInformationModel");
-    qmlRegisterType<Widgets::Extra::DockInformationModel>(uri, 1, 0, "DockInformationModel");
-    qmlRegisterType<Widgets::Extra::WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
+
+class WidgetBasePropertiesPrivate: public GraphicalComponentBasePrivate
+{
+public:
+    WidgetBasePropertiesPrivate(WidgetBaseProperties *q);
+    WidgetBasePropertiesPrivate(const QString &fileName,
+                                const QString &packageIdentifier,
+                                WidgetBaseProperties *q);
+    virtual bool checkValid(const DesktopParser &parser);
+    virtual void parseDesktopFile(const DesktopParser &parser);
+    QSize size;
+private:
+    Q_DECLARE_PUBLIC(WidgetBaseProperties)
+};
+
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsColorsPlugin)
-
+#endif // WIDGETS_WIDGETBASEPROPERTIES_P_H

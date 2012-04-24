@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Analogic clock
+Name[en_GB]=Analogic clock
+Name[fr]=Horloge analogique
+Comment=An stylish analogic clock borrowed from KDE desktop
+Comment[en_GB]=An stylish analogic clock borrowed from KDE desktop
+Comment[fr]=Une horloge analogique stylisée empruntée du bureau KDE
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-ComponentInfo-SettingsEnabled=false
+X-Widgets-WidgetInfo-File=AnalogicClock.qml

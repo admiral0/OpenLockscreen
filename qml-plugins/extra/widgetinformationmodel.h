@@ -14,43 +14,56 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKBASEPROPERTIES_P_H
-#define WIDGETS_DOCKBASEPROPERTIES_P_H
+#ifndef WIDGETS_EXTRA_WIDGETINFORMATIONMODEL_H
+#define WIDGETS_EXTRA_WIDGETINFORMATIONMODEL_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QScopedPointer>
 
-#include <QtCore/QSize>
-
-#include "graphicalcomponentbase_p.h"
-#include "dockbaseproperties.h"
+#include "packagemanager.h"
 
 namespace Widgets
 {
 
-class DockBasePropertiesPrivate: public GraphicalComponentBasePrivate
+namespace Extra
 {
+
+class WidgetInformationModelPrivate;
+class WidgetInformationModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
+               WRITE setPackageManager NOTIFY packageManagerChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    DockBasePropertiesPrivate(DockBaseProperties *q);
-    DockBasePropertiesPrivate(const QString &fileName,
-                              const QString &packageIdentifier,
-                              DockBaseProperties *q);
-    virtual bool checkValid(const DesktopParser &parser);
-    virtual void parseDesktopFile(const DesktopParser &parser);
-    void checkAnchorsValid();
-    QSize size;
-    bool anchorsTop;
-    bool anchorsBottom;
-    bool anchorsLeft;
-    bool anchorsRight;
+    enum PackageRole
+    {
+        NameRole,
+        DescriptionRole,
+        PackageRole,
+        FileRole
+    };
+    explicit WidgetInformationModel(QObject *parent = 0);
+    virtual ~WidgetInformationModel();
+    PackageManager * packageManager() const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void clear();
+Q_SIGNALS:
+    void packageManagerChanged();
+    void countChanged(int count);
+public Q_SLOTS:
+    void setPackageManager(PackageManager *packageManager);
+    void update();
+protected:
+    const QScopedPointer<WidgetInformationModelPrivate> d_ptr;
 private:
-    Q_DECLARE_PUBLIC(DockBaseProperties)
+    Q_DECLARE_PRIVATE(WidgetInformationModel)
 };
 
 }
 
-#endif // WIDGETS_DOCKBASEPROPERTIES_P_H
+}
+
+#endif // WIDGETS_EXTRA_WIDGETINFORMATIONMODEL_H

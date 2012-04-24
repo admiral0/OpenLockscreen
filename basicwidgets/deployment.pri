@@ -25,6 +25,14 @@ MAEMO_DOCK_FILES =      docks/maemo-dock/metadata.desktop \
                         docks/maemo-dock/MaemoDockButton.qml \
                         docks/maemo-dock/maemo-menu.png \
 
+ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
+                        widgets/analogic-clock/AnalogicClock.qml \
+                        widgets/analogic-clock/analogic-clock-background.png \
+                        widgets/analogic-clock/analogic-clock-night-background.png \
+                        widgets/analogic-clock/analogic-clock-center.png \
+                        widgets/analogic-clock/analogic-clock-hour.png \
+                        widgets/analogic-clock/analogic-clock-minute.png \
+
 androidDockFiles.path = $${INSTALL_PATH}/docks/android-dock
 androidDockFiles.files = $${ANDROID_DOCK_FILES}
 export(androidDockFiles.path)
@@ -35,4 +43,9 @@ maemoDockFiles.files = $${MAEMO_DOCK_FILES}
 export(maemoDockFiles.path)
 export(maemoDockFiles.files)
 
-INSTALLS += androidDockFiles maemoDockFiles
+analogicClock.path = $${INSTALL_PATH}/widgets/analogic-clock
+analogicClock.files = $${ANALOGIC_CLOCK_FILES}
+export(analogicClock.path)
+export(analogicClock.files)
+
+INSTALLS += androidDockFiles maemoDockFiles analogicClock

@@ -68,8 +68,6 @@ private:
 
 };
 
-QDebug operator<<(QDebug debug, ComponentBase *component);
-
 }
 
 #endif // WIDGETS_COMPONENTBASE_H

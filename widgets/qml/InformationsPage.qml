@@ -30,6 +30,10 @@ AbstractNavigationPage {
             identifier: "showDockList"
             text: QT_TR_NOOP("Installed docks")
         }
+        ListElement {
+            identifier: "showWidgetList"
+            text: QT_TR_NOOP("Installed widgets")
+        }
     }
     onShow: {
         if(page == "showPackageList") {
@@ -38,6 +42,9 @@ AbstractNavigationPage {
         if(page == "showDockList") {
             window.pageStack.push(dockListPage)
         }
+        if(page == "showWidgetList") {
+            window.pageStack.push(widgetListPage)
+        }
     }
 
     PackageListPage {
@@ -45,6 +52,9 @@ AbstractNavigationPage {
     }
     DockListPage {
         id: dockListPage
+    }
+    WidgetListPage {
+        id: widgetListPage
     }
 
     tools: ToolBarLayout {

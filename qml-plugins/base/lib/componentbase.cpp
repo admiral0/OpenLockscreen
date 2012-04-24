@@ -229,16 +229,4 @@ void ComponentBase::clearNamesAndDescriptions()
     emit descriptionChanged();
 }
 
-QDebug operator<<(QDebug debug, ComponentBase *component)
-{
-    debug.nospace() << "ComponentBase (";
-    debug.nospace() << "defaultName: " << component->defaultName() << " ";
-    debug.nospace() << "defaultDesription: " << component->defaultDescription() << " ";
-    debug.nospace() << "name: " << component->name() << " ";
-    debug.nospace() << "desription: " << component->description() << " ";
-    debug.nospace() << "icon: " << component->icon();
-    debug.nospace() << ")";
-    return debug.space();
-}
-
 }

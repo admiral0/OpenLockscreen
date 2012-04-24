@@ -21,12 +21,9 @@
 // file may change from version to version
 // without notice or even be removed.
 
-#include "dockbaseproperties_p.h"
+#include "widgetbaseproperties_p.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
 #include <QtCore/QVariant>
 
 #include "desktopparser.h"
@@ -36,44 +33,35 @@
 namespace Widgets
 {
 
-static const char *DESKTOP_FILE_SERVICE_VALUE = "dock";
-static const char *DESKTOP_FILE_DOCK_INFO_FILE = "X-Widgets-DockInfo-File";
+static const char *DESKTOP_FILE_SERVICE_VALUE = "widget";
+static const char *DESKTOP_FILE_WIDGET_INFO_FILE = "X-Widgets-WidgetInfo-File";
 
-DockBasePropertiesPrivate::DockBasePropertiesPrivate(DockBaseProperties *q):
+WidgetBasePropertiesPrivate::WidgetBasePropertiesPrivate(WidgetBaseProperties *q):
     GraphicalComponentBasePrivate(q)
 {
-    anchorsTop = false;
-    anchorsBottom = false;
-    anchorsLeft = false;
-    anchorsRight = false;
-    valid = false;
 }
 
-DockBasePropertiesPrivate::DockBasePropertiesPrivate(const QString &fileName,
-                                                     const QString &packageIdentifier,
-                                                     DockBaseProperties *q):
+WidgetBasePropertiesPrivate::WidgetBasePropertiesPrivate(const QString &fileName,
+                                                         const QString &packageIdentifier,
+                                                         WidgetBaseProperties *q):
     GraphicalComponentBasePrivate(fileName, packageIdentifier, q)
 {
-    anchorsTop = false;
-    anchorsBottom = false;
-    anchorsLeft = false;
-    anchorsRight = false;
 }
 
-bool DockBasePropertiesPrivate::checkValid(const DesktopParser &parser)
+bool WidgetBasePropertiesPrivate::checkValid(const DesktopParser &parser)
 {
     if (parser.value(DESKTOP_FILE_SERVICE_TYPE).toString() != DESKTOP_FILE_SERVICE_VALUE) {
         return false;
     }
 
-    if (!parser.contains(DESKTOP_FILE_DOCK_INFO_FILE)) {
+    if (!parser.contains(DESKTOP_FILE_WIDGET_INFO_FILE)) {
         return false;
     }
 
     return GraphicalComponentBasePrivate::checkValid(parser);
 }
 
-void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
+void WidgetBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
 {
     GraphicalComponentBasePrivate::parseDesktopFile(parser);
 
@@ -82,7 +70,7 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
 
     // Start parsing the QML file for anchors and size
     QString qmlFilePath =
-            folder.absoluteFilePath(parser.value(DESKTOP_FILE_DOCK_INFO_FILE).toString());
+            folder.absoluteFilePath(parser.value(DESKTOP_FILE_WIDGET_INFO_FILE).toString());
 
     QFile qmlFile (qmlFilePath);
     if (!qmlFile.open(QIODevice::ReadOnly)) {
@@ -128,10 +116,6 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
         }
     }
 
-    // Prevent anchors brackets to be discarded
-    QRegExp anchorsReplaceRegExp ("anchors\\s*\\{([^\\{]*)\\}");
-    data.replace(anchorsReplaceRegExp, QString("anchors <\\1>"));
-
     int firstBracket = data.indexOf("{");
     firstBracket = data.indexOf("{", firstBracket + 1);
 
@@ -143,7 +127,7 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     // Check if the document is valid
     bool haveImport = data.contains("import org.SfietKonstantin.widgets");
     bool haveDock = false;
-    QRegExp dockRegExp ("Dock(\\s*)\\{");
+    QRegExp dockRegExp ("Widget(\\s*)\\{");
     if (data.indexOf(dockRegExp) != -1) {
         haveDock = true;
     }
@@ -168,52 +152,7 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     size.setWidth(width);
     size.setHeight(height);
 
-    // Anchors
-    QStringList anchors;
-    anchors << "top" << "bottom" << "left" << "right";
-    QHash<QString, bool> anchorsOk;
-    foreach (QString anchor, anchors) {
-        QString anchorsRegExpString = QString("anchors[^>]*%1\\s*:\\s*parent\\s*\\.\\s*%1");
-        QRegExp anchorsRegExp (anchorsRegExpString.arg(anchor));
-        bool ok = (anchorsRegExp.indexIn(data) != -1);
-        anchorsOk.insert(anchor, ok);
-    }
-
-    anchorsTop = anchorsOk.value("top");
-    anchorsBottom = anchorsOk.value("bottom");
-    anchorsLeft = anchorsOk.value("left");
-    anchorsRight = anchorsOk.value("right");
-    checkAnchorsValid();
-
-    fileName = parser.value(DESKTOP_FILE_DOCK_INFO_FILE).toString();
-}
-
-void DockBasePropertiesPrivate::checkAnchorsValid()
-{
-    // If width and height are set, must be anchored in a corner
-    if (size.width() > 0 && size.height() > 0 &&
-        ((anchorsTop && !anchorsBottom && anchorsLeft && !anchorsRight) ||
-         (anchorsTop && !anchorsBottom && !anchorsLeft && anchorsRight) ||
-         (!anchorsTop && anchorsBottom && anchorsLeft && !anchorsRight) ||
-         (!anchorsTop && anchorsBottom && !anchorsLeft && anchorsRight))) {
-        return;
-    }
-
-    // If only width is set, must be either anchored at left or right side
-    if (size.width() > 0 && size.height() <= 0 &&
-        ((anchorsTop && anchorsBottom && anchorsLeft && !anchorsRight) ||
-         (anchorsTop && anchorsBottom && !anchorsLeft && anchorsRight))) {
-        return;
-    }
-
-    // If only height is set, must be either anchored at top or bottom side
-    if (size.width() <= 0 && size.height() > 0 &&
-        ((anchorsTop && !anchorsBottom && anchorsLeft && anchorsRight) ||
-         (!anchorsTop && anchorsBottom && anchorsLeft && anchorsRight))) {
-        return;
-    }
-
-    valid = false;
+    fileName = parser.value(DESKTOP_FILE_WIDGET_INFO_FILE).toString();
 }
 
 }

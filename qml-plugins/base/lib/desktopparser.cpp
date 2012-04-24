@@ -35,6 +35,7 @@ public:
 DesktopParserPrivate::DesktopParserPrivate(const QString &file):
     settings(file, QSettings::IniFormat)
 {
+    settings.setIniCodec("UTF-8");
     this->file = file;
 }
 

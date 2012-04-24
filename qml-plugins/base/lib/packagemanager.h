@@ -21,6 +21,7 @@
 
 #include "package.h"
 #include "dockbaseproperties.h"
+#include "widgetbaseproperties.h"
 
 namespace Widgets
 {
@@ -38,8 +39,11 @@ public:
     Q_INVOKABLE Widgets::DockBaseProperties * dock(const QString &packageIdentifier,
                                                    const QString &dockFilename);
     QStringList registeredDocks(const QString &packageIdentifier) const;
+    Q_INVOKABLE QString widgetFile(const QString &packageIdentifier, const QString &widgetFilename);
+    Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &packageIdentifier,
+                                                       const QString &dockFilename);
+    QStringList registeredWidgets(const QString &packageIdentifier) const;
 Q_SIGNALS:
-//    void
 public Q_SLOTS:
     void update();
 protected:

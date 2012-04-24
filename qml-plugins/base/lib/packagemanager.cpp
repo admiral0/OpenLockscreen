@@ -238,8 +238,8 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         QString anchorsRightString = informations.value(DOCK_INFORMATION_ANCHORS_RIGHT);
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
         value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
-        value->setWidth(informations.value(DOCK_INFORMATION_WIDTH).toInt());
-        value->setHeight(informations.value(DOCK_INFORMATION_HEIGHT).toInt());
+        value->setWidth(informations.value(COMPONENT_INFORMATION_WIDTH).toInt());
+        value->setHeight(informations.value(COMPONENT_INFORMATION_HEIGHT).toInt());
         value->setAnchorsTop(Tools::stringToBool(anchorsTopString));
         value->setAnchorsBottom(Tools::stringToBool(anchorsBottomString));
         value->setAnchorsLeft(Tools::stringToBool(anchorsLeftString));
@@ -271,6 +271,133 @@ QStringList PackageManager::registeredDocks(const QString &packageIdentifier) co
         query.finish();
     }
     QSqlDatabase::removeDatabase("get_registered_docks");
+    return values;
+}
+
+QString PackageManager::widgetFile(const QString &packageIdentifier, const QString &widgetFilename)
+{
+    Q_D(const PackageManager);
+
+    QString value;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_widget_file");
+        db.setDatabaseName(d->databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT packages.directory, widgets.directory FROM packages INNER JOIN widgets ON packages.id=widgets.packageId WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":widgetFile", widgetFilename);
+        d->executeQuery(&query);
+        if (query.next()) {
+            QString subdir = query.value(1).toString();
+            QDir dir = QDir(query.value(0).toString());
+
+            if (dir.cd(WIDGETS_FOLDER)) {
+                if (dir.cd(subdir)) {
+                    if (dir.exists(widgetFilename)) {
+                        value = dir.absoluteFilePath(widgetFilename);
+                    }
+                }
+            }
+        }
+    }
+    QSqlDatabase::removeDatabase("get_widget_file");
+
+    return value;
+}
+
+WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
+                                              const QString &widgetFilename)
+{
+    Q_D(const PackageManager);
+    WidgetBaseProperties *value = 0;
+
+    int widgetTypeId = d->componentTypeId(COMPONENT_TYPE_WIDGET);
+
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_widget");
+        db.setDatabaseName(d->databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT widgets.id FROM widgets INNER JOIN packages ON widgets.packageId=packages.id WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":widgetFile", widgetFilename);
+        d->executeQuery(&query);
+        if (!query.next()) {
+            return value;
+        }
+
+        value = new WidgetBaseProperties(this);
+        int dockId = query.value(0).toInt();
+
+        value->setFileName(widgetFilename);
+        value->setPackageIdentifier(packageIdentifier);
+
+        query.prepare("SELECT language, name, description FROM componentLocalizedInformation WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
+        query.bindValue(":componentTypeId", widgetTypeId);
+        query.bindValue(":componentId", dockId);
+        d->executeQuery(&query);
+        while (query.next()) {
+            QString language = query.value(0).toString();
+            QString name = query.value(1).toString();
+            QString description = query.value(2).toString();
+
+            if (language == COMPONENT_INFORMATION_DEFAULT_LANGUAGE) {
+                value->setDefaultName(name);
+                value->setDefaultDescription(description);
+            } else {
+                value->addName(language, name);
+                value->addDescription(language, description);
+            }
+        }
+        query.finish();
+        QMap<QString, QString> informations;
+
+        query.prepare("SELECT name, value FROM componentInformation INNER JOIN componentInformationProperties ON componentInformation.informationId = componentInformationProperties.id WHERE componentId=:componentId");
+        query.bindValue(":componentId", dockId);
+        d->executeQuery(&query);
+
+        while (query.next()) {
+            QString name = query.value(0).toString();
+            QString value = query.value(1).toString();
+            informations.insert(name, value);
+        }
+        query.finish();
+
+
+        QString settingsEnabledString = informations.value(COMPONENT_INFORMATION_SETTINGS_ENABLED);
+        value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
+        value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
+        value->setWidth(informations.value(COMPONENT_INFORMATION_WIDTH).toInt());
+        value->setHeight(informations.value(COMPONENT_INFORMATION_HEIGHT).toInt());
+
+    }
+    QSqlDatabase::removeDatabase("get_widget");
+
+    return value;
+}
+
+QStringList PackageManager::registeredWidgets(const QString &packageIdentifier) const
+{
+    Q_D(const PackageManager);
+    QStringList values;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_registered_widgets");
+        db.setDatabaseName(d->databasePath());
+        W_ASSERT(db.open());
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT widgets.file FROM widgets INNER JOIN packages ON widgets.packageId=packages.id WHERE packages.identifier=:packageIdentifier");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        d->executeQuery(&query);
+        while (query.next()) {
+            QString name = query.value(0).toString();
+            values.append(name);
+        }
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("get_registered_widgets");
     return values;
 }
 

@@ -20,9 +20,6 @@ Item {
     id: container
     property string identifier
     property bool enabled
-    property bool settingsEnabled: false
     property variant settings
     signal showSettings
-    width: 50
-    height: 50
 }

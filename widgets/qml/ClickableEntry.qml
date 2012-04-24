@@ -91,6 +91,7 @@ Item
 
         Label {
             id: mainText
+            anchors.left: parent.left; anchors.right: parent.right
             platformStyle: LabelStyle {
                 fontPixelSize: Ui.FONT_SIZE_MLARGE
             }
@@ -99,6 +100,8 @@ Item
         Label {
             id: subText
             anchors.top: mainText.bottom; anchors.topMargin: Ui.MARGIN_XSMALL
+            anchors.left: parent.left; anchors.right: parent.right
+            elide: Text.ElideRight
             platformStyle: LabelStyle {
                 fontPixelSize: Ui.FONT_SIZE_SMALL
                 textColor: theme.inverted ? Ui.FONT_COLOR_INVERTED_SECONDARY :

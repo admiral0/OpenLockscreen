@@ -125,19 +125,4 @@ void GraphicalComponentBase::setSettingsEnabled(bool settingsEnabled)
     }
 }
 
-QDebug operator<<(QDebug debug, GraphicalComponentBase *component)
-{
-    debug.nospace() << "Package (";
-    debug.nospace() << "defaultName: " << component->defaultName() << " ";
-    debug.nospace() << "defaultDesription: " << component->defaultDescription() << " ";
-    debug.nospace() << "name: " << component->name() << " ";
-    debug.nospace() << "desription: " << component->description() << " ";
-    debug.nospace() << "icon: " << component->icon() << " ";
-    debug.nospace() << "fileName: " << component->fileName() << " ";
-    debug.nospace() << "packageIdentifier: " << component->packageIdentifier() << " ";
-    debug.nospace() << "settingsEnabled: " << component->isSettingsEnabled();
-    debug.nospace() << ")";
-    return debug.space();
-}
-
 }

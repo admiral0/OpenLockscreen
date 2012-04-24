@@ -32,6 +32,7 @@
 
 #include "widgets_global.h"
 #include "dockbaseproperties.h"
+#include "widgetbaseproperties.h"
 
 namespace Widgets
 {
@@ -169,9 +170,14 @@ void PackageManagerPrivate::prepareDatabase()
         executeQuery(&query);
         query.finish();
 
+        query.prepare("CREATE TABLE IF NOT EXISTS widgets (id INTEGER PRIMARY KEY, packageId INTEGER, directory STRING, file STRING)");
+        executeQuery(&query);
+        query.finish();
+
         QStringList componentTypes;
         componentTypes.append(COMPONENT_TYPE_PACKAGE);
         componentTypes.append(COMPONENT_TYPE_DOCK);
+        componentTypes.append(COMPONENT_TYPE_WIDGET);
         addComponentType(componentTypes);
 
         QStringList componentInformationProperties;
@@ -181,8 +187,8 @@ void PackageManagerPrivate::prepareDatabase()
         componentInformationProperties.append(PACKAGE_INFORMATION_EMAIL);
         componentInformationProperties.append(PACKAGE_INFORMATION_WEBSITE);
         componentInformationProperties.append(PACKAGE_INFORMATION_VERSION);
-        componentInformationProperties.append(DOCK_INFORMATION_WIDTH);
-        componentInformationProperties.append(DOCK_INFORMATION_HEIGHT);
+        componentInformationProperties.append(COMPONENT_INFORMATION_WIDTH);
+        componentInformationProperties.append(COMPONENT_INFORMATION_HEIGHT);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_TOP);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_BOTTOM);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_LEFT);
@@ -412,15 +418,29 @@ void PackageManagerPrivate::scanPackageFolder(int packageId, const QString &path
         foreach (QFileInfo folderInfo, folders) {
             QDir folder (folderInfo.absoluteFilePath());
 
-            DockBaseProperties *dock =
-                    DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
-                                                        packageIdentifier);
+            QString metadata = folder.absoluteFilePath("metadata.desktop");
+            DockBaseProperties *dock = DockBaseProperties::fromDesktopFile(metadata,
+                                                                           packageIdentifier);
             if (dock->isValid()) {
                 addDock(packageId, folderInfo.fileName(), dock);
             }
         }
+    }
+    packageFolder = QDir(path);
+    if (packageFolder.cd(WIDGETS_FOLDER)) {
 
-        packageFolder.cdUp();
+        QFileInfoList folders = packageFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
+
+        foreach (QFileInfo folderInfo, folders) {
+            QDir folder (folderInfo.absoluteFilePath());
+
+            QString metadata = folder.absoluteFilePath("metadata.desktop");
+            WidgetBaseProperties *widget =
+                    WidgetBaseProperties::fromDesktopFile(metadata, packageIdentifier);
+            if (widget->isValid()) {
+                addWidget(packageId, folderInfo.fileName(), widget);
+            }
+        }
     }
 }
 
@@ -463,8 +483,8 @@ void PackageManagerPrivate::addDock(int packageId, const QString &subdirectory,
     QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, dock->icon());
     informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, dock->isSettingsEnabled());
-    informations.insert(DOCK_INFORMATION_WIDTH, dock->width());
-    informations.insert(DOCK_INFORMATION_HEIGHT, dock->height());
+    informations.insert(COMPONENT_INFORMATION_WIDTH, dock->width());
+    informations.insert(COMPONENT_INFORMATION_HEIGHT, dock->height());
     informations.insert(DOCK_INFORMATION_ANCHORS_TOP, dock->anchorsTop());
     informations.insert(DOCK_INFORMATION_ANCHORS_BOTTOM, dock->anchorsBottom());
     informations.insert(DOCK_INFORMATION_ANCHORS_LEFT, dock->anchorsLeft());
@@ -472,6 +492,52 @@ void PackageManagerPrivate::addDock(int packageId, const QString &subdirectory,
     addInformation(COMPONENT_TYPE_DOCK, dockId, informations);
 
     dock->deleteLater();
+}
+
+void PackageManagerPrivate::addWidget(int packageId, const QString &subdirectory,
+                                      WidgetBaseProperties *widget)
+{
+
+    int widgetId = -1;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_widget");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("INSERT INTO widgets (id, packageId, directory, file) VALUES (NULL, :packageId, :packageDirectory, :file)");
+        query.bindValue(":packageId", packageId);
+        query.bindValue(":packageDirectory", subdirectory);
+        query.bindValue(":file", widget->fileName());
+        executeQuery(&query);
+        widgetId = query.lastInsertId().toInt();
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_widget");
+
+    QStringList languages;
+    QStringList names;
+    QStringList descriptions;
+
+    languages.append(COMPONENT_INFORMATION_DEFAULT_LANGUAGE);
+    names.append(widget->defaultName());
+    descriptions.append(widget->defaultDescription());
+
+    foreach(QString language, widget->languages()) {
+        languages.append(language);
+        names.append(widget->name(language));
+        descriptions.append(widget->description(language));
+    }
+    addLocalizedInformation(COMPONENT_TYPE_WIDGET, widgetId, languages, names, descriptions);
+
+    QVariantMap informations;
+    informations.insert(COMPONENT_INFORMATION_ICON, widget->icon());
+    informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, widget->isSettingsEnabled());
+    informations.insert(COMPONENT_INFORMATION_WIDTH, widget->width());
+    informations.insert(COMPONENT_INFORMATION_HEIGHT, widget->height());
+    addInformation(COMPONENT_TYPE_WIDGET, widgetId, informations);
+
+    widget->deleteLater();
 }
 
 }

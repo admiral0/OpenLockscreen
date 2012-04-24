@@ -29,6 +29,7 @@ QML_FILES +=        qml/main.qml \
                     qml/PackageListPage.qml \
                     qml/PackageDetailPage.qml \
                     qml/DockListPage.qml \
+                    qml/WidgetListPage.qml \
                     qml/AboutPage.qml \
 
 
