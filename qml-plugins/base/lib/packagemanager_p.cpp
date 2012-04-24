@@ -403,18 +403,24 @@ void PackageManagerPrivate::addPackage(const QString &path)
 void PackageManagerPrivate::scanPackageFolder(int packageId, const QString &path,
                                               const QString &packageIdentifier)
 {
+    // Scan docks
     QDir packageFolder (path);
-    QFileInfoList folders = packageFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
+    if (packageFolder.cd(DOCKS_FOLDER)) {
 
-    foreach (QFileInfo folderInfo, folders) {
-        QDir folder (folderInfo.absoluteFilePath());
+        QFileInfoList folders = packageFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
 
-        DockBaseProperties *dock =
-                DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
-                                                    packageIdentifier);
-        if (dock->isValid()) {
-            addDock(packageId, folderInfo.fileName(), dock);
+        foreach (QFileInfo folderInfo, folders) {
+            QDir folder (folderInfo.absoluteFilePath());
+
+            DockBaseProperties *dock =
+                    DockBaseProperties::fromDesktopFile(folder.absoluteFilePath("metadata.desktop"),
+                                                        packageIdentifier);
+            if (dock->isValid()) {
+                addDock(packageId, folderInfo.fileName(), dock);
+            }
         }
+
+        packageFolder.cdUp();
     }
 }
 

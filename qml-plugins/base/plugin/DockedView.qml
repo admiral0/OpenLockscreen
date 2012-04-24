@@ -20,7 +20,6 @@ import org.SfietKonstantin.widgets 1.0
 Item {
     id: container
     anchors.fill: parent
-    property variant packageManager
     property alias content: contentsContainer.children
 
     DockModel {
@@ -34,7 +33,8 @@ Item {
 
     Component.onCompleted: {
         var settings;
-        var dock1 = container.packageManager.dock("org.SfietKonstantin.basicwidgets", "AndroidDock.qml")
+        var dock1 =
+                PackageManagerInstance.dock("org.SfietKonstantin.basicwidgets", "AndroidDock.qml")
         dockModelInstance.addDock(dock1, settings)
     }
 
@@ -52,8 +52,8 @@ Item {
         DockContainer {
             width: container.width
             height: container.height
-            qmlFile: container.packageManager.dockFile(model.dock.packageIdentifier,
-                                                       model.dock.fileName)
+            qmlFile: PackageManagerInstance.dockFile(model.dock.packageIdentifier,
+                                                     model.dock.fileName)
         }
     }
 }

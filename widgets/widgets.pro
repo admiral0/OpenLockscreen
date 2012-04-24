@@ -17,10 +17,12 @@ QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \
                     qml/HorizontalSeparator.qml \
                     qml/ClickableEntry.qml \
+                    qml/CheckableEntry.qml \
                     qml/AbstractPage.qml \
                     qml/AbstractNavigationPage.qml \
                     qml/MainPage.qml \
                     qml/PreviewPage.qml \
+                    qml/SettingsPage.qml \
                     qml/Background.qml \
                     qml/InformationsPage.qml \
                     qml/PackageListPage.qml \

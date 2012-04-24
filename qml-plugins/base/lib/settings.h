@@ -50,7 +50,6 @@ public:
     Q_INVOKABLE QVariant value(const QString &key) const;
     Q_INVOKABLE QVariant value(const QString &group, const QString &key) const;
     QDeclarativeListProperty<SettingsEntry> defaultSettings();
-    QMap<QString, QVariantMap> settings() const;
     virtual bool event(QEvent *event);
 public Q_SLOTS:
     void reload();

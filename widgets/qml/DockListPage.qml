@@ -21,7 +21,7 @@ import "UiConstants.js" as Ui
 
 AbstractPage {
     id: container
-    title: qsTr("Docks informations")
+    title: qsTr("Installed docks")
     tools: ToolBarLayout {
         ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
     }
@@ -40,6 +40,6 @@ AbstractPage {
 
     DockInformationModel {
         id: dockInformationModel
-        packageManager: widgetManager.packageManager
+        packageManager: PackageManagerInstance
     }
 }

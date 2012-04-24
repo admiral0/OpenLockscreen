@@ -16,39 +16,23 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
+import com.nokia.extras 1.1
+import "UiConstants.js" as Ui
 
-Page {
-    id: mainPage
+AbstractNavigationPage {
+    id: container
     orientationLock: PageOrientation.LockPortrait
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
+    title: qsTr("Configure widgets")
+    onShow: {
+        if(page == "showDockEditor") {
+            window.pageStack.push(dockEditorPage)
+        }
     }
-
-    Background {
-        anchors.fill: parent
-        id: background
-        view: view
-    }
-
-    DockedView {
-        content: ListView {
-            id: view
-            anchors.fill: parent
-            orientation: ListView.Horizontal
-            delegate: Item {
-                width: view.width
-                height: view.height
-            }
-
-            model: ListModel {
-                ListElement {}
-                ListElement {}
-                ListElement {}
-            }
+    model: ListModel {
+        ListElement {
+            identifier: "showDockEditor"
+            text: QT_TR_NOOP("Edit docks")
         }
     }
 }

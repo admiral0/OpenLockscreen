@@ -29,6 +29,9 @@ AbstractNavigationPage {
             pinchToBackBanner.show()
             window.pageStack.push(previewPage)
         }
+        if (page == "showSettings") {
+            window.pageStack.push(settingsPage)
+        }
         if(page == "showInfo") {
             window.pageStack.push(infoPage)
         }
@@ -40,6 +43,11 @@ AbstractNavigationPage {
         ListElement {
             identifier: "showPreview"
             text: QT_TR_NOOP("Preview")
+        }
+
+        ListElement {
+            identifier: "showSettings"
+            text: QT_TR_NOOP("Configure widgets")
         }
 
         ListElement {
@@ -60,6 +68,10 @@ AbstractNavigationPage {
             id: pinchToBackBanner
             text: qsTr("Pinch the screen to exit the preview mode")
         }
+    }
+
+    SettingsPage {
+        id: settingsPage
     }
 
     InformationsPage {

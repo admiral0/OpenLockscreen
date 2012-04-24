@@ -19,9 +19,4 @@ import org.SfietKonstantin.widgets 1.0
 
 Item {
    id: container
-   property variant packageManager: packageManagerInstance
-
-   PackageManager {
-       id: packageManagerInstance
-   }
 }

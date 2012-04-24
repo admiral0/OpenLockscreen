@@ -156,9 +156,12 @@ QString PackageManager::dockFile(const QString &packageIdentifier, const QString
         if (query.next()) {
             QString subdir = query.value(1).toString();
             QDir dir = QDir(query.value(0).toString());
-            if (dir.cd(subdir)) {
-                if (dir.exists(dockFilename)) {
-                    value = dir.absoluteFilePath(dockFilename);
+
+            if (dir.cd(DOCKS_FOLDER)) {
+                if (dir.cd(subdir)) {
+                    if (dir.exists(dockFilename)) {
+                        value = dir.absoluteFilePath(dockFilename);
+                    }
                 }
             }
         }

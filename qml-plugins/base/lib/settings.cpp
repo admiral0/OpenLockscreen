@@ -18,10 +18,11 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
+#include <QtCore/QEvent>
 #include <QtCore/QVariantMap>
 #include <QtGui/QDesktopServices>
-#include <QtCore/QCoreApplication>
 
+#include "abstractsettings_p.h"
 #include "widgets_global.h"
 #include "xmlserializableinterface.h"
 
@@ -29,26 +30,21 @@
 namespace Widgets
 {
 
-static const char *SETTINGS_ELEMENT = "settings";
 static const char *GROUP_ELEMENT = "group";
 static const char *GROUP_ATTRIBUTE = "group";
 static const char *PAIR_ELEMENT = "pair";
 static const char *KEY_ATTRIBUTE = "key";
 static const char *VALUE_ATTRIBUTE = "value";
 
-class SettingsPrivate: private XmlSerializableInterface
+class SettingsPrivate: public AbstractSettingsPrivate
 {
 public:
     SettingsPrivate(Settings *q = 0);
-    QString settingsFilePath() const;
     void setDefaultValue(const QString &group, const QString &key, const QVariant &value);
     void copyDefaultValues();
-    void load();
-    void requestSave();
-    void save();
+    virtual void clear();
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
-    QString componentName;
     QMap<QString, QVariantMap> defaultSettings;
     QMap<QString, QVariantMap> settings;
     QString currentGroup;
@@ -59,17 +55,8 @@ private:
 };
 
 SettingsPrivate::SettingsPrivate(Settings *q):
-    q_ptr(q)
+    AbstractSettingsPrivate(q), q_ptr(q)
 {
-}
-
-QString SettingsPrivate::settingsFilePath() const
-{
-    QString settingsFileName = QString("settings-%1.xml").arg(componentName);
-
-    QDir dir (QDesktopServices::storageLocation(QDesktopServices::DataLocation));
-    QDir::root().mkpath(dir.absolutePath());
-    return dir.absoluteFilePath(settingsFileName);
 }
 
 void SettingsPrivate::setDefaultValue(const QString &group, const QString &key,
@@ -124,59 +111,9 @@ void SettingsPrivate::copyDefaultValues()
     }
 }
 
-void SettingsPrivate::load()
+void SettingsPrivate::clear()
 {
-    if (componentName.isEmpty()) {
-        return;
-    }
-
     settings.clear();
-
-    QFile *input = new QFile(settingsFilePath());
-    if (!input->exists()) {
-        return;
-    }
-    W_ASSERT(input->open(QIODevice::ReadOnly));
-
-    QDomDocument document = QDomDocument();
-    if (document.setContent(input)) {
-        W_ASSERT(fromXmlElement(document.documentElement()));
-    }
-
-    input->close();
-    input->deleteLater();
-}
-
-void SettingsPrivate::requestSave()
-{
-    Q_Q(Settings);
-    QCoreApplication::postEvent(q, new QEvent(QEvent::UpdateRequest));
-}
-
-void SettingsPrivate::save()
-{
-    if (componentName.isEmpty()) {
-        return;
-    }
-
-    defaultSettings.clear();
-
-    QFile *output = new QFile(settingsFilePath());
-    W_ASSERT(output->open(QIODevice::WriteOnly));
-
-    QDomDocument document = QDomDocument();
-
-    // Declaration
-    QDomProcessingInstruction xmlDeclaration =
-                document.createProcessingInstruction("xml", "version=\"1.0\"");
-        document.appendChild(xmlDeclaration);
-    QDomElement element = toXmlElement(SETTINGS_ELEMENT, &document);
-    document.appendChild(element);
-
-    output->write(document.toByteArray(2));
-
-    output->close();
-    output->deleteLater();
 }
 
 bool SettingsPrivate::fromXmlElement(const QDomElement &element)
@@ -187,7 +124,7 @@ bool SettingsPrivate::fromXmlElement(const QDomElement &element)
 
     QDomElement groupElement = element.firstChildElement(GROUP_ELEMENT);
     while (!groupElement.isNull()) {
-        QString group = element.attribute(GROUP_ATTRIBUTE);
+        QString group = groupElement.attribute(GROUP_ATTRIBUTE);
         if (!settings.contains(group)) {
             settings.insert(group, QVariantMap());
         }
@@ -199,7 +136,7 @@ bool SettingsPrivate::fromXmlElement(const QDomElement &element)
 
             settings[group].insert(key, value);
 
-            pairElement = pairElement.nextSiblingElement(GROUP_ELEMENT);
+            pairElement = pairElement.nextSiblingElement(PAIR_ELEMENT);
         }
         groupElement = groupElement.nextSiblingElement(GROUP_ELEMENT);
     }
@@ -287,12 +224,6 @@ QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
 {
     return QDeclarativeListProperty<SettingsEntry>(this, 0,
                                                    &Widgets::Settings::appendDefaultSettings);
-}
-
-QMap<QString, QVariantMap> Settings::settings() const
-{
-    Q_D(const Settings);
-    return d->settings;
 }
 
 bool Settings::event(QEvent *event)

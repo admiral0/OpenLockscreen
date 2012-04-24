@@ -38,13 +38,22 @@
 #include "dockmodel.h"
 #include "dockmanager.h"
 
+void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri);
+    engine->rootContext()->setContextProperty("PackageManagerInstance",
+                                              new Widgets::PackageManager(this));
+
+}
+
 void WidgetsPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets
     qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
     qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
-    qmlRegisterType<Widgets::PackageManager>(uri, 1, 0, "PackageManager");
+    QString reason = "Only one instance of PackageManager is allowed";
+    qmlRegisterUncreatableType<Widgets::PackageManager>(uri, 1, 0, "PackageManager", reason);
     qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
     qmlRegisterType<Widgets::DockProperties>(uri, 1, 0, "DockProperties");
     qmlRegisterType<Widgets::DockModel>(uri, 1, 0, "DockModel");

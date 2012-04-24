@@ -13,6 +13,7 @@ HEADERS +=      widgets_global.h \
                 version.h \
                 identifiedelementinterface.h \
                 xmlserializableinterface.h \
+                abstractsettings_p.h \
                 settings.h \
                 settingsentry.h \
                 componentbase.h \
@@ -33,11 +34,12 @@ HEADERS +=      widgets_global.h \
                 packagemanager.h \
                 packagemanager_p.h \
                 packagemanagerdefines.h \
-                packagemanagerupdaterunnable.h
+                packagemanagerupdaterunnable.h \
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
                 settings.cpp \
+                abstractsettings_p.cpp \
                 settingsentry.cpp \
                 componentbase.cpp \
                 componentbase_p.cpp \

@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_PACKAGEMANAGER_H
 #define WIDGETS_PACKAGEMANAGER_H
@@ -43,7 +43,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void update();
 protected:
-    PackageManager(PackageManagerPrivate * dd, QObject *parent = 0);
+    PackageManager(PackageManagerPrivate *dd, QObject *parent = 0);
     const QScopedPointer<PackageManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(PackageManager)

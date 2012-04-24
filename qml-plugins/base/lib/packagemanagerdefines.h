@@ -12,13 +12,16 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef PACKAGEMANAGERDEFINES_H
 #define PACKAGEMANAGERDEFINES_H
 
 namespace Widgets
 {
+
+static const char *DOCKS_FOLDER = "docks";
+static const char *WIDGETS_FOLDER = "widgets";
 
 static const char *COMPONENT_TYPE_PACKAGE = "package";
 static const char *COMPONENT_TYPE_DOCK = "dock";

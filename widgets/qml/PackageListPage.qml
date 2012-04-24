@@ -16,12 +16,13 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.extra 1.0
 import "UiConstants.js" as Ui
 
 AbstractPage {
     id: container
-    title: qsTr("Packages informations")
+    title: qsTr("Installed packages")
     tools: ToolBarLayout {
         ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
     }
@@ -46,7 +47,7 @@ AbstractPage {
 
     PackageInformationModel {
         id: packageInformationModel
-        packageManager: widgetManager.packageManager
+        packageManager: PackageManagerInstance
     }
 
     PackageDetailPage {

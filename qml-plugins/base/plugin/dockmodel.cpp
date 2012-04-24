@@ -112,6 +112,20 @@ void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings)
         return;
     }
 
+    bool added = false;
+    QListIterator<DockProperties *> iterator = QListIterator<DockProperties *>(d->data);
+    while (!added && iterator.hasNext()) {
+        DockProperties *addedDock = iterator.next();
+        if (addedDock->packageIdentifier() == dock->packageIdentifier() &&
+            addedDock->fileName() == dock->fileName()) {
+            added = true;
+        }
+    }
+
+    if (added) {
+        return;
+    }
+
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     DockProperties *newDock;

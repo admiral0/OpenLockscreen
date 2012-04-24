@@ -14,41 +14,40 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
+#ifndef WIDGETS_ABSTRACTSETTINGS_P_H
+#define WIDGETS_ABSTRACTSETTINGS_P_H
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include "xmlserializableinterface.h"
+#include <QtCore/QObject>
 
-    Background {
-        anchors.fill: parent
-        id: background
-        view: view
-    }
+namespace Widgets
+{
 
-    DockedView {
-        content: ListView {
-            id: view
-            anchors.fill: parent
-            orientation: ListView.Horizontal
-            delegate: Item {
-                width: view.width
-                height: view.height
-            }
+static const char *SETTINGS_ELEMENT = "settings";
 
-            model: ListModel {
-                ListElement {}
-                ListElement {}
-                ListElement {}
-            }
-        }
-    }
+class AbstractSettingsPrivate: public XmlSerializableInterface
+{
+public:
+    AbstractSettingsPrivate(QObject *settingsObject);
+    QString settingsFilePath() const;
+    void load();
+    void requestSave();
+    void save();
+    virtual void clear() = 0;
+    virtual bool fromXmlElement(const QDomElement &element) = 0;
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const = 0;
+    QString componentName;
+private:
+    QObject *settingsObject;
+};
+
 }
+
+#endif // WIDGETS_ABSTRACTSETTINGS_P_H
