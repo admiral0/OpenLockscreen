@@ -80,16 +80,10 @@ bool GraphicalComponentBase::fromXmlElement(const QDomElement &element)
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE)) {
         return false;
     }
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE)) {
-        return false;
-    }
 
     setFileName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE));
     setPackageIdentifier(
                 element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE));
-    QString hasSettingsString =
-            element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE);
-    setSettingsEnabled(Tools::stringToBool(hasSettingsString));
 
     return true;
 }
@@ -101,9 +95,6 @@ QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE, fileName());
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE,
                          packageIdentifier());
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_HAS_SETTINGS_ATTRIBUTE,
-                         Tools::boolToString(isSettingsEnabled()));
-
     return element;
 }
 

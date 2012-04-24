@@ -20,9 +20,11 @@
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QScopedPointer>
 
+class QDeclarativeContext;
 namespace Widgets
 {
 
+class DockProperties;
 class DockBaseProperties;
 namespace Docks
 {
@@ -39,6 +41,7 @@ public:
     };
     explicit DockModel(QObject *parent = 0);
     virtual ~DockModel();
+    void setContext(QDeclarativeContext *context);
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int count() const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -46,6 +49,7 @@ public:
 Q_SIGNALS:
     void countChanged(int count);
 public Q_SLOTS:
+    void load();
     /**
      * @short Add a dock
      *
@@ -63,6 +67,7 @@ public Q_SLOTS:
     void addDock(Widgets::DockBaseProperties *dock,
                  const QVariantMap &settings = QVariantMap(),
                  const QString &identifier = QString());
+    void removeDock(Widgets::DockProperties *dock);
 protected:
     DockModel(DockModelPrivate *dd, QObject *parent = 0);
     virtual bool event(QEvent *event);

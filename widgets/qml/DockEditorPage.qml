@@ -33,12 +33,18 @@ AbstractPage {
     }
 
     content: ListView {
+        id: listView
+        property QtObject selectedDock
         anchors.fill: parent
         model: DockModelInstance
 
         delegate: ClickableEntry {
             text: model.dock.name
             indicatorIcon: ""
+            onPressAndHold: {
+                listView.selectedDock = model.dock
+                deleteDock.open()
+            }
         }
     }
 
@@ -61,6 +67,16 @@ AbstractPage {
                     DockModelInstance.addDock(dock)
                     addDockSheet.accept()
                 }
+            }
+        }
+    }
+
+    Menu {
+        id: deleteDock
+        MenuLayout {
+            MenuItem {
+                text: qsTr("Delete dock")
+                onClicked: console.debug(DockModelInstance.removeDock(listView.selectedDock))
             }
         }
     }

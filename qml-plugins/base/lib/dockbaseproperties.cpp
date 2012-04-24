@@ -109,66 +109,12 @@ bool DockBaseProperties::anchorsRight() const
 
 bool DockBaseProperties::fromXmlElement(const QDomElement &element)
 {
-    QDomElement geometryElement = element.firstChildElement(DOCK_BASE_PROPERTIES_GEOMETRY_TAGNAME);
-    if (geometryElement.isNull()) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE)) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE)) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE)) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE)) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE)) {
-        return false;
-    }
-    if (!geometryElement.hasAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE)) {
-        return false;
-    }
-
-    if (!GraphicalComponentBase::fromXmlElement(element)) {
-        return false;
-    }
-
-    setWidth(geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE).toInt());
-    setHeight(geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE).toInt());
-    QString anchorsTopString =
-            geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE);
-    QString anchorsBottomString =
-            geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE);
-    QString anchorsLeftString =
-            geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE);
-    QString anchorsRightString =
-            geometryElement.attribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE);
-    setAnchorsTop(Tools::stringToBool(anchorsTopString));
-    setAnchorsBottom(Tools::stringToBool(anchorsBottomString));
-    setAnchorsLeft(Tools::stringToBool(anchorsLeftString));
-    setAnchorsRight(Tools::stringToBool(anchorsRightString));
-
-    return true;
+    return GraphicalComponentBase::fromXmlElement(element);
 }
 
 QDomElement DockBaseProperties::toXmlElement(const QString &tagName, QDomDocument *document) const
 {
     QDomElement element = GraphicalComponentBase::toXmlElement(tagName, document);
-    QDomElement geometryElement = document->createElement(DOCK_BASE_PROPERTIES_GEOMETRY_TAGNAME);
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE, width());
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE, height());
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE,
-                                 Tools::boolToString(anchorsTop()));
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE,
-                                 Tools::boolToString(anchorsBottom()));
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE,
-                                 Tools::boolToString(anchorsLeft()));
-    geometryElement.setAttribute(DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE,
-                                 Tools::boolToString(anchorsRight()));
-    element.appendChild(geometryElement);
     return element;
 }
 

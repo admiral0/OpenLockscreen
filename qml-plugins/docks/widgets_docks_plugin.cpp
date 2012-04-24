@@ -24,8 +24,9 @@
 void WidgetsColorsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    engine->rootContext()->setContextProperty("DockModelInstance",
-                                              new Widgets::Docks::DockModel(this));
+    Widgets::Docks::DockModel *model = new Widgets::Docks::DockModel(this);
+    model->setContext(engine->rootContext());
+    engine->rootContext()->setContextProperty("DockModelInstance", model);
 }
 
 void WidgetsColorsPlugin::registerTypes(const char *uri)

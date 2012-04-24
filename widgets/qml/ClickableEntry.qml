@@ -37,6 +37,7 @@ Item
 {
     id: container
     signal clicked
+    signal pressAndHold
     property string icon: ""
     property alias text: mainText.text
     property alias subText: subText.text
@@ -108,21 +109,17 @@ Item
 
 
 
-    Image
-    {
+    Image {
         id: indicator
         source: container.indicatorIcon != "" ? "image://theme/" + container.indicatorIcon : ""
         anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
         anchors.verticalCenter: parent.verticalCenter
     }
 
-    MouseArea
-    {
+    MouseArea {
         id: mouseArea
         anchors.fill: container
-        onClicked:
-        {
-            container.clicked()
-        }
+        onClicked: container.clicked()
+        onPressAndHold: container.pressAndHold()
     }
 }

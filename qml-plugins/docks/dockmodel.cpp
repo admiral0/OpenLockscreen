@@ -18,15 +18,20 @@
 
 #include <QtCore/QList>
 #include <QtCore/QDebug>
+#include <QtCore/QEvent>
+#include <QtDeclarative/QDeclarativeContext>
 
 #include "abstractsettings_p.h"
 #include "dockproperties.h"
+#include "packagemanager.h"
 
 namespace Widgets
 {
 
 namespace Docks
 {
+
+static const char *DOCK_ELEMENT = "dock";
 
 class DockModelPrivate: public AbstractSettingsPrivate
 {
@@ -37,6 +42,8 @@ public:
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
     QList<DockProperties *> data;
+    QDeclarativeContext *context;
+    PackageManager *packageManager;
 private:
     DockModel * const q_ptr;
     Q_DECLARE_PUBLIC(DockModel)
@@ -45,6 +52,9 @@ private:
 DockModelPrivate::DockModelPrivate(DockModel *q):
     AbstractSettingsPrivate(q), q_ptr(q)
 {
+    componentName = "dock";
+    context = 0;
+    packageManager = 0;
 }
 
 DockModelPrivate::~DockModelPrivate()
@@ -64,12 +74,39 @@ void DockModelPrivate::clear()
 
 bool DockModelPrivate::fromXmlElement(const QDomElement &element)
 {
+    Q_Q(DockModel);
+    if (element.tagName() != SETTINGS_ELEMENT) {
+        return false;
+    }
 
+    QDomElement dockElement = element.firstChildElement(DOCK_ELEMENT);
+    while (!dockElement.isNull()) {
+        DockProperties *incompleteDock = new DockProperties(q);
+        if (incompleteDock->fromXmlElement(dockElement)) {
+            DockBaseProperties *dockBase =
+                    packageManager->dock(incompleteDock->packageIdentifier(),
+                                         incompleteDock->fileName());
+            qDebug() << incompleteDock->packageIdentifier() << incompleteDock->fileName();
+            if (dockBase != 0) {
+                q->addDock(dockBase, incompleteDock->settings(), incompleteDock->identifier());
+                dockBase->deleteLater();
+            }
+        }
+        incompleteDock->deleteLater();
+        dockElement = dockElement.nextSiblingElement(DOCK_ELEMENT);
+    }
+
+    return true;
 }
 
 QDomElement DockModelPrivate::toXmlElement(const QString &tagName, QDomDocument *document) const
 {
+    QDomElement element = document->createElement(tagName);
 
+    foreach(DockProperties *dock, data) {
+        element.appendChild(dock->toXmlElement(DOCK_ELEMENT, document));
+    }
+    return element;
 }
 
 ////// End of private class //////
@@ -92,6 +129,13 @@ DockModel::DockModel(DockModelPrivate *dd, QObject *parent):
 
 DockModel::~DockModel()
 {
+}
+
+void DockModel::setContext(QDeclarativeContext *context)
+{
+    Q_D(DockModel);
+    d->context = context;
+    load();
 }
 
 int DockModel::rowCount(const QModelIndex &parent) const
@@ -140,6 +184,29 @@ bool DockModel::hasDock(const QString &packageIdentifier, const QString &fileNam
     return added;
 }
 
+void DockModel::load()
+{
+    Q_D(DockModel);
+    if (d->context == 0) {
+        return;
+    }
+
+    if (d->packageManager == 0) {
+
+        QVariant packageManagerVariant = d->context->contextProperty("PackageManagerInstance");
+        QObject *packageManagerObject = packageManagerVariant.value<QObject *>();
+
+        PackageManager *packageManager = qobject_cast<PackageManager *>(packageManagerObject);
+        if (packageManager == 0) {
+            return;
+        }
+
+        d->packageManager = packageManager;
+    }
+
+    d->load();
+}
+
 void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings,
                         const QString &identifier)
 {
@@ -162,15 +229,36 @@ void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings,
 
     emit countChanged(rowCount());
     endInsertRows();
+
+    d->requestSave();
+}
+
+void DockModel::removeDock(DockProperties *dock)
+{
+    Q_D(DockModel);
+
+    int index = d->data.indexOf(dock);
+    if (index == -1) {
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), index, index);
+
+    d->data.takeAt(index)->deleteLater();
+
+    emit countChanged(rowCount());
+    endRemoveRows();
+
+    d->requestSave();
 }
 
 bool DockModel::event(QEvent *event)
 {
     Q_D(DockModel);
-//    if (event->type() == QEvent::UpdateRequest) {
-//        d->save();
-//        return true;
-//    }
+    if (event->type() == QEvent::UpdateRequest) {
+        d->save();
+        return true;
+    }
     return QObject::event(event);
 }
 
