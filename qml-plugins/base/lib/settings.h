@@ -50,7 +50,6 @@ public:
     Q_INVOKABLE QVariant value(const QString &key) const;
     Q_INVOKABLE QVariant value(const QString &group, const QString &key) const;
     QDeclarativeListProperty<SettingsEntry> defaultSettings();
-    virtual bool event(QEvent *event);
 public Q_SLOTS:
     void reload();
     void setComponentName(const QString &componentName);
@@ -61,6 +60,7 @@ Q_SIGNALS:
     void valueChanged(const QString &group, const QString &key, const QVariant &value);
 protected:
     Settings(SettingsPrivate *dd, QObject *parent = 0);
+    virtual bool event(QEvent *event);
     const QScopedPointer<SettingsPrivate> d_ptr;
 private:
     static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,

@@ -55,7 +55,7 @@ Q_SIGNALS:
     void defaultDescriptionChanged();
     void descriptionChanged();
 protected:
-    ComponentBase(ComponentBasePrivate * dd, QObject *parent = 0);
+    ComponentBase(ComponentBasePrivate *dd, QObject *parent = 0);
     void setIcon(const QString &icon);
     void setDefaultName(const QString &name);
     void addName(const QString &language, const QString &name);

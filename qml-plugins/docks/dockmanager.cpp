@@ -23,6 +23,9 @@
 namespace Widgets
 {
 
+namespace Docks
+{
+
 class DockManagerPrivate
 {
 public:
@@ -137,6 +140,8 @@ void DockManager::setDockModel(DockModel *dockModel)
         connect(dockModel, SIGNAL(countChanged(int)), this, SLOT(slotRecomputeMargins()));
         d->slotRecomputeMargins();
     }
+}
+
 }
 
 }

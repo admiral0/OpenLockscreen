@@ -14,56 +14,65 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
-#define WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#ifndef WIDGETS_DOCKMODEL_H
+#define WIDGETS_DOCKMODEL_H
 
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QScopedPointer>
 
-#include "packagemanager.h"
-
 namespace Widgets
 {
 
-namespace Extra
+class DockBaseProperties;
+namespace Docks
 {
 
-class DockInformationModelPrivate;
-class DockInformationModel : public QAbstractListModel
+class DockModelPrivate;
+class DockModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum PackageRole
     {
-        NameRole,
-        DescriptionRole,
-        PackageRole,
-        FileRole
+        DockRole = Qt::UserRole + 1
     };
-    explicit DockInformationModel(QObject *parent = 0);
-    virtual ~DockInformationModel();
-    PackageManager * packageManager() const;
+    explicit DockModel(QObject *parent = 0);
+    virtual ~DockModel();
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int count() const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
+    Q_INVOKABLE bool hasDock(const QString &packageIdentifier, const QString &fileName) const;
 Q_SIGNALS:
-    void packageManagerChanged();
     void countChanged(int count);
 public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void update();
+    /**
+     * @short Add a dock
+     *
+     * This method is used to add a dock
+     * to the model. The dock to add is
+     * caracterized by a DockBaseProperties.
+     *
+     * Missing properties such as identifier and settings
+     * are either provided or added by this method.
+     *
+     * @param dock the dock to add.
+     * @param settings settings of the dock to add.
+     * @param identifier identifier of the dock to add (only used during loading).
+     */
+    void addDock(Widgets::DockBaseProperties *dock,
+                 const QVariantMap &settings = QVariantMap(),
+                 const QString &identifier = QString());
 protected:
-    const QScopedPointer<DockInformationModelPrivate> d_ptr;
+    DockModel(DockModelPrivate *dd, QObject *parent = 0);
+    virtual bool event(QEvent *event);
+    const QScopedPointer<DockModelPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(DockInformationModel)
+    Q_DECLARE_PRIVATE(DockModel)
 };
 
 }
 
 }
 
-#endif // WIDGETS_EXTRA_DOCKINFORMATIONMODEL_H
+#endif // WIDGETS_DOCKMODEL_H

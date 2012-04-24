@@ -20,31 +20,63 @@
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QScopedPointer>
 
+#include "dockbaseproperties.h"
+
 namespace Widgets
 {
 
-class DockBaseProperties;
 class DockModelPrivate;
 class DockModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    enum PackageRole
-    {
-        DockRole
+    /**
+     * @short Model roles
+     */
+    enum DisplayedDocksRole {
+        /**
+         * @short Dock role
+         */
+        DockRole = Qt::UserRole + 1
     };
     explicit DockModel(QObject *parent = 0);
     virtual ~DockModel();
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int count() const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    void clear();
+    Q_INVOKABLE bool hasDock(const QString &packageIdentifier, const QString &fileName) const;
 Q_SIGNALS:
+    /**
+     * @short Count changed
+     *
+     * Notify that the row count
+     * has changed.
+     *
+     * @param count value of the new row count.
+     */
     void countChanged(int count);
 public Q_SLOTS:
-    void addDock(Widgets::DockBaseProperties *dockBase, const QVariantMap &settings);
+    /**
+     * @short Add a dock
+     *
+     * This method is used to add a dock
+     * to the model. The dock to add is
+     * caracterized by a DockBaseProperties.
+     *
+     * Missing properties such as identifier and settings
+     * are either provided or added by this method.
+     *
+     * @param dock the dock to add.
+     * @param settings settings of the dock to add.
+     * @param identifier identifier of the dock to add (only used during loading).
+     */
+    void addDock(Widgets::DockBaseProperties *dock,
+                 const QVariantMap &settings = QVariantMap(),
+                 const QString &identifier = QString());
 protected:
+    DockModel(DockModelPrivate *dd, QObject *parent = 0);
+    virtual bool event(QEvent *event);
     const QScopedPointer<DockModelPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(DockModel)

@@ -12,10 +12,10 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKMANAGER_H
-#define WIDGETS_DOCKMANAGER_H
+#ifndef WIDGETS_DOCKS_DOCKMANAGER_H
+#define WIDGETS_DOCKS_DOCKMANAGER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
@@ -25,11 +25,14 @@
 namespace Widgets
 {
 
+namespace Docks
+{
+
 class DockManagerPrivate;
 class DockManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::DockModel *dockModel READ dockModel WRITE setDockModel
+    Q_PROPERTY(Widgets::Docks::DockModel *dockModel READ dockModel WRITE setDockModel
                NOTIFY dockModelChanged)
     Q_PROPERTY(int topMargin READ topMargin NOTIFY topMarginChanged)
     Q_PROPERTY(int bottomMargin READ bottomMargin NOTIFY bottomMarginChanged)
@@ -53,11 +56,13 @@ Q_SIGNALS:
     void rightMarginChanged(int rightMargin);
 protected:
     const QScopedPointer<DockManagerPrivate> d_ptr;
-    
+
 private:
     Q_DECLARE_PRIVATE(DockManager)
     Q_PRIVATE_SLOT(d_func(), void slotRecomputeMargins())
 };
+
+}
 
 }
 

@@ -22,8 +22,11 @@ import "UiConstants.js" as Ui
 AbstractNavigationPage {
     id: container
     orientationLock: PageOrientation.LockPortrait
-
     title: qsTr("Configure widgets")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
+
     onShow: {
         if(page == "showDockEditor") {
             window.pageStack.push(dockEditorPage)
@@ -34,5 +37,9 @@ AbstractNavigationPage {
             identifier: "showDockEditor"
             text: QT_TR_NOOP("Edit docks")
         }
+    }
+
+    DockEditorPage {
+        id: dockEditorPage
     }
 }

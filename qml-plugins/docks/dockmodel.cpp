@@ -19,21 +19,31 @@
 #include <QtCore/QList>
 #include <QtCore/QDebug>
 
+#include "abstractsettings_p.h"
 #include "dockproperties.h"
 
 namespace Widgets
 {
 
-class DockModelPrivate
+namespace Docks
+{
+
+class DockModelPrivate: public AbstractSettingsPrivate
 {
 public:
-    DockModelPrivate();
+    DockModelPrivate(DockModel *q);
     ~DockModelPrivate();
-    void clear();
+    virtual void clear();
+    virtual bool fromXmlElement(const QDomElement &element);
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
     QList<DockProperties *> data;
+private:
+    DockModel * const q_ptr;
+    Q_DECLARE_PUBLIC(DockModel)
 };
 
-DockModelPrivate::DockModelPrivate()
+DockModelPrivate::DockModelPrivate(DockModel *q):
+    AbstractSettingsPrivate(q), q_ptr(q)
 {
 }
 
@@ -44,15 +54,36 @@ DockModelPrivate::~DockModelPrivate()
 
 void DockModelPrivate::clear()
 {
+    Q_Q(DockModel);
+    q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
     while (!data.isEmpty()) {
         delete data.takeFirst();
     }
+    q->endRemoveRows();
+}
+
+bool DockModelPrivate::fromXmlElement(const QDomElement &element)
+{
+
+}
+
+QDomElement DockModelPrivate::toXmlElement(const QString &tagName, QDomDocument *document) const
+{
+
 }
 
 ////// End of private class //////
 
 DockModel::DockModel(QObject *parent) :
-    QAbstractListModel(parent), d_ptr(new DockModelPrivate)
+    QAbstractListModel(parent), d_ptr(new DockModelPrivate(this))
+{
+    QHash <int, QByteArray> roles;
+    roles.insert(DockRole, "dock");
+    setRoleNames(roles);
+}
+
+DockModel::DockModel(DockModelPrivate *dd, QObject *parent):
+    QAbstractListModel(parent), d_ptr(dd)
 {
     QHash <int, QByteArray> roles;
     roles.insert(DockRole, "dock");
@@ -93,18 +124,24 @@ QVariant DockModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void DockModel::clear()
+bool DockModel::hasDock(const QString &packageIdentifier, const QString &fileName) const
 {
-    Q_D(DockModel);
-    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+    Q_D(const DockModel);
+    bool added = false;
+    QListIterator<DockProperties *> iterator = QListIterator<DockProperties *>(d->data);
+    while (!added && iterator.hasNext()) {
+        DockProperties *addedDock = iterator.next();
+        if (packageIdentifier == addedDock->packageIdentifier() &&
+            fileName == addedDock->fileName()) {
+            added = true;
+        }
+    }
 
-    d->clear();
-
-    emit countChanged(rowCount());
-    endRemoveRows();
+    return added;
 }
 
-void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings)
+void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings,
+                        const QString &identifier)
 {
     Q_D(DockModel);
 
@@ -112,36 +149,31 @@ void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings)
         return;
     }
 
-    bool added = false;
-    QListIterator<DockProperties *> iterator = QListIterator<DockProperties *>(d->data);
-    while (!added && iterator.hasNext()) {
-        DockProperties *addedDock = iterator.next();
-        if (addedDock->packageIdentifier() == dock->packageIdentifier() &&
-            addedDock->fileName() == dock->fileName()) {
-            added = true;
-        }
-    }
-
-    if (added) {
-        return;
-    }
-
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     DockProperties *newDock;
-    newDock = new DockProperties(dock->fileName(), dock->packageIdentifier(),
-                                 dock->isSettingsEnabled(),
-                                 dock->width(), dock->height(),
-                                 dock->anchorsTop(), dock->anchorsBottom(),
-                                 dock->anchorsLeft(), dock->anchorsRight(),
-                                 settings, this);
+    if (identifier.isEmpty()) {
+        newDock = new DockProperties(dock, settings, this);
+    } else {
+        newDock = new DockProperties(dock, identifier, settings, this);
+    }
 
-    // Append the dock to the list
     d->data.append(newDock);
 
     emit countChanged(rowCount());
     endInsertRows();
 }
 
+bool DockModel::event(QEvent *event)
+{
+    Q_D(DockModel);
+//    if (event->type() == QEvent::UpdateRequest) {
+//        d->save();
+//        return true;
+//    }
+    return QObject::event(event);
+}
+
+}
 
 }

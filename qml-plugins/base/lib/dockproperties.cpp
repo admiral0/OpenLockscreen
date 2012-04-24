@@ -15,56 +15,80 @@
  ****************************************************************************************/
 
 #include "dockproperties.h"
-#include "dockproperties_p.h"
 #include "dockpropertiesdefines.h"
+#include "dockbaseproperties_p.h"
+#include "graphicalcomponent_p.h"
 
 namespace Widgets
 {
+
+
+class DockPropertiesPrivate: public DockBasePropertiesPrivate, public GraphicalComponentPrivate
+{
+public:
+    DockPropertiesPrivate(DockProperties *q);
+
+    void copyFromBase(DockBaseProperties *base);
+
+private:
+    Q_DECLARE_PUBLIC(DockProperties)
+};
+
+DockPropertiesPrivate::DockPropertiesPrivate(DockProperties *q):
+    DockBasePropertiesPrivate(q), GraphicalComponentPrivate()
+{
+}
+
+void DockPropertiesPrivate::copyFromBase(DockBaseProperties *base)
+{
+    icon = base->icon();
+    defaultName = base->defaultName();
+    defaultDescription = base->defaultDescription();
+    foreach (QString language, base->languages()) {
+        QPair <QString, QString> data;
+        data.first = base->name(language);
+        data.second = base->description(language);
+        nameAndDescription.insert(language, data);
+    }
+
+
+    fileName = base->fileName();
+    packageIdentifier = base->packageIdentifier();
+    settingsEnabled = base->isSettingsEnabled();
+    size = QSize(base->width(), base->height());
+    anchorsTop = base->anchorsTop();
+    anchorsBottom = base->anchorsBottom();
+    anchorsLeft = base->anchorsLeft();
+    anchorsRight = base->anchorsRight();
+}
+
+////// End of private class //////
+
 
 DockProperties::DockProperties(QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
 }
 
-DockProperties::DockProperties(const QString &fileName, const QString &packageIdentifier,
-                               bool settingsEnabled,
-                               int width, int height,
-                               bool anchorsTop, bool anchorsBottom,
-                               bool anchorsLeft, bool anchorsRight,
-                               const QVariantMap &settings, QObject *parent):
-    DockBaseProperties(new DockPropertiesPrivate(this), parent)
-{
-    W_D(DockProperties);
-    d->fileName = fileName;
-    d->packageIdentifier = packageIdentifier;
-    d->settingsEnabled = settingsEnabled;
-    d->size = QSize(width, height);
-    d->anchorsTop = anchorsTop;
-    d->anchorsBottom = anchorsBottom;
-    d->anchorsLeft = anchorsLeft;
-    d->anchorsRight = anchorsRight;
-    d->identifier = generateIdentifier();
-    d->settings = settings;
-}
-
-DockProperties::DockProperties(const QString &fileName, const QString &packageIdentifier,
-                               bool settingsEnabled,
-                               int width, int height,
-                               bool anchorsTop, bool anchorsBottom,
-                               bool anchorsLeft, bool anchorsRight,
-                               const QString &identifier, const QVariantMap &settings,
+DockProperties::DockProperties(DockBaseProperties *base,
+                               const QVariantMap &settings,
                                QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
     W_D(DockProperties);
-    d->fileName = fileName;
-    d->packageIdentifier = packageIdentifier;
-    d->settingsEnabled = settingsEnabled;
-    d->size = QSize(width, height);
-    d->anchorsTop = anchorsTop;
-    d->anchorsBottom = anchorsBottom;
-    d->anchorsLeft = anchorsLeft;
-    d->anchorsRight = anchorsRight;
+    d->copyFromBase(base);
+    d->identifier = generateIdentifier();
+    d->settings = settings;
+}
+
+DockProperties::DockProperties(DockBaseProperties *base,
+                               const QString &identifier,
+                               const QVariantMap &settings,
+                               QObject *parent):
+    DockBaseProperties(new DockPropertiesPrivate(this), parent)
+{
+    W_D(DockProperties);
+    d->copyFromBase(base);
     d->identifier = identifier;
     d->settings = settings;
 }

@@ -2,4 +2,3 @@ plugin widgetsbase
 WidgetManager 1.0 WidgetManager.qml
 Widget 1.0 Widget.qml
 Dock 1.0 Dock.qml
-DockedView 1.0 DockedView.qml

@@ -16,26 +16,16 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.docks 1.0
 
 Item {
     id: container
     anchors.fill: parent
     property alias content: contentsContainer.children
 
-    DockModel {
-        id: dockModelInstance
-    }
-
     DockManager {
         id: dockManagerInstance
-        dockModel: dockModelInstance
-    }
-
-    Component.onCompleted: {
-        var settings;
-        var dock1 =
-                PackageManagerInstance.dock("org.SfietKonstantin.basicwidgets", "AndroidDock.qml")
-        dockModelInstance.addDock(dock1, settings)
+        dockModel: DockModelInstance
     }
 
     Item {
@@ -48,7 +38,7 @@ Item {
 
     Repeater {
         anchors.fill: parent
-        model: dockModelInstance
+        model: DockModelInstance
         DockContainer {
             width: container.width
             height: container.height

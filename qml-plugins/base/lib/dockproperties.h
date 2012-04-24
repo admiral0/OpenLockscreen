@@ -35,19 +35,11 @@ class DockProperties: public DockBaseProperties, private IdentifiedElementInterf
     Q_PROPERTY(QVariantMap settings READ settings NOTIFY settingsChanged)
 public:
     explicit DockProperties(QObject *parent = 0);
-    explicit DockProperties(const QString &fileName, const QString &packageIdentifier,
-                            bool settingsEnabled,
-                            int width, int height,
-                            bool anchorsTop, bool anchorsBottom,
-                            bool anchorsLeft, bool anchorsRight,
+    explicit DockProperties(DockBaseProperties *base,
                             const QVariantMap &settings = QVariantMap(),
                             QObject *parent = 0);
-    explicit DockProperties(const QString &fileName, const QString &packageIdentifier,
-                            bool settingsEnabled,
-                            int width, int height,
-                            bool anchorsTop, bool anchorsBottom,
-                            bool anchorsLeft, bool anchorsRight,
-                            const  QString &identifier,
+    explicit DockProperties(DockBaseProperties *base,
+                            const QString &identifier,
                             const QVariantMap &settings = QVariantMap(),
                             QObject *parent = 0);
     QString identifier() const;

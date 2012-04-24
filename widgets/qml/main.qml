@@ -25,11 +25,6 @@ PageStackWindow {
         theme.inverted = true
     }
 
-
-    WidgetManager {
-        id: widgetManager
-    }
-
     MainPage {
         id: mainPage
     }

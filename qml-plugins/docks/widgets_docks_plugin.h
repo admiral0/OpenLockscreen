@@ -14,33 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKPROPERTIES_P_H
-#define WIDGETS_DOCKPROPERTIES_P_H
+#ifndef WIDGETS_EXTRA_PLUGIN_H
+#define WIDGETS_EXTRA_PLUGIN_H
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-#include "dockbaseproperties_p.h"
-#include "graphicalcomponent_p.h"
-
-#include "dockproperties.h"
-
-namespace Widgets
+class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
 {
+    Q_OBJECT
 
-class DockPropertiesPrivate: public DockBasePropertiesPrivate, public GraphicalComponentPrivate
-{
 public:
-    DockPropertiesPrivate(DockProperties *q):
-        DockBasePropertiesPrivate(q), GraphicalComponentPrivate() {}
-private:
-    Q_DECLARE_PUBLIC(DockProperties)
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    /**
+     * @short Register types
+     *
+     * This method is used to register C++ classes
+     * into the QML context.
+     *
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
 };
 
-}
+#endif // WIDGETS_EXTRA_PLUGIN_H
 
-#endif // WIDGETS_DOCKPROPERTIES_P_H

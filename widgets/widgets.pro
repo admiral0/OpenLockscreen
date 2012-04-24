@@ -23,6 +23,7 @@ QML_FILES +=        qml/main.qml \
                     qml/MainPage.qml \
                     qml/PreviewPage.qml \
                     qml/SettingsPage.qml \
+                    qml/DockEditorPage.qml \
                     qml/Background.qml \
                     qml/InformationsPage.qml \
                     qml/PackageListPage.qml \

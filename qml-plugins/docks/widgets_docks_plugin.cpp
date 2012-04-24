@@ -14,42 +14,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.widgets.background 1.0
+#include "widgets_docks_plugin.h"
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+#include <QtDeclarative/QtDeclarative>
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include "dockmanager.h"
+#include "dockmodel.h"
 
-    Background {
-        anchors.fill: parent
-        id: background
-        view: view
-    }
-
-    DockedView {
-        content: ListView {
-            id: view
-            anchors.fill: parent
-            orientation: ListView.Horizontal
-            delegate: Item {
-                width: view.width
-                height: view.height
-            }
-
-            model: ListModel {
-                ListElement {}
-                ListElement {}
-                ListElement {}
-            }
-        }
-    }
+void WidgetsColorsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri)
+    engine->rootContext()->setContextProperty("DockModelInstance",
+                                              new Widgets::Docks::DockModel(this));
 }
+
+void WidgetsColorsPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.docks
+    qmlRegisterType<Widgets::Docks::DockManager>(uri, 1, 0, "DockManager");
+    QString reason = "Only one instance of DockModel is allowed.";
+    qmlRegisterUncreatableType<Widgets::Docks::DockModel>(uri, 1, 0, "DockModel", reason);
+}
+
+Q_EXPORT_PLUGIN2(Widgets, WidgetsColorsPlugin)
+

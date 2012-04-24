@@ -26,7 +26,6 @@ HEADERS +=      widgets_global.h \
                 dockbaseproperties_p.h \
                 dockbasepropertiesdefines.h \
                 dockproperties.h \
-                dockproperties_p.h \
                 dockpropertiesdefines.h \
                 desktopparser.h \
                 desktopparserdefines.h \
@@ -35,6 +34,7 @@ HEADERS +=      widgets_global.h \
                 packagemanager_p.h \
                 packagemanagerdefines.h \
                 packagemanagerupdaterunnable.h \
+#                dockmodel.h \
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
@@ -53,5 +53,6 @@ SOURCES +=      version.cpp \
                 packagemanager.cpp \
                 packagemanager_p.cpp \
                 packagemanagerupdaterunnable.cpp \
+#                dockmodel.cpp \
 
 include(deployment.pri)

@@ -63,6 +63,7 @@ DockInformationModel::DockInformationModel(QObject *parent) :
     QHash<int, QByteArray> roles;
     roles.insert(NameRole, "name");
     roles.insert(DescriptionRole, "description");
+    roles.insert(PackageRole, "package");
     roles.insert(FileRole, "file");
     setRoleNames(roles);
 }
@@ -104,6 +105,9 @@ QVariant DockInformationModel::data(const QModelIndex &index, int role) const
         break;
     case DescriptionRole:
         return dock->description();
+        break;
+    case PackageRole:
+        return dock->packageIdentifier();
         break;
     case FileRole:
         return dock->fileName();

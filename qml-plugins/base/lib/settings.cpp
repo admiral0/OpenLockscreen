@@ -226,16 +226,6 @@ QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
                                                    &Widgets::Settings::appendDefaultSettings);
 }
 
-bool Settings::event(QEvent *event)
-{
-    Q_D(Settings);
-    if (event->type() == QEvent::UpdateRequest) {
-        d->save();
-        return true;
-    }
-    return QObject::event(event);
-}
-
 void Settings::reload()
 {
     Q_D(Settings);
@@ -273,6 +263,16 @@ void Settings::setValue(const QString &group, const QString &key, const QVariant
         emit valueChanged(group, key, value);
         d->requestSave();
     }
+}
+
+bool Settings::event(QEvent *event)
+{
+    Q_D(Settings);
+    if (event->type() == QEvent::UpdateRequest) {
+        d->save();
+        return true;
+    }
+    return QObject::event(event);
 }
 
 void Settings::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,

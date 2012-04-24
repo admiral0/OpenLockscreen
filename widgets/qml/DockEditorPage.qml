@@ -17,38 +17,50 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.widgets.background 1.0
+import org.SfietKonstantin.widgets.extra 1.0
+import "UiConstants.js" as Ui
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
-
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
+AbstractPage {
+    id: container
+    title: qsTr("Edit docks")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+        ToolButton {
+            anchors.centerIn: parent
+            text: qsTr("Add dock")
+            onClicked: addDockSheet.open()
+        }
     }
 
-    Background {
+    content: ListView {
         anchors.fill: parent
-        id: background
-        view: view
+        model: DockModelInstance
+
+        delegate: ClickableEntry {
+            text: model.dock.name
+            indicatorIcon: ""
+        }
     }
 
-    DockedView {
+    Sheet {
+        id: addDockSheet
+        rejectButtonText: qsTr("Cancel")
         content: ListView {
             id: view
             anchors.fill: parent
-            orientation: ListView.Horizontal
-            delegate: Item {
-                width: view.width
-                height: view.height
+            model: DockInformationModel {
+                packageManager: PackageManagerInstance
             }
-
-            model: ListModel {
-                ListElement {}
-                ListElement {}
-                ListElement {}
+            clip: true
+            delegate: ClickableEntry {
+                text: model.name
+                subText: model.description
+                indicatorIcon: ""
+                onClicked: {
+                    var dock = PackageManagerInstance.dock(model.package, model.file)
+                    DockModelInstance.addDock(dock)
+                    addDockSheet.accept()
+                }
             }
         }
     }
