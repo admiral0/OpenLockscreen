@@ -87,7 +87,10 @@ bool DockModelPrivate::fromXmlElement(const QDomElement &element)
                     packageManager->dock(incompleteDock->packageIdentifier(),
                                          incompleteDock->fileName());
             if (dockBase != 0) {
-                q->addDock(dockBase, incompleteDock->settings(), incompleteDock->identifier());
+                if (!q->hasDock(dockBase->packageIdentifier(),
+                                dockBase->fileName())) {
+                    q->addDock(dockBase, incompleteDock->settings(), incompleteDock->identifier());
+                }
                 dockBase->deleteLater();
             }
         }

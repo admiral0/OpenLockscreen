@@ -56,6 +56,8 @@ class GridManager : public QObject
      * The grid width is the number of rows in the grid.
      */
     Q_PROPERTY(int gridHeight READ gridHeight NOTIFY gridHeightChanged)
+    Q_PROPERTY(int containerWidth READ containerWidth NOTIFY containerWidthChanged)
+    Q_PROPERTY(int containerHeight READ containerHeight NOTIFY containerHeightChanged)
     Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
 public:
     explicit GridManager(QObject *parent = 0);
@@ -105,6 +107,7 @@ public:
      * @return width of the grid.
      */
     int gridWidth() const;
+    int containerWidth() const;
     /**
      * @short Grid height
      *
@@ -114,6 +117,7 @@ public:
      * @return height of the grid.
      */
     int gridHeight() const;
+    int containerHeight() const;
     Settings * settings() const;
 Q_SIGNALS:
     void gridCellWidthChanged(int gridCellWidth);
@@ -129,6 +133,7 @@ Q_SIGNALS:
      * @param gridWidth new grid width.
      */
     void gridWidthChanged(int gridWidth);
+    void containerWidthChanged(int containerHeight);
     /**
      * @short Grid height changed
      *
@@ -138,6 +143,7 @@ Q_SIGNALS:
      * @param gridHeight new grid height.
      */
     void gridHeightChanged(int gridHeight);
+    void containerHeightChanged(int containerHeight);
     void settingsChanged();
 public Q_SLOTS:
     /**
@@ -167,7 +173,8 @@ protected:
     const QScopedPointer<GridManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(GridManager)
-    Q_PRIVATE_SLOT(d_func(), void slotValueChanged(const QString &key, const QVariant &value))
+    Q_PRIVATE_SLOT(d_func(), void slotValueChanged(const QString &group, const QString &key,
+                                                   const QVariant &value))
 };
 
 }

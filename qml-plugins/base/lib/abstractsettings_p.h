@@ -26,6 +26,7 @@
 
 #include "xmlserializableinterface.h"
 #include <QtCore/QObject>
+#include <QtCore/QMutex>
 
 namespace Widgets
 {
@@ -46,6 +47,7 @@ public:
     QString componentName;
 private:
     QObject *settingsObject;
+    QMutex mutex;
 };
 
 }

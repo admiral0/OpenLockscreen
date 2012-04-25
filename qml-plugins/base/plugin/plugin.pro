@@ -17,6 +17,7 @@ SOURCES +=      widgets_plugin.cpp \
 OTHER_FILES =   qmldir \
                 Widget.qml \
                 Dock.qml \
+                WidgetsView.qml \
 
 include(deployment.pri)
 

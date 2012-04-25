@@ -21,10 +21,11 @@
 
 #include "settings.h"
 
-static const char *GRID_CELL_WIDTH_KEY = "view/gridCellWidth";
-static const char *GRID_CELL_HEIGHT_KEY = "view/gridCellHeight";
-static const char *GRID_CELL_HMARGIN_KEY = "view/gridCellHorizontalMargin";
-static const char *GRID_CELL_VMARGIN_KEY = "view/gridCellVerticalMargin";
+static const char *GRID_GROUP = "grid";
+static const char *GRID_CELL_WIDTH_KEY = "cellWidth";
+static const char *GRID_CELL_HEIGHT_KEY = "cellHeight";
+static const char *GRID_CELL_HMARGIN_KEY = "cellHorizontalMargin";
+static const char *GRID_CELL_VMARGIN_KEY = "cellVerticalMargin";
 
 namespace Widgets
 {
@@ -48,7 +49,7 @@ public:
      */
     void recomputeGridCount();
     void loadSettings();
-    void slotValueChanged(const QString &key, const QVariant &value);
+    void slotValueChanged(const QString &group, const QString &key, const QVariant &value);
     /**
      * @short View size
      */
@@ -90,6 +91,12 @@ void GridManagerPrivate::recomputeGridCount()
     int cellVMargin = gridCellMarginsSize.height();
 
     if(cellWidth == 0 || cellHeight == 0) {
+        gridSize = QSize(0, 0);
+        return;
+    }
+
+    if (viewSize.width() <= 0 || viewSize.height() <= 0) {
+        gridSize = QSize(0, 0);
         return;
     }
 
@@ -100,20 +107,22 @@ void GridManagerPrivate::recomputeGridCount()
     if (newGridWidth != gridSize.width()) {
         gridSize.setWidth(newGridWidth);
         emit q->gridWidthChanged(newGridWidth);
+        emit q->containerWidthChanged(q->containerWidth());
     }
 
-    if (newGridHeight  != gridSize.height()) {
+    if (newGridHeight != gridSize.height()) {
         gridSize.setHeight(newGridHeight );
         emit q->gridHeightChanged(newGridHeight);
+        emit q->containerHeightChanged(q->containerHeight());
     }
 }
 
 void GridManagerPrivate::loadSettings()
 {
-    int cellWidth = settings->value(GRID_CELL_WIDTH_KEY).toInt();
-    int cellHeight = settings->value(GRID_CELL_HEIGHT_KEY).toInt();
-    int cellHMargin = settings->value(GRID_CELL_HMARGIN_KEY).toInt();
-    int cellVMargin = settings->value(GRID_CELL_VMARGIN_KEY).toInt();
+    int cellWidth = settings->value(GRID_GROUP, GRID_CELL_WIDTH_KEY).toInt();
+    int cellHeight = settings->value(GRID_GROUP, GRID_CELL_HEIGHT_KEY).toInt();
+    int cellHMargin = settings->value(GRID_GROUP, GRID_CELL_HMARGIN_KEY).toInt();
+    int cellVMargin = settings->value(GRID_GROUP, GRID_CELL_VMARGIN_KEY).toInt();
 
     gridCellSize.setWidth(cellWidth);
     gridCellSize.setHeight(cellHeight);
@@ -124,8 +133,13 @@ void GridManagerPrivate::loadSettings()
     recomputeGridCount();
 }
 
-void GridManagerPrivate::slotValueChanged(const QString &key, const QVariant &value)
+void GridManagerPrivate::slotValueChanged(const QString &group, const QString &key,
+                                          const QVariant &value)
 {
+    if (group != GRID_GROUP) {
+        return;
+    }
+
     if(key == GRID_CELL_WIDTH_KEY) {
         gridCellSize.setWidth(value.toInt());
         recomputeGridCount();
@@ -169,16 +183,42 @@ int GridManager::gridCellHeight() const
     return d->gridCellSize.height();
 }
 
+int GridManager::gridCellHorizontalMargin() const
+{
+    Q_D(const GridManager);
+    return d->gridCellMarginsSize.width();
+}
+
+int GridManager::gridCellVerticalMargin() const
+{
+    Q_D(const GridManager);
+    return d->gridCellMarginsSize.height();
+}
+
 int GridManager::gridWidth() const
 {
     Q_D(const GridManager);
     return d->gridSize.width();
 }
 
+int GridManager::containerWidth() const
+{
+    Q_D(const GridManager);
+    int cellAndMargin = d->gridCellSize.width() + d->gridCellMarginsSize.width();
+    return cellAndMargin * d->gridSize.width() - d->gridCellMarginsSize.width();
+}
+
 int GridManager::gridHeight() const
 {
     Q_D(const GridManager);
     return d->gridSize.height();
+}
+
+int GridManager::containerHeight() const
+{
+    Q_D(const GridManager);
+    int cellAndMargin = d->gridCellSize.height() + d->gridCellMarginsSize.height();
+    return cellAndMargin * d->gridSize.height() - d->gridCellMarginsSize.height();
 }
 
 Settings * GridManager::settings() const
@@ -215,8 +255,8 @@ void GridManager::setSettings(Settings *settings)
     if(d->settings == 0) {
         d->settings = settings;
         d->loadSettings();
-        connect(d->settings, SIGNAL(valueChanged(QString,QVariant)),
-                this, SLOT(slotValueChanged(QString,QVariant)));
+        connect(d->settings, SIGNAL(valueChanged(QString,QString,QVariant)),
+                this, SLOT(slotValueChanged(QString,QString,QVariant)));
 
         emit settingsChanged();
     }

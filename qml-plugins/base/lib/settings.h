@@ -37,22 +37,15 @@ class SettingsPrivate;
 class Settings : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString componentName READ componentName WRITE setComponentName
-               NOTIFY componentNameChanged)
     Q_PROPERTY(QDeclarativeListProperty<Widgets::SettingsEntry> defaultSettings
                READ defaultSettings)
 public:
     explicit Settings(QObject *parent = 0);
     virtual ~Settings();
-    QString componentName() const;
-    void setGroup(const QString &group);
-    void clearGroup();
-    Q_INVOKABLE QVariant value(const QString &key) const;
     Q_INVOKABLE QVariant value(const QString &group, const QString &key) const;
     QDeclarativeListProperty<SettingsEntry> defaultSettings();
 public Q_SLOTS:
     void reload();
-    void setComponentName(const QString &componentName);
     void setValue(const QString &key, const QVariant &value);
     void setValue(const QString &group, const QString &key, const QVariant &value);
 Q_SIGNALS:
@@ -60,7 +53,6 @@ Q_SIGNALS:
     void valueChanged(const QString &group, const QString &key, const QVariant &value);
 protected:
     Settings(SettingsPrivate *dd, QObject *parent = 0);
-    virtual bool event(QEvent *event);
     const QScopedPointer<SettingsPrivate> d_ptr;
 private:
     static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,

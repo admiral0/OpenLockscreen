@@ -56,22 +56,20 @@ void BackgroundManagerPrivate::loadSettings()
 {
     Q_Q(BackgroundManager);
 
-    settings->setGroup(BACKGROUND_GROUP);
-    wallpaperSource = settings->value(BACKGROUND_WALLPAPER_SOURCE).toString();
+    wallpaperSource = settings->value(BACKGROUND_GROUP, BACKGROUND_WALLPAPER_SOURCE).toString();
     emit q->wallpaperSourceChanged(wallpaperSource);
 
-    int wallPaperWidth = settings->value(BACKGROUND_WALLPAPER_WIDTH).toInt();
+    int wallPaperWidth = settings->value(BACKGROUND_GROUP, BACKGROUND_WALLPAPER_WIDTH).toInt();
     if(wallpaperSize.width() != wallPaperWidth) {
         wallpaperSize.setWidth(wallPaperWidth);
         emit q->wallpaperWidthChanged(wallPaperWidth);
     }
 
-    int wallPaperHeight = settings->value(BACKGROUND_WALLPAPER_HEIGHT).toInt();
+    int wallPaperHeight = settings->value(BACKGROUND_GROUP, BACKGROUND_WALLPAPER_HEIGHT).toInt();
     if(wallpaperSize.height() != wallPaperHeight) {
         wallpaperSize.setHeight(wallPaperHeight);
         emit q->wallpaperHeightChanged(wallPaperHeight);
     }
-    settings->clearGroup();
 }
 
 void BackgroundManagerPrivate::slotValueChanged(const QString &group, const QString &key,

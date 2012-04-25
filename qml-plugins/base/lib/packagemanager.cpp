@@ -219,8 +219,9 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         query.finish();
         QMap<QString, QString> informations;
 
-        query.prepare("SELECT name, value FROM componentInformation INNER JOIN componentInformationProperties ON componentInformation.informationId = componentInformationProperties.id WHERE componentId=:componentId");
+        query.prepare("SELECT name, value FROM componentInformation INNER JOIN componentInformationProperties ON componentInformation.informationId = componentInformationProperties.id WHERE componentInformation.componentId=:componentId AND componentInformation.componentTypeId=:componentTypeId");
         query.bindValue(":componentId", dockId);
+        query.bindValue(":componentTypeId", dockTypeId);
         d->executeQuery(&query);
 
         while (query.next()) {
@@ -330,14 +331,14 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         }
 
         value = new WidgetBaseProperties(this);
-        int dockId = query.value(0).toInt();
+        int widgetId = query.value(0).toInt();
 
         value->setFileName(widgetFilename);
         value->setPackageIdentifier(packageIdentifier);
 
         query.prepare("SELECT language, name, description FROM componentLocalizedInformation WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
         query.bindValue(":componentTypeId", widgetTypeId);
-        query.bindValue(":componentId", dockId);
+        query.bindValue(":componentId", widgetId);
         d->executeQuery(&query);
         while (query.next()) {
             QString language = query.value(0).toString();
@@ -355,8 +356,9 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         query.finish();
         QMap<QString, QString> informations;
 
-        query.prepare("SELECT name, value FROM componentInformation INNER JOIN componentInformationProperties ON componentInformation.informationId = componentInformationProperties.id WHERE componentId=:componentId");
-        query.bindValue(":componentId", dockId);
+        query.prepare("SELECT name, value FROM componentInformation INNER JOIN componentInformationProperties ON componentInformation.informationId = componentInformationProperties.id WHERE componentInformation.componentId=:componentId AND componentInformation.componentTypeId=:componentTypeId");
+        query.bindValue(":componentId", widgetId);
+        query.bindValue(":componentTypeId", widgetTypeId);
         d->executeQuery(&query);
 
         while (query.next()) {

@@ -26,7 +26,6 @@ Item {
     HorizontalParallaxBackground {
         view: container.view
         settings: Settings {
-            componentName: "background"
             defaultSettings: [
                 SettingsEntry {
                     group: "background"

@@ -18,36 +18,25 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
-#include <QtCore/QEvent>
+#include <QtCore/QSettings>
 #include <QtCore/QVariantMap>
 #include <QtGui/QDesktopServices>
 
-#include "abstractsettings_p.h"
 #include "widgets_global.h"
 #include "xmlserializableinterface.h"
 
 
 namespace Widgets
 {
-
-static const char *GROUP_ELEMENT = "group";
-static const char *GROUP_ATTRIBUTE = "group";
-static const char *PAIR_ELEMENT = "pair";
-static const char *KEY_ATTRIBUTE = "key";
-static const char *VALUE_ATTRIBUTE = "value";
-
-class SettingsPrivate: public AbstractSettingsPrivate
+class SettingsPrivate
 {
 public:
     SettingsPrivate(Settings *q = 0);
     void setDefaultValue(const QString &group, const QString &key, const QVariant &value);
     void copyDefaultValues();
-    virtual void clear();
-    virtual bool fromXmlElement(const QDomElement &element);
-    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
+
     QMap<QString, QVariantMap> defaultSettings;
-    QMap<QString, QVariantMap> settings;
-    QString currentGroup;
+    QSettings settings;
 
 private:
     Q_DECLARE_PUBLIC(Settings)
@@ -55,7 +44,7 @@ private:
 };
 
 SettingsPrivate::SettingsPrivate(Settings *q):
-    AbstractSettingsPrivate(q), q_ptr(q)
+    q_ptr(q)
 {
 }
 
@@ -73,15 +62,14 @@ void SettingsPrivate::setDefaultValue(const QString &group, const QString &key,
         emit q->valueChanged(group, key, value);
     }
 
-    if (!settings.contains(group)) {
-        settings.insert(group, QVariantMap());
+    settings.beginGroup(group);
+
+    if(!settings.contains(key)) {
+        settings.setValue(key, value);
+        emit q->valueChanged(group, key, value);
     }
 
-    if(!settings[group].contains(key)) {
-        settings[group].insert(key, value);
-        emit q->valueChanged(group, key, value);
-        requestSave();
-    }
+    settings.endGroup();
 }
 
 void SettingsPrivate::copyDefaultValues()
@@ -93,9 +81,7 @@ void SettingsPrivate::copyDefaultValues()
         QString group = groupIterator.key();
         QVariantMap pair = groupIterator.value();
 
-        if (!settings.contains(group)) {
-            settings.insert(group, QVariantMap());
-        }
+        settings.beginGroup(group);
 
         QMapIterator<QString, QVariant> pairIterator =
                 QMapIterator<QString, QVariant>(pair);
@@ -104,79 +90,13 @@ void SettingsPrivate::copyDefaultValues()
             QString key = pairIterator.key();
             QVariant value = pairIterator.value();
 
-            if (!settings[group].contains(key)) {
-                settings[group].insert(key, value);
-            }
-        }
-    }
-}
-
-void SettingsPrivate::clear()
-{
-    settings.clear();
-}
-
-bool SettingsPrivate::fromXmlElement(const QDomElement &element)
-{
-    if (element.tagName() != SETTINGS_ELEMENT) {
-        return false;
-    }
-
-    QDomElement groupElement = element.firstChildElement(GROUP_ELEMENT);
-    while (!groupElement.isNull()) {
-        QString group = groupElement.attribute(GROUP_ATTRIBUTE);
-        if (!settings.contains(group)) {
-            settings.insert(group, QVariantMap());
+            settings.setValue(key, value);
         }
 
-        QDomElement pairElement = groupElement.firstChildElement(PAIR_ELEMENT);
-        while (!pairElement.isNull()) {
-            QString key = pairElement.attribute(KEY_ATTRIBUTE);
-            QVariant value = QVariant(pairElement.attribute(VALUE_ATTRIBUTE));
-
-            settings[group].insert(key, value);
-
-            pairElement = pairElement.nextSiblingElement(PAIR_ELEMENT);
-        }
-        groupElement = groupElement.nextSiblingElement(GROUP_ELEMENT);
+        settings.endGroup();
     }
 
-    return true;
-}
-
-QDomElement SettingsPrivate::toXmlElement(const QString &tagName, QDomDocument *document) const
-{
-    QDomElement element = document->createElement(tagName);
-
-    QMapIterator<QString, QVariantMap> groupIterator =
-            QMapIterator<QString, QVariantMap>(settings);
-    while (groupIterator.hasNext()) {
-        groupIterator.next();
-        QString group = groupIterator.key();
-        QVariantMap pair = groupIterator.value();
-
-        QDomElement groupElement = document->createElement(GROUP_ELEMENT);
-        groupElement.setAttribute(GROUP_ATTRIBUTE, group);
-
-        QMapIterator<QString, QVariant> pairIterator =
-                QMapIterator<QString, QVariant>(pair);
-
-        while (pairIterator.hasNext()) {
-            pairIterator.next();
-            QString key = pairIterator.key();
-            QVariant value = pairIterator.value();
-
-            QDomElement pairElement = document->createElement(PAIR_ELEMENT);
-            pairElement.setAttribute(KEY_ATTRIBUTE, key);
-            pairElement.setAttribute(VALUE_ATTRIBUTE, value.toString());
-
-            groupElement.appendChild(pairElement);
-        }
-
-        element.appendChild(groupElement);
-    }
-
-    return element;
+    defaultSettings.clear();
 }
 
 ////// End of private class //////
@@ -195,29 +115,11 @@ Settings::~Settings()
 {
 }
 
-void Settings::setGroup(const QString &group)
-{
-    Q_D(Settings);
-    d->currentGroup = group;
-}
-
-void Settings::clearGroup()
-{
-    Q_D(Settings);
-    d->currentGroup = QString();
-}
-
-QVariant Settings::value(const QString &key) const
-{
-    Q_D(const Settings);
-    return value(d->currentGroup, key);
-}
-
 QVariant Settings::value(const QString &group, const QString &key) const
 {
 
     Q_D(const Settings);
-    return d->settings.value(group).value(key);
+    return d->settings.value(QString("%1/%2").arg(group).arg(key));
 }
 
 QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
@@ -226,53 +128,10 @@ QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
                                                    &Widgets::Settings::appendDefaultSettings);
 }
 
-void Settings::reload()
-{
-    Q_D(Settings);
-
-    d->load();
-    d->copyDefaultValues();
-}
-
-void Settings::setComponentName(const QString &componentName)
-{
-    Q_D(Settings);
-    if (d->componentName != componentName) {
-        d->componentName = componentName;
-        emit componentNameChanged(componentName);
-
-        reload();
-    }
-}
-
-void Settings::setValue(const QString &key, const QVariant &value)
-{
-    Q_D(Settings);
-    setValue(d->currentGroup, key, value);
-}
-
 void Settings::setValue(const QString &group, const QString &key, const QVariant &value)
 {
     Q_D(Settings);
-    if (!d->settings.contains(group)) {
-        d->settings.insert(group, QVariantMap());
-    }
-
-    if(d->settings[group].value(key) != value) {
-        d->settings[group].insert(key, value);
-        emit valueChanged(group, key, value);
-        d->requestSave();
-    }
-}
-
-bool Settings::event(QEvent *event)
-{
-    Q_D(Settings);
-    if (event->type() == QEvent::UpdateRequest) {
-        d->save();
-        return true;
-    }
-    return QObject::event(event);
+    d->settings.setValue(QString("%1/%2").arg(group).arg(key), value);
 }
 
 void Settings::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,

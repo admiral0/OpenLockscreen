@@ -36,19 +36,36 @@ Page {
     }
 
     DockedView {
-        content: ListView {
-            id: view
+        content: Item {
+            id: widgets
             anchors.fill: parent
-            orientation: ListView.Horizontal
-            delegate: Item {
-                width: view.width
-                height: view.height
-            }
 
-            model: ListModel {
-                ListElement {}
-                ListElement {}
-                ListElement {}
+            WidgetsView {
+                id: widgetsView
+                content: Item {
+                    anchors.fill: parent
+                    ListView {
+                        id: view
+                        orientation: ListView.Horizontal
+                        anchors.fill: parent
+                        spacing: widgets.width - view.width
+                        delegate: Item {
+                            width: view.width
+                            height: view.height
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: model.color
+                            }
+                        }
+
+                        model: ListModel {
+                            ListElement {color: "red"}
+                            ListElement {color: "green"}
+                            ListElement {color: "blue"}
+                        }
+                    }
+                }
             }
         }
     }

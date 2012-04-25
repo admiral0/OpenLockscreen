@@ -26,6 +26,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtCore/QMutexLocker>
 #include <QtGui/QDesktopServices>
 
 #include "widgets_global.h"
@@ -34,7 +35,7 @@ namespace Widgets
 {
 
 AbstractSettingsPrivate::AbstractSettingsPrivate(QObject *settingsObject):
-    XmlSerializableInterface(), settingsObject(settingsObject)
+    XmlSerializableInterface(), settingsObject(settingsObject), mutex()
 {
 }
 
@@ -50,6 +51,8 @@ QString AbstractSettingsPrivate::settingsFilePath() const
 
 void AbstractSettingsPrivate::load()
 {
+    QMutexLocker locker (&mutex);
+    Q_UNUSED(locker)
     if (componentName.isEmpty()) {
         return;
     }
@@ -83,18 +86,18 @@ void AbstractSettingsPrivate::save()
     }
 
     QFile *output = new QFile(settingsFilePath());
-    W_ASSERT(output->open(QIODevice::WriteOnly));
+    W_ASSERT(output->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate));
 
-    QDomDocument document = QDomDocument();
+    QDomDocument outputDocument = QDomDocument();
 
     // Declaration
     QDomProcessingInstruction xmlDeclaration =
-                document.createProcessingInstruction("xml", "version=\"1.0\"");
-        document.appendChild(xmlDeclaration);
-    QDomElement element = toXmlElement(SETTINGS_ELEMENT, &document);
-    document.appendChild(element);
+                outputDocument.createProcessingInstruction("xml", "version=\"1.0\"");
+        outputDocument.appendChild(xmlDeclaration);
+    QDomElement element = toXmlElement(SETTINGS_ELEMENT, &outputDocument);
+    outputDocument.appendChild(element);
 
-    output->write(document.toByteArray(2));
+    output->write(outputDocument.toByteArray(2));
 
     output->close();
     output->deleteLater();
