@@ -23,6 +23,7 @@
 #include "componentbase_p.h"
 #include "desktopparser.h"
 #include "desktopparserdefines.h"
+#include "tools.h"
 
 namespace Widgets
 {
@@ -34,6 +35,8 @@ static const char *DESKTOP_FILE_PLUGIN_INFO_EMAIL = "X-Widgets-PluginInfo-Email"
 static const char *DESKTOP_FILE_PLUGIN_INFO_WEBSITE = "X-Widgets-PluginInfo-Website";
 static const char *DESKTOP_FILE_PLUGIN_INFO_NAME = "X-Widgets-PluginInfo-Name";
 static const char *DESKTOP_FILE_PLUGIN_INFO_VERSION = "X-Widgets-PluginInfo-Version";
+static const char *DESKTOP_FILE_PLUGIN_INFO_VISIBLE = "X-Widgets-PluginInfo-Visible";
+static const char *DESKTOP_FILE_PLUGIN_INFO_TAGS = "X-Widgets-PluginInfo-Tags";
 
 class PackagePrivate: public ComponentBasePrivate
 {
@@ -46,6 +49,8 @@ public:
     QString email;
     QString website;
     Version version;
+    bool visible;
+    QStringList tags;
 protected:
     virtual void parseDesktopFile(const DesktopParser &parser);
     virtual bool checkValid(const DesktopParser &parser);
@@ -56,6 +61,7 @@ private:
 PackagePrivate::PackagePrivate(Package *q):
     ComponentBasePrivate(q)
 {
+    visible = true;
 }
 
 void PackagePrivate::parseDesktopFile(const DesktopParser &parser)
@@ -71,7 +77,14 @@ void PackagePrivate::parseDesktopFile(const DesktopParser &parser)
     q->setEmail(parser.value(DESKTOP_FILE_PLUGIN_INFO_EMAIL).toString());
     q->setWebsite(parser.value(DESKTOP_FILE_PLUGIN_INFO_WEBSITE).toString());
     QString version = parser.value(DESKTOP_FILE_PLUGIN_INFO_VERSION).toString();
+    QString tagString = parser.value(DESKTOP_FILE_PLUGIN_INFO_TAGS).toString();
+    QStringList tags = tagString.split(";", QString::SkipEmptyParts);
+    q->setTags(tags);
     q->setVersion(Version::fromString(version));
+    if (parser.contains(DESKTOP_FILE_PLUGIN_INFO_VISIBLE)) {
+        q->setVisible(
+                    Tools::stringToBool(parser.value(DESKTOP_FILE_PLUGIN_INFO_VISIBLE).toString()));
+    }
 }
 
 bool PackagePrivate::checkValid(const DesktopParser &parser)
@@ -151,6 +164,18 @@ Version Package::version() const
     return d->version;
 }
 
+bool Package::isVisible() const
+{
+    W_D(const Package);
+    return d->visible;
+}
+
+QStringList Package::tags() const
+{
+    W_D(const Package);
+    return d->tags;
+}
+
 void Package::setIdentifier(const QString &identifier)
 {
     W_D(Package);
@@ -216,28 +241,21 @@ void Package::setVersion(const Version &version)
     }
 }
 
+void Package::setVisible(bool visible)
+{
+    W_D(Package);
+    d->visible = visible;
+}
+
+void Package::setTags(const QStringList tags)
+{
+    W_D(Package);
+    d->tags = tags;
+}
+
 Package * Package::fromDesktopFile(const QString &desktopFile, QObject *parent)
 {
     return new Package(desktopFile, parent);
-}
-
-QDebug operator<<(QDebug debug, Package *package)
-{
-    debug.nospace() << "Package (";
-    debug.nospace() << "defaultName: " << package->defaultName() << " ";
-    debug.nospace() << "defaultDesription: " << package->defaultDescription() << " ";
-    debug.nospace() << "name: " << package->name() << " ";
-    debug.nospace() << "desription: " << package->description() << " ";
-    debug.nospace() << "icon: " << package->icon() << " ";
-    debug.nospace() << "identifier: " << package->identifier() << " ";
-    debug.nospace() << "directory: " << package->directory() << " ";
-    debug.nospace() << "plugin: " << package->plugin() << " ";
-    debug.nospace() << "author: " << package->author() << " ";
-    debug.nospace() << "email: " << package->email() << " ";
-    debug.nospace() << "website: " << package->website() << " ";
-    debug.nospace() << "version: " << package->version().toString();
-    debug.nospace() << ")";
-    return debug.space();
 }
 
 }

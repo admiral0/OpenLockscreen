@@ -43,9 +43,9 @@ maemoDockFiles.files = $${MAEMO_DOCK_FILES}
 export(maemoDockFiles.path)
 export(maemoDockFiles.files)
 
-analogicClock.path = $${INSTALL_PATH}/widgets/analogic-clock
-analogicClock.files = $${ANALOGIC_CLOCK_FILES}
-export(analogicClock.path)
-export(analogicClock.files)
+analogicClockFiles.path = $${INSTALL_PATH}/widgets/analogic-clock
+analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
+export(analogicClockFiles.path)
+export(analogicClockFiles.files)
 
-INSTALLS += androidDockFiles maemoDockFiles analogicClock
+INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles

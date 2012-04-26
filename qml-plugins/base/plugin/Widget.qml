@@ -21,5 +21,12 @@ Item {
     property string identifier
     property bool enabled
     property variant settings
+    property int minimumWidth
+    property int minimumHeight
+    property int maximumWidth
+    property int maximumHeight
+    property bool settingsEnabled: false
+    width: minimumWidth
+    height: minimumHeight
     signal showSettings
 }

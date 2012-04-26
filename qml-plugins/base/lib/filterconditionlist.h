@@ -14,46 +14,38 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#ifndef WIDGETS_FILTERCONDITIONLIST_H
+#define WIDGETS_FILTERCONDITIONLIST_H
 
-#include "graphicalcomponentbase_p.h"
+#include <QtCore/QObject>
+#include <QtDeclarative/QDeclarativeListProperty>
 
-#include <QtCore/QDebug>
-#include <QtCore/QVariant>
-
-#include "desktopparser.h"
-#include "tools.h"
+#include "filtercondition.h"
 
 namespace Widgets
 {
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
-    ComponentBasePrivate(q)
+class FilterConditionListPrivate;
+class FilterConditionList: public QObject
 {
-    settingsEnabled = false;
-}
-
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
-                                                             const QString &packageIdentifier,
-                                                             GraphicalComponentBase *q):
-    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
-{
-    settingsEnabled = false;
-}
-
-bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
-{
-    return ComponentBasePrivate::checkValid(parser);
-}
-
-void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
-{
-    ComponentBasePrivate::parseDesktopFile(parser);
-}
+    Q_OBJECT
+    Q_PROPERTY(QDeclarativeListProperty<Widgets::FilterCondition> conditions
+               READ conditions)
+    Q_CLASSINFO("DefaultProperty", "conditions")
+public:
+    explicit FilterConditionList(QObject *parent = 0);
+    virtual ~FilterConditionList();
+    QDeclarativeListProperty<FilterCondition> conditions();
+    QStringList tags() const;
+Q_SIGNALS:
+    void conditionListChanged();
+protected:
+    explicit FilterConditionList(FilterConditionListPrivate *dd, QObject *parent = 0);
+    const QScopedPointer<FilterConditionListPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(FilterConditionList)
+};
 
 }
+
+#endif // WIDGETS_FILTERCONDITIONLIST_H

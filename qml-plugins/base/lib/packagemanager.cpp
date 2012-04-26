@@ -112,6 +112,19 @@ Package * PackageManager::package(const QString &identifier)
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
         value->setWebsite(informations.value(PACKAGE_INFORMATION_WEBSITE));
         value->setVersion(Version::fromString(informations.value(PACKAGE_INFORMATION_VERSION)));
+        value->setVisible(Tools::stringToBool(informations.value(PACKAGE_INFORMATION_VISIBLE)));
+
+
+        query.prepare("SELECT tags.name FROM tags INNER JOIN packageTags ON tags.id=packageTags.tagId WHERE packageTags.packageId=:packageId");
+        query.bindValue(":packageId", packageId);
+        d->executeQuery(&query);
+
+        QStringList tags;
+        while (query.next()) {
+            QString tag = query.value(0).toString();
+            tags.append(tag);
+        }
+        value->setTags(tags);
     }
     QSqlDatabase::removeDatabase("get_package");
 
@@ -126,8 +139,27 @@ QStringList PackageManager::registeredPackages() const
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_registered_packages");
         db.setDatabaseName(d->databasePath());
         W_ASSERT(db.open());
+
         QSqlQuery query = QSqlQuery(db);
-        query.prepare("SELECT identifier FROM packages");
+        QStringList tags;
+        if (filter() != 0) {
+            tags = filter()->tags();
+        }
+        if (tags.isEmpty()) {
+            query.prepare("SELECT DISTINCT packages.identifier FROM packages");
+        } else {
+            QStringList queryConditions;
+            QString queryString = "SELECT DISTINCT packages.identifier FROM packages INNER JOIN packageTags ON packages.id=packageTags.packageId INNER JOIN tags ON packageTags.tagId=tags.id WHERE %1";
+            for (int i = 0; i < tags.count(); i++) {
+                queryConditions.append("tags.name=?");
+            }
+            queryString = queryString.arg(queryConditions.join(" OR "));
+            query.prepare(queryString);
+            for (int i = 0; i < tags.count(); i++) {
+                query.bindValue(i, tags.at(i));
+            }
+        }
+
         d->executeQuery(&query);
         while (query.next()) {
             values.append(query.value(0).toString());
@@ -149,7 +181,7 @@ QString PackageManager::dockFile(const QString &packageIdentifier, const QString
         W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
-        query.prepare("SELECT packages.directory, docks.directory FROM packages INNER JOIN docks ON packages.id=docks.packageId WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
+        query.prepare("SELECT DISTINCT packages.directory, docks.directory FROM packages INNER JOIN docks ON packages.id=docks.packageId WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
         query.bindValue(":packageIdentifier", packageIdentifier);
         query.bindValue(":dockFile", dockFilename);
         d->executeQuery(&query);
@@ -239,8 +271,8 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         QString anchorsRightString = informations.value(DOCK_INFORMATION_ANCHORS_RIGHT);
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
         value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
-        value->setWidth(informations.value(COMPONENT_INFORMATION_WIDTH).toInt());
-        value->setHeight(informations.value(COMPONENT_INFORMATION_HEIGHT).toInt());
+        value->setWidth(informations.value(DOCK_INFORMATION_WIDTH).toInt());
+        value->setHeight(informations.value(DOCK_INFORMATION_HEIGHT).toInt());
         value->setAnchorsTop(Tools::stringToBool(anchorsTopString));
         value->setAnchorsBottom(Tools::stringToBool(anchorsBottomString));
         value->setAnchorsLeft(Tools::stringToBool(anchorsLeftString));
@@ -372,8 +404,10 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         QString settingsEnabledString = informations.value(COMPONENT_INFORMATION_SETTINGS_ENABLED);
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
         value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
-        value->setWidth(informations.value(COMPONENT_INFORMATION_WIDTH).toInt());
-        value->setHeight(informations.value(COMPONENT_INFORMATION_HEIGHT).toInt());
+        value->setMinimumWidth(informations.value(WIDGET_INFORMATION_MINIMUM_WIDTH).toInt());
+        value->setMinimumHeight(informations.value(WIDGET_INFORMATION_MINIMUM_HEIGHT).toInt());
+        value->setMaximumWidth(informations.value(WIDGET_INFORMATION_MAXIMUM_WIDTH).toInt());
+        value->setMaximumHeight(informations.value(WIDGET_INFORMATION_MAXIMUM_HEIGHT).toInt());
 
     }
     QSqlDatabase::removeDatabase("get_widget");
@@ -403,6 +437,12 @@ QStringList PackageManager::registeredWidgets(const QString &packageIdentifier) 
     return values;
 }
 
+FilterConditionList * PackageManager::filter() const
+{
+    Q_D(const PackageManager);
+    return d->filter;
+}
+
 void PackageManager::update()
 {
     Q_D(PackageManager);
@@ -415,11 +455,23 @@ void PackageManager::update()
         d->executeQuery(&query);
         query.finish();
 
+        query.prepare("DELETE FROM docks");
+        d->executeQuery(&query);
+        query.finish();
+
+        query.prepare("DELETE FROM widgets");
+        d->executeQuery(&query);
+        query.finish();
+
         query.prepare("DELETE FROM componentInformation");
         d->executeQuery(&query);
         query.finish();
 
         query.prepare("DELETE FROM componentLocalizedInformation");
+        d->executeQuery(&query);
+        query.finish();
+
+        query.prepare("DELETE FROM tags");
         d->executeQuery(&query);
         query.finish();
     }
@@ -432,7 +484,17 @@ void PackageManager::update()
     foreach (QFileInfo folder, folders) {
         d->addPackage(folder.absoluteFilePath());
     }
+}
 
+void PackageManager::setFilter(FilterConditionList *filter)
+{
+    Q_D(PackageManager);
+    if (d->filter != filter) {
+        d->filter = filter;
+        emit filterChanged();
+
+        connect(d->filter, SIGNAL(conditionListChanged()), this, SIGNAL(filterChanged()));
+    }
 }
 
 }

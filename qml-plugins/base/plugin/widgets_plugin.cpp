@@ -33,8 +33,8 @@
 #include "packagemanager.h"
 #include "settings.h"
 #include "settingsentry.h"
-#include "dockbaseproperties.h"
-#include "dockproperties.h"
+#include "filterconditionlist.h"
+#include "filtercondition.h"
 
 void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -52,8 +52,13 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
     QString reason = "Only one instance of PackageManager is allowed";
     qmlRegisterUncreatableType<Widgets::PackageManager>(uri, 1, 0, "PackageManager", reason);
+//    qmlRegisterType<Widgets::PackageManager>(uri, 1, 0, "PackageManager");
+    qmlRegisterType<Widgets::FilterConditionList>(uri, 1, 0,"FilterConditionList");
+    qmlRegisterType<Widgets::FilterCondition>(uri, 1, 0,"FilterCondition");
     qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
     qmlRegisterType<Widgets::DockProperties>(uri, 1, 0, "DockProperties");
+
+
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)

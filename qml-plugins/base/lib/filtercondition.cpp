@@ -14,46 +14,46 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
-
-#include "graphicalcomponentbase_p.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QVariant>
-
-#include "desktopparser.h"
-#include "tools.h"
+#include "filtercondition.h"
 
 namespace Widgets
 {
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
-    ComponentBasePrivate(q)
+class FilterConditionPrivate
 {
-    settingsEnabled = false;
+public:
+    QString tag;
+};
+
+////// End of private class //////
+
+FilterCondition::FilterCondition(QObject *parent) :
+    QObject(parent), d_ptr(new FilterConditionPrivate())
+{
 }
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
-                                                             const QString &packageIdentifier,
-                                                             GraphicalComponentBase *q):
-    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
+FilterCondition::FilterCondition(FilterConditionPrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
 {
-    settingsEnabled = false;
 }
 
-bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
+FilterCondition::~FilterCondition()
 {
-    return ComponentBasePrivate::checkValid(parser);
 }
 
-void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
+QString FilterCondition::tag() const
 {
-    ComponentBasePrivate::parseDesktopFile(parser);
+    Q_D(const FilterCondition);
+    return d->tag;
+}
+
+void FilterCondition::setTag(const QString &tag)
+{
+    Q_D(FilterCondition);
+    if (d->tag != tag) {
+        d->tag = tag;
+        emit tagChanged(tag);
+    }
 }
 
 }

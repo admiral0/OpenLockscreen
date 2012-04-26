@@ -135,6 +135,7 @@ void WidgetInformationModel::setPackageManager(PackageManager *packageManager)
         emit packageManagerChanged();
 
         update();
+        connect(d->packageManager, SIGNAL(filterChanged()), this, SLOT(update()));
     }
 }
 

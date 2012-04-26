@@ -41,7 +41,8 @@ public:
                                 WidgetBaseProperties *q);
     virtual bool checkValid(const DesktopParser &parser);
     virtual void parseDesktopFile(const DesktopParser &parser);
-    QSize size;
+    QSize minimumSize;
+    QSize maximumSize;
 private:
     Q_DECLARE_PUBLIC(WidgetBaseProperties)
 };

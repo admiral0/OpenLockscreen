@@ -50,10 +50,13 @@ public:
     void addLocalizedInformation(const char *type, int componentId,
                                  const QStringList &languages, const QStringList &names,
                                  const QStringList &descriptions);
+    int tagId(const QString &tag);
+    void addTags(int packageId, const QStringList &tags);
     void addPackage(const QString &path);
     void scanPackageFolder(int packageId, const QString &path, const QString &packageIdentifier);
     void addDock(int packageId, const QString &subdirectory, DockBaseProperties *dock);
     void addWidget(int packageId, const QString &subdirectory, WidgetBaseProperties *widget);
+    FilterConditionList *filter;
 private:
     Q_DECLARE_PUBLIC(PackageManager)
     PackageManager * const q_ptr;

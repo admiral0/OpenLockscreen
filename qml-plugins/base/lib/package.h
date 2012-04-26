@@ -50,6 +50,8 @@ public:
     QString email() const;
     QString website() const;
     Version version() const;
+    bool isVisible() const;
+    QStringList tags() const;
     static Package * fromDesktopFile(const QString &desktopFile, QObject *parent = 0);
 Q_SIGNALS:
     void identifierChanged();
@@ -70,12 +72,11 @@ private:
     void setEmail(const QString &email);
     void setWebsite(const QString &website);
     void setVersion(const Version &version);
+    void setVisible(bool isVisible);
+    void setTags(const QStringList tags);
     W_DECLARE_PRIVATE(Package)
     friend class PackageManager;
 };
-
-QDebug operator<<(QDebug debug, Package *package);
-
 
 }
 

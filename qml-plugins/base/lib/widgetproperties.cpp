@@ -14,46 +14,52 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#include "widgetproperties.h"
 
-#include "graphicalcomponentbase_p.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QVariant>
-
-#include "desktopparser.h"
-#include "tools.h"
+#include "dockpropertiesdefines.h"
+#include "dockbaseproperties_p.h"
+#include "graphicalcomponent_p.h"
 
 namespace Widgets
 {
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
-    ComponentBasePrivate(q)
+class WidgetPropertiesPrivate: public WidgetBasePropertiesPrivate, public GraphicalComponentPrivate
 {
-    settingsEnabled = false;
+public:
+    WidgetPropertiesPrivate(WidgetProperties *q);
+
+    void copyFromBase(WidgetBaseProperties *base);
+
+private:
+    Q_DECLARE_PUBLIC(WidgetBaseProperties)
+};
+
+WidgetPropertiesPrivate::WidgetPropertiesPrivate(WidgetProperties *q):
+    WidgetBasePropertiesPrivate(q), GraphicalComponentPrivate()
+{
 }
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
-                                                             const QString &packageIdentifier,
-                                                             GraphicalComponentBase *q):
-    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
+void WidgetPropertiesPrivate::copyFromBase(WidgetBaseProperties *base)
 {
-    settingsEnabled = false;
+    icon = base->icon();
+    defaultName = base->defaultName();
+    defaultDescription = base->defaultDescription();
+    foreach (QString language, base->languages()) {
+        QPair <QString, QString> data;
+        data.first = base->name(language);
+        data.second = base->description(language);
+        nameAndDescription.insert(language, data);
+    }
+
+
+    fileName = base->fileName();
+    packageIdentifier = base->packageIdentifier();
+    settingsEnabled = base->isSettingsEnabled();
+    size = QSize(base->width(), base->height());
+    anchorsTop = base->anchorsTop();
+    anchorsBottom = base->anchorsBottom();
+    anchorsLeft = base->anchorsLeft();
+    anchorsRight = base->anchorsRight();
 }
 
-bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
-{
-    return ComponentBasePrivate::checkValid(parser);
-}
-
-void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
-{
-    ComponentBasePrivate::parseDesktopFile(parser);
-}
-
-}
+////// End of private class //////

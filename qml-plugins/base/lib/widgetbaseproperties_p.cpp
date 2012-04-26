@@ -126,31 +126,71 @@ void WidgetBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
 
     // Check if the document is valid
     bool haveImport = data.contains("import org.SfietKonstantin.widgets");
-    bool haveDock = false;
+    bool haveWidget = false;
     QRegExp dockRegExp ("Widget(\\s*)\\{");
     if (data.indexOf(dockRegExp) != -1) {
-        haveDock = true;
+        haveWidget = true;
     }
 
-    if (!haveImport || !haveDock) {
+    // Width and height
+    QRegExp minimumWidthRegExp ("minimumWidth\\s*:\\s*(\\d+)");
+    QRegExp minimumHeightRegExp ("minimumHeight\\s*:\\s*(\\d+)");
+
+    int minimumWidth = -1;
+    int minimumHeight = -1;
+    if (minimumWidthRegExp.indexIn(data) != -1) {
+        minimumWidth = minimumWidthRegExp.cap(1).toInt();
+    }
+    if (minimumHeightRegExp.indexIn(data) != -1) {
+        minimumHeight = minimumHeightRegExp.cap(1).toInt();
+    }
+
+    QRegExp maximumWidthRegExp ("maximumWidth\\s*:\\s*(\\d+)");
+    QRegExp maximumHeightRegExp ("maximumHeight\\s*:\\s*(\\d+)");
+
+    int maximumWidth = -1;
+    int maximumHeight = -1;
+    if (maximumWidthRegExp.indexIn(data) != -1) {
+        maximumWidth = maximumWidthRegExp.cap(1).toInt();
+    }
+    if (maximumHeightRegExp.indexIn(data) != -1) {
+        maximumHeight = maximumHeightRegExp.cap(1).toInt();
+    }
+
+    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
+    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
+
+    if (widthRegExp.indexIn(data) != -1) {
+        int width = widthRegExp.cap(1).toInt();
+        minimumWidth = width;
+        maximumWidth = width;
+    }
+    if (heightRegExp.indexIn(data) != -1) {
+        int height = heightRegExp.cap(1).toInt();
+        minimumHeight = height;
+        maximumHeight = height;
+    }
+
+    bool sizeOk = (minimumWidth != -1 && minimumHeight != -1 &&
+                   maximumWidth != -1 && maximumHeight != -1);
+
+    if (!haveImport || !haveWidget || !sizeOk) {
         valid = false;
         return;
     }
 
-    // Width and height
-    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
-    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
+    minimumSize.setWidth(minimumWidth);
+    minimumSize.setHeight(minimumHeight);
+    maximumSize.setWidth(maximumWidth);
+    maximumSize.setHeight(maximumHeight);
 
-    int width = -1;
-    int height = -1;
-    if (widthRegExp.indexIn(data) != -1) {
-        width = widthRegExp.cap(1).toInt();
+
+    // Settings enabled
+    QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
+    if (settingsEnabledRegExp.indexIn(data) != -1) {
+        QString settingsEnabledString = settingsEnabledRegExp.cap(1);
+        settingsEnabled = Tools::stringToBool(settingsEnabledString);
     }
-    if (heightRegExp.indexIn(data) != -1) {
-        height = heightRegExp.cap(1).toInt();
-    }
-    size.setWidth(width);
-    size.setHeight(height);
 
     fileName = parser.value(DESKTOP_FILE_WIDGET_INFO_FILE).toString();
 }

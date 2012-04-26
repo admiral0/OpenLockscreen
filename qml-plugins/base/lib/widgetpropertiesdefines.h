@@ -14,18 +14,16 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKBASEPROPERTIESDEFINES_H
-#define WIDGETS_DOCKBASEPROPERTIESDEFINES_H
+#ifndef WIDGETS_WIDGETPROPERTIESDEFINES_H
+#define WIDGETS_WIDGETPROPERTIESDEFINES_H
 
 namespace Widgets
 {
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_TAGNAME = "geometry";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_WIDTH_ATTRIBUTE = "width";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_HEIGHT_ATTRIBUTE = "height";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_TOP_ATTRIBUTE = "anchors_top";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_BOTTOM_ATTRIBUTE = "anchors_bottom";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_LEFT_ATTRIBUTE = "anchors_left";
-//static const char *DOCK_BASE_PROPERTIES_GEOMETRY_ANCHORS_RIGHT_ATTRIBUTE = "anchors_right";
+static const char *WIDGET_PROPERTIES_SETTINGS_TAGNAME = "settings";
+static const char *WIDGET_PROPERTIES_SETTINGS_ENTRY_TAGNAME = "entry";
+static const char *WIDGET_PROPERTIES_SETTINGS_KEY_ATTRIBUTE = "key";
+static const char *WIDGET_PROPERTIES_SETTINGS_VALUE_ATTRIBUTE = "value";
+static const char *WIDGET_PROPERTIES_IDENTIFIER_ATTRIBUTE = "identifier";
 }
 
-#endif // WIDGETS_DOCKBASEPROPERTIESDEFINES_H
+#endif // WIDGETS_WIDGETPROPERTIESDEFINES_H

@@ -10,9 +10,11 @@ LIBS +=         -L ../lib/ -lwidgetsbase
 
 HEADERS +=      widgets_plugin.h \
                 gridmanager.h \
+#                widgetsviewpagemodel.h \
 
 SOURCES +=      widgets_plugin.cpp \
                 gridmanager.cpp \
+#                widgetsviewpagemodel.cpp \
 
 OTHER_FILES =   qmldir \
                 Widget.qml \

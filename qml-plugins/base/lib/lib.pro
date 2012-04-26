@@ -24,7 +24,6 @@ HEADERS +=      widgets_global.h \
                 graphicalcomponent_p.h \
                 dockbaseproperties.h \
                 dockbaseproperties_p.h \
-                dockbasepropertiesdefines.h \
                 dockproperties.h \
                 dockpropertiesdefines.h \
                 desktopparser.h \
@@ -34,9 +33,12 @@ HEADERS +=      widgets_global.h \
                 packagemanager_p.h \
                 packagemanagerdefines.h \
                 packagemanagerupdaterunnable.h \
-#                dockmodel.h \
-    widgetbaseproperties.h \
-    widgetbaseproperties_p.h
+                widgetbaseproperties.h \
+                widgetbaseproperties_p.h \
+#                widgetproperties.h \
+#                widgetpropertiesdefines.h
+    filterconditionlist.h \
+    filtercondition.h
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
@@ -55,8 +57,10 @@ SOURCES +=      version.cpp \
                 packagemanager.cpp \
                 packagemanager_p.cpp \
                 packagemanagerupdaterunnable.cpp \
-#                dockmodel.cpp \
-    widgetbaseproperties.cpp \
-    widgetbaseproperties_p.cpp
+                widgetbaseproperties.cpp \
+                widgetbaseproperties_p.cpp \
+#                widgetproperties.cpp
+    filterconditionlist.cpp \
+    filtercondition.cpp
 
 include(deployment.pri)

@@ -16,7 +16,6 @@
 
 #include "dockbaseproperties.h"
 #include "dockbaseproperties_p.h"
-#include "dockbasepropertiesdefines.h"
 
 #include <QtCore/QDebug>
 

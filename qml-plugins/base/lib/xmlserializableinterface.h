@@ -12,7 +12,10 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
+
+#ifndef WIDGETS_XMLSERIALIZABLEINTERFACE_H
+#define WIDGETS_XMLSERIALIZABLEINTERFACE_H
 
 /**
  * @file xmlserializableinterface.h
@@ -21,9 +24,6 @@
  * This file contains the definition of the
  * XmlSerializableInterface interface.
  */
-
-#ifndef WIDGETS_XMLSERIALIZABLEINTERFACE_H
-#define WIDGETS_XMLSERIALIZABLEINTERFACE_H
 
 #include <QtXml/QDomElement>
 

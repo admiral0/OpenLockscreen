@@ -34,6 +34,8 @@ public:
     SettingsPrivate(Settings *q = 0);
     void setDefaultValue(const QString &group, const QString &key, const QVariant &value);
     void copyDefaultValues();
+    static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
+                                      SettingsEntry *entry);
 
     QMap<QString, QVariantMap> defaultSettings;
     QSettings settings;
@@ -99,6 +101,15 @@ void SettingsPrivate::copyDefaultValues()
     defaultSettings.clear();
 }
 
+void SettingsPrivate::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
+                                            SettingsEntry *entry)
+{
+    Settings *settings = qobject_cast<Settings *>(list->object);
+    if(settings) {
+        settings->d_func()->setDefaultValue(entry->group(), entry->key(), entry->value());
+    }
+}
+
 ////// End of private class //////
 
 Settings::Settings(QObject *parent):
@@ -125,22 +136,13 @@ QVariant Settings::value(const QString &group, const QString &key) const
 QDeclarativeListProperty<SettingsEntry> Settings::defaultSettings()
 {
     return QDeclarativeListProperty<SettingsEntry>(this, 0,
-                                                   &Widgets::Settings::appendDefaultSettings);
+                                                   Widgets::SettingsPrivate::appendDefaultSettings);
 }
 
 void Settings::setValue(const QString &group, const QString &key, const QVariant &value)
 {
     Q_D(Settings);
     d->settings.setValue(QString("%1/%2").arg(group).arg(key), value);
-}
-
-void Settings::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
-                                     SettingsEntry *entry)
-{
-    Settings *settings = qobject_cast<Settings *>(list->object);
-    if(settings) {
-        settings->d_func()->setDefaultValue(entry->group(), entry->key(), entry->value());
-    }
 }
 
 }

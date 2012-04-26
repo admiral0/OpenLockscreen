@@ -135,6 +135,7 @@ void DockInformationModel::setPackageManager(PackageManager *packageManager)
         emit packageManagerChanged();
 
         update();
+        connect(d->packageManager, SIGNAL(filterChanged()), this, SLOT(update()));
     }
 }
 

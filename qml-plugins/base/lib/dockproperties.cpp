@@ -22,7 +22,6 @@
 namespace Widgets
 {
 
-
 class DockPropertiesPrivate: public DockBasePropertiesPrivate, public GraphicalComponentPrivate
 {
 public:

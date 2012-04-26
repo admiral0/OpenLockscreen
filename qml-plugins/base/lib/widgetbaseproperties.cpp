@@ -36,7 +36,7 @@ WidgetBaseProperties::WidgetBaseProperties(const QString &fileName,
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
     d->settingsEnabled = settingsEnabled;
-    d->size = QSize(width, height);
+    d->minimumSize = QSize(width, height);
 }
 
 WidgetBaseProperties::WidgetBaseProperties(WidgetBasePropertiesPrivate *dd, QObject *parent):
@@ -60,16 +60,28 @@ bool WidgetBaseProperties::isValid() const
     return d->valid;
 }
 
-int WidgetBaseProperties::width() const
+int WidgetBaseProperties::minimumWidth() const
 {
     W_D(const WidgetBaseProperties);
-    return d->size.width();
+    return d->minimumSize.width();
 }
 
-int WidgetBaseProperties::height() const
+int WidgetBaseProperties::minimumHeight() const
 {
     W_D(const WidgetBaseProperties);
-    return d->size.height();
+    return d->minimumSize.height();
+}
+
+int WidgetBaseProperties::maximumWidth() const
+{
+    W_D(const WidgetBaseProperties);
+    return d->maximumSize.width();
+}
+
+int WidgetBaseProperties::maximumHeight() const
+{
+    W_D(const WidgetBaseProperties);
+    return d->maximumSize.height();
 }
 
 bool WidgetBaseProperties::fromXmlElement(const QDomElement &element)
@@ -90,21 +102,39 @@ WidgetBaseProperties * WidgetBaseProperties::fromDesktopFile(const QString &desk
     return new WidgetBaseProperties(desktopFile, packageIdentifier, parent);
 }
 
-void WidgetBaseProperties::setWidth(int width)
+void WidgetBaseProperties::setMinimumWidth(int width)
 {
     W_D(WidgetBaseProperties);
-    if (d->size.width() != width) {
-        d->size.setWidth(width);
-        emit widthChanged(width);
+    if (d->minimumSize.width() != width) {
+        d->minimumSize.setWidth(width);
+        emit minimumWidthChanged(width);
     }
 }
 
-void WidgetBaseProperties::setHeight(int height)
+void WidgetBaseProperties::setMinimumHeight(int height)
 {
     W_D(WidgetBaseProperties);
-    if (d->size.height() != height) {
-        d->size.setHeight(height);
-        emit heightChanged(height);
+    if (d->minimumSize.height() != height) {
+        d->minimumSize.setHeight(height);
+        emit minimumHeightChanged(height);
+    }
+}
+
+void WidgetBaseProperties::setMaximumWidth(int width)
+{
+    W_D(WidgetBaseProperties);
+    if (d->maximumSize.width() != width) {
+        d->maximumSize.setWidth(width);
+        emit maximumWidthChanged(width);
+    }
+}
+
+void WidgetBaseProperties::setMaximumHeight(int height)
+{
+    W_D(WidgetBaseProperties);
+    if (d->maximumSize.height() != height) {
+        d->maximumSize.setHeight(height);
+        emit maximumHeightChanged(height);
     }
 }
 

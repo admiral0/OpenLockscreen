@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Core widgets
+Comment=Core widgets used on Harmattan
+Icon=
+Type=Service
+X-Widgets-ServiceType=plugin
+X-Widgets-PluginInfo-Id=org.SfietKonstantin.corewidgets
+X-Widgets-PluginInfo-Author=Lucien XU
+X-Widgets-PluginInfo-Tags=mobile-harmattan
+X-Widgets-PluginInfo-Email=sfietkonstantin@free.fr
+X-Widgets-PluginInfo-Website=https://gitorious.org/~sfietkonstantin
+X-Widgets-PluginInfo-Name=corewidgets
+X-Widgets-PluginInfo-Version=1.0.0
+X-Widgets-PluginInfo-Visible=false

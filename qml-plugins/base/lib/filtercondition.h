@@ -14,46 +14,34 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+#ifndef WIDGETS_FILTERCONDITION_H
+#define WIDGETS_FILTERCONDITION_H
 
-#include "graphicalcomponentbase_p.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QVariant>
-
-#include "desktopparser.h"
-#include "tools.h"
+#include <QtCore/QObject>
 
 namespace Widgets
 {
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
-    ComponentBasePrivate(q)
+class FilterConditionPrivate;
+class FilterCondition : public QObject
 {
-    settingsEnabled = false;
-}
-
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
-                                                             const QString &packageIdentifier,
-                                                             GraphicalComponentBase *q):
-    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
-{
-    settingsEnabled = false;
-}
-
-bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
-{
-    return ComponentBasePrivate::checkValid(parser);
-}
-
-void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
-{
-    ComponentBasePrivate::parseDesktopFile(parser);
-}
+    Q_OBJECT
+    Q_PROPERTY(QString tag READ tag WRITE setTag NOTIFY tagChanged)
+public:
+    explicit FilterCondition(QObject *parent = 0);
+    virtual ~FilterCondition();
+    QString tag() const;
+signals:
+    void tagChanged(const QString &tag);
+public slots:
+    void setTag(const QString &tag);
+protected:
+    FilterCondition(FilterConditionPrivate *dd, QObject *parent = 0);
+    const QScopedPointer<FilterConditionPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(FilterCondition)
+};
 
 }
+
+#endif // WIDGETS_FILTERCONDITION_H

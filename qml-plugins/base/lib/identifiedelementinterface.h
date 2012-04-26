@@ -14,6 +14,9 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_IDENTIFIEDELEMENTINTERFACE_H
+#define WIDGETS_IDENTIFIEDELEMENTINTERFACE_H
+
 /**
  * @file identifiedelementinterface.h
  * @short Definition of Widgets::IdentifiedElementInterface
@@ -22,8 +25,6 @@
  * Widgets::IdentifiedElementInterface class.
  */
 
-#ifndef WIDGETS_IDENTIFIEDELEMENTINTERFACE_H
-#define WIDGETS_IDENTIFIEDELEMENTINTERFACE_H
 
 #include <QtCore/QString>
 
@@ -32,11 +33,11 @@ namespace Widgets
 
 /**
  * @short Interface for elements with identifiers
- * 
+ *
  * This interface (even if it do not provide any
  * interface but only protected method) is used for
  * any class that needs to have unique identifier.
- * 
+ *
  * The protected method generateIdentifier() is
  * used to generate the needed unique identifier.
  */

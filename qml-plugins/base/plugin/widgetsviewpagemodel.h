@@ -22,8 +22,8 @@
  * Widgets::DisplayedPageWidgetsModel class.
  */
 
-#ifndef WIDGETS_DISPLAYEDPAGEWIDGETSMODEL_H
-#define WIDGETS_DISPLAYEDPAGEWIDGETSMODEL_H
+#ifndef WIDGETS_WIDGETSVIEWPAGEMODEL_H
+#define WIDGETS_WIDGETSVIEWPAGEMODEL_H
 
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QRect>
@@ -236,4 +236,4 @@ private:
 
 Q_DECLARE_METATYPE(Widgets::DisplayedPageWidgetsModel*)
 
-#endif // WIDGETS_DISPLAYEDPAGEWIDGETSMODEL_H
+#endif // WIDGETS_WIDGETSVIEWPAGEMODEL_H

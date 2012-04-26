@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #include "packageinformationmodel.h"
 
@@ -143,6 +143,7 @@ void PackageInformationModel::setPackageManager(PackageManager *packageManager)
         emit packageManagerChanged();
 
         update();
+        connect(d->packageManager, SIGNAL(filterChanged()), this, SLOT(update()));
     }
 }
 
@@ -159,7 +160,9 @@ void PackageInformationModel::update()
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
         Package *package = packageManager()->package(identifier);
-        d->data.append(package);
+        if (package->isVisible()) {
+            d->data.append(package);
+        }
 
         endInsertRows();
     }

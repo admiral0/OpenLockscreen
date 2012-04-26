@@ -12,10 +12,10 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef DOCKPROPERTIESDEFINES_H
-#define DOCKPROPERTIESDEFINES_H
+#ifndef WIDGETS_DOCKPROPERTIESDEFINES_H
+#define WIDGETS_DOCKPROPERTIESDEFINES_H
 
 namespace Widgets
 {
@@ -26,4 +26,4 @@ static const char *DOCK_PROPERTIES_SETTINGS_VALUE_ATTRIBUTE = "value";
 static const char *DOCK_PROPERTIES_IDENTIFIER_ATTRIBUTE = "identifier";
 }
 
-#endif // DOCKPROPERTIESDEFINES_H
+#endif // WIDGETS_DOCKPROPERTIESDEFINES_H

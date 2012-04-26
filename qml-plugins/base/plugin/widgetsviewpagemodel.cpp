@@ -23,7 +23,7 @@
  * implementation of Widgets::DisplayedPageWidgetsModel::DisplayedPageWidgetsModelPrivate.
  */
 
-#include "displayedpagewidgetsmodel.h"
+#include "widgetsviewpagemodel.h"
 #include "widgetproperties.h"
 #include "settings.h"
 #include "packagemanager.h"

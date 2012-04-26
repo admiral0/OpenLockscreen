@@ -24,6 +24,7 @@ Dock {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
+    settingsEnabled: true
 
     Item {
         id: bar

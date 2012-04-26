@@ -23,6 +23,14 @@ PageStackWindow {
     initialPage: mainPage
     Component.onCompleted: {
         theme.inverted = true
+        PackageManagerInstance.filter = packageManagerFilters
+    }
+
+    FilterConditionList {
+        id: packageManagerFilters
+        FilterCondition {
+            tag: "mobile-harmattan"
+        }
     }
 
     MainPage {

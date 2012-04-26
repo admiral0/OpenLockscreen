@@ -29,34 +29,48 @@ class WidgetBaseProperties: public GraphicalComponentBase
 {
     Q_OBJECT
     /**
-     * @short Width of the dock
+     * @short Minimum width of the dock
      */
-    Q_PROPERTY(int width READ width NOTIFY widthChanged)
+    Q_PROPERTY(int minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
     /**
-     * @short Height of the dock
+     * @short Minimum height of the dock
      */
-    Q_PROPERTY(int height READ height NOTIFY heightChanged)
+    Q_PROPERTY(int minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
+    /**
+     * @short Maximum width of the dock
+     */
+    Q_PROPERTY(int maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
+    /**
+     * @short Maximum height of the dock
+     */
+    Q_PROPERTY(int maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
 public:
     explicit WidgetBaseProperties(QObject *parent = 0);
     bool isValid() const;
-    int width() const;
-    int height() const;
+    int minimumWidth() const;
+    int minimumHeight() const;
+    int maximumWidth() const;
+    int maximumHeight() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
     static WidgetBaseProperties * fromDesktopFile(const QString &desktopFile,
                                                   const QString &packageIdentifier,
                                                   QObject *parent = 0);
 Q_SIGNALS:
-    void widthChanged(int width);
-    void heightChanged(int height);
+    void minimumWidthChanged(int width);
+    void minimumHeightChanged(int height);
+    void maximumWidthChanged(int width);
+    void maximumHeightChanged(int height);
 protected:
     explicit WidgetBaseProperties(const QString &fileName, const QString &packageIdentifier,
                                   bool settingsEnabled,
                                   int width, int height,
                                   QObject *parent = 0);
     explicit WidgetBaseProperties(WidgetBasePropertiesPrivate *dd, QObject *parent);
-    void setWidth(int width);
-    void setHeight(int height);
+    void setMinimumWidth(int width);
+    void setMinimumHeight(int height);
+    void setMaximumWidth(int width);
+    void setMaximumHeight(int height);
     friend class PackageManager;
 private:
     explicit WidgetBaseProperties(const QString &desktopFile,

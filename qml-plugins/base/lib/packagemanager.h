@@ -22,6 +22,7 @@
 #include "package.h"
 #include "dockbaseproperties.h"
 #include "widgetbaseproperties.h"
+#include "filterconditionlist.h"
 
 namespace Widgets
 {
@@ -30,6 +31,8 @@ class PackageManagerPrivate;
 class PackageManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Widgets::FilterConditionList * filter READ filter WRITE setFilter
+               NOTIFY filterChanged)
 public:
     explicit PackageManager(QObject *parent = 0);
     virtual ~PackageManager();
@@ -43,9 +46,12 @@ public:
     Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &packageIdentifier,
                                                        const QString &dockFilename);
     QStringList registeredWidgets(const QString &packageIdentifier) const;
+    FilterConditionList * filter() const;
 Q_SIGNALS:
+    void filterChanged();
 public Q_SLOTS:
     void update();
+    void setFilter(FilterConditionList *filter);
 protected:
     PackageManager(PackageManagerPrivate *dd, QObject *parent = 0);
     const QScopedPointer<PackageManagerPrivate> d_ptr;

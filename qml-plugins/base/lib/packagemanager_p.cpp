@@ -40,6 +40,7 @@ namespace Widgets
 PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
     q_ptr(q)
 {
+    filter = 0;
 }
 
 QString PackageManagerPrivate::databasePath() const
@@ -174,6 +175,14 @@ void PackageManagerPrivate::prepareDatabase()
         executeQuery(&query);
         query.finish();
 
+        query.prepare("CREATE TABLE IF NOT EXISTS tags (id INTEGER PRIMARY KEY, name STRING)");
+        executeQuery(&query);
+        query.finish();
+
+        query.prepare("CREATE TABLE IF NOT EXISTS packageTags (packageId INTEGER, tagId INTEGER)");
+        executeQuery(&query);
+        query.finish();
+
         QStringList componentTypes;
         componentTypes.append(COMPONENT_TYPE_PACKAGE);
         componentTypes.append(COMPONENT_TYPE_DOCK);
@@ -187,12 +196,17 @@ void PackageManagerPrivate::prepareDatabase()
         componentInformationProperties.append(PACKAGE_INFORMATION_EMAIL);
         componentInformationProperties.append(PACKAGE_INFORMATION_WEBSITE);
         componentInformationProperties.append(PACKAGE_INFORMATION_VERSION);
-        componentInformationProperties.append(COMPONENT_INFORMATION_WIDTH);
-        componentInformationProperties.append(COMPONENT_INFORMATION_HEIGHT);
+        componentInformationProperties.append(PACKAGE_INFORMATION_VISIBLE);
+        componentInformationProperties.append(DOCK_INFORMATION_WIDTH);
+        componentInformationProperties.append(DOCK_INFORMATION_HEIGHT);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_TOP);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_BOTTOM);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_LEFT);
         componentInformationProperties.append(DOCK_INFORMATION_ANCHORS_RIGHT);
+        componentInformationProperties.append(WIDGET_INFORMATION_MINIMUM_WIDTH);
+        componentInformationProperties.append(WIDGET_INFORMATION_MINIMUM_HEIGHT);
+        componentInformationProperties.append(WIDGET_INFORMATION_MAXIMUM_WIDTH);
+        componentInformationProperties.append(WIDGET_INFORMATION_MAXIMUM_HEIGHT);
         addComponentInformationProperties(componentInformationProperties);
 
         // Check version
@@ -348,6 +362,59 @@ void PackageManagerPrivate::addLocalizedInformation(const char *type, int compon
     QSqlDatabase::removeDatabase("add_localized_information");
 }
 
+int PackageManagerPrivate::tagId(const QString &tag)
+{
+    int id = -1;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "tag_id");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT id FROM tags WHERE name=:name");
+        query.bindValue(":name", tag);
+        executeQuery(&query);
+
+        if (query.next()) {
+            id = query.value(0).toInt();
+        }
+
+        if (id == -1) {
+            query.prepare("INSERT INTO tags (id, name) VALUES (NULL, :name)");
+            query.bindValue(":name", tag);
+            executeQuery(&query);
+            id = query.lastInsertId().toInt();
+        }
+
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("tag_id");
+    return id;
+}
+
+void PackageManagerPrivate::addTags(int packageId, const QStringList &tags)
+{
+    QVariantList packageIdList;
+    QVariantList tagIdList;
+    foreach(QString tag, tags) {
+        packageIdList.append(packageId);
+        tagIdList.append(tagId(tag));
+    }
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_tag");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("INSERT INTO packageTags (packageId, tagId) VALUES (?, ?)");
+        query.addBindValue(packageIdList);
+        query.addBindValue(tagIdList);
+        executeQueryBatch(&query);
+        query.finish();
+    }
+    QSqlDatabase::removeDatabase("add_tag");
+}
+
 void PackageManagerPrivate::addPackage(const QString &path)
 {
     QDir dir = QDir(path);
@@ -368,6 +435,15 @@ void PackageManagerPrivate::addPackage(const QString &path)
         W_ASSERT(db.open());
 
         QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT COUNT(*) FROM packages WHERE identifier=:identifier");
+        query.bindValue(":identifier", package->identifier());
+        executeQuery(&query);
+
+        W_ASSERT(query.next());
+        if (query.value(0).toInt() > 0) {
+            return;
+        }
+
         query.prepare("INSERT INTO packages (id, identifier, directory, plugin) VALUES (NULL, :identifier, :directory, :plugin)");
         query.bindValue(":identifier", package->identifier());
         query.bindValue(":directory", dir.absolutePath());
@@ -399,7 +475,10 @@ void PackageManagerPrivate::addPackage(const QString &path)
     informations.insert(PACKAGE_INFORMATION_EMAIL, package->email());
     informations.insert(PACKAGE_INFORMATION_WEBSITE, package->website());
     informations.insert(PACKAGE_INFORMATION_VERSION, package->version().toString());
+    informations.insert(PACKAGE_INFORMATION_VISIBLE, package->isVisible());
     addInformation(COMPONENT_TYPE_PACKAGE, packageId, informations);
+
+    addTags(packageId, package->tags());
 
     scanPackageFolder(packageId, path, package->identifier());
 
@@ -483,8 +562,8 @@ void PackageManagerPrivate::addDock(int packageId, const QString &subdirectory,
     QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, dock->icon());
     informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, dock->isSettingsEnabled());
-    informations.insert(COMPONENT_INFORMATION_WIDTH, dock->width());
-    informations.insert(COMPONENT_INFORMATION_HEIGHT, dock->height());
+    informations.insert(DOCK_INFORMATION_WIDTH, dock->width());
+    informations.insert(DOCK_INFORMATION_HEIGHT, dock->height());
     informations.insert(DOCK_INFORMATION_ANCHORS_TOP, dock->anchorsTop());
     informations.insert(DOCK_INFORMATION_ANCHORS_BOTTOM, dock->anchorsBottom());
     informations.insert(DOCK_INFORMATION_ANCHORS_LEFT, dock->anchorsLeft());
@@ -533,8 +612,10 @@ void PackageManagerPrivate::addWidget(int packageId, const QString &subdirectory
     QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, widget->icon());
     informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, widget->isSettingsEnabled());
-    informations.insert(COMPONENT_INFORMATION_WIDTH, widget->width());
-    informations.insert(COMPONENT_INFORMATION_HEIGHT, widget->height());
+    informations.insert(WIDGET_INFORMATION_MINIMUM_WIDTH, widget->minimumWidth());
+    informations.insert(WIDGET_INFORMATION_MINIMUM_HEIGHT, widget->minimumHeight());
+    informations.insert(WIDGET_INFORMATION_MAXIMUM_WIDTH, widget->maximumWidth());
+    informations.insert(WIDGET_INFORMATION_MAXIMUM_HEIGHT, widget->maximumHeight());
     addInformation(COMPONENT_TYPE_WIDGET, widgetId, informations);
 
     widget->deleteLater();

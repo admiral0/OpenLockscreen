@@ -49,6 +49,8 @@ Page {
                         orientation: ListView.Horizontal
                         anchors.fill: parent
                         spacing: widgets.width - view.width
+                        snapMode: ListView.SnapOneItem
+                        highlightRangeMode: ListView.StrictlyEnforceRange
                         delegate: Item {
                             width: view.width
                             height: view.height
@@ -56,11 +58,14 @@ Page {
                             Rectangle {
                                 anchors.fill: parent
                                 color: model.color
+                                opacity: 0.5
                             }
                         }
 
                         model: ListModel {
                             ListElement {color: "red"}
+                            ListElement {color: "orange"}
+                            ListElement {color: "yellow"}
                             ListElement {color: "green"}
                             ListElement {color: "blue"}
                         }
