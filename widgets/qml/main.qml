@@ -24,6 +24,7 @@ PageStackWindow {
     Component.onCompleted: {
         theme.inverted = true
         PackageManagerInstance.filter = packageManagerFilters
+        WidgetsPageListModelInstance.settings = widgetsSettings
     }
 
     FilterConditionList {
@@ -31,6 +32,22 @@ PageStackWindow {
         FilterCondition {
             tag: "mobile-harmattan"
         }
+    }
+
+    Settings {
+        id: widgetsSettings
+        defaultSettings: [
+            SettingsEntry {
+                group: "widgets"
+                key: "pageCount"
+                value: 5
+            },
+            SettingsEntry {
+                group: "widgets"
+                key: "initialPage"
+                value: 2
+            }
+        ]
     }
 
     MainPage {

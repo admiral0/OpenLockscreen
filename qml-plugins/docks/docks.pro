@@ -19,5 +19,6 @@ SOURCES +=      widgets_docks_plugin.cpp \
 OTHER_FILES =   qmldir \
                 DockContainer.qml \
                 DockedView.qml \
+                EmptyDockedView.qml \
 
 include(deployment.pri)

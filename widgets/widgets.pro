@@ -21,9 +21,10 @@ QML_FILES +=        qml/main.qml \
                     qml/AbstractPage.qml \
                     qml/AbstractNavigationPage.qml \
                     qml/MainPage.qml \
-                    qml/PreviewPage.qml \
+                    qml/WidgetsPage.qml \
                     qml/SettingsPage.qml \
                     qml/DockEditorPage.qml \
+                    qml/WidgetEditorPage.qml \
                     qml/Background.qml \
                     qml/InformationsPage.qml \
                     qml/PackageListPage.qml \

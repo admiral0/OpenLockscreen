@@ -16,51 +16,18 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.docks 1.0
 
 Item {
-   id: container
-   property QtObject gridManagerInstance: gridManager
-   property alias content: contentsContainer.children
-   anchors.fill: parent
-   Component.onCompleted: {
-       gridManager.setViewWidth(width)
-       gridManager.setViewHeight(height)
-   }
-   onWidthChanged: gridManager.setViewWidth(width)
-   onHeightChanged: gridManager.setViewHeight(height)
-
-    GridManager {
-        id: gridManager
-        settings: Settings {
-            defaultSettings: [
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellWidth"
-                    value: 100
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellHeight"
-                    value: 100
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellHorizontalMargin"
-                    value: 20
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellVerticalMargin"
-                    value: 20
-                }
-            ]
-        }
-    }
+    id: container
+    anchors.fill: parent
+    property alias content: contentsContainer.children
 
     Item {
         id: contentsContainer
-        anchors.centerIn: parent
-        width: gridManager.containerWidth
-        height: gridManager.containerHeight
+        anchors.top: parent.top; anchors.topMargin: DockManagerInstance.topMargin
+        anchors.bottom: parent.bottom; anchors.bottomMargin: DockManagerInstance.bottomMargin
+        anchors.left: parent.left; anchors.leftMargin: DockManagerInstance.leftMargin
+        anchors.right: parent.right; anchors.rightMargin: DockManagerInstance.rightMargin
     }
 }

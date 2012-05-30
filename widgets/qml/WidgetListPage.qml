@@ -14,16 +14,32 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKPROPERTIESDEFINES_H
-#define WIDGETS_DOCKPROPERTIESDEFINES_H
+import QtQuick 1.1
+import com.nokia.meego 1.0
+import org.SfietKonstantin.widgets.extra 1.0
+import "UiConstants.js" as Ui
 
-namespace Widgets
-{
-static const char *DOCK_PROPERTIES_SETTINGS_TAGNAME = "settings";
-static const char *DOCK_PROPERTIES_SETTINGS_ENTRY_TAGNAME = "entry";
-static const char *DOCK_PROPERTIES_SETTINGS_KEY_ATTRIBUTE = "key";
-static const char *DOCK_PROPERTIES_SETTINGS_VALUE_ATTRIBUTE = "value";
-static const char *DOCK_PROPERTIES_IDENTIFIER_ATTRIBUTE = "identifier";
+AbstractPage {
+    id: container
+    title: qsTr("Installed widgets")
+    tools: ToolBarLayout {
+        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+    }
+    content: ListView {
+        id: view
+        anchors.fill: parent
+        model: widgetInformationModel
+        clip: true
+        delegate: ClickableEntry {
+            enabled: false
+            text: model.name
+            subText: model.description
+            indicatorIcon: ""
+        }
+    }
+
+    WidgetInformationModel {
+        id: widgetInformationModel
+        packageManager: PackageManagerInstance
+    }
 }
-
-#endif // WIDGETS_DOCKPROPERTIESDEFINES_H

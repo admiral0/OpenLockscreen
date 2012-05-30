@@ -23,17 +23,12 @@ Item {
     anchors.fill: parent
     property alias content: contentsContainer.children
 
-    DockManager {
-        id: dockManagerInstance
-        dockModel: DockModelInstance
-    }
-
     Item {
         id: contentsContainer
-        anchors.top: parent.top; anchors.topMargin: dockManagerInstance.topMargin
-        anchors.bottom: parent.bottom; anchors.bottomMargin: dockManagerInstance.bottomMargin
-        anchors.left: parent.left; anchors.leftMargin: dockManagerInstance.leftMargin
-        anchors.right: parent.right; anchors.rightMargin: dockManagerInstance.rightMargin
+        anchors.top: parent.top; anchors.topMargin: DockManagerInstance.topMargin
+        anchors.bottom: parent.bottom; anchors.bottomMargin: DockManagerInstance.bottomMargin
+        anchors.left: parent.left; anchors.leftMargin: DockManagerInstance.leftMargin
+        anchors.right: parent.right; anchors.rightMargin: DockManagerInstance.rightMargin
     }
 
     Repeater {

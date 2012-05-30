@@ -18,6 +18,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QSize>
+#include <QtCore/qmath.h>
 
 #include "settings.h"
 
@@ -225,6 +226,51 @@ Settings * GridManager::settings() const
 {
     Q_D(const GridManager);
     return d->settings;
+}
+
+QRect GridManager::fit(const QRect &geometry) const
+{
+    return QRect(fitPosition(geometry.topLeft()), fitSize(geometry.size()));
+}
+
+QPoint GridManager::fitPosition(const QPoint &position) const
+{
+    Q_D(const GridManager);
+    int cellWidth = d->gridCellSize.width();
+    int cellHeight = d->gridCellSize.height();
+    int cellHMargin = d->gridCellMarginsSize.width();
+    int cellVMargin = d->gridCellMarginsSize.height();
+    int oldX = position.x();
+    int oldY = position.y();
+
+    float xRatio = (float) (oldX + cellHMargin) / (cellWidth + cellHMargin);
+    int x = qRound(xRatio) * (cellWidth + cellHMargin);
+
+    float yRatio = (float) (oldY + cellVMargin) / (cellHeight + cellVMargin);
+    int y = qRound(yRatio) * (cellHeight + cellVMargin);
+
+    return QPoint(x, y);
+}
+
+QSize GridManager::fitSize(const QSize &size) const
+{
+    Q_D(const GridManager);
+    int cellWidth = d->gridCellSize.width();
+    int cellHeight = d->gridCellSize.height();
+    int cellHMargin = d->gridCellMarginsSize.width();
+    int cellVMargin = d->gridCellMarginsSize.height();
+    int oldWidth = size.width();
+    int oldHeight = size.height();
+
+    float rowCount = ((float) oldWidth + (float) cellHMargin) /
+                     ((float) cellWidth + (float) cellHMargin);
+    float columnCount = ((float) oldHeight + (float) cellVMargin) /
+                        ((float) cellHeight + (float) cellVMargin);
+
+    int width = qCeil(rowCount) * cellWidth + qMax(0, qCeil(rowCount - 1)) * cellHMargin - 1;
+    int height = qCeil(columnCount) * cellHeight + qMax(0, qCeil(columnCount - 1)) * cellVMargin;
+
+    return QSize(width, height);
 }
 
 void GridManager::setViewWidth(int width)

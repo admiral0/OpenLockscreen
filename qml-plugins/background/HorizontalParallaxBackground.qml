@@ -21,6 +21,7 @@ import org.SfietKonstantin.widgets.background 1.0
 Item {
     id: container
     property Item view
+    property int initialX: 0
     property real parallax: 0
     property QtObject settings
     clip: true
@@ -32,7 +33,7 @@ Item {
     // of the view
     function updateParallax() {
         if(view.model.count > 1) {
-            var value = (view.contentX /*+ settingsWrapper.pageInitialIndex * view.width*/) /
+            var value = (view.contentX - container.initialX) /
                         (view.contentWidth - view.width)
             container.parallax = Math.min(Math.max(value ,0) ,1)
         } else {
@@ -49,8 +50,8 @@ Item {
         id: background
         height: container.height
         width: backgroundManager.wallpaperHeight != 0 ?
-                   backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
-                   0
+               backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
+               0
         color: "black"
         x: - container.parallax * (background.width - container.width)
 

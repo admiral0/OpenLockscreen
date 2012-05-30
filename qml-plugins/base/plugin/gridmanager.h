@@ -18,6 +18,7 @@
 #define WIDGETS_GRIDMANAGER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QRect>
 
 #include "settings.h"
 
@@ -119,6 +120,9 @@ public:
     int gridHeight() const;
     int containerHeight() const;
     Settings * settings() const;
+    QRect fit(const QRect &geometry) const;
+    QPoint fitPosition(const QPoint &position) const;
+    QSize fitSize(const QSize &size) const;
 Q_SIGNALS:
     void gridCellWidthChanged(int gridCellWidth);
     void gridCellHeightChanged(int gridCellHeight);

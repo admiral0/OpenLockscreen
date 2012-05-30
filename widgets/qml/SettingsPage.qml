@@ -31,15 +31,26 @@ AbstractNavigationPage {
         if(page == "showDockEditor") {
             window.pageStack.push(dockEditorPage)
         }
+        if(page == "showWidgetEditor") {
+            window.pageStack.push(widgetEditorPage)
+        }
     }
     model: ListModel {
         ListElement {
             identifier: "showDockEditor"
             text: QT_TR_NOOP("Edit docks")
         }
+        ListElement {
+            identifier: "showWidgetEditor"
+            text: QT_TR_NOOP("Edit widgets")
+        }
     }
 
     DockEditorPage {
         id: dockEditorPage
+    }
+
+    WidgetEditorPage {
+        id: widgetEditorPage
     }
 }

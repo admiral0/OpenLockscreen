@@ -21,7 +21,8 @@ import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.background 1.0
 
 Page {
-    id: mainPage
+    id: container
+    property bool preview: true
     orientationLock: PageOrientation.LockPortrait
 
     PinchArea {
@@ -32,7 +33,8 @@ Page {
     Background {
         anchors.fill: parent
         id: background
-        view: view
+        view: widgetsPage.view
+        initialX: widgetsPage.initialX
     }
 
     DockedView {
@@ -40,37 +42,8 @@ Page {
             id: widgets
             anchors.fill: parent
 
-            WidgetsView {
-                id: widgetsView
-                content: Item {
-                    anchors.fill: parent
-                    ListView {
-                        id: view
-                        orientation: ListView.Horizontal
-                        anchors.fill: parent
-                        spacing: widgets.width - view.width
-                        snapMode: ListView.SnapOneItem
-                        highlightRangeMode: ListView.StrictlyEnforceRange
-                        delegate: Item {
-                            width: view.width
-                            height: view.height
-
-                            Rectangle {
-                                anchors.fill: parent
-                                color: model.color
-                                opacity: 0.5
-                            }
-                        }
-
-                        model: ListModel {
-                            ListElement {color: "red"}
-                            ListElement {color: "orange"}
-                            ListElement {color: "yellow"}
-                            ListElement {color: "green"}
-                            ListElement {color: "blue"}
-                        }
-                    }
-                }
+            WidgetsHorizontalPageView {
+                id: widgetsPage
             }
         }
     }

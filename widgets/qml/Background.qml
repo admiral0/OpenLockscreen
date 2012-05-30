@@ -18,32 +18,27 @@ import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 
-Item {
-    id: container
-    anchors.fill: parent
-    property Item view
+HorizontalParallaxBackground {
 
-    HorizontalParallaxBackground {
-        view: container.view
-        settings: Settings {
-            defaultSettings: [
-                SettingsEntry {
-                    group: "background"
-                    key: "wallpaperWidth"
-                    value: 1440
-                },
-                SettingsEntry {
-                    group: "background"
-                    key: "wallpaperHeight"
-                    value: 900
-                },
-                SettingsEntry {
-                    group: "background"
-                    key: "wallpaperSource"
-                    value: "/opt/widgets/data/wallpaper-1.jpg"
-                }
-            ]
-        }
+    view: container.view
+    settings: Settings {
+        defaultSettings: [
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperWidth"
+                value: 1440
+            },
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperHeight"
+                value: 900
+            },
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperSource"
+                value: "/opt/widgets/data/wallpaper-1.jpg"
+            }
+        ]
     }
 }
 

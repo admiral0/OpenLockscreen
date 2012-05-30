@@ -22,17 +22,22 @@
  * Widgets::DisplayedPagesModel class.
  */
 
-#ifndef WIDGETS_DISPLAYEDPAGESMODEL_H
-#define WIDGETS_DISPLAYEDPAGESMODEL_H
+#ifndef WIDGETS_WIDGETSVIEWPAGELISTMODEL_H
+#define WIDGETS_WIDGETSVIEWPAGELISTMODEL_H
 
-#include <QAbstractListModel>
-#include "displayedpagewidgetsmodel.h"
+#include <QtCore/QAbstractListModel>
+
+#include "widgetspagemodel.h"
+#include "settings.h"
+#include "gridmanager.h"
+#include "packagemanager.h"
 
 namespace Widgets
 {
 
-class Settings;
-class PackageManager;
+//class Settings;
+//class PackageManager;
+class WidgetsPageListModelPrivate;
 /**
  * @short Model for widgets page
  *
@@ -59,7 +64,7 @@ class PackageManager;
  * This class is used in QML context. Accessing
  * it is done using the "displayedPagesModel" global object.
  */
-class DisplayedPagesModel : public QAbstractListModel
+class WidgetsPageListModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
@@ -73,6 +78,11 @@ class DisplayedPagesModel : public QAbstractListModel
      * rowCount().
      */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(int initialPage READ initialPage NOTIFY initialPageChanged)
+    Q_PROPERTY(int currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
+    Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
+    Q_PROPERTY(Widgets::GridManager * gridManager READ gridManager WRITE setGridManager
+               NOTIFY gridManagerChanged)
 public:
     /**
      * @short Model roles
@@ -90,16 +100,13 @@ public:
     /**
      * @short Default constructor
      *
-     * @param settings Settings object used to manage settings.
-     * @param packageManager PackageManager object used to provide available widgets.
      * @param parent parent object.
      */
-    explicit DisplayedPagesModel(Settings *settings, PackageManager *packageManager,
-                                 QObject *parent = 0);
+    explicit WidgetsPageListModel(QObject *parent = 0);
     /**
      * @short Destructor
      */
-    virtual ~DisplayedPagesModel();
+    virtual ~WidgetsPageListModel();
     /**
      * @short Reimplementation of rowCount
      *
@@ -120,6 +127,11 @@ public:
      * @return number of rows in this model.
      */
     int count() const;
+    int initialPage() const;
+    int currentPage() const;
+    Settings * settings() const;
+    GridManager * gridManager() const;
+    PackageManager * packageManager() const;
     /**
      * @short Reimplementation of data
      *
@@ -142,7 +154,14 @@ public:
      * @param index index of the page to retrieve.
      * @return the page model at the given index.
      */
-    Q_INVOKABLE Widgets::DisplayedPageWidgetsModel * pageModel(int index) const;
+//    Q_INVOKABLE Widgets::DisplayedPageWidgetsModel * pageModel(int index) const;
+
+
+    Q_INVOKABLE bool addWidget(int pageIndex,
+                               Widgets::WidgetBaseProperties *widget,
+                               Widgets::GridManager *gridManager,
+                               const QVariantMap &settings = QVariantMap(),
+                               const QString &identifier = QString());
 Q_SIGNALS:
     /**
      * @short Count changed
@@ -153,6 +172,11 @@ Q_SIGNALS:
      * @param count value of the new row count.
      */
     void countChanged(int count);
+    void initialPageChanged(int page);
+    void currentPageChanged(int page);
+    void settingsChanged();
+    void gridManagerChanged();
+    void packageManagerChanged();
     /**
      * @short Row inserted in a page
      *
@@ -164,9 +188,13 @@ Q_SIGNALS:
      * @param start the first row that is new.
      * @param end the last row that is new.
      */
-    void pageRowInserted(DisplayedPageWidgetsModel * page,
-                         const QModelIndex &parent, int start, int end);
+//    void pageRowInserted(DisplayedPageWidgetsModel * page,
+//                         const QModelIndex &parent, int start, int end);
 public Q_SLOTS:
+    void setSettings(Settings *settings);
+    void setGridManager(GridManager *gridManager);
+    void setPackageManager(PackageManager *packageManager);
+    void setCurrentPage(int currentPage);
     /**
      * @short Set page count
      *
@@ -192,16 +220,17 @@ public Q_SLOTS:
      * page of the model.
      */
     void removePage();
-private:
-    class DisplayedPagesModelPrivate;
+protected:
+    WidgetsPageListModel(WidgetsPageListModelPrivate *dd, QObject *parent);
     /**
      * @short D-pointer
      */
-    DisplayedPagesModelPrivate * const d;
-
-    Q_PRIVATE_SLOT(d, void slotRowsInserted(const QModelIndex &parent, int start, int end))
+    const QScopedPointer<WidgetsPageListModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(WidgetsPageListModel)
+//    Q_PRIVATE_SLOT(d, void slotRowsInserted(const QModelIndex &parent, int start, int end))
 };
 
 }
 
-#endif // WIDGETS_DISPLAYEDPAGESMODEL_H
+#endif // WIDGETS_WIDGETSVIEWPAGELISTMODEL_H

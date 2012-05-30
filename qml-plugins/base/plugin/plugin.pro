@@ -10,16 +10,20 @@ LIBS +=         -L ../lib/ -lwidgetsbase
 
 HEADERS +=      widgets_plugin.h \
                 gridmanager.h \
-#                widgetsviewpagemodel.h \
+                widgetspagemodel.h \
+                widgetspagelistmodel.h \
 
 SOURCES +=      widgets_plugin.cpp \
                 gridmanager.cpp \
-#                widgetsviewpagemodel.cpp \
+                widgetspagemodel.cpp \
+                widgetspagelistmodel.cpp \
 
 OTHER_FILES =   qmldir \
                 Widget.qml \
                 Dock.qml \
+                WidgestPage.qml \
                 WidgetsView.qml \
+                WidgetsHorizontalPageView.qml \
 
 include(deployment.pri)
 

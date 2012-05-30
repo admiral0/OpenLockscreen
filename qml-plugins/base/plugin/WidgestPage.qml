@@ -15,52 +15,20 @@
 ****************************************************************************************/
 
 import QtQuick 1.1
-import org.SfietKonstantin.widgets 1.0
 
-Item {
-   id: container
-   property QtObject gridManagerInstance: gridManager
-   property alias content: contentsContainer.children
-   anchors.fill: parent
-   Component.onCompleted: {
-       gridManager.setViewWidth(width)
-       gridManager.setViewHeight(height)
-   }
-   onWidthChanged: gridManager.setViewWidth(width)
-   onHeightChanged: gridManager.setViewHeight(height)
+Rectangle {
+    id: container
+    property variant pageModel
+    color: "blue"
 
-    GridManager {
-        id: gridManager
-        settings: Settings {
-            defaultSettings: [
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellWidth"
-                    value: 100
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellHeight"
-                    value: 100
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellHorizontalMargin"
-                    value: 20
-                },
-                SettingsEntry {
-                    group: "grid"
-                    key: "cellVerticalMargin"
-                    value: 20
-                }
-            ]
+    Repeater {
+        model: container.pageModel
+        delegate: Rectangle {
+            x: model.widget.x
+            y: model.widget.y
+            width: model.widget.width
+            height: model.widget.height
         }
-    }
 
-    Item {
-        id: contentsContainer
-        anchors.centerIn: parent
-        width: gridManager.containerWidth
-        height: gridManager.containerHeight
     }
 }

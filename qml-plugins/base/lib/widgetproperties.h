@@ -60,8 +60,17 @@ public:
                               const QVariantMap &settings = QVariantMap(),
                               QObject *parent = 0);
     explicit WidgetProperties(WidgetBaseProperties *base,
+                              const QRect &geometry, int z,
+                              const QVariantMap &settings = QVariantMap(),
+                              QObject *parent = 0);
+    explicit WidgetProperties(WidgetBaseProperties *base,
                               const QString &identifier,
                               int x, int y, int z, int width, int height,
+                              const QVariantMap &settings = QVariantMap(),
+                              QObject *parent = 0);
+    explicit WidgetProperties(WidgetBaseProperties *base,
+                              const QRect &geometry, int z,
+                              const QString &identifier,
                               const QVariantMap &settings = QVariantMap(),
                               QObject *parent = 0);
     QString identifier() const;

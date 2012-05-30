@@ -32,8 +32,10 @@
 namespace Widgets
 {
 
+class GridManager;
 class Settings;
 class PackageManager;
+class WidgetsPageModelPrivate;
 /**
  * @short Model for displayed widget page
  *
@@ -66,7 +68,7 @@ class PackageManager;
  * This class needs a Settings object to be provided
  * since the models needs to save settings.
  */
-class DisplayedPageWidgetsModel : public QAbstractListModel
+class WidgetsPageModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
@@ -86,7 +88,7 @@ class DisplayedPageWidgetsModel : public QAbstractListModel
      * This property is mainly used in QML context
      * and is used to retrieve the index of this page.
      */
-    Q_PROPERTY(int pageIndex READ pageIndex CONSTANT)
+//    Q_PROPERTY(int pageIndex READ pageIndex CONSTANT)
 public:
     /**
      * @short Model roles
@@ -105,14 +107,11 @@ public:
      * @param packageManager PackageManager object used to provide available widgets.
      * @param parent parent object.
      */
-    explicit DisplayedPageWidgetsModel(int pageIndex = -1,
-                                       Settings *settings = 0,
-                                       PackageManager *packageManager = 0,
-                                       QObject *parent = 0);
+    explicit WidgetsPageModel(QObject *parent = 0);
     /**
      * @short Destructor
      */
-    virtual ~DisplayedPageWidgetsModel();
+    virtual ~WidgetsPageModel();
     /**
      * @short Reimplementation of rowCount
      *
@@ -154,7 +153,7 @@ public:
      *
      * @return the index of this page.
      */
-    int pageIndex() const;
+//    int pageIndex() const;
     /**
      * @short Properties of a widget
      *
@@ -165,7 +164,11 @@ public:
      * @param index index to retrieve the widget.
      * @return the widget at the given index.
      */
-    Q_INVOKABLE Widgets::WidgetProperties * widget(int index) const;
+//    Q_INVOKABLE Widgets::WidgetProperties * widget(int index) const;
+    bool addWidget(Widgets::WidgetBaseProperties *widget,
+                   Widgets::GridManager *gridManager,
+                   const QVariantMap &settings = QVariantMap(),
+                   const QString &identifier = QString());
 Q_SIGNALS:
     /**
      * @short Count changed
@@ -177,6 +180,8 @@ Q_SIGNALS:
      */
     void countChanged(int count);
 public Q_SLOTS:
+    void relayout(Widgets::GridManager *gridManager);
+
     /**
      * @short Add a widget
      *
@@ -197,11 +202,11 @@ public Q_SLOTS:
      * @param identifier identifier of the widget to add (only used during loading).
      * @param z the z coordinate of the widget to add (only used during loading).
      */
-    void addWidget(Widgets::WidgetBaseProperties *widget,
-                   int x = 0, int y = 0,
-                   int width = 0, int height = 0,
-                   const QVariantMap &settings = QVariantMap(),
-                   const QString &identifier = QString(), int z = -1);
+//    void addWidget(Widgets::WidgetBaseProperties *widget,
+//                   int x = 0, int y = 0,
+//                   int width = 0, int height = 0,
+//                   const QVariantMap &settings = QVariantMap(),
+//                   const QString &identifier = QString(), int z = -1);
     /**
      * @short Remove a widget
      *
@@ -210,7 +215,7 @@ public Q_SLOTS:
      *
      * @param widget the widget to remove.
      */
-    void removeWidget(Widgets::WidgetProperties *widget);
+//    void removeWidget(Widgets::WidgetProperties *widget);
     /**
      * @short Update a widget
      *
@@ -223,17 +228,19 @@ public Q_SLOTS:
      * @param width new width.
      * @param height new height.
      */
-    void updateWidget(const QString &identifier, int x, int y, int width, int height);
-private:
-    class DisplayedPageWidgetsModelPrivate;
+//    void updateWidget(const QString &identifier, int x, int y, int width, int height);
+protected:
+    explicit WidgetsPageModel(WidgetsPageModelPrivate *dd, QObject *parent = 0);
     /**
      * @short D-pointer
      */
-    DisplayedPageWidgetsModelPrivate * const d;
+    const QScopedPointer<WidgetsPageModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(WidgetsPageModel)
 };
 
 }
 
-Q_DECLARE_METATYPE(Widgets::DisplayedPageWidgetsModel*)
+Q_DECLARE_METATYPE(Widgets::WidgetsPageModel*)
 
 #endif // WIDGETS_WIDGETSVIEWPAGEMODEL_H
