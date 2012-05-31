@@ -14,32 +14,26 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "widgets_docks_plugin.h"
+#include "widgets_drag_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 
-#include "dockmanager.h"
-#include "dockmodel.h"
+#include "dragmanager.h"
 
-void WidgetsDocksPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+void WidgetsDragPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Widgets::Docks::DockModel *model = new Widgets::Docks::DockModel(this);
-    model->setContext(engine->rootContext());
-    engine->rootContext()->setContextProperty("DockModelInstance", model);
-    Widgets::Docks::DockManager *manager = new Widgets::Docks::DockManager(this);
-    manager->setDockModel(model);
-    engine->rootContext()->setContextProperty("DockManagerInstance", manager);
+    Widgets::Drag::DragManager *dragManager = new Widgets::Drag::DragManager(this);
+    dragManager->setContext(engine->rootContext());
+    engine->rootContext()->setContextProperty("DragManagerInstance", dragManager);
 }
 
-void WidgetsDocksPlugin::registerTypes(const char *uri)
+void WidgetsDragPlugin::registerTypes(const char *uri)
 {
-    // @uri org.SfietKonstantin.widgets.docks
-    QString reason = "Only one instance of DockManager is allowed.";
-    qmlRegisterUncreatableType<Widgets::Docks::DockManager>(uri, 1, 0, "DockManager", reason);
-    reason = "Only one instance of DockModel is allowed.";
-    qmlRegisterUncreatableType<Widgets::Docks::DockModel>(uri, 1, 0, "DockModel", reason);
+    // @uri org.SfietKonstantin.widgets.drag
+    QString reason = "Only one instance of DragManager is allowed.";
+    qmlRegisterUncreatableType<Widgets::Drag::DragManager>(uri, 1, 0, "DragManager", reason);
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsDocksPlugin)
+Q_EXPORT_PLUGIN2(Widgets, WidgetsDragPlugin)
 

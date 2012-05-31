@@ -37,6 +37,9 @@ HEADERS +=      widgets_global.h \
                 widgetbaseproperties.h \
                 widgetbaseproperties_p.h \
                 widgetproperties.h \
+                gridmanager.h \
+                widgetspagemodel.h \
+                widgetspagelistmodel.h \
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
@@ -60,5 +63,8 @@ SOURCES +=      version.cpp \
                 widgetbaseproperties.cpp \
                 widgetbaseproperties_p.cpp \
                 widgetproperties.cpp \
+                gridmanager.cpp \
+                widgetspagemodel.cpp \
+                widgetspagelistmodel.cpp \
 
 include(deployment.pri)

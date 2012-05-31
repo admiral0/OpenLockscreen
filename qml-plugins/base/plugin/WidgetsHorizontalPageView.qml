@@ -40,6 +40,8 @@ WidgetsView {
             onWidthChanged: if (!moving) {recomputeInitialX()}
             onHeightChanged: if (!moving) {recomputeInitialX()}
             onCurrentIndexChanged: WidgetsPageListModelInstance.currentPage = currentIndex
+            cacheBuffer: view.width * WidgetsPageListModelInstance.count
+
             delegate: Item {
                 width: view.width
                 height: view.height

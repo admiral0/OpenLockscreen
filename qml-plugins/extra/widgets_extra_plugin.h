@@ -19,7 +19,7 @@
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
+class WidgetsExtraPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 

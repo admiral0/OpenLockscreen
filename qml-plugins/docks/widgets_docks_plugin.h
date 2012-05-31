@@ -14,12 +14,12 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_EXTRA_PLUGIN_H
-#define WIDGETS_EXTRA_PLUGIN_H
+#ifndef WIDGETS_DOCKS_PLUGIN_H
+#define WIDGETS_DOCKS_PLUGIN_H
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
+class WidgetsDocksPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 
@@ -36,5 +36,5 @@ public:
     void registerTypes(const char *uri);
 };
 
-#endif // WIDGETS_EXTRA_PLUGIN_H
+#endif // WIDGETS_DOCKS_PLUGIN_H
 

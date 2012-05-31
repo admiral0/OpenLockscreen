@@ -17,8 +17,9 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.background 1.0
+import org.SfietKonstantin.widgets.docks 1.0
+import org.SfietKonstantin.widgets.drag 1.0
 import org.SfietKonstantin.widgets.extra 1.0
 import "UiConstants.js" as Ui
 
@@ -26,12 +27,12 @@ Page {
     id: container
     orientationLock: PageOrientation.LockPortrait
 
-//    Background {
-//        anchors.fill: parent
-//        id: background
-//        view: widgetsPage.view
-//        initialX: widgetsPage.initialX
-//    }
+    Background {
+        anchors.fill: parent
+        id: background
+        view: widgetsPage.view
+        initialX: widgetsPage.initialX
+    }
 
     EmptyDockedView {
         content: Item {
@@ -93,5 +94,15 @@ Page {
         Behavior on opacity {
             NumberAnimation {duration: Ui.ANIMATION_DURATION_XFAST}
         }
+
+        ToolIcon {
+            iconId: DragManagerInstance.locked ? "toolbar-edit" : "toolbar-done"
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: {
+                DragManagerInstance.locked = !DragManagerInstance.locked
+            }
+        }
+
     }
 }

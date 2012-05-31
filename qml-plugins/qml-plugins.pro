@@ -1,3 +1,3 @@
 TEMPLATE =  subdirs
 
-SUBDIRS +=  base colors background extra docks
+SUBDIRS +=  base colors background docks extra drag

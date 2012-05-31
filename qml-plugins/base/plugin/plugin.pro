@@ -9,22 +9,16 @@ INCLUDEPATH +=  ../lib/
 LIBS +=         -L ../lib/ -lwidgetsbase
 
 HEADERS +=      widgets_plugin.h \
-                gridmanager.h \
-                widgetspagemodel.h \
-                widgetspagelistmodel.h \
 
 SOURCES +=      widgets_plugin.cpp \
-                gridmanager.cpp \
-                widgetspagemodel.cpp \
-                widgetspagelistmodel.cpp \
 
 OTHER_FILES =   qmldir \
                 Widget.qml \
                 Dock.qml \
+                WidgetContainer.qml \
                 WidgestPage.qml \
                 WidgetsView.qml \
                 WidgetsHorizontalPageView.qml \
-    WidgetContainer.qml
 
 include(deployment.pri)
 

@@ -22,7 +22,7 @@
 #include "widgetinformationmodel.h"
 #include "packageinformationmodel.h"
 
-void WidgetsColorsPlugin::registerTypes(const char *uri)
+void WidgetsExtraPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.extra
     qmlRegisterType<Widgets::Extra::PackageInformationModel>(uri, 1, 0, "PackageInformationModel");
@@ -30,5 +30,5 @@ void WidgetsColorsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::Extra::WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsColorsPlugin)
+Q_EXPORT_PLUGIN2(Widgets, WidgetsExtraPlugin)
 
