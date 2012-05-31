@@ -25,7 +25,7 @@ Item {
     property int minimumHeight
     property int maximumWidth
     property int maximumHeight
-    property bool settingsEnabled: false
+//    property bool settingsEnabled: false
     width: minimumWidth
     height: minimumHeight
     signal showSettings

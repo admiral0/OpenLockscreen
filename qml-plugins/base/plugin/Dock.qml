@@ -21,6 +21,6 @@ Item {
     property string identifier
     property bool enabled
     property variant settings
-    property bool settingsEnabled: false
+//    property bool settingsEnabled: false
     signal showSettings
 }

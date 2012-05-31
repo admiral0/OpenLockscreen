@@ -26,24 +26,30 @@
 #include "widgetspagemodel.h"
 #include "widgetproperties.h"
 
+#include "abstractsettings_p.h"
 #include "gridmanager.h"
 #include "settings.h"
 #include "packagemanager.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QEvent>
 #include <QtCore/qmath.h>
 #include <QtCore/QStringList>
 #include <QtCore/QSize>
 #include <QtCore/QRect>
 
+#include <QtDeclarative/QDeclarativeContext>
+
 namespace Widgets
 {
+
+static const char *WIDGET_ELEMENT = "widget";
 
 /**
  * @internal
  * @short Private class for DisplayedPageWidgetsModel
  */
-class WidgetsPageModelPrivate
+class WidgetsPageModelPrivate: public AbstractSettingsPrivate
 {
 public:
     /**
@@ -56,18 +62,21 @@ public:
      */
     WidgetsPageModelPrivate(WidgetsPageModel *q);
     ~WidgetsPageModelPrivate();
+    virtual void clear();
+    virtual bool fromXmlElement(const QDomElement &element);
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
     /**
      * @short Load settings
      *
      * This method is used to retrieve
      * the saved widgets and create them.
      */
-    void loadSettings();
+//    void loadSettings();
     QRect availableRect(Widgets::GridManager *gridManager, int width, int height) const;
     /**
      * @short Index of this page
      */
-//    int pageIndex;
+    int pageIndex;
     /**
      * @short A list of WidgetProperties
      *
@@ -105,7 +114,7 @@ public:
     /**
      * @short Package manager
      */
-    PackageManager * packageManager;
+    PackageManager *packageManager;
 private:
     /**
      * @short Q-pointer
@@ -115,20 +124,72 @@ private:
 };
 
 WidgetsPageModelPrivate::WidgetsPageModelPrivate(WidgetsPageModel *q):
-    q_ptr(q)
+    AbstractSettingsPrivate(q), q_ptr(q)
 {
+    pageIndex = -1;
+    packageManager = 0;
 }
 
 WidgetsPageModelPrivate::~WidgetsPageModelPrivate()
 {
-    // Delete allocated items
-    while (!data.isEmpty()) {
-        data.takeFirst()->deleteLater();
-    }
+    clear();
 }
 
-void WidgetsPageModelPrivate::loadSettings()
+void WidgetsPageModelPrivate::clear()
 {
+    Q_Q(WidgetsPageModel);
+    q->beginRemoveRows(QModelIndex(), 0, q->rowCount() - 1);
+    while (!data.isEmpty()) {
+        delete data.takeFirst();
+    }
+    q->endRemoveRows();
+}
+
+bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
+{
+    Q_Q(WidgetsPageModel);
+    if (element.tagName() != SETTINGS_ELEMENT) {
+        return false;
+    }
+
+    QDomElement widgetElement = element.firstChildElement(WIDGET_ELEMENT);
+    while (!widgetElement.isNull()) {
+        WidgetProperties *incompleteWidget = new WidgetProperties(q);
+        if (incompleteWidget->fromXmlElement(widgetElement)) {
+            WidgetBaseProperties *widgetBase =
+                    packageManager->widget(incompleteWidget->packageIdentifier(),
+                                           incompleteWidget->fileName());
+            if (widgetBase != 0) {
+                QRect geometry = QRect(incompleteWidget->x(), incompleteWidget->y(),
+                                       incompleteWidget->width(), incompleteWidget->height());
+                int z = incompleteWidget->z();
+
+                q->addWidget(widgetBase, geometry, z,
+                             incompleteWidget->settings(),
+                             incompleteWidget->identifier());
+                widgetBase->deleteLater();
+            }
+        }
+        incompleteWidget->deleteLater();
+        widgetElement = widgetElement.nextSiblingElement(WIDGET_ELEMENT);
+    }
+
+    return true;
+}
+
+QDomElement WidgetsPageModelPrivate::toXmlElement(const QString &tagName,
+                                                  QDomDocument *document) const
+{
+    QDomElement element = document->createElement(tagName);
+
+    foreach(WidgetProperties *widget, data) {
+        element.appendChild(widget->toXmlElement(WIDGET_ELEMENT, document));
+    }
+    return element;
+}
+
+//void WidgetsPageModelPrivate::loadSettings()
+//{
     /*
     if(settings == 0 || packageManager == 0) {
         return;
@@ -160,7 +221,7 @@ void WidgetsPageModelPrivate::loadSettings()
 
     }*/
 
-}
+//}
 
 QRect WidgetsPageModelPrivate::availableRect(GridManager *gridManager, int width, int height) const
 {
@@ -225,34 +286,30 @@ WidgetsPageModel::WidgetsPageModel(QObject *parent):
     QAbstractListModel(parent),
     d_ptr(new WidgetsPageModelPrivate(this))
 {
-    Q_D(WidgetsPageModel);
-
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(WidgetRole, "widget");
     setRoleNames(roles);
-
-    // load settings
-    d->loadSettings();
 }
 
 WidgetsPageModel::WidgetsPageModel(WidgetsPageModelPrivate *dd, QObject *parent):
     QAbstractListModel(parent),
     d_ptr(dd)
 {
-    Q_D(WidgetsPageModel);
-
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(WidgetRole, "widget");
     setRoleNames(roles);
-
-    // load settings
-    d->loadSettings();
 }
 
 WidgetsPageModel::~WidgetsPageModel()
 {
+}
+
+int WidgetsPageModel::pageIndex() const
+{
+    Q_D(const WidgetsPageModel);
+    return d->pageIndex;
 }
 
 int WidgetsPageModel::rowCount(const QModelIndex &parent) const
@@ -265,6 +322,12 @@ int WidgetsPageModel::rowCount(const QModelIndex &parent) const
 int WidgetsPageModel::count() const
 {
     return rowCount();
+}
+
+PackageManager * WidgetsPageModel::packageManager() const
+{
+    Q_D(const WidgetsPageModel);
+    return d->packageManager;
 }
 
 QVariant WidgetsPageModel::data(const QModelIndex &index, int role) const
@@ -284,6 +347,33 @@ QVariant WidgetsPageModel::data(const QModelIndex &index, int role) const
     }
 }
 
+void WidgetsPageModel::setPageIndex(int index)
+{
+    Q_D(WidgetsPageModel);
+    if (d->pageIndex != index) {
+        d->pageIndex = index;
+
+        d->componentName = QString("widget-%1").arg(index);
+        load();
+
+        emit pageIndexChanged();
+    }
+}
+
+void WidgetsPageModel::load()
+{
+    Q_D(WidgetsPageModel);
+    if (d->packageManager == 0) {
+        return;
+    }
+
+    if (d->pageIndex < 0) {
+        return;
+    }
+
+    d->load();
+}
+
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  Widgets::GridManager *gridManager,
                                  const QVariantMap &settings,
@@ -300,15 +390,23 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
         return false;
     }
 
-    qDebug() << "test" << geometry;
+    return addWidget(widget, geometry, 0, settings, identifier);
+}
+
+bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
+                                 const QRect &geometry, int z,
+                                 const QVariantMap &settings,
+                                 const QString &identifier)
+{
+    Q_D(WidgetsPageModel);
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     WidgetProperties *newWidget;
     if (identifier.isEmpty()) {
-        newWidget = new WidgetProperties(widget, geometry, 0, settings, this);
+        newWidget = new WidgetProperties(widget, geometry, z, settings, this);
     } else {
-        newWidget = new WidgetProperties(widget, geometry, 0, identifier, settings, this);
+        newWidget = new WidgetProperties(widget, geometry, z, identifier, settings, this);
     }
 
     d->data.append(newWidget);
@@ -316,8 +414,21 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
     emit countChanged(rowCount());
     endInsertRows();
 
-//    d->requestSave();
+    d->requestSave();
     return true;
+}
+
+void WidgetsPageModel::setPackageManager(PackageManager *packageManager)
+{
+    Q_D(WidgetsPageModel);
+    if (d->packageManager != packageManager) {
+        d->packageManager = packageManager;
+        emit packageManagerChanged();
+    }
+
+    if (d->packageManager != 0) {
+        load();
+    }
 }
 
 void WidgetsPageModel::relayout(GridManager *gridManager)
@@ -506,5 +617,15 @@ void WidgetsPageModel::relayout(GridManager *gridManager)
 ////        d->settings->setValue(key, widget->toMap());
 ////    }
 //}
+
+bool WidgetsPageModel::event(QEvent *event)
+{
+    Q_D(WidgetsPageModel);
+    if (event->type() == QEvent::UpdateRequest) {
+        d->save();
+        return true;
+    }
+    return QObject::event(event);
+}
 
 }

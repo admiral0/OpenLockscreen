@@ -16,18 +16,25 @@
 
 import QtQuick 1.1
 
-Rectangle {
+Item {
     id: container
     property variant pageModel
-    color: "blue"
 
     Repeater {
         model: container.pageModel
-        delegate: Rectangle {
+        delegate: WidgetContainer {
             x: model.widget.x
             y: model.widget.y
             width: model.widget.width
             height: model.widget.height
+            scale: 0
+            qmlFile: PackageManagerInstance.widgetFile(model.widget.packageIdentifier,
+                                                       model.widget.fileName)
+
+            Component.onCompleted: scale = 1
+            Behavior on scale {
+                NumberAnimation {duration: 1000; easing.type: Easing.OutBack}
+            }
         }
 
     }

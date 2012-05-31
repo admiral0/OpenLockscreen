@@ -29,6 +29,7 @@
 #include <QtCore/QRect>
 #include "widgetproperties.h"
 
+class QDeclarativeContext;
 namespace Widgets
 {
 
@@ -81,6 +82,7 @@ class WidgetsPageModel : public QAbstractListModel
      * This property is nearly equivalent to
      * rowCount().
      */
+    Q_PROPERTY(int pageIndex READ pageIndex NOTIFY pageIndexChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     /**
      * @short Index of this page
@@ -112,6 +114,7 @@ public:
      * @short Destructor
      */
     virtual ~WidgetsPageModel();
+    int pageIndex() const;
     /**
      * @short Reimplementation of rowCount
      *
@@ -132,6 +135,7 @@ public:
      * @return number of rows in this model.
      */
     int count() const;
+    PackageManager * packageManager() const;
     /**
      * @short Reimplementation of data
      *
@@ -165,11 +169,19 @@ public:
      * @return the widget at the given index.
      */
 //    Q_INVOKABLE Widgets::WidgetProperties * widget(int index) const;
+    void setPageIndex(int index);
+    void load();
     bool addWidget(Widgets::WidgetBaseProperties *widget,
                    Widgets::GridManager *gridManager,
                    const QVariantMap &settings = QVariantMap(),
                    const QString &identifier = QString());
+    bool addWidget(Widgets::WidgetBaseProperties *widget,
+                   const QRect &geometry, int z,
+                   const QVariantMap &settings = QVariantMap(),
+                   const QString &identifier = QString());
 Q_SIGNALS:
+    void pageIndexChanged();
+    void packageManagerChanged();
     /**
      * @short Count changed
      *
@@ -180,6 +192,7 @@ Q_SIGNALS:
      */
     void countChanged(int count);
 public Q_SLOTS:
+    void setPackageManager(PackageManager *packageManager);
     void relayout(Widgets::GridManager *gridManager);
 
     /**
@@ -231,6 +244,7 @@ public Q_SLOTS:
 //    void updateWidget(const QString &identifier, int x, int y, int width, int height);
 protected:
     explicit WidgetsPageModel(WidgetsPageModelPrivate *dd, QObject *parent = 0);
+    virtual bool event(QEvent *event);
     /**
      * @short D-pointer
      */

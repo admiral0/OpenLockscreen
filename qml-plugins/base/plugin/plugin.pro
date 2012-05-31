@@ -24,6 +24,7 @@ OTHER_FILES =   qmldir \
                 WidgestPage.qml \
                 WidgetsView.qml \
                 WidgetsHorizontalPageView.qml \
+    WidgetContainer.qml
 
 include(deployment.pri)
 

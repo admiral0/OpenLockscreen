@@ -201,7 +201,7 @@ bool WidgetProperties::fromXmlElement(const QDomElement &element)
         return false;
     }
 
-    if (!WidgetProperties::fromXmlElement(element)) {
+    if (!WidgetBaseProperties::fromXmlElement(element)) {
         return false;
     }
 
@@ -232,7 +232,7 @@ bool WidgetProperties::fromXmlElement(const QDomElement &element)
 
 QDomElement WidgetProperties::toXmlElement(const QString &tagName, QDomDocument *document) const
 {
-    QDomElement element = WidgetProperties::toXmlElement(tagName, document);
+    QDomElement element = WidgetBaseProperties::toXmlElement(tagName, document);
     element.setAttribute(WIDGET_PROPERTIES_IDENTIFIER_ATTRIBUTE, identifier());
 
     QDomElement geometryElement = document->createElement(WIDGET_PROPERTIES_GEOMETRY_TAGNAME);

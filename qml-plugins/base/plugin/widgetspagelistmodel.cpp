@@ -40,25 +40,6 @@ namespace Widgets
 
 /**
  * @internal
- * @short Structure used in the DisplayedPagesModel
- *
- * This structure is used to store
- * the components in DisplayedPagesModel.
- */
-struct WidgetsPageListModelItem
-{
-    /**
-     * @short Index
-     */
-    int index;
-    /**
-     * @short Page model
-     */
-    WidgetsPageModel *model;
-};
-
-/**
- * @internal
  * @short Private class for DisplayedPagesModel
  */
 class WidgetsPageListModelPrivate
@@ -76,15 +57,6 @@ public:
      * @short Destructor
      */
     ~WidgetsPageListModelPrivate();
-    /**
-     * @short Helper method used to delete WidgetViewModelItem
-     *
-     * This helper method makes deletion of WidgetViewModelItem
-     * easier by deleting the unused pointers.
-     *
-     * @param item the WidgetViewModelItem to delete.
-     */
-    void deleteItem(WidgetsPageListModelItem *item);
     void loadSettings();
     /**
      * @short Slot that watch the pages
@@ -104,7 +76,7 @@ public:
      * This list of WidgetViewModelItem is the
      * internal storage of the model.
      */
-    QList<WidgetsPageListModelItem *> items;
+    QList<WidgetsPageModel *> items;
     int initialPage;
     int currentPage;
     /**
@@ -138,16 +110,8 @@ WidgetsPageListModelPrivate::~WidgetsPageListModelPrivate()
 {
     // Delete allocated items
     while (!items.isEmpty()) {
-        deleteItem(items.takeFirst());
+        items.takeFirst()->deleteLater();
     }
-}
-
-void WidgetsPageListModelPrivate::deleteItem(WidgetsPageListModelItem *item)
-{
-    // Delete the model in the item
-    item->model->deleteLater();
-
-    delete item;
 }
 
 void WidgetsPageListModelPrivate::loadSettings()
@@ -194,6 +158,8 @@ WidgetsPageListModel::WidgetsPageListModel(WidgetsPageListModelPrivate *dd,
 WidgetsPageListModel::~WidgetsPageListModel()
 {
 }
+
+//void WidgetsPageListModel::
 
 int WidgetsPageListModel::rowCount(const QModelIndex &parent) const
 {
@@ -245,13 +211,13 @@ QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    WidgetsPageListModelItem *item = d->items.at(index.row());
+    WidgetsPageModel *item = d->items.at(index.row());
     switch(role) {
     case IndexRole:
-        return item->index;
+        return item->pageIndex();
         break;
     case PageModelRole:
-        return QVariant::fromValue(item->model);
+        return QVariant::fromValue(item);
         break;
     default:
         return QVariant();
@@ -270,7 +236,7 @@ bool WidgetsPageListModel::addWidget(int pageIndex,
         return false;
     }
 
-    return d->items[pageIndex]->model->addWidget(widget, gridManager, settings, identifier);
+    return d->items[pageIndex]->addWidget(widget, gridManager, settings, identifier);
 }
 
 //DisplayedPageWidgetsModel * DisplayedPagesModel::pageModel(int index) const
@@ -310,6 +276,12 @@ void WidgetsPageListModel::setPackageManager(PackageManager *packageManager)
         d->packageManager = packageManager;
         emit packageManagerChanged();
     }
+
+    if (d->packageManager != 0) {
+        foreach (WidgetsPageModel *item, d->items) {
+            item->setPackageManager(d->packageManager);
+        }
+    }
 }
 
 void WidgetsPageListModel::setCurrentPage(int currentPage)
@@ -340,9 +312,9 @@ void WidgetsPageListModel::addPage()
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-    WidgetsPageListModelItem *item = new WidgetsPageListModelItem;
-    item->index = rowCount();
-    item->model = new WidgetsPageModel(this);
+    WidgetsPageModel *item = new WidgetsPageModel(this);
+    item->setPackageManager(d->packageManager);
+    item->setPageIndex(rowCount());
 
     d->items.append(item);
 //    connect(item->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
@@ -362,10 +334,10 @@ void WidgetsPageListModel::removePage()
 
     beginRemoveRows(QModelIndex(), rowCount() - 1, rowCount() - 1);
 
-    WidgetsPageListModelItem *item = d->items.takeLast();
+    WidgetsPageModel *item = d->items.takeLast();
 //    disconnect(item->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
 //               this, SLOT(slotRowsInserted(QModelIndex, int, int)));
-    d->deleteItem(item);
+    item->deleteLater();
 
     emit countChanged(rowCount());
     endRemoveRows();
