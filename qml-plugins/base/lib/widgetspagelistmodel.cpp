@@ -286,6 +286,8 @@ void WidgetsPageListModel::setPackageManager(PackageManager *packageManager)
 
 void WidgetsPageListModel::setCurrentPage(int currentPage)
 {
+    qDebug() << currentPage;
+
     Q_D(WidgetsPageListModel);
     if (d->currentPage != currentPage) {
         d->currentPage = currentPage;

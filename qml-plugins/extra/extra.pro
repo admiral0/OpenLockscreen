@@ -1,5 +1,3 @@
-include(../../globals.pri)
-
 TEMPLATE =      lib
 
 TARGET =        widgetsextra
@@ -11,12 +9,12 @@ LIBS +=         -L ../base/lib/ -lwidgetsbase
 HEADERS +=      widgets_extra_plugin.h \
                 packageinformationmodel.h \
                 dockinformationmodel.h \
-    widgetinformationmodel.h
+                widgetinformationmodel.h
 
 SOURCES +=      widgets_extra_plugin.cpp \
                 packageinformationmodel.cpp \
                 dockinformationmodel.cpp \
-    widgetinformationmodel.cpp
+                widgetinformationmodel.cpp
 
 OTHER_FILES =   qmldir \
 

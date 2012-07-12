@@ -1,5 +1,3 @@
-include(../globals.pri)
-
 QT =        core
 
 TARGET =    widgetsapi

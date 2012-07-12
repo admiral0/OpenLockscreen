@@ -1,5 +1,3 @@
-include(../globals.pri)
-
 TEMPLATE =      lib
 
 TARGET =        basicwidgets

@@ -21,6 +21,7 @@ WidgetsView {
     id: container
     property Item view: view
     property int initialX: 0
+    clip: true
 
     content: Item {
         anchors.fill: parent
@@ -33,14 +34,14 @@ WidgetsView {
             }
             orientation: ListView.Horizontal
             anchors.fill: parent
-            spacing: widgets.width - view.width
+            spacing: container.parent.width - view.width
             snapMode: ListView.SnapOneItem
             highlightRangeMode: ListView.StrictlyEnforceRange
             onMovingChanged: if (moving) {moved = true}
-            onWidthChanged: if (!moving) {recomputeInitialX()}
-            onHeightChanged: if (!moving) {recomputeInitialX()}
+//            onWidthChanged: if (!moving) {recomputeInitialX()}
+//            onHeightChanged: if (!moving) {recomputeInitialX()}
             onCurrentIndexChanged: WidgetsPageListModelInstance.currentPage = currentIndex
-            cacheBuffer: view.width * WidgetsPageListModelInstance.count
+            cacheBuffer: view.width * 11
 
             delegate: Item {
                 width: view.width
@@ -55,10 +56,13 @@ WidgetsView {
             Connections {
                 target: WidgetsPageListModelInstance
                 onInitialPageChanged: {
-                    if (page != -1) {
-                        view.positionViewAtIndex(page, ListView.Contain)
-                        view.recomputeInitialX()
-                    }
+//                    if (page != -1) {
+//                        var newPage = page - 1
+
+//                        console.debug(page + " " + view.currentIndex)
+//                        view.positionViewAtIndex(newPage + 1, ListView.Beginning)
+//                        view.recomputeInitialX()
+//                    }
                 }
             }
         }

@@ -1,5 +1,7 @@
+include(../../../globals.pri)
+
 # Path for target
-target.path = $${LIB_FOLDER}
+target.path = $${LIBDIR}
 export(target.path)
 
 # Installs

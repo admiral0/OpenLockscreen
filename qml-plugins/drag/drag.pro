@@ -1,5 +1,3 @@
-include(../../globals.pri)
-
 TEMPLATE =      lib
 
 TARGET =        widgetsdrag
@@ -10,12 +8,13 @@ LIBS +=         -L ../base/lib/ -lwidgetsbase
 
 
 HEADERS +=      widgets_drag_plugin.h \
-    dragmanager.h
+                dragmanager.h
 
 SOURCES +=      widgets_drag_plugin.cpp \
-    dragmanager.cpp
+                dragmanager.cpp
 
 OTHER_FILES =   qmldir \
+                DragOverlay.qml
 
 include(deployment.pri)
 

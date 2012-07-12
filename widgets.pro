@@ -1,9 +1,9 @@
 TEMPLATE =      subdirs
 
-SUBDIRS +=      qml-plugins api
+SUBDIRS +=      qml-plugins api app
 
-contains(WIDGETS_OPTIONS, application):SUBDIRS += widgets corewidgets basicwidgets
-contains(WIDGETS_OPTIONS, tests):SUBDIRS += tests
+contains(CONFIG, mobile):SUBDIRS += corewidgets basicwidgets
+contains(CONFIG, tests):SUBDIRS += tests
 
 OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \
                 qtc_packaging/debian_harmattan/README \

@@ -42,6 +42,10 @@ Page {
             WidgetsHorizontalPageView {
                 id: widgetsPage
             }
+
+//            DragOverlay {
+//                widgetsView: widgetsPage
+//            }
         }
     }
 

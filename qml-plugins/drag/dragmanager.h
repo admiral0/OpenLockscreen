@@ -18,6 +18,7 @@
 #define WIDGETS_DRAG_DRAGMANAGER_H
 
 #include <QtCore/QObject>
+#include "widgetproperties.h"
 
 class QDeclarativeContext;
 namespace Widgets
@@ -38,6 +39,7 @@ public:
     bool locked() const;
 signals:
     void lockedChanged();
+    void requestCreateDragger(Widgets::WidgetProperties *widget);
 public slots:
     void load();
     void setLocked(bool locked);

@@ -1,4 +1,4 @@
-include(../globals.pri)
+include(../../globals.pri)
 
 TEMPLATE =          app
 TARGET =            widgets
@@ -6,7 +6,7 @@ TARGET =            widgets
 QT =                core gui declarative xml
 CONFIG +=           qdeclarative-boostable
 
-DEFINES +=          'MAIN_QML_PATH=\'\"$${DEPLOYMENT_PREFIX}/$${APPLICATION_FOLDER}/qml/main.qml\"\''
+DEFINES +=          'MAIN_QML_PATH=\'\"$${SHAREDIR}/qml/main.qml\"\''
 
 HEADERS +=          webandmailhandler.h \
 
@@ -32,8 +32,6 @@ QML_FILES +=        qml/main.qml \
                     qml/DockListPage.qml \
                     qml/WidgetListPage.qml \
                     qml/AboutPage.qml \
-
-
 
 DATA_FILES +=       data/wallpaper-1.jpg \
 

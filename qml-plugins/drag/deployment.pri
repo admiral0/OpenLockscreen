@@ -1,4 +1,6 @@
-installPath = $${QML_PLUGIN_FOLDER}/drag
+include(../../globals.pri)
+
+installPath = $${QML_PLUGIN_PATH}/drag
 
 # Path for QML files
 qmlFiles.path = $${installPath}

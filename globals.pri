@@ -1,43 +1,66 @@
+# name
+NAME = widgets
+
 # version
 VERSION_MAJOR = 1
 VERSION_MINOR = 0
 VERSION_PATCH = 0
 
 # 64 bits if needed
-contains(QMAKE_HOST.arch, x86_64): {
+contains(QMAKE_HOST.arch, x86_64):{
     !contains(MEEGO_EDITION,harmattan):64_BITS = 64
 }
 
-# QML plugins
-QML_PLUGIN_FOLDER =         /usr/lib$${64_BITS}/qt4/imports/org/SfietKonstantin/widgets/
+isEmpty(PREFIX) {
+    CONFIG(release):PREFIX = /usr
+    CONFIG(debug, debug|release):PREFIX = $${DEPLOYMENT_PREFIX}
+}
 
-# Widgets API
-INCLUDE_FOLDER =            /usr/include/widgets/
-LIB_FOLDER =                /usr/lib$${64_BITS}/
+DEFAULT_IMPORT_FOLDER = /usr/lib$${64_BITS}/qt4/imports/
 
-# Widgets folders
-SYSTEM_WIDGETS_FOLDER =     /usr/share/widgets/
-USER_WIDGETS_FOLDER =       /opt/widgets/widgets/
 
-# Application folder
-APPLICATION_FOLDER  =       /opt/widgets/
-
-# Test folder
-TEST_FOLDER =               /opt/widgets/tests/
-
-# Testing on Unix
-unix {
-    CONFIG(debug, debug|release): {
-        QML_PLUGIN_FOLDER =     $${DEPLOYMENT_PREFIX}/usr/lib$${64_BITS}/qt4/imports/org/SfietKonstantin/widgets/
-        INCLUDE_FOLDER =        $${DEPLOYMENT_PREFIX}/usr/include/widgets/
-        LIB_FOLDER =            $${DEPLOYMENT_PREFIX}/usr/lib$${64_BITS}/
-        SYSTEM_WIDGETS_FOLDER = $${DEPLOYMENT_PREFIX}/usr/share/widgets/
-        USER_WIDGETS_FOLDER =   $${DEPLOYMENT_PREFIX}/opt/widgets/widgets/
-
-        QML_PLUGIN_ROOT_FOLDER = $${DEPLOYMENT_PREFIX}/usr/lib$${64_BITS}/qt4/imports/
-        DEFINES += 'QML_PLUGIN_PATH=\'\"$${QML_PLUGIN_ROOT_FOLDER}\"\''
+# Default directories
+isEmpty(BINDIR) {
+    BINDIR = $${PREFIX}/bin
+}
+isEmpty(LIBDIR) {
+    LIBDIR = $${PREFIX}/lib$${64_BITS}
+}
+isEmpty(IMPORTDIR) {
+    CONFIG(noqtimport):{
+        IMPORTDIR = $${PREFIX}/imports/
+    } else {
+        IMPORTDIR = $${DEFAULT_IMPORT_FOLDER}
     }
 }
+isEmpty(SHAREDIR) {
+    SHAREDIR = $${PREFIX}/share/$${NAME}
+}
+
+isEmpty(OPTDIR) {
+    OPTDIR = /opt/$${NAME}
+}
+
+isEmpty(INCLUDEDIR) {
+    INCLUDEDIR = $${PREFIX}/include/$${NAME}
+}
+
+# Widgets folders
+SYSTEM_WIDGETS_FOLDER = $${SHAREDIR}/widgets/
+USER_WIDGETS_FOLDER =   $${OPTDIR}/widgets/
+
+# Application folder
+contains(MEEGO_EDITION,harmattan):{
+    APPLICATION_FOLDER  = $${OPTDIR}/bin/
+} else {
+    APPLICATION_FOLDER  = $${BINDIR}
+}
+
+# Test folder
+TEST_FOLDER = $${SHAREDIR}/tests/
+
+# QML include folder
+QML_PLUGIN_PATH = $${IMPORTDIR}/org/SfietKonstantin/$${NAME}
 
 # Useful defines
 DEFINES += 'SYSTEM_WIDGETS=\'\"$${SYSTEM_WIDGETS_FOLDER}\"\''

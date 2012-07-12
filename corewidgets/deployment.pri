@@ -1,11 +1,13 @@
-INSTALL_PATH = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
+include(../globals.pri)
+
+installPath = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
 
 # Path for target
-target.path = $${INSTALL_PATH}
+target.path = $${installPath}
 export(target.path)
 
 # Path for desktop file
-desktopFile.path = $${INSTALL_PATH}
+desktopFile.path = $${installPath}
 desktopFile.files = $${DESKTOP_FILES}
 export(desktopFile.path)
 export(desktopFile.files)
@@ -26,4 +28,4 @@ INSTALLS += target desktopFile
 #export(iconFiles.path)
 #export(iconFiles.files)
 
-INSTALLS += iconFiles
+#INSTALLS += iconFiles

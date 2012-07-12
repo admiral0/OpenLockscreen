@@ -1,5 +1,3 @@
-include(../../../globals.pri)
-
 QT += sql
 CONFIG  += qtestlib
 LIBS +=     ../../../qml-plugins/base/lib/

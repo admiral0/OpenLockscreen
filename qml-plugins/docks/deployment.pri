@@ -1,4 +1,6 @@
-installPath = $${QML_PLUGIN_FOLDER}/docks
+include(../../globals.pri)
+
+installPath = $${QML_PLUGIN_PATH}/docks
 
 # Path for QML files
 qmlFiles.path = $${installPath}

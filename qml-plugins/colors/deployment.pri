@@ -1,4 +1,6 @@
-installPath = $${QML_PLUGIN_FOLDER}/colors
+include(../../globals.pri)
+
+installPath = $${QML_PLUGIN_PATH}/colors
 
 # Path for QML files
 qmlFiles.path = $${installPath}

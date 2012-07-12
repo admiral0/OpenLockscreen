@@ -1,11 +1,13 @@
+include(../globals.pri)
+
 # Path for headers
-headerFiles.path = $${INCLUDE_FOLDER}
+headerFiles.path = $${INCLUDEDIR}
 headerFiles.files = $${HEADERS}
 export(headerFiles.path)
 export(headerFiles.files)
 
 # Path for target
-target.path = $${LIB_FOLDER}
+target.path = $${LIBDIR}
 export(target.path)
 
 # Installs

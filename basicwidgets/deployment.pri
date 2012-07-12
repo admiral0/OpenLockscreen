@@ -1,11 +1,13 @@
-INSTALL_PATH = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
+include(../globals.pri)
+
+installPath = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
 
 # Path for target
-target.path = $${INSTALL_PATH}
+target.path = $${installPath}
 export(target.path)
 
 # Path for desktop file
-desktopFile.path = $${INSTALL_PATH}
+desktopFile.path = $${installPath}
 desktopFile.files = $${DESKTOP_FILES}
 export(desktopFile.path)
 export(desktopFile.files)
@@ -33,17 +35,17 @@ ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
                         widgets/analogic-clock/analogic-clock-hour.png \
                         widgets/analogic-clock/analogic-clock-minute.png \
 
-androidDockFiles.path = $${INSTALL_PATH}/docks/android-dock
+androidDockFiles.path = $${installPath}/docks/android-dock
 androidDockFiles.files = $${ANDROID_DOCK_FILES}
 export(androidDockFiles.path)
 export(androidDockFiles.files)
 
-maemoDockFiles.path = $${INSTALL_PATH}/docks/maemo-dock
+maemoDockFiles.path = $${installPath}/docks/maemo-dock
 maemoDockFiles.files = $${MAEMO_DOCK_FILES}
 export(maemoDockFiles.path)
 export(maemoDockFiles.files)
 
-analogicClockFiles.path = $${INSTALL_PATH}/widgets/analogic-clock
+analogicClockFiles.path = $${installPath}/widgets/analogic-clock
 analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
 export(analogicClockFiles.path)
 export(analogicClockFiles.files)
