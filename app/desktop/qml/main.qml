@@ -14,29 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
-
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+import QtQuick 1.1
+import org.SfietKonstantin.widgets 1.0
 
 
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
+Rectangle {
+    id: container
+    color: "black"
 
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
+    PageStack {
+        id: stack
+        anchors.fill: parent
 
-    return app.exec();
+        Main {
+            id: main
+        }
+
+        Component.onCompleted: push(main)
+    }
 }
+
+

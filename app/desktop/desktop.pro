@@ -6,32 +6,31 @@ TARGET =            widgets
 QT =                core gui declarative xml
 
 DEFINES +=          'MAIN_QML_PATH=\'\"$${SHAREDIR}/qml/main.qml\"\''
+DEFINES +=          'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
+DEFINES +=          'DATA_DIR=\'\"$${SHAREDIR}/data/\"\''
 
 SOURCES +=          main.cpp \
 
-#QML_FILES +=        qml/main.qml \
-#                    qml/UiConstants.js \
-#                    qml/HorizontalSeparator.qml \
-#                    qml/ClickableEntry.qml \
-#                    qml/CheckableEntry.qml \
-#                    qml/AbstractPage.qml \
-#                    qml/AbstractNavigationPage.qml \
-#                    qml/MainPage.qml \
-#                    qml/WidgetsPage.qml \
-#                    qml/SettingsPage.qml \
-#                    qml/DockEditorPage.qml \
-#                    qml/WidgetEditorPage.qml \
-#                    qml/Background.qml \
-#                    qml/InformationsPage.qml \
-#                    qml/PackageListPage.qml \
-#                    qml/PackageDetailPage.qml \
-#                    qml/DockListPage.qml \
-#                    qml/WidgetListPage.qml \
-#                    qml/AboutPage.qml \
+QML_FILES +=        qml/main.qml \
+                    qml/Icon.qml \
+                    qml/IconRow.qml \
+                    qml/Toolbar.qml \
+                    qml/Page.qml \
+                    qml/PageStack.qml \
+                    qml/ClickableEntry.qml \
+                    qml/Main.qml \
+                    qml/WidgetView.qml \
+                    qml/Informations.qml \
+                    qml/PackageInformations.qml \
+                    qml/DockInformations.qml \
+                    qml/WidgetInformations.qml \
 
-#DATA_FILES +=       data/wallpaper-1.jpg \
+DATA_FILES +=       data/configure.png \
+                    data/list-add.png \
+                    data/edit-undo.png \
 
 
 include(deployment.pri)
+
 
 

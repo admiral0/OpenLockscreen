@@ -33,7 +33,7 @@ QML_FILES +=        qml/main.qml \
                     qml/WidgetListPage.qml \
                     qml/AboutPage.qml \
 
-DATA_FILES +=       data/wallpaper-1.jpg \
+DATA_FILES +=       data/wallpaper-1.png \
 
 
 include(deployment.pri)

@@ -15,28 +15,24 @@
  ****************************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
+import QtQuick 1.1
 
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+Page {
+    id: container
 
 
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
+    Toolbar {
+        id: toolbar
 
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
-
-    return app.exec();
+        IconRow {
+            Icon {
+                icon: "edit-undo"
+                onClicked: stack.pop()
+            }
+        }
+    }
 }
+
+
+
+

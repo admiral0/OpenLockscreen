@@ -15,28 +15,39 @@
  ****************************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
+import QtQuick 1.1
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.extra 1.0
 
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+Page {
+    id: container
 
+    ListView {
+        id: view
+        anchors.fill: parent
+        model: widgetInformationModel
+        delegate: ClickableEntry {
+            text: model.name
+        }
+    }
 
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
+    Toolbar {
+        id: toolbar
 
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
+        IconRow {
+            Icon {
+                icon: "edit-undo"
+                onClicked: stack.pop()
+            }
+        }
+    }
 
-    return app.exec();
+    WidgetInformationModel {
+        id: widgetInformationModel
+        packageManager: PackageManagerInstance
+    }
 }
+
+
+
+

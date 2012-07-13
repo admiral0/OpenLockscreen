@@ -15,28 +15,25 @@
  ****************************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
+import QtQuick 1.1
 
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+Item {
+    id: container
+    property Item current: container
+    function push(item) {
+        item.parent = current
+        item.visible = true
+        item.anchors.fill = current
+        container.current = item
+    }
+    function pop() {
+        if (container.current == container) {
+            return
+        }
 
-
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
-
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
-
-    return app.exec();
+        container.current.visible = false
+        container.current = container.current.parent
+    }
 }
+
+

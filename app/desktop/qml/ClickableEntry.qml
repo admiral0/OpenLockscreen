@@ -15,28 +15,31 @@
  ****************************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
+import QtQuick 1.1
 
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+Rectangle {
+    id: container
+    property alias text: text.text
+    signal clicked()
+    height: 80
+    width: parent.width
+    color: !mouseArea.pressed ? "black" : "grey"
 
+    Text {
+        id: text
+        anchors.left: parent.left; anchors.leftMargin: 10
+        anchors.right: parent.right; anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        font.pixelSize: 30
+        color: "white"
+    }
 
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
-
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
-
-    return app.exec();
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onClicked: container.clicked()
+    }
 }
+
+
+

@@ -18,7 +18,6 @@ isEmpty(PREFIX) {
 
 DEFAULT_IMPORT_FOLDER = /usr/lib$${64_BITS}/qt4/imports/
 
-
 # Default directories
 isEmpty(BINDIR) {
     BINDIR = $${PREFIX}/bin

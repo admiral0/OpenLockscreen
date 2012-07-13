@@ -15,28 +15,39 @@
  ****************************************************************************************/
 
 
-#include <QtGui/QApplication>
-#include <QtDeclarative/QtDeclarative>
-#include <QtDeclarative/QDeclarativeEngine>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeEngine>
+import QtQuick 1.1
 
-int main(int argc, char *argv[])
-{
-    QApplication app (argc, argv);
-    QDeclarativeView view;
-    app.setApplicationName("Widgets");
-    app.setOrganizationName("SfietKonstantin");
+Page {
+    id: container
 
+    function pushChild(role) {
+        if (role == "showInfo") {
+            stack.push(informations)
+        }
+    }
 
-    view.engine()->addImportPath(IMPORT_DIR);
-    view.rootContext()->setContextProperty("ICON_DIR", DATA_DIR);
-    view.setMinimumSize(480, 640);
-    view.setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    view.setSource(QUrl(MAIN_QML_PATH));
+    ListModel {
+        id: model
+        ListElement {
+            text: "Informations"
+            role: "showInfo"
+        }
+    }
 
-    QObject::connect(view.engine(), SIGNAL(quit()), &view, SLOT(close()));
-    view.show();
+    ListView {
+        id: view
+        anchors.fill: parent
+        model: model
+        delegate: ClickableEntry {
+            text: model.text
+            onClicked: container.pushChild(model.role)
+        }
+    }
 
-    return app.exec();
+    Informations {
+        id: informations
+    }
 }
+
+
+
