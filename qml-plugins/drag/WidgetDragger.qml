@@ -44,6 +44,7 @@ Item {
     // the highlighter when the dragger
     // is moving
     function drag() {
+        console.debug("drag" + dragging)
         if(dragging) {
             DragManagerInstance.drag(widget, Qt.rect(x, y, width, height))
 //            var pos = viewManager.computeWidgetPosition(x, y)
@@ -111,14 +112,16 @@ Item {
         drag.maximumY: container.parent.height - container.height
         drag.axis: Drag.XandYAxis
 
-        onPressed: container.dragging = true
+        onPressed: {
+            container.dragging = true
+        }
         onReleased: container.dragging = false
     }
 
     WidgetDraggerButton {
         id: removeButton
-        anchors.top: container.top; anchors.topMargin: 32
-        anchors.right: container.right; anchors.rightMargin: 32
+        anchors.top: container.top
+        anchors.right: container.right
         source: DragParametersInstance.removeButtonSource
         onClicked: container.removeWidget(container.widget)
     }

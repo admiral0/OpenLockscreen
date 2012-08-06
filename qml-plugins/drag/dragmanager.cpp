@@ -230,7 +230,7 @@ void DragManager::finishDrag(WidgetProperties *widgetProperties, QDeclarativeIte
     dragger->setWidth(currentPosition.width());
     dragger->setHeight(currentPosition.height());
 
-
+    d->previousPosition = QRect();
 
     emit widgetDragged(0, QRect(0, 0, 0, 0));
 }
