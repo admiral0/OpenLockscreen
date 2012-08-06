@@ -117,8 +117,8 @@ Item {
 
     WidgetDraggerButton {
         id: removeButton
-        anchors.top: container.top; anchors.topMargin: - 60
-        anchors.right: container.right; anchors.rightMargin: - 60
+        anchors.top: container.top; anchors.topMargin: 32
+        anchors.right: container.right; anchors.rightMargin: 32
         source: DragParametersInstance.removeButtonSource
         onClicked: container.removeWidget(container.widget)
     }
