@@ -14,40 +14,46 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DRAG_DRAGGERMANAGER_H
-#define WIDGETS_DRAG_DRAGGERMANAGER_H
+#include "dragparameters.h"
 
-#include <QtCore/QObject>
-
-class QDeclarativeItem;
 namespace Widgets
 {
 
-class WidgetProperties;
 namespace Drag
 {
 
-class DraggerManagerPrivate;
-class DraggerManager : public QObject
+class DragParametersPrivate
 {
-    Q_OBJECT
 public:
-    explicit DraggerManager(QObject *parent = 0);
-    virtual ~DraggerManager();
-    Q_INVOKABLE bool draggerExists(Widgets::WidgetProperties *widgetProperties);
-public Q_SLOTS:
-    void disableDraggers();
-    void registerDragger(Widgets::WidgetProperties *widgetProperties, QDeclarativeItem *dragger);
-    void unregisterDragger(Widgets::WidgetProperties *widgetProperties);
-    void unregisterDraggers();
-protected:
-    const QScopedPointer<DraggerManagerPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(DraggerManager)
+    QString removeButtonSource;
 };
 
+////// End of private class //////
+
+DragParameters::DragParameters(QObject *parent) :
+    QObject(parent), d_ptr(new DragParametersPrivate())
+{
+}
+
+DragParameters::~DragParameters()
+{
+}
+
+QString DragParameters::removeButtonSource() const
+{
+    Q_D(const DragParameters);
+    return d->removeButtonSource;
+}
+
+void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
+{
+    Q_D(DragParameters);
+    if (d->removeButtonSource != removeButtonSource) {
+        d->removeButtonSource = removeButtonSource;
+        emit removeButtonSourceChanged();
+    }
 }
 
 }
 
-#endif // WIDGETS_DRAG_DRAGGERMANAGER_H
+}

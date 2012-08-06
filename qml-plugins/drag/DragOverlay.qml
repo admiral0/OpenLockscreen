@@ -34,6 +34,11 @@ Item {
         id: draggerManager
     }
 
+    Connections {
+        target: widgetsView
+        onBusyChanged: DragManagerInstance.busy = widgetsView.busy
+    }
+
     Item {
         id: contentsContainer
         parent: widgetsView.contentItem
@@ -63,7 +68,7 @@ Item {
                                                  {"widget": widget,
                                                   "qmlFile": qmlFile});
             draggerManager.registerDragger(widget, dragger)
-//            dragger.removeWidget.connect(container.removeWidget)
+            dragger.removeWidget.connect(container.removeWidget)
 //            dragger.showWidgetSettings.connect(container.showWidgetSettings)
         } else {
             console.debug("Cannot create the widget from file WidgetDragger.qml" +
@@ -72,10 +77,19 @@ Item {
         component.destroy()
     }
 
+    // Remove widget
+    // This slot is connected to the remove widget
+    // button on the dragger
+    function removeWidget(widget) {
+        draggerManager.unregisterDragger(widget)
+        WidgetsPageListModelInstance.removeWidget(WidgetsPageListModelInstance.currentPage, widget)
+    }
+
     Component.onCompleted: DragManagerInstance.gridManager = widgetsView.gridManagerInstance
 
     Connections {
         target: DragManagerInstance
+        onRequestDisableDraggers: draggerManager.disableDraggers()
         onRequestCreateDragger: createDragger(widget)
         onRequestDeleteDraggers: draggerManager.unregisterDraggers()
     }

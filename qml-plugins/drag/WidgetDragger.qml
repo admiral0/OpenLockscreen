@@ -35,7 +35,7 @@ Item {
     property variant dragRect
     property string qmlFile
     property bool dragging
-//    signal removeWidget(variant widget)
+    signal removeWidget(variant widget)
 //    signal showWidgetSettings(variant widget)
     opacity: 0.8
 
@@ -53,7 +53,7 @@ Item {
 
     function finishDrag() {
         if (!dragging) {
-            DragManagerInstance.finishDrag(widget, Qt.rect(x, y, width, height))
+            DragManagerInstance.finishDrag(widget, container, Qt.rect(x, y, width, height))
         }
     }
 
@@ -114,15 +114,15 @@ Item {
         onPressed: container.dragging = true
         onReleased: container.dragging = false
     }
-    /*
-//    WidgetDraggerButton {
-//        id: removeButton
-//        anchors.top: container.top; anchors.topMargin: - UI.MARGIN_DEFAULT
-//        anchors.right: container.right; anchors.rightMargin: - UI.MARGIN_DEFAULT
-//        source: "image://theme/icon-m-framework-close-thumbnail"
-//        onClicked: container.removeWidget(container.widget)
-//    }
 
+    WidgetDraggerButton {
+        id: removeButton
+        anchors.top: container.top; anchors.topMargin: - 32
+        anchors.right: container.right; anchors.rightMargin: - 32
+        source: DragParametersInstance.removeButtonSource
+        onClicked: container.removeWidget(container.widget)
+    }
+    /*
 //    WidgetDraggerButton {
 //        id: settingsButton
 //        anchors.bottom: container.bottom; anchors.bottomMargin: - UI.MARGIN_DEFAULT

@@ -20,6 +20,7 @@
 
 #include "dragmanager.h"
 #include "draggermanager.h"
+#include "dragparameters.h"
 
 void WidgetsDragPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -27,6 +28,9 @@ void WidgetsDragPlugin::initializeEngine(QDeclarativeEngine *engine, const char 
     Widgets::Drag::DragManager *dragManager = new Widgets::Drag::DragManager(this);
     dragManager->setContext(engine->rootContext());
     engine->rootContext()->setContextProperty("DragManagerInstance", dragManager);
+
+    Widgets::Drag::DragParameters *dragParameters = new Widgets::Drag::DragParameters(this);
+    engine->rootContext()->setContextProperty("DragParametersInstance", dragParameters);
 }
 
 void WidgetsDragPlugin::registerTypes(const char *uri)
@@ -34,6 +38,9 @@ void WidgetsDragPlugin::registerTypes(const char *uri)
     // @uri org.SfietKonstantin.widgets.drag
     QString reason = "Only one instance of DragManager is allowed.";
     qmlRegisterUncreatableType<Widgets::Drag::DragManager>(uri, 1, 0, "DragManager", reason);
+
+    reason = "Only one instance of DragParameters is allowed";
+    qmlRegisterUncreatableType<Widgets::Drag::DragParameters>(uri, 1, 0, "DragParameters", reason);
     qmlRegisterType<Widgets::Drag::DraggerManager>(uri, 1, 0, "DraggerManager");
 }
 

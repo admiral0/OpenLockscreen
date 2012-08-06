@@ -14,40 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DRAG_DRAGGERMANAGER_H
-#define WIDGETS_DRAG_DRAGGERMANAGER_H
+#ifndef WIDGETS_DRAG_DRAGPARAMETERS_H
+#define WIDGETS_DRAG_DRAGPARAMETERS_H
 
 #include <QtCore/QObject>
 
-class QDeclarativeItem;
 namespace Widgets
 {
 
-class WidgetProperties;
 namespace Drag
 {
 
-class DraggerManagerPrivate;
-class DraggerManager : public QObject
+class DragParametersPrivate;
+class DragParameters : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString removeButtonSource READ removeButtonSource WRITE setRemoveButtonSource
+               NOTIFY removeButtonSourceChanged)
 public:
-    explicit DraggerManager(QObject *parent = 0);
-    virtual ~DraggerManager();
-    Q_INVOKABLE bool draggerExists(Widgets::WidgetProperties *widgetProperties);
-public Q_SLOTS:
-    void disableDraggers();
-    void registerDragger(Widgets::WidgetProperties *widgetProperties, QDeclarativeItem *dragger);
-    void unregisterDragger(Widgets::WidgetProperties *widgetProperties);
-    void unregisterDraggers();
+    explicit DragParameters(QObject *parent = 0);
+    virtual ~DragParameters();
+    QString removeButtonSource() const;
+Q_SIGNALS:
+    void removeButtonSourceChanged();
+public slots:
+    void setRemoveButtonSource(const QString &removeButtonSource);
 protected:
-    const QScopedPointer<DraggerManagerPrivate> d_ptr;
+    QScopedPointer<DragParametersPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(DraggerManager)
+    Q_DECLARE_PRIVATE(DragParameters)
 };
 
 }
 
 }
 
-#endif // WIDGETS_DRAG_DRAGGERMANAGER_H
+#endif // WIDGETS_DRAG_DRAGPARAMETERS_H

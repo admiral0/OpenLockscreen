@@ -179,6 +179,15 @@ public:
                    const QRect &geometry, int z,
                    const QVariantMap &settings = QVariantMap(),
                    const QString &identifier = QString());
+    /**
+     * @short Remove a widget
+     *
+     * This method is used to remove a widget
+     * that is in the model.
+     *
+     * @param widget the widget to remove.
+     */
+    bool removeWidget(Widgets::WidgetProperties *widget);
 Q_SIGNALS:
     void pageIndexChanged();
     void packageManagerChanged();
@@ -220,15 +229,6 @@ public Q_SLOTS:
 //                   int width = 0, int height = 0,
 //                   const QVariantMap &settings = QVariantMap(),
 //                   const QString &identifier = QString(), int z = -1);
-    /**
-     * @short Remove a widget
-     *
-     * This method is used to remove a widget
-     * that is in the model.
-     *
-     * @param widget the widget to remove.
-     */
-//    void removeWidget(Widgets::WidgetProperties *widget);
     /**
      * @short Update a widget
      *

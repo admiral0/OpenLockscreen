@@ -9,15 +9,18 @@ LIBS +=         -L ../base/lib/ -lwidgetsbase
 
 HEADERS +=      widgets_drag_plugin.h \
                 dragmanager.h \
-    draggermanager.h
+                draggermanager.h \
+                dragparameters.h
 
 SOURCES +=      widgets_drag_plugin.cpp \
                 dragmanager.cpp \
-    draggermanager.cpp
+                draggermanager.cpp \
+                dragparameters.cpp
 
 OTHER_FILES =   qmldir \
                 DragOverlay.qml \
                 WidgetDragger.qml \
+                WidgetDraggerButton.qml \
 
 include(deployment.pri)
 

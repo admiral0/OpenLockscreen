@@ -21,6 +21,7 @@ WidgetsView {
     id: container
     property Item view: view
     property int initialX: 0
+    busy: view.moving
     clip: true
 
     content: Item {

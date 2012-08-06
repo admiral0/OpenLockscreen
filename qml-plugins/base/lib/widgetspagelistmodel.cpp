@@ -196,8 +196,7 @@ PackageManager * WidgetsPageListModel::packageManager() const
 QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const WidgetsPageListModel);
-    if (index.row() < 0 or index.row() >= rowCount())
-    {
+    if (index.row() < 0 or index.row() >= rowCount()) {
         return QVariant();
     }
 
@@ -227,6 +226,16 @@ bool WidgetsPageListModel::addWidget(int pageIndex,
     }
 
     return d->items[pageIndex]->addWidget(widget, gridManager, settings, identifier);
+}
+
+bool WidgetsPageListModel::removeWidget(int pageIndex, WidgetProperties *widget)
+{
+    Q_D(WidgetsPageListModel);
+    if (pageIndex < 0 || pageIndex >= rowCount()) {
+        return false;
+    }
+
+    return d->items[pageIndex]->removeWidget(widget);
 }
 
 void WidgetsPageListModel::setSettings(Settings *settings)

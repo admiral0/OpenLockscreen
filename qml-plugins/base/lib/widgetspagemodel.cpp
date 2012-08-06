@@ -424,6 +424,30 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
     return true;
 }
 
+bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
+{
+    Q_D(WidgetsPageModel);
+
+    // Check if the widget is present
+    int widgetIndex = d->data.indexOf(widget);
+    if (widgetIndex == -1) {
+        return false;
+    }
+
+    beginRemoveRows(QModelIndex(), widgetIndex, widgetIndex);
+
+    d->data.takeAt(widgetIndex)->deleteLater();
+
+    emit dataChanged(this->index(0), this->index(rowCount() - 1));
+
+    emit countChanged(rowCount());
+    endRemoveRows();
+
+    d->requestSave();
+
+    return true;
+}
+
 void WidgetsPageModel::setPackageManager(PackageManager *packageManager)
 {
     Q_D(WidgetsPageModel);
@@ -439,7 +463,7 @@ void WidgetsPageModel::setPackageManager(PackageManager *packageManager)
 
 void WidgetsPageModel::relayout(GridManager *gridManager)
 {
-
+    Q_UNUSED(gridManager)
 }
 
 
@@ -520,61 +544,6 @@ void WidgetsPageModel::relayout(GridManager *gridManager)
 //    // Save the widget as a map
 //    key = QString("page%1/widget_%2").arg(d->pageIndex).arg(newWidget->identifier());
 //    d->settings->setValue(key, newWidget->toMap());
-//}
-
-//void WidgetsViewPageModel::removeWidget(WidgetProperties *widget)
-//{
-//    // Check if the widget is present
-//    int widgetIndex = d->widgets.indexOf(widget);
-//    if (widgetIndex == -1) {
-//        return;
-//    }
-
-//    beginRemoveRows(QModelIndex(), widgetIndex, widgetIndex);
-
-//    // Remove the widget out of the list
-//    d->widgets.removeAt(widgetIndex);
-
-//    // Remove also the widget from the list by Z
-////    d->widgetsByZ.removeAt(widgetToDelete->z());
-
-//    // Remove the widget from the map between
-//    // widget and identifier
-//    d->widgetsByIdentifier.remove(widget->identifier());
-
-//    // Need to update all widgets after the removed one
-//    // because their z are no longer valid
-////    int deletedZ = widgetToDelete->z();
-////    for(int z = deletedZ; z < rowCount(); z++) {
-////        d->widgetsByZ.at(z)->setZ(z);
-////    }
-
-//    // Data changed in the whole model after the Z updates
-////    emit dataChanged(this->index(0), this->index(rowCount() - 1));
-
-//    emit countChanged(rowCount());
-//    endRemoveRows();
-
-//    // Save settings
-//    // Remove the widget from the list of identifiers
-//    d->identifiers.removeAll(widget->identifier());
-//    QString key = QString("page%1/identifiers").arg(d->pageIndex);
-//    d->settings->setValue(key, d->identifiers);
-
-//    // Remove the widget settings
-//    key = QString("page%1/widget_%2").arg(d->pageIndex).arg(widget->identifier());
-//    d->settings->remove(key);
-
-//    // Delete the widget
-//    widget->deleteLater();
-
-//    // Update the settings of the others widgets
-////    for(int z = deletedZ; z < rowCount(); z++) {
-////        WidgetProperties * widget = d->widgetsByZ.at(z);
-
-////        key = QString("page%1/widget_%2").arg(d->pageIndex).arg(widget->identifier());
-////        d->settings->setValue(key, widget->toMap());
-////    }
 //}
 
 //void WidgetsViewPageModel::updateWidget(const QString &identifier, int x, int y,

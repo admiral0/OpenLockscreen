@@ -69,10 +69,23 @@ bool DraggerManager::draggerExists(WidgetProperties *widgetProperties)
     return (d->draggers.contains(widgetProperties));
 }
 
+void DraggerManager::disableDraggers()
+{
+    Q_D(DraggerManager);
+    QHashIterator<WidgetProperties *, QDeclarativeItem *> iterator =
+            QHashIterator<WidgetProperties *, QDeclarativeItem *>(d->draggers);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->setVisible(false);
+    }
+}
+
 void DraggerManager::registerDragger(WidgetProperties *widgetProperties, QDeclarativeItem *dragger)
 {
     Q_D(DraggerManager);
     if (draggerExists(widgetProperties)) {
+        d->draggers.value(widgetProperties)->setVisible(true);
+        dragger->deleteLater();
         return;
     }
     d->draggers.insert(widgetProperties, dragger);

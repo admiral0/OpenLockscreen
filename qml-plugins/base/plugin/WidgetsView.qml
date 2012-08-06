@@ -22,6 +22,7 @@ Item {
    property QtObject gridManagerInstance: gridManager
    property alias content: contentItem.children
    property alias contentItem: contentItem
+   property bool busy
    anchors.fill: parent
    Component.onCompleted: {
        gridManager.setViewWidth(width)

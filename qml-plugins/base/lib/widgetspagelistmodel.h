@@ -149,6 +149,7 @@ public:
                                Widgets::GridManager *gridManager,
                                const QVariantMap &settings = QVariantMap(),
                                const QString &identifier = QString());
+    Q_INVOKABLE bool removeWidget(int pageIndex, Widgets::WidgetProperties *widget);
 Q_SIGNALS:
     /**
      * @short Count changed

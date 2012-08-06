@@ -15,8 +15,6 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import "UiConstants.js" as UI
 
 // Dragger button
 // This button is used on
@@ -27,8 +25,8 @@ Item {
     signal clicked
     property alias source: icon.source
 
-    width: UI.WIDGET_BUTTON_SIZE
-    height: UI.WIDGET_BUTTON_SIZE
+    width: 64
+    height: 64
 
     MouseArea {
         id: mouseArea

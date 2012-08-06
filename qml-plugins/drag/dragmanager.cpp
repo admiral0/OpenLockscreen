@@ -19,6 +19,7 @@
 
 #include <QtCore/QDebug>
 #include <QtDeclarative/QDeclarativeContext>
+#include <QtDeclarative/QDeclarativeItem>
 
 namespace Widgets
 {
@@ -30,8 +31,10 @@ class DragManagerPrivate
 {
 public:
     DragManagerPrivate(DragManager *q);
+    void establishPageConnection();
     void createDraggers();
     void slotCurrentPageChanged(int page);
+    bool busy;
     bool locked;
     QDeclarativeContext *context;
     WidgetsPageListModel *widgetsPageListModel;
@@ -45,15 +48,32 @@ private:
 DragManagerPrivate::DragManagerPrivate(DragManager *q):
     q_ptr(q)
 {
+    busy = false;
     locked = true;
     context = 0;
     widgetsPageListModel = 0;
     gridManager = 0;
 }
 
+void DragManagerPrivate::establishPageConnection()
+{
+    Q_Q(DragManager);
+    int index = widgetsPageListModel->count() - 1;
+    QVariant pageModelVariant = widgetsPageListModel->data(widgetsPageListModel->index(index),
+                                                           WidgetsPageListModel::PageModelRole);
+    WidgetsPageModel *pageModel = pageModelVariant.value<WidgetsPageModel *>();
+    q->connect(pageModel, SIGNAL(countChanged(int)), q, SLOT(createDraggers()));
+
+}
+
 void DragManagerPrivate::createDraggers()
 {
     Q_Q(DragManager);
+    if (locked) {
+        return;
+    }
+    emit q->requestDisableDraggers();
+
     int currentIndex = widgetsPageListModel->currentPage();
     QVariant modelVariant = widgetsPageListModel->data(widgetsPageListModel->index(currentIndex),
                                                        WidgetsPageListModel::PageModelRole);
@@ -66,14 +86,6 @@ void DragManagerPrivate::createDraggers()
         QVariant widgetVariant = model->data(model->index(i), WidgetsPageModel::WidgetRole);
         WidgetProperties *widget = widgetVariant.value<WidgetProperties *>();
         emit q->requestCreateDragger(widget);
-    }
-}
-
-void DragManagerPrivate::slotCurrentPageChanged(int page)
-{
-    Q_UNUSED(page)
-    if (!locked) {
-        createDraggers();
     }
 }
 
@@ -93,6 +105,12 @@ void DragManager::setContext(QDeclarativeContext *context)
     Q_D(DragManager);
     d->context = context;
     load();
+}
+
+bool DragManager::busy() const
+{
+    Q_D(const DragManager);
+    return d->busy;
 }
 
 bool DragManager::locked() const
@@ -117,17 +135,36 @@ void DragManager::load()
     if (d->widgetsPageListModel == 0) {
 
         QVariant pageListModelVariant = d->context->contextProperty("WidgetsPageListModelInstance");
-        QObject *pageListModelObject = pageListModelVariant.value<QObject *>();
+        QObject *pageListModelObject
+                = qobject_cast<QObject *>(pageListModelVariant.value<QObject *>());
+        WidgetsPageListModel *pageListModel
+                = qobject_cast<WidgetsPageListModel *>(pageListModelObject);
 
-        WidgetsPageListModel *pageListModel =
-                qobject_cast<WidgetsPageListModel *>(pageListModelObject);
         if (pageListModel == 0) {
             return;
         }
 
         d->widgetsPageListModel = pageListModel;
-        connect(d->widgetsPageListModel, SIGNAL(currentPageChanged(int)),
-                this, SLOT(slotCurrentPageChanged(int)));
+        // Connections
+        connect(d->widgetsPageListModel, SIGNAL(countChanged(int)),
+                this, SLOT(establishPageConnection()));
+    }
+}
+
+void DragManager::setBusy(bool busy)
+{
+    Q_D(DragManager);
+    if (d->busy != busy) {
+        d->busy = busy;
+        emit busyChanged();
+    }
+
+    if (busy) {
+        emit requestDisableDraggers();
+    } else {
+        if (!locked()) {
+            d->createDraggers();
+        }
     }
 }
 
@@ -173,7 +210,8 @@ void DragManager::drag(WidgetProperties *widgetProperties, const QRect &rect)
 
 }
 
-void DragManager::finishDrag(WidgetProperties *widgetProperties, const QRect &rect)
+void DragManager::finishDrag(WidgetProperties *widgetProperties, QDeclarativeItem *dragger,
+                             const QRect &rect)
 {
     Q_D(DragManager);
     if (!d->gridManager) {
@@ -186,6 +224,13 @@ void DragManager::finishDrag(WidgetProperties *widgetProperties, const QRect &re
     widgetProperties->setWidth(currentPosition.width());
     widgetProperties->setHeight(currentPosition.height());
     widgetProperties->setVisible(true);
+
+    dragger->setX(currentPosition.x());
+    dragger->setY(currentPosition.y());
+    dragger->setWidth(currentPosition.width());
+    dragger->setHeight(currentPosition.height());
+
+
 
     emit widgetDragged(0, QRect(0, 0, 0, 0));
 }

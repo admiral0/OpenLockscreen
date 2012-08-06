@@ -22,6 +22,7 @@
 #include "gridmanager.h"
 
 class QDeclarativeContext;
+class QDeclarativeItem;
 namespace Widgets
 {
 
@@ -32,6 +33,7 @@ class DragManagerPrivate;
 class DragManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool busy READ busy WRITE setBusy NOTIFY busyChanged)
     Q_PROPERTY(bool locked READ locked WRITE setLocked NOTIFY lockedChanged)
     Q_PROPERTY(Widgets::GridManager *gridManager READ gridManager WRITE setGridManager
                NOTIFY gridManagerChanged)
@@ -39,25 +41,31 @@ public:
     explicit DragManager(QObject *parent = 0);
     virtual ~DragManager();
     void setContext(QDeclarativeContext *context);
+    bool busy() const;
     bool locked() const;
     GridManager * gridManager() const;
 Q_SIGNALS:
+    void busyChanged();
     void lockedChanged();
     void gridManagerChanged();
+    void requestDisableDraggers();
     void requestCreateDragger(Widgets::WidgetProperties *widget);
     void requestDeleteDraggers();
     void widgetDragged(Widgets::WidgetProperties *widget, const QRect &rect);
 public Q_SLOTS:
     void load();
+    void setBusy(bool busy);
     void setLocked(bool locked);
     void setGridManager(Widgets::GridManager *gridManager);
     void drag(Widgets::WidgetProperties *widgetProperties, const QRect &rect);
-    void finishDrag(Widgets::WidgetProperties *widgetProperties, const QRect &rect);
+    void finishDrag(Widgets::WidgetProperties *widgetProperties, QDeclarativeItem *dragger,
+                    const QRect &rect);
 protected:
     const QScopedPointer<DragManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(DragManager)
-    Q_PRIVATE_SLOT(d_func(), void slotCurrentPageChanged(int))
+    Q_PRIVATE_SLOT(d_func(), void createDraggers())
+    Q_PRIVATE_SLOT(d_func(), void establishPageConnection())
 };
 
 }

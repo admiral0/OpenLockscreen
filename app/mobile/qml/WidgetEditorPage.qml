@@ -27,6 +27,10 @@ Page {
     id: container
     orientationLock: PageOrientation.LockPortrait
 
+    Component.onCompleted: {
+        DragParametersInstance.removeButtonSource = "image://theme/icon-m-framework-close-thumbnail"
+    }
+
     // The background slows down the transition
     // Therefore it is removed until a better solution is found
 //    Background {
