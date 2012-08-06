@@ -78,7 +78,7 @@ AbstractPage {
         MenuLayout {
             MenuItem {
                 text: qsTr("Delete dock")
-                onClicked: console.debug(DockModelInstance.removeDock(listView.selectedDock))
+                onClicked: DockModelInstance.removeDock(listView.selectedDock)
             }
         }
     }

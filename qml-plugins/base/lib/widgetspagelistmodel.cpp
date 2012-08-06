@@ -26,8 +26,6 @@
 
 #include "widgetspagelistmodel.h"
 #include "widgetspagemodel.h"
-//#include "settings.h"
-//#include "packagemanager.h"
 
 #include <QtCore/QDebug>
 
@@ -125,12 +123,6 @@ void WidgetsPageListModelPrivate::loadSettings()
     emit q->currentPageChanged(currentPage);
 }
 
-//void DisplayedPagesModelPrivate::slotRowsInserted(const QModelIndex &parent,
-//                                                                 int start, int end)
-//{
-//    DisplayedPageWidgetsModel * model = qobject_cast<DisplayedPageWidgetsModel *>(q->sender());
-//    emit q->pageRowInserted(model, parent, start, end);
-//}
 
 ////// End of private class //////
 
@@ -158,8 +150,6 @@ WidgetsPageListModel::WidgetsPageListModel(WidgetsPageListModelPrivate *dd,
 WidgetsPageListModel::~WidgetsPageListModel()
 {
 }
-
-//void WidgetsPageListModel::
 
 int WidgetsPageListModel::rowCount(const QModelIndex &parent) const
 {
@@ -239,17 +229,6 @@ bool WidgetsPageListModel::addWidget(int pageIndex,
     return d->items[pageIndex]->addWidget(widget, gridManager, settings, identifier);
 }
 
-//DisplayedPageWidgetsModel * DisplayedPagesModel::pageModel(int index) const
-//{
-//    if (index < 0 or index > rowCount())
-//    {
-//        return 0;
-//    }
-
-//    DisplayedPagesModelItem *item = d->items.at(index);
-//    return  item->model;
-//}
-
 void WidgetsPageListModel::setSettings(Settings *settings)
 {
     Q_D(WidgetsPageListModel);
@@ -286,8 +265,6 @@ void WidgetsPageListModel::setPackageManager(PackageManager *packageManager)
 
 void WidgetsPageListModel::setCurrentPage(int currentPage)
 {
-    qDebug() << currentPage;
-
     Q_D(WidgetsPageListModel);
     if (d->currentPage != currentPage) {
         d->currentPage = currentPage;
@@ -319,8 +296,6 @@ void WidgetsPageListModel::addPage()
     item->setPageIndex(rowCount());
 
     d->items.append(item);
-//    connect(item->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-//            this, SLOT(slotRowsInserted(QModelIndex, int, int)));
 
     emit countChanged(rowCount());
     endInsertRows();
@@ -337,8 +312,6 @@ void WidgetsPageListModel::removePage()
     beginRemoveRows(QModelIndex(), rowCount() - 1, rowCount() - 1);
 
     WidgetsPageModel *item = d->items.takeLast();
-//    disconnect(item->model, SIGNAL(rowsInserted(QModelIndex, int, int)),
-//               this, SLOT(slotRowsInserted(QModelIndex, int, int)));
     item->deleteLater();
 
     emit countChanged(rowCount());

@@ -16,69 +16,35 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-//import com.nokia.extras 1.1
-import "UiConstants.js" as Ui
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.docks 1.0
+import org.SfietKonstantin.widgets.background 1.0
 
-AbstractNavigationPage {
-    id: container
+Page {
+    id: mainPage
     orientationLock: PageOrientation.LockPortrait
 
-    title: qsTr("Widgets settings")
-    onShow: {
-        if(page == "showPreview") {
-//            pinchToBackBanner.show()
-            window.pageStack.push(previewPage)
-        }
-        if (page == "showSettings") {
-            window.pageStack.push(settingsPage)
-        }
-        if(page == "showInfo") {
-            window.pageStack.push(infoPage)
-        }
-        if(page == "showAbout") {
-            window.pageStack.push(aboutPage)
-        }
-    }
-    model: ListModel {
-        ListElement {
-            identifier: "showPreview"
-            text: QT_TR_NOOP("Preview")
-        }
-
-        ListElement {
-            identifier: "showSettings"
-            text: QT_TR_NOOP("Configure widgets")
-        }
-
-        ListElement {
-            identifier: "showInfo"
-            text: QT_TR_NOOP("Informations")
-        }
-
-        ListElement {
-            identifier: "showAbout"
-            text: QT_TR_NOOP("About")
-        }
+    PinchArea {
+        anchors.fill: parent
+        onPinchFinished: window.pageStack.pop()
     }
 
-    PreviewPage {
-        id: previewPage
-
-//        InfoBanner {
-//            id: pinchToBackBanner
-//            text: qsTr("Pinch the screen to exit the preview mode")
-//        }
+    Background {
+        anchors.fill: parent
+        id: background
+        // Currently disabled because of bugs in PageView
+        // view: widgetsPage.view
+        // initialX: widgetsPage.initialX
     }
 
-    SettingsPage {
-        id: settingsPage
-    }
+    DockedView {
+        content: Item {
+            id: widgets
+            anchors.fill: parent
 
-    InformationsPage {
-        id: infoPage
-    }
-
-    AboutPage {
-        id: aboutPage
+            WidgetsHorizontalPageView {
+                id: widgetsPage
+            }
+        }
     }
 }

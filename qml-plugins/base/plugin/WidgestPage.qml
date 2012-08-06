@@ -30,6 +30,7 @@ Item {
             scale: 0
             qmlFile: PackageManagerInstance.widgetFile(model.widget.packageIdentifier,
                                                        model.widget.fileName)
+            visible: model.widget.visible
 
             Component.onCompleted: scale = 1
             Behavior on scale {

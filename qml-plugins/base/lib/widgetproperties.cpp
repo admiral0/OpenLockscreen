@@ -44,6 +44,7 @@ public:
     QSize size;
     QPoint position;
     int z;
+    bool visible;
 
 
 private:
@@ -53,6 +54,7 @@ private:
 WidgetPropertiesPrivate::WidgetPropertiesPrivate(WidgetProperties *q):
     WidgetBasePropertiesPrivate(q), GraphicalComponentPrivate()
 {
+    visible = true;
 }
 
 void WidgetPropertiesPrivate::copyFromBase(WidgetBaseProperties *base)
@@ -66,7 +68,6 @@ void WidgetPropertiesPrivate::copyFromBase(WidgetBaseProperties *base)
         data.second = base->description(language);
         nameAndDescription.insert(language, data);
     }
-
 
     fileName = base->fileName();
     packageIdentifier = base->packageIdentifier();
@@ -178,6 +179,12 @@ int WidgetProperties::height() const
 {
     W_D(const WidgetProperties);
     return d->size.height();
+}
+
+bool WidgetProperties::isVisible() const
+{
+    W_D(const WidgetProperties);
+    return d->visible;
 }
 
 QVariantMap WidgetProperties::settings() const
@@ -311,6 +318,15 @@ void WidgetProperties::setHeight(int height)
     if (d->size.height() != height) {
         d->size.setHeight(height);
         emit heightChanged(height);
+    }
+}
+
+void WidgetProperties::setVisible(bool visible)
+{
+    W_D(WidgetProperties);
+    if (d->visible != visible) {
+        d->visible = visible;
+        emit visibleChanged(visible);
     }
 }
 

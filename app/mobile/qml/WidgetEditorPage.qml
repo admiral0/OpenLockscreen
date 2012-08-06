@@ -30,8 +30,9 @@ Page {
     Background {
         anchors.fill: parent
         id: background
-        view: widgetsPage.view
-        initialX: widgetsPage.initialX
+        // Currently disabled because of bugs in PageView
+        //view: widgetsPage.view
+        // initialX: widgetsPage.initialX
     }
 
     EmptyDockedView {
@@ -43,9 +44,9 @@ Page {
                 id: widgetsPage
             }
 
-//            DragOverlay {
-//                widgetsView: widgetsPage
-//            }
+            DragOverlay {
+                widgetsView: widgetsPage
+            }
         }
     }
 

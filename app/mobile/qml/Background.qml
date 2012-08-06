@@ -19,8 +19,6 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 
 HorizontalParallaxBackground {
-
-    view: container.view
     settings: Settings {
         defaultSettings: [
             SettingsEntry {
@@ -36,7 +34,7 @@ HorizontalParallaxBackground {
             SettingsEntry {
                 group: "background"
                 key: "wallpaperSource"
-                value: "/opt/widgets/data/wallpaper-1.jpg"
+                value: "/opt/widgets/data/wallpaper-1.png"
             }
         ]
     }

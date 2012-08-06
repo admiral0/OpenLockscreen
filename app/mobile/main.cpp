@@ -62,8 +62,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<WebAndMailHandler>("org.SfietKonstantin.widgets.app", 1, 0,
                                        "WebAndMailHandler");
 
-#ifdef QML_PLUGIN_PATH
-    view->engine()->addImportPath(QML_PLUGIN_PATH);
+#ifdef IMPORT_DIR
+    view->engine()->addImportPath(IMPORT_DIR);
 #endif
 
     view->setSource(QUrl(MAIN_QML_PATH));

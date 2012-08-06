@@ -61,7 +61,7 @@ public:
      * @param parent parent Q-pointer.
      */
     WidgetsPageModelPrivate(WidgetsPageModel *q);
-    ~WidgetsPageModelPrivate();
+    virtual ~WidgetsPageModelPrivate();
     virtual void clear();
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;

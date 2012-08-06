@@ -37,10 +37,11 @@ public:
     virtual ~DragManager();
     void setContext(QDeclarativeContext *context);
     bool locked() const;
-signals:
+Q_SIGNALS:
     void lockedChanged();
     void requestCreateDragger(Widgets::WidgetProperties *widget);
-public slots:
+    void requestDeleteDraggers();
+public Q_SLOTS:
     void load();
     void setLocked(bool locked);
 protected:

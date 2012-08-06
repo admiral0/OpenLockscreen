@@ -30,10 +30,49 @@
 namespace Widgets
 {
 
+/**
+ * @short Interface for classes that can be serialized into XML
+ *
+ * This interface provides two methods that are used to
+ * save a class instance into XML and to load the instance
+ * from XML, they are
+ *
+ * - fromXmlElement()
+ * - toXmlElement()
+ *
+ * The first method is used to retrieve an instance of the class.
+ * It should be called on an instance that is already created
+ * (but invalid), and reload all information from the XML element.
+ *
+ * The second method is used to dump all the information from the
+ * instance to an XML element.
+ */
 class XmlSerializableInterface
 {
 public:
+    /**
+     * @brief Load from XML element
+     *
+     * This method is used to load information from an
+     * XML element to a class instance.
+     *
+     * @param element the source XML element.
+     * @return if the loading succeded.
+     */
     virtual bool fromXmlElement(const QDomElement &element) = 0;
+    /**
+     * @brief Save to XML element
+     *
+     * This method is used to save the information that is
+     * contained in the instance to an XML element.
+     *
+     * This element and all children elements should be created using
+     * the provided QDomDocument, otherwise, it will be invalid.
+     *
+     * @param tagName the tag that will be used to create this element.
+     * @param document a pointer to the document that is used to create elements.
+     * @return the class as an XML element.
+     */
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const = 0;
 };
 

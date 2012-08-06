@@ -52,6 +52,7 @@ class WidgetProperties: public WidgetBaseProperties, private IdentifiedElementIn
      * @short Current height of the widget
      */
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(QVariantMap settings READ settings NOTIFY settingsChanged)
 public:
     explicit WidgetProperties(QObject *parent = 0);
@@ -119,6 +120,7 @@ public:
      * @return current height of the widget.
      */
     int height() const;
+    bool isVisible() const;
     QVariantMap settings() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
@@ -169,6 +171,7 @@ Q_SIGNALS:
      * @param height value of the new height.
      */
     void heightChanged(int height);
+    void visibleChanged(bool visible);
     /**
      * @short Settings changed
      *
@@ -224,6 +227,7 @@ public Q_SLOTS:
      * @param height height to set.
      */
     void setHeight(int height);
+    void setVisible(bool visible);
     /**
      * @short Set the settings that belongs to this widget
      *

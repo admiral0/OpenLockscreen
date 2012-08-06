@@ -35,8 +35,6 @@
 namespace Widgets
 {
 
-//class Settings;
-//class PackageManager;
 class WidgetsPageListModelPrivate;
 /**
  * @short Model for widgets page
@@ -145,17 +143,6 @@ public:
      * @return retrieved data as a variant.
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    /**
-     * @short Direct access to page model
-     *
-     * This method is used to have a direct access
-     * to a page model.
-     *
-     * @param index index of the page to retrieve.
-     * @return the page model at the given index.
-     */
-//    Q_INVOKABLE Widgets::DisplayedPageWidgetsModel * pageModel(int index) const;
-
 
     Q_INVOKABLE bool addWidget(int pageIndex,
                                Widgets::WidgetBaseProperties *widget,
@@ -177,19 +164,6 @@ Q_SIGNALS:
     void settingsChanged();
     void gridManagerChanged();
     void packageManagerChanged();
-    /**
-     * @short Row inserted in a page
-     *
-     * Notify that in a page, rows
-     * was inserted.
-     *
-     * @param page the page that changed.
-     * @param parent parent model index.
-     * @param start the first row that is new.
-     * @param end the last row that is new.
-     */
-//    void pageRowInserted(DisplayedPageWidgetsModel * page,
-//                         const QModelIndex &parent, int start, int end);
 public Q_SLOTS:
     void setSettings(Settings *settings);
     void setGridManager(GridManager *gridManager);
@@ -228,7 +202,6 @@ protected:
     const QScopedPointer<WidgetsPageListModelPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(WidgetsPageListModel)
-//    Q_PRIVATE_SLOT(d, void slotRowsInserted(const QModelIndex &parent, int start, int end))
 };
 
 }

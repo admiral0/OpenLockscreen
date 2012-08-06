@@ -51,8 +51,6 @@ void DragManagerPrivate::createDraggers()
 {
     Q_Q(DragManager);
     int currentIndex = widgetsPageListModel->currentPage();
-    qDebug() << currentIndex;
-
     QVariant modelVariant = widgetsPageListModel->data(widgetsPageListModel->index(currentIndex),
                                                        WidgetsPageListModel::PageModelRole);
     WidgetsPageModel *model = modelVariant.value<WidgetsPageModel *>();
@@ -121,9 +119,10 @@ void DragManager::setLocked(bool locked)
         emit lockedChanged();
     }
 
-    // Create draggers
     if (!d->locked) {
         d->createDraggers();
+    } else {
+        emit requestDeleteDraggers();
     }
 }
 

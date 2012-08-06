@@ -20,7 +20,8 @@ import org.SfietKonstantin.widgets 1.0
 Item {
    id: container
    property QtObject gridManagerInstance: gridManager
-   property alias content: contentsContainer.children
+   property alias content: contentItem.children
+   property alias contentItem: contentItem
    anchors.fill: parent
    Component.onCompleted: {
        gridManager.setViewWidth(width)
@@ -58,7 +59,7 @@ Item {
     }
 
     Item {
-        id: contentsContainer
+        id: contentItem
         anchors.centerIn: parent
         width: gridManager.containerWidth
         height: gridManager.containerHeight

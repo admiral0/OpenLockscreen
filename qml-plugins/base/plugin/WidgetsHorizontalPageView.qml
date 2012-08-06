@@ -41,6 +41,7 @@ WidgetsView {
 //            onWidthChanged: if (!moving) {recomputeInitialX()}
 //            onHeightChanged: if (!moving) {recomputeInitialX()}
             onCurrentIndexChanged: WidgetsPageListModelInstance.currentPage = currentIndex
+            // TODO : Change the hardcoded 11
             cacheBuffer: view.width * 11
 
             delegate: Item {
@@ -56,13 +57,14 @@ WidgetsView {
             Connections {
                 target: WidgetsPageListModelInstance
                 onInitialPageChanged: {
-//                    if (page != -1) {
+                    if (page != -1) {
 //                        var newPage = page - 1
 
+                        view.positionViewAtIndex(page, ListView.Visible)
+                        view.currentIndex = page
 //                        console.debug(page + " " + view.currentIndex)
-//                        view.positionViewAtIndex(newPage + 1, ListView.Beginning)
 //                        view.recomputeInitialX()
-//                    }
+                    }
                 }
             }
         }

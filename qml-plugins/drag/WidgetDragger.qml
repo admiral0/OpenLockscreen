@@ -15,7 +15,8 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import "UiConstants.js" as UI
+import org.SfietKonstantin.widgets 1.0
+//import "UiConstants.js" as UI
 
 // Widget dragger
 // This widget dragger is used to drag
@@ -27,15 +28,18 @@ import "UiConstants.js" as UI
 //
 // When the dragger is released, the true widget
 // is set at the correct position
-Item {
+Rectangle {
     id: container
     property variant widget
     property variant dragRect
+    property string qmlFile
     property bool dragging
-    signal removeWidget(variant widget)
-    signal showWidgetSettings(variant widget)
+//    signal removeWidget(variant widget)
+//    signal showWidgetSettings(variant widget)
     opacity: 0.8
+    color: "green"
 
+    /*
     // This function is used to update
     // the highlighter when the dragger
     // is moving
@@ -64,14 +68,14 @@ Item {
             height = widget.height
         }
     }
-
+    */
     Component.onCompleted: {
         x = widget.x
         y = widget.y
         width = widget.width
         height = widget.height
     }
-
+    /*
     onXChanged: updateHighlighter()
     onYChanged: updateHighlighter()
     onDraggingChanged: {
@@ -79,14 +83,15 @@ Item {
         updateDraggedWidgetIdentifierAndPosition()
     }
 
-
+    */
     WidgetContainer {
         id: widgetContainer
-        qmlFile: widget.qmlFile
-        settings: widget.settings
+        qmlFile: container.qmlFile
+        widgetProperties: widget
         visible: false
         anchors.fill: parent
     }
+    /*
 
     MouseArea {
         anchors.fill: parent
@@ -101,22 +106,22 @@ Item {
         onReleased: container.dragging = false
     }
 
-    WidgetDraggerButton {
-        id: removeButton
-        anchors.top: container.top; anchors.topMargin: - UI.MARGIN_DEFAULT
-        anchors.right: container.right; anchors.rightMargin: - UI.MARGIN_DEFAULT
-        source: "image://theme/icon-m-framework-close-thumbnail"
-        onClicked: container.removeWidget(container.widget)
-    }
+//    WidgetDraggerButton {
+//        id: removeButton
+//        anchors.top: container.top; anchors.topMargin: - UI.MARGIN_DEFAULT
+//        anchors.right: container.right; anchors.rightMargin: - UI.MARGIN_DEFAULT
+//        source: "image://theme/icon-m-framework-close-thumbnail"
+//        onClicked: container.removeWidget(container.widget)
+//    }
 
-    WidgetDraggerButton {
-        id: settingsButton
-        anchors.bottom: container.bottom; anchors.bottomMargin: - UI.MARGIN_DEFAULT
-        anchors.left: container.left; anchors.leftMargin: - UI.MARGIN_DEFAULT
-        source: "image://theme/icon-l-settings"
-        visible: container.widget.hasSettings
-        onClicked: container.showWidgetSettings(container.widget)
-    }
+//    WidgetDraggerButton {
+//        id: settingsButton
+//        anchors.bottom: container.bottom; anchors.bottomMargin: - UI.MARGIN_DEFAULT
+//        anchors.left: container.left; anchors.leftMargin: - UI.MARGIN_DEFAULT
+//        source: "image://theme/icon-l-settings"
+//        visible: container.widget.hasSettings
+//        onClicked: container.showWidgetSettings(container.widget)
+//    }
 
     states: State {
         name: "dragging"; when: dragging
@@ -125,4 +130,5 @@ Item {
             visible: true
         }
     }
+    */
 }

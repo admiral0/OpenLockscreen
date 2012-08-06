@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,28 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "widgets_drag_plugin.h"
+#ifndef WIDGETS_DRAG_DRAGGERMANAGER_H
+#define WIDGETS_DRAG_DRAGGERMANAGER_H
 
-#include <QtDeclarative/QtDeclarative>
+#include <QtCore/QObject>
 
-#include "dragmanager.h"
-#include "draggermanager.h"
-
-void WidgetsDragPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+class QDeclarativeItem;
+namespace Widgets
 {
-    Q_UNUSED(uri)
-    Widgets::Drag::DragManager *dragManager = new Widgets::Drag::DragManager(this);
-    dragManager->setContext(engine->rootContext());
-    engine->rootContext()->setContextProperty("DragManagerInstance", dragManager);
+
+class WidgetProperties;
+namespace Drag
+{
+
+class DraggerManagerPrivate;
+class DraggerManager : public QObject
+{
+    Q_OBJECT
+public:
+    explicit DraggerManager(QObject *parent = 0);
+    virtual ~DraggerManager();
+    Q_INVOKABLE bool draggerExists(Widgets::WidgetProperties *widgetProperties);
+public Q_SLOTS:
+    void registerDragger(Widgets::WidgetProperties *widgetProperties, QDeclarativeItem *dragger);
+    void unregisterDragger(Widgets::WidgetProperties *widgetProperties);
+    void unregisterDraggers();
+protected:
+    const QScopedPointer<DraggerManagerPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(DraggerManager)
+};
+
 }
 
-void WidgetsDragPlugin::registerTypes(const char *uri)
-{
-    // @uri org.SfietKonstantin.widgets.drag
-    QString reason = "Only one instance of DragManager is allowed.";
-    qmlRegisterUncreatableType<Widgets::Drag::DragManager>(uri, 1, 0, "DragManager", reason);
-    qmlRegisterType<Widgets::Drag::DraggerManager>(uri, 1, 0, "DraggerManager");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsDragPlugin)
-
+#endif // WIDGETS_DRAG_DRAGGERMANAGER_H

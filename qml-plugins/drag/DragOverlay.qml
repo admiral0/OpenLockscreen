@@ -25,16 +25,44 @@ import org.SfietKonstantin.widgets.drag 1.0
 // draggers that are used to move
 // the different widgets
 
-Rectangle {
+Item {
     id: container
     property Item widgetsView
-
     anchors.fill: widgetsView
+
+    DraggerManager {
+        id: draggerManager
+    }
+
+    Item {
+        id: contentsContainer
+        parent: widgetsView.contentItem
+        anchors.fill: parent
+    }
+
+    // Create a dragger
+    function createDragger(widget) {
+        var qmlFile = PackageManagerInstance.widgetFile(widget.packageIdentifier, widget.fileName)
+        var component = Qt.createComponent("WidgetDragger.qml")
+        if (component.status == Component.Ready) {
+//            var dragRect = Qt.rect(0,0, grid.width, grid.height)
+            var dragger = component.createObject(contentsContainer,
+                                                 {"widget": widget,
+                                                  "qmlFile": qmlFile});
+            draggerManager.registerDragger(widget, dragger)
+//            dragger.removeWidget.connect(container.removeWidget)
+//            dragger.showWidgetSettings.connect(container.showWidgetSettings)
+        } else {
+            console.debug("Cannot create the widget from file WidgetDragger.qml" +
+                          "\nerror : " + component.errorString())
+        }
+        component.destroy()
+    }
 
     Connections {
         target: DragManagerInstance
-//        onRequestCreateDragger: createDragger(widget)
-        onRequestCreateDragger: console.debug(widget.fileName)
+        onRequestCreateDragger: createDragger(widget)
+        onRequestDeleteDraggers: draggerManager.unregisterDraggers()
     }
 }
 
