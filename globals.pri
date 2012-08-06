@@ -11,6 +11,11 @@ contains(QMAKE_HOST.arch, x86_64):{
     !contains(MEEGO_EDITION,harmattan):64_BITS = 64
 }
 
+isEmpty(DEPLOYMENT_PREFIX)
+{
+    DEPLOYMENT_PREFIX = /usr
+}
+
 isEmpty(PREFIX) {
     CONFIG(release):PREFIX = /usr
     CONFIG(debug, debug|release):PREFIX = $${DEPLOYMENT_PREFIX}
@@ -51,8 +56,12 @@ USER_WIDGETS_FOLDER =   $${OPTDIR}/widgets/
 # Application folder
 contains(MEEGO_EDITION,harmattan):{
     APPLICATION_FOLDER  = $${OPTDIR}/bin/
+    DATA_FOLDER = $${OPTDIR}/data/
+    QML_FOLDER = $${OPTDIR}/qml/
 } else {
     APPLICATION_FOLDER  = $${BINDIR}
+    DATA_FOLDER = $${SHAREDIR}/data
+    QML_FOLDER = $${SHAREDIR}/qml
 }
 
 # Test folder

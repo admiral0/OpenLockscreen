@@ -43,6 +43,10 @@ PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
     filter = 0;
 }
 
+PackageManagerPrivate::~PackageManagerPrivate()
+{
+}
+
 QString PackageManagerPrivate::databasePath() const
 {
     QDir dir (QDesktopServices::storageLocation(QDesktopServices::CacheLocation));

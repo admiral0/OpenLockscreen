@@ -27,13 +27,15 @@ Page {
     id: container
     orientationLock: PageOrientation.LockPortrait
 
-    Background {
-        anchors.fill: parent
-        id: background
+    // The background slows down the transition
+    // Therefore it is removed until a better solution is found
+//    Background {
+//        anchors.fill: parent
+//        id: background
         // Currently disabled because of bugs in PageView
         //view: widgetsPage.view
         // initialX: widgetsPage.initialX
-    }
+//    }
 
     EmptyDockedView {
         content: Item {
@@ -76,7 +78,8 @@ Page {
 
     Item {
         id: falseToolbar
-        opacity: window.pageStack.busy ? 0 : 1
+//        opacity: window.pageStack.busy ? 0 : 1
+        visible: !window.pageStack.busy
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -96,9 +99,9 @@ Page {
             onClicked: addWidgetSheet.open()
         }
 
-        Behavior on opacity {
-            NumberAnimation {duration: Ui.ANIMATION_DURATION_XFAST}
-        }
+//        Behavior on opacity {
+//            NumberAnimation {duration: Ui.ANIMATION_DURATION_XFAST}
+//        }
 
         ToolIcon {
             iconId: DragManagerInstance.locked ? "toolbar-edit" : "toolbar-done"

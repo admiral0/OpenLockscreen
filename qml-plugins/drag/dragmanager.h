@@ -19,6 +19,7 @@
 
 #include <QtCore/QObject>
 #include "widgetproperties.h"
+#include "gridmanager.h"
 
 class QDeclarativeContext;
 namespace Widgets
@@ -32,22 +33,31 @@ class DragManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool locked READ locked WRITE setLocked NOTIFY lockedChanged)
+    Q_PROPERTY(Widgets::GridManager *gridManager READ gridManager WRITE setGridManager
+               NOTIFY gridManagerChanged)
 public:
     explicit DragManager(QObject *parent = 0);
     virtual ~DragManager();
     void setContext(QDeclarativeContext *context);
     bool locked() const;
+    GridManager * gridManager() const;
 Q_SIGNALS:
     void lockedChanged();
+    void gridManagerChanged();
     void requestCreateDragger(Widgets::WidgetProperties *widget);
     void requestDeleteDraggers();
+    void widgetDragged(Widgets::WidgetProperties *widget, const QRect &rect);
 public Q_SLOTS:
     void load();
     void setLocked(bool locked);
+    void setGridManager(Widgets::GridManager *gridManager);
+    void drag(Widgets::WidgetProperties *widgetProperties, const QRect &rect);
+    void finishDrag(Widgets::WidgetProperties *widgetProperties, const QRect &rect);
 protected:
     const QScopedPointer<DragManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(DragManager)
+    Q_PRIVATE_SLOT(d_func(), void slotCurrentPageChanged(int))
 };
 
 }

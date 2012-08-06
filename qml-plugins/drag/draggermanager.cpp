@@ -16,6 +16,7 @@
 
 #include "draggermanager.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QHash>
 #include <QtDeclarative/QDeclarativeItem>
 

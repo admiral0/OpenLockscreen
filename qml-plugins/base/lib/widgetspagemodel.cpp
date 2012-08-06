@@ -415,6 +415,12 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
     endInsertRows();
 
     d->requestSave();
+
+    connect(newWidget, SIGNAL(xChanged(int)), this, SLOT(requestSave()));
+    connect(newWidget, SIGNAL(yChanged(int)), this, SLOT(requestSave()));
+    connect(newWidget, SIGNAL(widthChanged(int)), this, SLOT(requestSave()));
+    connect(newWidget, SIGNAL(heightChanged(int)), this, SLOT(requestSave()));
+
     return true;
 }
 
@@ -629,3 +635,5 @@ bool WidgetsPageModel::event(QEvent *event)
 }
 
 }
+
+#include "moc_widgetspagemodel.cpp"

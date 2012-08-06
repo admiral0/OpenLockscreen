@@ -16,6 +16,7 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.drag 1.0
 //import "UiConstants.js" as UI
 
 // Widget dragger
@@ -28,7 +29,7 @@ import org.SfietKonstantin.widgets 1.0
 //
 // When the dragger is released, the true widget
 // is set at the correct position
-Rectangle {
+Item {
     id: container
     property variant widget
     property variant dragRect
@@ -37,19 +38,26 @@ Rectangle {
 //    signal removeWidget(variant widget)
 //    signal showWidgetSettings(variant widget)
     opacity: 0.8
-    color: "green"
 
-    /*
+
     // This function is used to update
     // the highlighter when the dragger
     // is moving
-    function updateHighlighter() {
+    function drag() {
         if(dragging) {
-            var pos = viewManager.computeWidgetPosition(x, y)
-            viewManager.highlightRect = Qt.rect(pos.x, pos.y, width, height)
+            DragManagerInstance.drag(widget, Qt.rect(x, y, width, height))
+//            var pos = viewManager.computeWidgetPosition(x, y)
+//            viewManager.highlightRect = Qt.rect(pos.x, pos.y, width, height)
         }
     }
 
+    function finishDrag() {
+        if (!dragging) {
+            DragManagerInstance.finishDrag(widget, Qt.rect(x, y, width, height))
+        }
+    }
+
+    /*
     // This function is used to
     // update the information about
     // the widget that is currently being dragged
@@ -75,15 +83,16 @@ Rectangle {
         width = widget.width
         height = widget.height
     }
-    /*
-    onXChanged: updateHighlighter()
-    onYChanged: updateHighlighter()
+
+    onXChanged: drag()
+    onYChanged: drag()
     onDraggingChanged: {
-        updateHighlighter()
-        updateDraggedWidgetIdentifierAndPosition()
+        drag()
+        finishDrag()
+//        updateDraggedWidgetIdentifierAndPosition()
     }
 
-    */
+
     WidgetContainer {
         id: widgetContainer
         qmlFile: container.qmlFile
@@ -91,21 +100,21 @@ Rectangle {
         visible: false
         anchors.fill: parent
     }
-    /*
+
 
     MouseArea {
         anchors.fill: parent
         drag.target: container
-        drag.minimumX: dragRect.x
-        drag.minimumY: dragRect.y
-        drag.maximumX: dragRect.x + dragRect.width - container.width
-        drag.maximumY: dragRect.y + dragRect.height - container.height
+        drag.minimumX: 0
+        drag.minimumY: 0
+        drag.maximumX: container.parent.width - container.width
+        drag.maximumY: container.parent.height - container.height
         drag.axis: Drag.XandYAxis
 
         onPressed: container.dragging = true
         onReleased: container.dragging = false
     }
-
+    /*
 //    WidgetDraggerButton {
 //        id: removeButton
 //        anchors.top: container.top; anchors.topMargin: - UI.MARGIN_DEFAULT
@@ -122,7 +131,7 @@ Rectangle {
 //        visible: container.widget.hasSettings
 //        onClicked: container.showWidgetSettings(container.widget)
 //    }
-
+    */
     states: State {
         name: "dragging"; when: dragging
         PropertyChanges {
@@ -130,5 +139,5 @@ Rectangle {
             visible: true
         }
     }
-    */
+
 }

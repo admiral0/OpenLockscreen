@@ -38,6 +38,20 @@ Item {
         id: contentsContainer
         parent: widgetsView.contentItem
         anchors.fill: parent
+
+        Rectangle {
+            id: highlighter
+
+            Connections {
+                target: DragManagerInstance
+                onWidgetDragged: {
+                    highlighter.x = rect.x
+                    highlighter.y = rect.y
+                    highlighter.width = rect.width
+                    highlighter.height = rect.height
+                }
+            }
+        }
     }
 
     // Create a dragger
@@ -45,7 +59,6 @@ Item {
         var qmlFile = PackageManagerInstance.widgetFile(widget.packageIdentifier, widget.fileName)
         var component = Qt.createComponent("WidgetDragger.qml")
         if (component.status == Component.Ready) {
-//            var dragRect = Qt.rect(0,0, grid.width, grid.height)
             var dragger = component.createObject(contentsContainer,
                                                  {"widget": widget,
                                                   "qmlFile": qmlFile});
@@ -58,6 +71,8 @@ Item {
         }
         component.destroy()
     }
+
+    Component.onCompleted: DragManagerInstance.gridManager = widgetsView.gridManagerInstance
 
     Connections {
         target: DragManagerInstance

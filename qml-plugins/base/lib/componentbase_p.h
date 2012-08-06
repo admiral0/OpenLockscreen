@@ -38,6 +38,7 @@ class ComponentBasePrivate
 {
 public:
     ComponentBasePrivate(ComponentBase *q);
+    virtual ~ComponentBasePrivate();
     QString defaultName;
     QString defaultDescription;
     QHash<QString, QPair<QString, QString> > nameAndDescription;

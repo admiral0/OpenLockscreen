@@ -39,6 +39,7 @@ class PackageManagerPrivate
 {
 public:
     PackageManagerPrivate(PackageManager *q);
+    virtual ~PackageManagerPrivate();
     virtual QString databasePath() const;
     bool executeQuery(QSqlQuery *query) const;
     bool executeQueryBatch(QSqlQuery *query) const;

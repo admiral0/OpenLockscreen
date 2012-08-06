@@ -44,6 +44,10 @@ ComponentBasePrivate::ComponentBasePrivate(ComponentBase *q):
     valid = false;
 }
 
+ComponentBasePrivate::~ComponentBasePrivate()
+{
+}
+
 void ComponentBasePrivate::fromDesktopFile(const QString &file)
 {
     DesktopParser parser (file);

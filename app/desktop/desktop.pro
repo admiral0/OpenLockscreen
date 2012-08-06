@@ -5,9 +5,9 @@ TARGET =            widgets
 
 QT =                core gui declarative xml
 
-DEFINES +=          'MAIN_QML_PATH=\'\"$${SHAREDIR}/qml/main.qml\"\''
+DEFINES +=          'MAIN_QML_PATH=\'\"$${QML_FOLDER}/main.qml\"\''
 DEFINES +=          'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
-DEFINES +=          'DATA_DIR=\'\"$${SHAREDIR}/data/\"\''
+DEFINES +=          'DATA_DIR=\'\"$${DATA_FOLDER}\"\''
 
 SOURCES +=          main.cpp \
 

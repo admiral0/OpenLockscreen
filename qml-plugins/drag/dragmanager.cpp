@@ -31,9 +31,12 @@ class DragManagerPrivate
 public:
     DragManagerPrivate(DragManager *q);
     void createDraggers();
+    void slotCurrentPageChanged(int page);
     bool locked;
     QDeclarativeContext *context;
     WidgetsPageListModel *widgetsPageListModel;
+    GridManager *gridManager;
+    QRect previousPosition;
 private:
     DragManager * const q_ptr;
     Q_DECLARE_PUBLIC(DragManager)
@@ -45,6 +48,7 @@ DragManagerPrivate::DragManagerPrivate(DragManager *q):
     locked = true;
     context = 0;
     widgetsPageListModel = 0;
+    gridManager = 0;
 }
 
 void DragManagerPrivate::createDraggers()
@@ -62,6 +66,14 @@ void DragManagerPrivate::createDraggers()
         QVariant widgetVariant = model->data(model->index(i), WidgetsPageModel::WidgetRole);
         WidgetProperties *widget = widgetVariant.value<WidgetProperties *>();
         emit q->requestCreateDragger(widget);
+    }
+}
+
+void DragManagerPrivate::slotCurrentPageChanged(int page)
+{
+    Q_UNUSED(page)
+    if (!locked) {
+        createDraggers();
     }
 }
 
@@ -89,6 +101,12 @@ bool DragManager::locked() const
     return d->locked;
 }
 
+GridManager * DragManager::gridManager() const
+{
+    Q_D(const DragManager);
+    return d->gridManager;
+}
+
 void DragManager::load()
 {
     Q_D(DragManager);
@@ -108,6 +126,8 @@ void DragManager::load()
         }
 
         d->widgetsPageListModel = pageListModel;
+        connect(d->widgetsPageListModel, SIGNAL(currentPageChanged(int)),
+                this, SLOT(slotCurrentPageChanged(int)));
     }
 }
 
@@ -126,6 +146,52 @@ void DragManager::setLocked(bool locked)
     }
 }
 
+void DragManager::setGridManager(GridManager *gridManager)
+{
+    Q_D(DragManager);
+    if (d->gridManager != gridManager) {
+        d->gridManager = gridManager;
+        emit gridManagerChanged();
+    }
+}
+
+void DragManager::drag(WidgetProperties *widgetProperties, const QRect &rect)
+{
+    Q_D(DragManager);
+    widgetProperties->setVisible(false);
+
+    if (!d->gridManager) {
+        return;
+    }
+
+    QRect currentPosition = d->gridManager->fit(rect);
+    if (d->previousPosition != currentPosition) {
+        d->previousPosition = currentPosition;
+
+        emit widgetDragged(widgetProperties, currentPosition);
+    }
+
+}
+
+void DragManager::finishDrag(WidgetProperties *widgetProperties, const QRect &rect)
+{
+    Q_D(DragManager);
+    if (!d->gridManager) {
+        return;
+    }
+
+    QRect currentPosition = d->gridManager->fit(rect);
+    widgetProperties->setX(currentPosition.x());
+    widgetProperties->setY(currentPosition.y());
+    widgetProperties->setWidth(currentPosition.width());
+    widgetProperties->setHeight(currentPosition.height());
+    widgetProperties->setVisible(true);
+
+    emit widgetDragged(0, QRect(0, 0, 0, 0));
 }
 
 }
+
+}
+
+#include "moc_dragmanager.cpp"

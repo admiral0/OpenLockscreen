@@ -251,6 +251,7 @@ protected:
     const QScopedPointer<WidgetsPageModelPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(WidgetsPageModel)
+    Q_PRIVATE_SLOT(d_func(), void requestSave())
 };
 
 }

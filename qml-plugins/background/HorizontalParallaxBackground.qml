@@ -63,7 +63,6 @@ Item {
             anchors.centerIn: parent
             clip: true
             fillMode: Image.PreserveAspectCrop
-            smooth: true
             source: backgroundManager.wallpaperSource
         }
     }

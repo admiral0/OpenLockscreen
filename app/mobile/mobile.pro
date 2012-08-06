@@ -6,7 +6,7 @@ TARGET =            widgets
 QT =                core gui declarative xml
 CONFIG +=           qdeclarative-boostable
 
-DEFINES +=          'MAIN_QML_PATH=\'\"$${SHAREDIR}/qml/main.qml\"\''
+DEFINES +=          'MAIN_QML_PATH=\'\"$${QML_FOLDER}/main.qml\"\''
 CONFIG(noqtimport):DEFINES += 'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
 
 HEADERS +=          webandmailhandler.h \
