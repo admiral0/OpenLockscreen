@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file packagemanager.cpp
+ * @short Implementation of Widgets::PackageManager
+ */
+
 #include "packagemanager.h"
 #include "packagemanager_p.h"
 #include "packagemanagerdefines.h"

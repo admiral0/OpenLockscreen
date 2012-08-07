@@ -14,9 +14,13 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file package.cpp
+ * @short Implementation of Widgets::Package
+ */
+
 #include "package.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QFileInfo>
 #include <QtCore/QVariant>
 

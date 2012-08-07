@@ -17,9 +17,6 @@
 /**
  * @file widgets_plugin.cpp
  * @short Implementation of WidgetsPlugin
- *
- * This file contains the implemetation of the
- * WidgetsPlugin class.
  */
 
 

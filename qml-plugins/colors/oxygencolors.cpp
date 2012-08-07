@@ -17,9 +17,6 @@
 /**
  * @file oxygencolors.cpp
  * @short Implementation of Widgets::Colors::OxygenColors
- *
- * This file contains the implemetation of the
- * Widgets::Colors::OxygenColors class.
  */
 
 #include "oxygencolors.h"

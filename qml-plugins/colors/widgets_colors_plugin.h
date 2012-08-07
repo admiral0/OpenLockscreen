@@ -17,24 +17,70 @@
 #ifndef WIDGETS_EXTRA_PLUGIN_H
 #define WIDGETS_EXTRA_PLUGIN_H
 
+/**
+ * @file widgets_colors_plugin.h
+ * @short Definition of Widgets::Colors::WidgetsColorsPlugin
+ */
+
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
+namespace Widgets
+{
+
+namespace Colors
+{
+
+/**
+ * @page pluginColors QML plugin for colors
+ *
+ * libwidgets comes with a plugin that registers many colors, that can be
+ * used to provide a consistent and beautiful look and feel. These colors
+ * comes from KDE Oxygen palette.
+ *
+ * To access the colors, you have to import the QML plugin
+ * @code{.qml}
+ * import org.SfietKonstantin.widgets.colors 1.0
+ * @endcode
+ *
+ * This import creates a global object in the QML context called \e Colors.
+ * To use the registered colors, you have to do as follow :
+ *
+ * @code{.qml}
+ * Rectangle {
+ *     id: rectangle
+ *     color: Colors.woodBrown3
+ * }
+ * @endcode
+ *
+ * This plugin do not depend on any plugin. You can use it without importing
+ * the main widgets plugin.
+ */
+/**
+ * @internal
+ * @brief QML plugin for colors
+ */
 class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
-
 public:
+    /**
+     * @internal
+     * @brief Initialize engine
+     * @param engine QML engine.
+     * @param uri uri used in the import.
+     */
     void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     /**
+     * @internal
      * @short Register types
-     *
-     * This method is used to register C++ classes
-     * into the QML context.
-     *
      * @param uri uri used in the import.
      */
     void registerTypes(const char *uri);
 };
+
+}
+
+}
 
 #endif // WIDGETS_EXTRA_PLUGIN_H
 

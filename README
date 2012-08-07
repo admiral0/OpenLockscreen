@@ -1,0 +1,94 @@
+#####################
+The libwidgets readme
+#####################
+
+1. What is libwidgets
+2. Building and installing
+3. Documentation
+
+
+1. What is libwidgets
+
+libwidgets is a Qt + QML library that can be used to build
+applications that needs widgets. libwidgets comes with many
+features, including a widgets grid, docking capabilities,
+package management, and backgrounds.
+
+libwidgets also come with a mobile demo app, that is targeted
+to Harmattan device like the Nokia N9. An experimental lock
+screen widgets feature is also included.
+
+2. Building and installing
+
+a. For end users
+
+If you want to build the mobile demo app, just do the following
+(in a cross-compilation environnement)
+
+- qmake CONFIG+=mobile
+- make
+- make install
+
+b. For developers
+
+If you want to use the library to build your own software, you
+may want to only build the library, without the app. This is
+actually the default behaviour.
+
+- qmake
+- make
+- make install
+
+By default, the libraries will be installed in /usr/lib/, and
+/usr/lib(64)/qt4/imports/. You can tune these installation
+folders by passing the needed prefix
+
+- PREFIX is the prefix to all folders to set
+- BINDIR is the directory where executables are stored
+- LIBDIR is the directory where libraries are stored
+- SHAREDIR is the directory where shared files are stored
+- OPTDIR is the optified directory
+
+In a developer build, BINDIR and SHAREDIR should not be used, but
+in the application build it is used. Please note that on Harmattan,
+SHAREDIR and BINDIR are not used. Instead, OPTDIR is used.
+
+If you want to customize the import dir, you have two choice.
+Either set IMPORTDIR, or use CONFIG+=noqtimport. The latter will
+install the QML plugins in PREFIX/import/ instead of using
+/usr/lib(64)/qt4/imports/.
+
+
+All config switch
+
+For the project
+- CONFIG+=noqtimport installs the QML in PREFIX/import/.
+- CONFIG+=mobile enables mobile app and mobile widgets.
+- CONFIG+=desktop enables desktop app and desktop widgets.
+
+For core widgets library
+- CONFIG+=nopackagemanager disable package management features.
+- CONFIG+=nodocks disable everything related to docks.
+
+For additional widgets library
+- CONFIG+=plugincolors enable the QML plugin that provides colors.
+- CONFIG+=plugindocks enable the docks plugin.
+- CONFIG+=pluginbackground enable the background plugin.
+- CONFIG+=plugindrag enable the drag plugin.
+- CONFIG+=pluginextra enable the extra plugin.
+
+
+Note that if both mobile and desktop switches are set at the same
+time, nothing is built.
+
+Note that if enable nodocks switch and plugindocks, docks won't be
+built nevertheless.
+
+Note that if mobile or desktop switch are set, all additional plugins
+are also built.
+
+3. Documentation
+
+Documentation on how to use widgets is available through doxygen.
+Build it by parsing the qml-plugin folder. If you want to have
+the full dock, including private classes, enable INTERNAL_DOCS.

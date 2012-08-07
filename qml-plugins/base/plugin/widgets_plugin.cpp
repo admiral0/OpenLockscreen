@@ -16,10 +16,7 @@
 
 /**
  * @file widgets_plugin.cpp
- * @short Implementation of WidgetsPlugin
- *
- * This file contains the implemetation of the
- * WidgetsPlugin class.
+ * @short Implementation of Widgets::WidgetsPlugin
  */
 
 #include "widgets_plugin.h"
@@ -38,6 +35,9 @@
 #include "filterconditionlist.h"
 #include "filtercondition.h"
 #include "widgetspagelistmodel.h"
+
+namespace Widgets
+{
 
 void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -70,5 +70,7 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsPlugin)
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::WidgetsPlugin)
 

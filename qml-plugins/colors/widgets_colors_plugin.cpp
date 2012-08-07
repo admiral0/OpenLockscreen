@@ -14,11 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file widgets_colors_plugin.cpp
+ * @short Implementation of Widgets::Colors::WidgetsColorsPlugin
+ */
+
 #include "widgets_colors_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 
 #include "oxygencolors.h"
+
+namespace Widgets
+{
+
+namespace Colors
+{
 
 void WidgetsColorsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
@@ -36,5 +47,9 @@ void WidgetsColorsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Widgets::Colors::OxygenColors>(uri, 1, 0, "OxygenColors", reason);
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsColorsPlugin)
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Colors::WidgetsColorsPlugin)
 

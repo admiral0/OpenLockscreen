@@ -20,9 +20,6 @@
 /**
  * @file widgets_background_plugin.h
  * @short Definition of WidgetsPlugin
- *
- * This file contains the definition of the
- * WidgetsPlugin class.
  */
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>

@@ -17,9 +17,6 @@
 /**
  * @file oxygencolors.h
  * @short Definition of Widgets::Colors::OxygenColors
- *
- * This file contains the definition of the
- * Widgets::Colors::OxygenColors class.
  */
 
 
@@ -41,10 +38,10 @@ namespace Colors
  * These colors are base colors that can be used
  * to provide a consistant theme for an
  * application.
- * 
+ *
  * These colors are extracted from KDE's oxygen color
  * palette.
- * 
+ *
  * This class is used in QML context. Accessing
  * it is done using the "colors" global object.
  *
@@ -568,6 +565,10 @@ class OxygenColors : public QObject
     Q_PROPERTY(QString black READ black CONSTANT )
 
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     OxygenColors(QObject *parent = 0);
     /**
      * @short Color woodBrown6

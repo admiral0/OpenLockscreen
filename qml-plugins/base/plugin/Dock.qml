@@ -18,7 +18,6 @@ import QtQuick 1.1
 
 Item {
     id: container
-    property string identifier
     property bool enabled
     property variant settings
 //    property bool settingsEnabled: false

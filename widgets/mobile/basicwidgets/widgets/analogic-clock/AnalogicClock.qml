@@ -44,7 +44,8 @@ import QtMobility.systeminfo 1.2
 
 Widget {
     id: clock
-    width: 200; height: 200
+    minimumWidth: 200
+    minimumHeight: 200
 
     property int hours
     property int minutes

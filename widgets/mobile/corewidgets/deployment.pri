@@ -1,4 +1,4 @@
-include(../globals.pri)
+include(../../../globals.pri)
 
 installPath = $${SYSTEM_WIDGETS_FOLDER}/$${TARGET}
 
