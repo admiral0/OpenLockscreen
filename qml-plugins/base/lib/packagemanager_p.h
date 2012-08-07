@@ -41,6 +41,11 @@ public:
     PackageManagerPrivate(PackageManager *q);
     virtual ~PackageManagerPrivate();
     virtual QString databasePath() const;
+    QString searchForDockFile(const QString &packageIdentifier, const QString &dockFileName,
+                              const QString &dockSearchedFileName);
+    QString searchForWidgetFile(const QString &packageIdentifier, const QString &widgetFileName,
+                                const QString &widgetSearchedFileName);
+
     bool executeQuery(QSqlQuery *query) const;
     bool executeQueryBatch(QSqlQuery *query) const;
     void addComponentType(const QStringList &names);

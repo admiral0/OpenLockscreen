@@ -99,9 +99,9 @@
  * }
  * @endcode
  *
- * \e minimumWidth and \e minimumHeight are mandatory, and provide the default
- * size of the widget. \e maximumWidth and \e maximumHeight are optional, and are
- * used for resizable widgets (in the future).
+ * Defining the size of the widget can be done in two ways. Either by setting \e width
+ * and \e height, so the widget is fixed size, or providing  \e minimumWidth, \e minimumHeight,
+ * \e maximumWidth and \e maximumHeight, that creates a resizable widget (in the future).
  *
  * \e enabled property is used to enable the widget. If it is disabled, the widget
  * should stop processing and heavy tasks. \e settings is used to communicate settings
@@ -239,6 +239,9 @@
  * @see Widgets::PackageManager
  */
 
+/**
+ * @short Namespace for libwidgets
+ */
 namespace Widgets
 {
 /**

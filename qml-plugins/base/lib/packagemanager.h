@@ -134,7 +134,10 @@ public:
      * @param dockFilename dock file name.
      * @return absolute file path to the QML file.
      */
-    Q_INVOKABLE QString dockFile(const QString &packageIdentifier, const QString &dockFilename);
+    Q_INVOKABLE QString dockFile(const QString &packageIdentifier, const QString &dockFileName);
+    Q_INVOKABLE QString dockSettingsFile(const QString &packageIdentifier,
+                                         const QString &dockFileName,
+                                         const QString &dockSettingsFileName);
     /**
      * @short Dock
      *
@@ -173,7 +176,10 @@ public:
      * @param widgetFilename widget file name.
      * @return absolute file path to the QML file.
      */
-    Q_INVOKABLE QString widgetFile(const QString &packageIdentifier, const QString &widgetFilename);
+    Q_INVOKABLE QString widgetFile(const QString &packageIdentifier, const QString &widgetFileName);
+    Q_INVOKABLE QString widgetSettingsFile(const QString &packageIdentifier,
+                                           const QString &widgetFileName,
+                                           const QString &widgetSettingsFileName);
     /**
      * @short Widget
      *
@@ -227,8 +233,8 @@ public Q_SLOTS:
     void setFilter(FilterConditionList *filter);
 protected:
     /**
-     * @brief Constructor for d-pointer
-     * @param dd parent d-pointer.
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
      * @param parent parent object.
      */
     PackageManager(PackageManagerPrivate *dd, QObject *parent = 0);

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Plain text
+Name[en_GB]=Plain text
+Name[fr]=Texte brut
+Comment=Displays a plain text
+Comment[en_GB]=Displays a plain text
+Comment[fr]=Affiche un texte brut
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-WidgetInfo-File=PlainText.qml
+X-Widgets-ComponentInfo-SettingsFile=PlainTextSettings.qml

@@ -37,7 +37,7 @@ class DockModelPrivate: public AbstractSettingsPrivate
 {
 public:
     DockModelPrivate(DockModel *q);
-    ~DockModelPrivate();
+    virtual ~DockModelPrivate();
     virtual void clear();
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;

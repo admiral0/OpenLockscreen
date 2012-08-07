@@ -37,6 +37,9 @@
 namespace Widgets
 {
 
+static const char *DOCKS_FOLDER = "docks";
+static const char *WIDGETS_FOLDER = "widgets";
+
 PackageManagerPrivate::PackageManagerPrivate(PackageManager *q):
     q_ptr(q)
 {
@@ -52,6 +55,72 @@ QString PackageManagerPrivate::databasePath() const
     QDir dir (QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
     QDir::root().mkpath(dir.absolutePath());
     return dir.absoluteFilePath("packagemanager.db");
+}
+
+QString PackageManagerPrivate::searchForDockFile(const QString &packageIdentifier,
+                                                 const QString &dockFileName,
+                                                 const QString &dockSearchedFileName)
+{
+    QString value;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "search_dock_file");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT DISTINCT packages.directory, docks.directory FROM packages INNER JOIN docks ON packages.id=docks.packageId WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":dockFile", dockFileName);
+        executeQuery(&query);
+        if (query.next()) {
+            QString subdir = query.value(1).toString();
+            QDir dir = QDir(query.value(0).toString());
+
+            if (dir.cd(DOCKS_FOLDER)) {
+                if (dir.cd(subdir)) {
+                    if (dir.exists(dockSearchedFileName)) {
+                        value = dir.absoluteFilePath(dockSearchedFileName);
+                    }
+                }
+            }
+        }
+    }
+    QSqlDatabase::removeDatabase("get_dock_file");
+
+    return value;
+}
+
+QString PackageManagerPrivate::searchForWidgetFile(const QString &packageIdentifier,
+                                                   const QString &widgetFileName,
+                                                   const QString &widgetSearchedFileName)
+{
+    QString value;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_widget_file");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT packages.directory, widgets.directory FROM packages INNER JOIN widgets ON packages.id=widgets.packageId WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":widgetFile", widgetFileName);
+        executeQuery(&query);
+        if (query.next()) {
+            QString subdir = query.value(1).toString();
+            QDir dir = QDir(query.value(0).toString());
+
+            if (dir.cd(WIDGETS_FOLDER)) {
+                if (dir.cd(subdir)) {
+                    if (dir.exists(widgetSearchedFileName)) {
+                        value = dir.absoluteFilePath(widgetSearchedFileName);
+                    }
+                }
+            }
+        }
+    }
+    QSqlDatabase::removeDatabase("get_widget_file");
+
+    return value;
 }
 
 bool PackageManagerPrivate::executeQuery(QSqlQuery *query) const
@@ -195,7 +264,7 @@ void PackageManagerPrivate::prepareDatabase()
 
         QStringList componentInformationProperties;
         componentInformationProperties.append(COMPONENT_INFORMATION_ICON);
-        componentInformationProperties.append(COMPONENT_INFORMATION_SETTINGS_ENABLED);
+        componentInformationProperties.append(COMPONENT_INFORMATION_SETTINGS_FILE);
         componentInformationProperties.append(PACKAGE_INFORMATION_AUTHOR);
         componentInformationProperties.append(PACKAGE_INFORMATION_EMAIL);
         componentInformationProperties.append(PACKAGE_INFORMATION_WEBSITE);
@@ -565,7 +634,7 @@ void PackageManagerPrivate::addDock(int packageId, const QString &subdirectory,
 
     QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, dock->icon());
-    informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, dock->isSettingsEnabled());
+    informations.insert(COMPONENT_INFORMATION_SETTINGS_FILE, dock->settingsFileName());
     informations.insert(DOCK_INFORMATION_WIDTH, dock->width());
     informations.insert(DOCK_INFORMATION_HEIGHT, dock->height());
     informations.insert(DOCK_INFORMATION_ANCHORS_TOP, dock->anchorsTop());
@@ -615,7 +684,7 @@ void PackageManagerPrivate::addWidget(int packageId, const QString &subdirectory
 
     QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, widget->icon());
-    informations.insert(COMPONENT_INFORMATION_SETTINGS_ENABLED, widget->isSettingsEnabled());
+    informations.insert(COMPONENT_INFORMATION_SETTINGS_FILE, widget->settingsFileName());
     informations.insert(WIDGET_INFORMATION_MINIMUM_WIDTH, widget->minimumWidth());
     informations.insert(WIDGET_INFORMATION_MINIMUM_HEIGHT, widget->minimumHeight());
     informations.insert(WIDGET_INFORMATION_MAXIMUM_WIDTH, widget->maximumWidth());

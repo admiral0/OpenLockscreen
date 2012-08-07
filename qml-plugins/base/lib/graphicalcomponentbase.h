@@ -26,32 +26,69 @@ namespace Widgets
 {
 
 class GraphicalComponentBasePrivate;
-class GraphicalComponentBase: public ComponentBase,
-        public XmlSerializableInterface
+
+/**
+ * @brief Base for all graphical components
+ *
+ * This class is used to represent all the informations
+ * that a graphical component, that is, either a widget,
+ * or a dock, have. It an be accessed through QML.
+ *
+ * These informations are
+ * - fileName(), that is the filename of the component.
+ * - packageIdentifier(), that is the identifier of the package that this component
+ *   belongs to.
+ * - settingsEnabled() that is WIP
+ * @todo manage settingsEnabled().
+ *
+ * This class can also be serialized to an XML element. This
+ * serialization is incomplete, since none of the information
+ * from ComponentBase is saved, but this information can still
+ * be retrived using the package manager.
+ *
+ * The page about \ref packageCreationMetaSubsection "desktop file creation" provides more
+ * information about how desktop files should be written.
+ *
+ * @see Widgets::PackageManager.
+ */
+class GraphicalComponentBase: public ComponentBase, public XmlSerializableInterface
 {
     Q_OBJECT
+    /**
+     * @short Filename of the component
+     */
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
+    /**
+     * @short Package idenfifier of the component
+     */
     Q_PROPERTY(QString packageIdentifier READ packageIdentifier NOTIFY packageIdentifierChanged)
+    /**
+     * @short Settings enabled
+     * @todo pay attention to this
+     */
     Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
+    Q_PROPERTY(QString settingsFileName READ settingsFileName NOTIFY settingsFileNameChanged)
 public:
     explicit GraphicalComponentBase(QObject *parent = 0);
     explicit GraphicalComponentBase(const QString &fileName, const QString &packageIdentifier,
-                                    bool settingsEnabled, QObject *parent = 0);
+                                    const QString &settingsFileName, QObject *parent = 0);
     virtual ~GraphicalComponentBase();
     QString fileName() const;
     QString packageIdentifier() const;
     bool isSettingsEnabled() const;
+    QString settingsFileName() const;
     virtual bool fromXmlElement(const QDomElement &element);
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
 Q_SIGNALS:
     void fileNameChanged(const QString &fileName);
     void packageIdentifierChanged(const QString &packageIdentifier);
-    void settingsEnabledChanged(bool settingsEnabled);
+    void settingsEnabledChanged();
+    void settingsFileNameChanged() const;
 protected:
     explicit GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent);
     void setFileName(const QString &fileName);
     void setPackageIdentifier(const QString &packageIdentifier);
-    void setSettingsEnabled(bool settingsEnabled);
+    void setSettingsFileName(const QString &settingsFileName);
 private:
     W_DECLARE_PRIVATE(GraphicalComponentBase)
 };

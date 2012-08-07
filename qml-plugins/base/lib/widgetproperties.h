@@ -53,7 +53,7 @@ class WidgetProperties: public WidgetBaseProperties, private IdentifiedElementIn
      */
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
-    Q_PROPERTY(QVariantMap settings READ settings NOTIFY settingsChanged)
+    Q_PROPERTY(QVariantMap settings READ settings WRITE setSettings NOTIFY settingsChanged)
 public:
     explicit WidgetProperties(QObject *parent = 0);
     explicit WidgetProperties(WidgetBaseProperties *base,

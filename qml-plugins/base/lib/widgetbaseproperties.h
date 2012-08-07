@@ -63,7 +63,7 @@ Q_SIGNALS:
     void maximumHeightChanged(int height);
 protected:
     explicit WidgetBaseProperties(const QString &fileName, const QString &packageIdentifier,
-                                  bool settingsEnabled,
+                                  const QString &settingsFileName,
                                   int width, int height,
                                   QObject *parent = 0);
     explicit WidgetBaseProperties(WidgetBasePropertiesPrivate *dd, QObject *parent);

@@ -35,6 +35,7 @@
 #include "filterconditionlist.h"
 #include "filtercondition.h"
 #include "widgetspagelistmodel.h"
+#include "configurationmanager.h"
 
 namespace Widgets
 {
@@ -46,8 +47,11 @@ void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri
     Widgets::WidgetsPageListModel *widgetsPageListModel = new Widgets::WidgetsPageListModel(this);
     widgetsPageListModel->setPackageManager(packageManager);
 
+    Widgets::ConfigurationManager *configurationManager = new Widgets::ConfigurationManager(this);
+
     engine->rootContext()->setContextProperty("PackageManagerInstance", packageManager);
     engine->rootContext()->setContextProperty("WidgetsPageListModelInstance", widgetsPageListModel);
+    engine->rootContext()->setContextProperty("ConfigurationManagerInstance", configurationManager);
 }
 
 void WidgetsPlugin::registerTypes(const char *uri)
@@ -68,6 +72,9 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Widgets::WidgetsPageListModel>(uri, 1, 0,
                                                               "WidgetsPageListModel", reason);
     qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
+    reason = "Only one instance of ConfigurationManager is allowed";
+    qmlRegisterUncreatableType<Widgets::ConfigurationManager>(uri, 1, 0,
+                                                              "ConfigurationManager", reason);
 }
 
 }

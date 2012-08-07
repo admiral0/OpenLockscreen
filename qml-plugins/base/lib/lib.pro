@@ -40,6 +40,7 @@ HEADERS +=      widgets_global.h \
                 gridmanager.h \
                 widgetspagemodel.h \
                 widgetspagelistmodel.h \
+                configurationmanager.h
 
 SOURCES +=      version.cpp \
                 identifiedelementinterface.cpp \
@@ -47,7 +48,6 @@ SOURCES +=      version.cpp \
                 abstractsettings_p.cpp \
                 settingsentry.cpp \
                 componentbase.cpp \
-                componentbase_p.cpp \
                 graphicalcomponentbase.cpp \
                 graphicalcomponentbase_p.cpp \
                 dockbaseproperties.cpp \
@@ -66,5 +66,6 @@ SOURCES +=      version.cpp \
                 gridmanager.cpp \
                 widgetspagemodel.cpp \
                 widgetspagelistmodel.cpp \
+                configurationmanager.cpp
 
 include(deployment.pri)

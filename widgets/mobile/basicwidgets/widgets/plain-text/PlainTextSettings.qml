@@ -38,80 +38,25 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
-import QtMobility.systeminfo 1.2
 
-Widget {
-    id: clock
-    width: 200
-    height: 200
+SettingsItem {
+    id: container
 
-    property int hours
-    property int minutes
-    property bool night: false
-    property string dayBackgroundSource: "analogic-clock-background.png"
-    property string nightBackgroundSource: "analogic-clock-night-background.png"
-
-    Component.onCompleted: changeTime()
-    function changeTime() {
-        var date = new Date;
-        hours = date.getHours()
-        night = ( hours < 7 || hours > 19 )
-        minutes = date.getMinutes()
-    }
-
-    AlignedTimer {
-        minimumInterval: 1
-        maximumInterval: 1
-        singleShot: false
-        onTimeout: clock.changeTime()
-
-        Component.onCompleted: start()
-    }
-
-    Image {
-        id: background
-        source: !clock.night ? dayBackgroundSource : nightBackgroundSource
-    }
-
-    Image {
-        x: 92.5; y: 27
-        source: "analogic-clock-hour.png"
-        smooth: true
-        transform: Rotation {
-            id: hourRotation
-            origin.x: 7.5; origin.y: 73;
-            angle: (clock.hours * 30) + (clock.minutes * 0.5)
-            Behavior on angle {
-                SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-            }
+    Connections {
+        target: ConfigurationManagerInstance
+        onSaveWidgetSettingsRequested: {
+            var settings = new Object
+            settings.color = "red"
+            ConfigurationManagerInstance.saveWidgetSettings(settings)
         }
     }
 
-    Image {
-        x: 93.5; y: 17
-        source: "analogic-clock-minute.png"
-        smooth: true
-        transform: Rotation {
-            id: minuteRotation
-            origin.x: 6.5; origin.y: 83;
-            angle: clock.minutes * 6
-            Behavior on angle {
-                SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-            }
-        }
-    }
-
-    Image {
-        anchors.centerIn: background; source: "analogic-clock-center.png"
-    }
-
-    Text {
-        id: cityLabel
-        y: 200; anchors.horizontalCenter: parent.horizontalCenter
-        color: "white"
-        font.bold: true; font.pixelSize: 14
-        style: Text.Raised; styleColor: "black"
+    Rectangle {
+        anchors.centerIn: parent
+        width: 200
+        height: 200
+        color: "green"
     }
 }

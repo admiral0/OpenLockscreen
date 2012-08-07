@@ -31,12 +31,11 @@ import org.SfietKonstantin.widgets.drag 1.0
 // is set at the correct position
 Item {
     id: container
-    property variant widget
-    property variant dragRect
+    property QtObject widget
     property string qmlFile
     property bool dragging
     signal removeWidget(variant widget)
-//    signal showWidgetSettings(variant widget)
+    signal showWidgetSettings(variant widget)
     opacity: 0.8
 
 
@@ -44,11 +43,8 @@ Item {
     // the highlighter when the dragger
     // is moving
     function drag() {
-        console.debug("drag" + dragging)
         if(dragging) {
             DragManagerInstance.drag(widget, Qt.rect(x, y, width, height))
-//            var pos = viewManager.computeWidgetPosition(x, y)
-//            viewManager.highlightRect = Qt.rect(pos.x, pos.y, width, height)
         }
     }
 
@@ -58,26 +54,6 @@ Item {
         }
     }
 
-    /*
-    // This function is used to
-    // update the information about
-    // the widget that is currently being dragged
-    function updateDraggedWidgetIdentifierAndPosition() {
-        if(dragging) {
-            viewManager.currentDraggedWidget = widget.identifier
-        } else {
-            // When the dragger is released,
-            // the current position is passed
-            // to the widget object, that is used
-            // to store the position of the widget
-            viewManager.currentDraggedWidget = ""
-            x = widget.x
-            y = widget.y
-            width = widget.width
-            height = widget.height
-        }
-    }
-    */
     Component.onCompleted: {
         x = widget.x
         y = widget.y
@@ -90,14 +66,13 @@ Item {
     onDraggingChanged: {
         drag()
         finishDrag()
-//        updateDraggedWidgetIdentifierAndPosition()
     }
 
 
     WidgetContainer {
         id: widgetContainer
         qmlFile: container.qmlFile
-        widgetProperties: widget
+        widget: container.widget
         visible: false
         anchors.fill: parent
     }
@@ -125,16 +100,16 @@ Item {
         source: DragParametersInstance.removeButtonSource
         onClicked: container.removeWidget(container.widget)
     }
-    /*
-//    WidgetDraggerButton {
-//        id: settingsButton
-//        anchors.bottom: container.bottom; anchors.bottomMargin: - UI.MARGIN_DEFAULT
-//        anchors.left: container.left; anchors.leftMargin: - UI.MARGIN_DEFAULT
-//        source: "image://theme/icon-l-settings"
-//        visible: container.widget.hasSettings
-//        onClicked: container.showWidgetSettings(container.widget)
-//    }
-    */
+
+    WidgetDraggerButton {
+        id: settingsButton
+        anchors.bottom: container.bottom
+        anchors.left: container.left
+        source: DragParametersInstance.editButtonSource
+        visible: container.widget.settingsEnabled
+        onClicked: container.showWidgetSettings(container.widget)
+    }
+
     states: State {
         name: "dragging"; when: dragging
         PropertyChanges {

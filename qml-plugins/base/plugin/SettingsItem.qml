@@ -17,27 +17,8 @@
 import QtQuick 1.1
 
 Item {
-    id: container
-    property variant pageModel
-
-    Repeater {
-        model: container.pageModel
-        delegate: WidgetContainer {
-            x: model.widget.x
-            y: model.widget.y
-            width: model.widget.width
-            height: model.widget.height
-            scale: 0
-            widget: model.widget
-            qmlFile: PackageManagerInstance.widgetFile(model.widget.packageIdentifier,
-                                                       model.widget.fileName)
-            visible: model.widget.visible
-
-            Component.onCompleted: scale = 1
-            Behavior on scale {
-                NumberAnimation {duration: 1000; easing.type: Easing.OutBack}
-            }
-        }
-
-    }
+   id: container
+   anchors.centerIn: parent
+   property variant settings
 }
+

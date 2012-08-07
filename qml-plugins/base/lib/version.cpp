@@ -12,7 +12,12 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
+
+/**
+ * @file version.cpp
+ * @short Implementation of Widgets::Version
+ */
 
 #include "version.h"
 
@@ -21,12 +26,34 @@
 namespace Widgets
 {
 
+/**
+ * @brief BETA_LIMIT
+ *
+ * This constant variable provides the limit for
+ * the minor version to be in beta.
+ */
 static const int BETA_LIMIT = 50;
 
+/**
+ * @internal
+ * @brief Private class for Widgets::Version
+ */
 struct VersionPrivate
 {
+    /**
+     * @internal
+     * @brief Major version
+     */
     int major;
+    /**
+     * @internal
+     * @brief Minor version
+     */
     int minor;
+    /**
+     * @internal
+     * @brief Patch version
+     */
     int patch;
 };
 
@@ -87,6 +114,10 @@ Version::~Version()
 
 bool Version::operator==(const Version &other)
 {
+    if (!this->isValid() || !other.isValid()) {
+        return false;
+    }
+
     return (major() == other.major() && minor() == other.minor() && patch() == other.patch());
 }
 
@@ -97,6 +128,10 @@ bool Version::operator !=(const Version &other)
 
 bool Version::operator >(const Version &other)
 {
+    if (!this->isValid() || !other.isValid()) {
+        return false;
+    }
+
     if (major() > other.major()) {
         return true;
     }
@@ -110,6 +145,10 @@ bool Version::operator >(const Version &other)
 
 bool Version::operator >=(const Version &other)
 {
+    if (!this->isValid() || !other.isValid()) {
+        return false;
+    }
+
     if (major() > other.major()) {
         return true;
     }
@@ -123,6 +162,10 @@ bool Version::operator >=(const Version &other)
 
 bool Version::operator <(const Version &other)
 {
+    if (!this->isValid() || !other.isValid()) {
+        return false;
+    }
+
     if (major() < other.major()) {
         return true;
     }
@@ -136,6 +179,10 @@ bool Version::operator <(const Version &other)
 
 bool Version::operator <=(const Version &other)
 {
+    if (!this->isValid() || !other.isValid()) {
+        return false;
+    }
+
     if (major() < other.major()) {
         return true;
     }

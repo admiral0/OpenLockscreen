@@ -29,6 +29,7 @@ Page {
 
     Component.onCompleted: {
         DragParametersInstance.removeButtonSource = "image://theme/icon-m-framework-close-thumbnail"
+        DragParametersInstance.editButtonSource = "image://theme/icon-l-settings"
     }
 
     // The background slows down the transition
@@ -51,6 +52,8 @@ Page {
             }
 
             DragOverlay {
+                id: dragOverlay
+                onShowWidgetSettings: configureWidgetSheet.configure(widget)
                 widgetsView: widgetsPage
             }
         }
@@ -80,10 +83,55 @@ Page {
         }
     }
 
+    Sheet {
+        id: configureWidgetSheet
+        property Item settingsItem
+        acceptButtonText: qsTr("Close")
+        content: Item {
+            id: contentContainer
+            anchors.fill: parent
+        }
+
+        function slotSettingsChanged(settings) {
+            widget.settings = settings
+        }
+
+        function configure(widget) {
+            ConfigurationManagerInstance.setCurrentWidget(widget)
+            var qmlFile = PackageManagerInstance.widgetSettingsFile(widget.packageIdentifier,
+                                                                    widget.fileName,
+                                                                    widget.settingsFileName)
+            if(qmlFile != "") {
+                var component = Qt.createComponent(qmlFile)
+                if (component.status == Component.Ready) {
+                    settingsItem = component.createObject(contentContainer ,
+                                                          {"settings": widget.settings});
+                } else {
+                    console.debug("Cannot create the configure from file " + qmlFile +
+                                  "\nerror : " + component.errorString())
+//                    createDummy()
+                }
+                component.destroy()
+            } else {
+//                createDummy()
+            }
+            configureWidgetSheet.open()
+        }
+        onAccepted: {
+            ConfigurationManagerInstance.requestSaveWidgetSettings()
+        }
+
+        onStatusChanged: {
+            if (status == DialogStatus.Closed) {
+                settingsItem.destroy()
+                ConfigurationManagerInstance.setCurrentWidget(0)
+            }
+        }
+    }
+
     Item {
         id: falseToolbar
-//        opacity: window.pageStack.busy ? 0 : 1
-        visible: !window.pageStack.busy
+        opacity: window.pageStack.busy ? 0 : 1
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -103,9 +151,9 @@ Page {
             onClicked: addWidgetSheet.open()
         }
 
-//        Behavior on opacity {
-//            NumberAnimation {duration: Ui.ANIMATION_DURATION_XFAST}
-//        }
+        Behavior on opacity {
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_XFAST}
+        }
 
         ToolIcon {
             iconId: DragManagerInstance.locked ? "toolbar-edit" : "toolbar-done"

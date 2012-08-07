@@ -20,15 +20,12 @@
 namespace Widgets
 {
 
-static const char *DOCKS_FOLDER = "docks";
-static const char *WIDGETS_FOLDER = "widgets";
-
 static const char *COMPONENT_TYPE_PACKAGE = "package";
 static const char *COMPONENT_TYPE_DOCK = "dock";
 static const char *COMPONENT_TYPE_WIDGET = "widget";
 
 static const char *COMPONENT_INFORMATION_ICON = "icon";
-static const char *COMPONENT_INFORMATION_SETTINGS_ENABLED = "settings_enabled";
+static const char *COMPONENT_INFORMATION_SETTINGS_FILE = "settings_file";
 static const char *COMPONENT_INFORMATION_DEFAULT_LANGUAGE = "default";
 
 static const char *PACKAGE_INFORMATION_AUTHOR = "package_author";

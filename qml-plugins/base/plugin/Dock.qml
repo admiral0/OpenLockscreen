@@ -20,6 +20,4 @@ Item {
     id: container
     property bool enabled
     property variant settings
-//    property bool settingsEnabled: false
-    signal showSettings
 }

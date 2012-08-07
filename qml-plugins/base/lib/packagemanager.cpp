@@ -175,37 +175,18 @@ QStringList PackageManager::registeredPackages() const
     return values;
 }
 
-QString PackageManager::dockFile(const QString &packageIdentifier, const QString &dockFilename)
+QString PackageManager::dockFile(const QString &packageIdentifier, const QString &dockFileName)
 {
-    Q_D(const PackageManager);
+    Q_D(PackageManager);
+    return d->searchForDockFile(packageIdentifier, dockFileName, dockFileName);
+}
 
-    QString value;
-    {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_dock_file");
-        db.setDatabaseName(d->databasePath());
-        W_ASSERT(db.open());
-
-        QSqlQuery query = QSqlQuery(db);
-        query.prepare("SELECT DISTINCT packages.directory, docks.directory FROM packages INNER JOIN docks ON packages.id=docks.packageId WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
-        query.bindValue(":packageIdentifier", packageIdentifier);
-        query.bindValue(":dockFile", dockFilename);
-        d->executeQuery(&query);
-        if (query.next()) {
-            QString subdir = query.value(1).toString();
-            QDir dir = QDir(query.value(0).toString());
-
-            if (dir.cd(DOCKS_FOLDER)) {
-                if (dir.cd(subdir)) {
-                    if (dir.exists(dockFilename)) {
-                        value = dir.absoluteFilePath(dockFilename);
-                    }
-                }
-            }
-        }
-    }
-    QSqlDatabase::removeDatabase("get_dock_file");
-
-    return value;
+QString PackageManager::dockSettingsFile(const QString &packageIdentifier,
+                                         const QString &dockFileName,
+                                         const QString &dockSettingsFileName)
+{
+    Q_D(PackageManager);
+    return d->searchForDockFile(packageIdentifier, dockFileName, dockSettingsFileName);
 }
 
 DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
@@ -269,13 +250,12 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         query.finish();
 
 
-        QString settingsEnabledString = informations.value(COMPONENT_INFORMATION_SETTINGS_ENABLED);
         QString anchorsTopString = informations.value(DOCK_INFORMATION_ANCHORS_TOP);
         QString anchorsBottomString = informations.value(DOCK_INFORMATION_ANCHORS_BOTTOM);
         QString anchorsLeftString = informations.value(DOCK_INFORMATION_ANCHORS_LEFT);
         QString anchorsRightString = informations.value(DOCK_INFORMATION_ANCHORS_RIGHT);
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
-        value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
+        value->setSettingsFileName(informations.value(COMPONENT_INFORMATION_SETTINGS_FILE));
         value->setWidth(informations.value(DOCK_INFORMATION_WIDTH).toInt());
         value->setHeight(informations.value(DOCK_INFORMATION_HEIGHT).toInt());
         value->setAnchorsTop(Tools::stringToBool(anchorsTopString));
@@ -312,37 +292,19 @@ QStringList PackageManager::registeredDocks(const QString &packageIdentifier) co
     return values;
 }
 
-QString PackageManager::widgetFile(const QString &packageIdentifier, const QString &widgetFilename)
+QString PackageManager::widgetFile(const QString &packageIdentifier, const QString &widgetFileName)
 {
-    Q_D(const PackageManager);
+    Q_D(PackageManager);
+    return d->searchForWidgetFile(packageIdentifier, widgetFileName, widgetFileName);
+}
 
-    QString value;
-    {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_widget_file");
-        db.setDatabaseName(d->databasePath());
-        W_ASSERT(db.open());
+QString PackageManager::widgetSettingsFile(const QString &packageIdentifier,
+                                           const QString &widgetFileName,
+                                           const QString &widgetSettingsFileName)
 
-        QSqlQuery query = QSqlQuery(db);
-        query.prepare("SELECT packages.directory, widgets.directory FROM packages INNER JOIN widgets ON packages.id=widgets.packageId WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
-        query.bindValue(":packageIdentifier", packageIdentifier);
-        query.bindValue(":widgetFile", widgetFilename);
-        d->executeQuery(&query);
-        if (query.next()) {
-            QString subdir = query.value(1).toString();
-            QDir dir = QDir(query.value(0).toString());
-
-            if (dir.cd(WIDGETS_FOLDER)) {
-                if (dir.cd(subdir)) {
-                    if (dir.exists(widgetFilename)) {
-                        value = dir.absoluteFilePath(widgetFilename);
-                    }
-                }
-            }
-        }
-    }
-    QSqlDatabase::removeDatabase("get_widget_file");
-
-    return value;
+{
+    Q_D(PackageManager);
+    return d->searchForWidgetFile(packageIdentifier, widgetFileName, widgetSettingsFileName);
 }
 
 WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
@@ -406,9 +368,8 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         query.finish();
 
 
-        QString settingsEnabledString = informations.value(COMPONENT_INFORMATION_SETTINGS_ENABLED);
         value->setIcon(informations.value(COMPONENT_INFORMATION_ICON));
-        value->setSettingsEnabled(Tools::stringToBool(settingsEnabledString));
+        value->setSettingsFileName(informations.value(COMPONENT_INFORMATION_SETTINGS_FILE));
         value->setMinimumWidth(informations.value(WIDGET_INFORMATION_MINIMUM_WIDTH).toInt());
         value->setMinimumHeight(informations.value(WIDGET_INFORMATION_MINIMUM_HEIGHT).toInt());
         value->setMaximumWidth(informations.value(WIDGET_INFORMATION_MAXIMUM_WIDTH).toInt());

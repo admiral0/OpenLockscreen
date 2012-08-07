@@ -26,6 +26,7 @@ class DragParametersPrivate
 {
 public:
     QString removeButtonSource;
+    QString editButtonSource;
 };
 
 ////// End of private class //////
@@ -45,12 +46,27 @@ QString DragParameters::removeButtonSource() const
     return d->removeButtonSource;
 }
 
+QString DragParameters::editButtonSource() const
+{
+    Q_D(const DragParameters);
+    return d->editButtonSource;
+}
+
 void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
 {
     Q_D(DragParameters);
     if (d->removeButtonSource != removeButtonSource) {
         d->removeButtonSource = removeButtonSource;
         emit removeButtonSourceChanged();
+    }
+}
+
+void DragParameters::setEditButtonSource(const QString &editButtonSource)
+{
+    Q_D(DragParameters);
+    if (d->editButtonSource != editButtonSource) {
+        d->editButtonSource = editButtonSource;
+        emit editButtonSourceChanged();
     }
 }
 

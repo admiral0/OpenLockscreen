@@ -29,13 +29,16 @@
 #include "desktopparser.h"
 #include "tools.h"
 
+static const char *DESKTOP_FILE_COMPONENT_INFO_SETTINGSFILE
+      = "X-Widgets-ComponentInfo-SettingsFile";
+
+
 namespace Widgets
 {
 
 GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
     ComponentBasePrivate(q)
 {
-    settingsEnabled = false;
 }
 
 GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
@@ -43,16 +46,17 @@ GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &file
                                                              GraphicalComponentBase *q):
     ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
 {
-    settingsEnabled = false;
 }
 
 bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
 {
+
     return ComponentBasePrivate::checkValid(parser);
 }
 
 void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
 {
+    settingsFileName = parser.value(DESKTOP_FILE_COMPONENT_INFO_SETTINGSFILE).toString();
     ComponentBasePrivate::parseDesktopFile(parser);
 }
 

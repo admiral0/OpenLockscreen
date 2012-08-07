@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_GRAPHICALCOMPONENTBASE_P_H
 #define WIDGETS_GRAPHICALCOMPONENTBASE_P_H
@@ -40,7 +40,7 @@ public:
                                   GraphicalComponentBase *q);
     QString fileName;
     QString packageIdentifier;
-    bool settingsEnabled;
+    QString settingsFileName;
 protected:
     virtual void parseDesktopFile(const DesktopParser &parser);
     virtual bool checkValid(const DesktopParser &parser);

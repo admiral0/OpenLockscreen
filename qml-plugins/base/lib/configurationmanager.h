@@ -14,44 +14,49 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DRAG_DRAGPARAMETERS_H
-#define WIDGETS_DRAG_DRAGPARAMETERS_H
+#ifndef WIDGETS_CONFIGURATIONMANAGER_H
+#define WIDGETS_CONFIGURATIONMANAGER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QVariantMap>
+
+#include "widgetproperties.h"
+#include "dockproperties.h"
 
 namespace Widgets
 {
 
-namespace Drag
-{
-
-class DragParametersPrivate;
-class DragParameters : public QObject
+class ConfigurationManagerPrivate;
+class ConfigurationManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString removeButtonSource READ removeButtonSource WRITE setRemoveButtonSource
-               NOTIFY removeButtonSourceChanged)
-    Q_PROPERTY(QString editButtonSource READ editButtonSource WRITE setEditButtonSource
-               NOTIFY editButtonSourceChanged)
+    Q_PROPERTY(Widgets::DockProperties * currentDock READ currentDock WRITE setCurrentDock
+               NOTIFY currentDockChanged)
+    Q_PROPERTY(Widgets::WidgetProperties * currentWidget READ currentWidget WRITE setCurrentWidget
+               NOTIFY currentWidgetChanged)
 public:
-    explicit DragParameters(QObject *parent = 0);
-    virtual ~DragParameters();
-    QString removeButtonSource() const;
-    QString editButtonSource() const;
+    explicit ConfigurationManager(QObject *parent = 0);
+    virtual ~ConfigurationManager();
+    DockProperties *currentDock() const;
+    WidgetProperties *currentWidget() const;
 Q_SIGNALS:
-    void removeButtonSourceChanged();
-    void editButtonSourceChanged();
-public slots:
-    void setRemoveButtonSource(const QString &removeButtonSource);
-    void setEditButtonSource(const QString &editButtonSource);
+    void currentDockChanged();
+    void currentWidgetChanged();
+    void saveDockSettingsRequested();
+    void saveWidgetSettingsRequested();
+public Q_SLOTS:
+    void setCurrentDock(Widgets::DockProperties *currentDock);
+    void setCurrentWidget(Widgets::WidgetProperties *currentWidget);
+    void requestSaveDockSettings();
+    void requestSaveWidgetSettings();
+    void saveDockSettings(const QVariantMap &settings);
+    void saveWidgetSettings(const QVariantMap &settings);
 protected:
-    QScopedPointer<DragParametersPrivate> d_ptr;
+    QScopedPointer <ConfigurationManagerPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(DragParameters)
+    Q_DECLARE_PRIVATE(ConfigurationManager)
 };
 
 }
 
-}
-
-#endif // WIDGETS_DRAG_DRAGPARAMETERS_H
+#endif // WIDGETS_CONFIGURATIONMANAGER_H

@@ -28,6 +28,8 @@ import org.SfietKonstantin.widgets.drag 1.0
 Item {
     id: container
     property Item widgetsView
+
+    signal showWidgetSettings(variant widget)
     anchors.fill: widgetsView
 
     DraggerManager {
@@ -69,7 +71,7 @@ Item {
                                                   "qmlFile": qmlFile});
             draggerManager.registerDragger(widget, dragger)
             dragger.removeWidget.connect(container.removeWidget)
-//            dragger.showWidgetSettings.connect(container.showWidgetSettings)
+            dragger.showWidgetSettings.connect(container.showWidgetSettings)
         } else {
             console.debug("Cannot create the widget from file WidgetDragger.qml" +
                           "\nerror : " + component.errorString())

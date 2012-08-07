@@ -169,11 +169,12 @@ void DockBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     size.setHeight(height);
 
     // Settings enabled
-    QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
-    if (settingsEnabledRegExp.indexIn(data) != -1) {
-        QString settingsEnabledString = settingsEnabledRegExp.cap(1);
-        settingsEnabled = Tools::stringToBool(settingsEnabledString);
-    }
+    /// @todo remove this
+//    QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
+//    if (settingsEnabledRegExp.indexIn(data) != -1) {
+//        QString settingsEnabledString = settingsEnabledRegExp.cap(1);
+//        settingsEnabled = Tools::stringToBool(settingsEnabledString);
+//    }
 
     // Anchors
     QStringList anchors;

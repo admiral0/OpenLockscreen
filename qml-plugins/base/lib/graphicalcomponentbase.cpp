@@ -29,19 +29,17 @@ GraphicalComponentBase::GraphicalComponentBase(QObject *parent) :
     ComponentBase(new GraphicalComponentBasePrivate(this), parent),
     XmlSerializableInterface()
 {
-    W_D(GraphicalComponentBase);
-    d->settingsEnabled = false;
 }
 
 GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
                                                const QString &packageIdentifier,
-                                               bool settingsEnabled,
+                                               const QString &settingsFileName,
                                                QObject *parent):
     ComponentBase(new GraphicalComponentBasePrivate(fileName, packageIdentifier, this), parent),
     XmlSerializableInterface()
 {
     W_D(GraphicalComponentBase);
-    d->settingsEnabled = settingsEnabled;
+    d->settingsFileName = settingsFileName;
 }
 
 GraphicalComponentBase::GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent):
@@ -69,7 +67,13 @@ QString GraphicalComponentBase::packageIdentifier() const
 bool GraphicalComponentBase::isSettingsEnabled() const
 {
     W_D(const GraphicalComponentBase);
-    return d->settingsEnabled;
+    return !d->settingsFileName.isEmpty();
+}
+
+QString GraphicalComponentBase::settingsFileName() const
+{
+    W_D(const GraphicalComponentBase);
+    return d->settingsFileName;
 }
 
 bool GraphicalComponentBase::fromXmlElement(const QDomElement &element)
@@ -116,12 +120,14 @@ void GraphicalComponentBase::setPackageIdentifier(const QString &packageName)
     }
 }
 
-void GraphicalComponentBase::setSettingsEnabled(bool settingsEnabled)
+void GraphicalComponentBase::setSettingsFileName(const QString &settingsFileName)
 {
     W_D(GraphicalComponentBase);
-    if (d->settingsEnabled != settingsEnabled) {
-        d->settingsEnabled = settingsEnabled;
-        emit settingsEnabledChanged(settingsEnabled);
+    if (d->settingsFileName != settingsFileName) {
+        d->settingsFileName = settingsFileName;
+
+        emit settingsEnabledChanged();
+        emit settingsFileNameChanged();
     }
 }
 

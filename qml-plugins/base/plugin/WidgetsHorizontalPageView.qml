@@ -63,7 +63,6 @@ WidgetsView {
 
                         view.positionViewAtIndex(page, ListView.Visible)
                         view.currentIndex = page
-//                        console.debug(page + " " + view.currentIndex)
 //                        view.recomputeInitialX()
                     }
                 }

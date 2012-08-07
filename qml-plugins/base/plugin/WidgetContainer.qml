@@ -19,8 +19,17 @@ import QtQuick 1.1
 Item {
     id: container
     property Item content
-    property variant widgetProperties
+    property QtObject widget
     property string qmlFile
+
+    Connections {
+        target: widget
+        onSettingsChanged: {
+            if (content != null) {
+                content.settings = widget.settings
+            }
+        }
+    }
 
     // Load content
     // This function is used to create
@@ -32,7 +41,7 @@ Item {
                 content = component.createObject(container ,
                                                  {"anchors.centerIn": container,
                                                   "enabled": true,
-                                                  "settings": container.settings});
+                                                  "settings": container.widget.settings});
             } else {
                 console.debug("Cannot create the widget from file " + qmlFile +
                               "\nerror : " + component.errorString())

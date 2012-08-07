@@ -420,6 +420,7 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
     connect(newWidget, SIGNAL(yChanged(int)), this, SLOT(requestSave()));
     connect(newWidget, SIGNAL(widthChanged(int)), this, SLOT(requestSave()));
     connect(newWidget, SIGNAL(heightChanged(int)), this, SLOT(requestSave()));
+    connect(newWidget, SIGNAL(settingsChanged(QVariantMap)), this, SLOT(requestSave()));
 
     return true;
 }

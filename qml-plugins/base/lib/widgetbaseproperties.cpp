@@ -27,7 +27,7 @@ WidgetBaseProperties::WidgetBaseProperties(QObject *parent):
 
 WidgetBaseProperties::WidgetBaseProperties(const QString &fileName,
                                            const QString &packageIdentifier,
-                                           bool settingsEnabled,
+                                           const QString &settingsFileName,
                                            int width, int height,
                                            QObject *parent):
     GraphicalComponentBase(new WidgetBasePropertiesPrivate(this), parent)
@@ -35,7 +35,7 @@ WidgetBaseProperties::WidgetBaseProperties(const QString &fileName,
     W_D(WidgetBaseProperties);
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
-    d->settingsEnabled = settingsEnabled;
+    d->settingsFileName = settingsFileName;
     d->minimumSize = QSize(width, height);
 }
 

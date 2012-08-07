@@ -27,6 +27,9 @@
 namespace Widgets
 {
 
+/**
+ * @short Namespace for colors plugin in libwidgets
+ */
 namespace Colors
 {
 
@@ -53,7 +56,7 @@ namespace Colors
  * @endcode
  *
  * This plugin do not depend on any plugin. You can use it without importing
- * the main widgets plugin.
+ * the main libwidgets plugin.
  */
 /**
  * @internal

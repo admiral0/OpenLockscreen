@@ -13,6 +13,7 @@ SOURCES +=      widgets_plugin.cpp \
 OTHER_FILES =   qmldir \
                 Widget.qml \
                 Dock.qml \
+                SettingsItem.qml \
                 WidgetContainer.qml \
                 WidgestPage.qml \
                 WidgetsView.qml \

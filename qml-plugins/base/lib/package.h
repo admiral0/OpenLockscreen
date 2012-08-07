@@ -60,8 +60,10 @@ class PackagePrivate;
  * with the other components, and that are provided through
  * Widgets::ComponentBase.
  *
- * he page about \ref packageCreationMetaSubsection "desktop file creation" provides more
+ * The page about \ref packageCreationMetaSubsection "desktop file creation" provides more
  * information about how desktop files should be written.
+ *
+ * @see Widgets::PackageManager
  */
 class Package: public ComponentBase
 {
@@ -156,7 +158,7 @@ public:
      * If the desktop file could not be parsed, this method will return
      * a null pointer.
      *
-     * @param desktopFile the desktop file to parse.
+     * @param desktopFile path to the desktop file to parse.
      * @param parent parent object for the created Widgets::Package.
      * @return a Widgets::Package.
      */
@@ -192,8 +194,8 @@ Q_SIGNALS:
     void versionChanged();
 protected:
     /**
-     * @brief Constructor for d-pointer
-     * @param dd parent d-pointer.
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
      * @param parent parent object.
      */
     Package(PackagePrivate *dd, QObject *parent = 0);
@@ -204,7 +206,7 @@ private:
      * This private constructor is used to parse a desktop
      * file and extract the information.
      *
-     * @param desktopFile desktop file.
+     * @param desktopFile path to the desktop file to parse.
      * @param parent parent object.
      */
     explicit Package(const QString &desktopFile, QObject *parent = 0);

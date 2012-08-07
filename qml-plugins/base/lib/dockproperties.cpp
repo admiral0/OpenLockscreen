@@ -58,7 +58,7 @@ void DockPropertiesPrivate::copyFromBase(DockBaseProperties *base)
 
     fileName = base->fileName();
     packageIdentifier = base->packageIdentifier();
-    settingsEnabled = base->isSettingsEnabled();
+    settingsFileName = base->settingsFileName();
     size = QSize(base->width(), base->height());
     anchorsTop = base->anchorsTop();
     anchorsBottom = base->anchorsBottom();

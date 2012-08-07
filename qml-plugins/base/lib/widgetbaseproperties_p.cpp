@@ -23,6 +23,7 @@
 
 #include "widgetbaseproperties_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QVariant>
 
@@ -160,15 +161,18 @@ void WidgetBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
     QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
 
-    if (widthRegExp.indexIn(data) != -1) {
-        int width = widthRegExp.cap(1).toInt();
-        minimumWidth = width;
-        maximumWidth = width;
-    }
-    if (heightRegExp.indexIn(data) != -1) {
-        int height = heightRegExp.cap(1).toInt();
-        minimumHeight = height;
-        maximumHeight = height;
+    if (minimumWidth == -1 && minimumHeight == -1
+        && maximumWidth == -1 && maximumHeight == -1) {
+        if (widthRegExp.indexIn(data) != -1) {
+            int width = widthRegExp.cap(1).toInt();
+            minimumWidth = width;
+            maximumWidth = width;
+        }
+        if (heightRegExp.indexIn(data) != -1) {
+            int height = heightRegExp.cap(1).toInt();
+            minimumHeight = height;
+            maximumHeight = height;
+        }
     }
 
     bool sizeOk = (minimumWidth != -1 && minimumHeight != -1 &&
@@ -184,13 +188,13 @@ void WidgetBasePropertiesPrivate::parseDesktopFile(const DesktopParser &parser)
     maximumSize.setWidth(maximumWidth);
     maximumSize.setHeight(maximumHeight);
 
-
     // Settings enabled
-    QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
-    if (settingsEnabledRegExp.indexIn(data) != -1) {
-        QString settingsEnabledString = settingsEnabledRegExp.cap(1);
-        settingsEnabled = Tools::stringToBool(settingsEnabledString);
-    }
+    /// @todo remove this
+//    QRegExp settingsEnabledRegExp ("settingsEnabled\\s*:\\s*(true|false)");
+//    if (settingsEnabledRegExp.indexIn(data) != -1) {
+//        QString settingsEnabledString = settingsEnabledRegExp.cap(1);
+//        settingsEnabled = Tools::stringToBool(settingsEnabledString);
+//    }
 
     fileName = parser.value(DESKTOP_FILE_WIDGET_INFO_FILE).toString();
 }

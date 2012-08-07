@@ -35,6 +35,10 @@ ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
                         widgets/analogic-clock/analogic-clock-hour.png \
                         widgets/analogic-clock/analogic-clock-minute.png \
 
+PLAIN_TEXT_FILES =      widgets/plain-text/metadata.desktop \
+                        widgets/plain-text/PlainText.qml \
+                        widgets/plain-text/PlainTextSettings.qml \
+
 androidDockFiles.path = $${installPath}/docks/android-dock
 androidDockFiles.files = $${ANDROID_DOCK_FILES}
 export(androidDockFiles.path)
@@ -50,4 +54,9 @@ analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
 export(analogicClockFiles.path)
 export(analogicClockFiles.files)
 
-INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles
+plainTextFiles.path = $${installPath}/widgets/plain-text
+plainTextFiles.files = $${PLAIN_TEXT_FILES}
+export(plainTextFiles.path)
+export(plainTextFiles.files)
+
+INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles plainTextFiles

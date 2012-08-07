@@ -32,30 +32,116 @@
 namespace Widgets
 {
 
+/**
+ * @internal
+ * @brief DESKTOP_FILE_SERVICE_VALUE
+ */
 static const char *DESKTOP_FILE_SERVICE_VALUE = "plugin";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_ID
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_ID = "X-Widgets-PluginInfo-Id";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_AUTHOR
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_AUTHOR = "X-Widgets-PluginInfo-Author";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_EMAIL
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_EMAIL = "X-Widgets-PluginInfo-Email";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_WEBSITE
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_WEBSITE = "X-Widgets-PluginInfo-Website";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_NAME
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_NAME = "X-Widgets-PluginInfo-Name";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_VERSION
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_VERSION = "X-Widgets-PluginInfo-Version";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_VISIBLE
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_VISIBLE = "X-Widgets-PluginInfo-Visible";
+/**
+ * @internal
+ * @brief DESKTOP_FILE_PLUGIN_INFO_TAGS
+ */
 static const char *DESKTOP_FILE_PLUGIN_INFO_TAGS = "X-Widgets-PluginInfo-Tags";
 
+/**
+ * @internal
+ * @brief Private class for Widgets::Package
+ */
 class PackagePrivate: public ComponentBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
     PackagePrivate(Package *q);
+    /**
+     * @internal
+     * @brief Identifier
+     */
     QString identifier;
+    /**
+     * @internal
+     * @brief Directory
+     */
     QString directory;
+    /**
+     * @internal
+     * @brief Plugin
+     */
     QString plugin;
+    /**
+     * @internal
+     * @brief Authors
+     */
     QString author;
+    /**
+     * @internal
+     * @brief Email
+     */
     QString email;
+    /**
+     * @internal
+     * @brief Website
+     */
     QString website;
+    /**
+     * @internal
+     * @brief %Version
+     */
     Version version;
+    /**
+     * @internal
+     * @brief Visible
+     */
     bool visible;
+    /**
+     * @internal
+     * @brief Tags
+     */
     QStringList tags;
 protected:
+    /**
+     * @internal
+     * @brief Parse the desktop file
+     * @param parser parser used to parse the desktop file.
+     */
     virtual void parseDesktopFile(const DesktopParser &parser);
     virtual bool checkValid(const DesktopParser &parser);
 private:

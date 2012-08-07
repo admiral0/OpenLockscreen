@@ -17,6 +17,7 @@
 #include "widgetproperties.h"
 
 #include <QtCore/QRect>
+#include <QtCore/QDebug>
 
 #include "widgetbaseproperties_p.h"
 #include "graphicalcomponent_p.h"
@@ -71,7 +72,7 @@ void WidgetPropertiesPrivate::copyFromBase(WidgetBaseProperties *base)
 
     fileName = base->fileName();
     packageIdentifier = base->packageIdentifier();
-    settingsEnabled = base->isSettingsEnabled();
+    settingsFileName = base->settingsFileName();
     minimumSize = QSize(base->minimumWidth(), base->minimumHeight());
     maximumSize = QSize(base->maximumWidth(), base->maximumHeight());
 }
@@ -332,9 +333,12 @@ void WidgetProperties::setVisible(bool visible)
 
 void WidgetProperties::setSettings(const QVariantMap &settings)
 {
+
     W_D(WidgetProperties);
+    qDebug() << d->settings << settings;
     if (d->settings != settings) {
         d->settings = settings;
+        qDebug() << settings;
         emit settingsChanged(settings);
     }
 }

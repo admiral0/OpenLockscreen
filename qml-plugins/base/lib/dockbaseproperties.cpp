@@ -31,7 +31,7 @@ DockBaseProperties::DockBaseProperties(QObject *parent):
 }
 
 DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
-                                       bool settingsEnabled,
+                                       const QString &settingsFileName,
                                        int width, int height,
                                        bool anchorsTop, bool anchorsBottom,
                                        bool anchorsLeft, bool anchorsRight,
@@ -41,7 +41,7 @@ DockBaseProperties::DockBaseProperties(const QString &fileName, const QString &p
     W_D(DockBaseProperties);
     d->fileName = fileName;
     d->packageIdentifier = packageIdentifier;
-    d->settingsEnabled = settingsEnabled;
+    d->settingsFileName = settingsFileName;
     d->size = QSize(width, height);
     d->anchorsTop = anchorsTop;
     d->anchorsBottom = anchorsBottom;

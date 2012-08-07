@@ -75,7 +75,7 @@ Q_SIGNALS:
     void anchorsRightChanged(bool anchorsRight);
 protected:
     explicit DockBaseProperties(const QString &fileName, const QString &packageIdentifier,
-                                bool settingsEnabled,
+                                const QString &settingsFileName,
                                 int width, int height,
                                 bool anchorsTop, bool anchorsBottom,
                                 bool anchorsLeft, bool anchorsRight,
