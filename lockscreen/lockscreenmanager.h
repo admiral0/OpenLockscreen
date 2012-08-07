@@ -18,6 +18,7 @@
 #define LOCKSCEENMANAGER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class LockScreenManager : public QObject
 {
@@ -28,6 +29,7 @@ public:
 Q_SIGNALS:
     void unlocked();
 public Q_SLOTS:
+    void debug(const QString &value);
     void unlock();
 
 };

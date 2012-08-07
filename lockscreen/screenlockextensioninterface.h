@@ -38,11 +38,11 @@ class ScreenLockExtensionInterface : public MApplicationExtensionInterface
 public:
 
     //! Screen lock modes
-    enum ScreenLockMode {
-        NormalMode,
-        LowPowerMode,
-        DisplayOffMode
-    };
+        enum ScreenLockMode {
+            NormalMode,
+            LowPowerMode,
+            DisplayOffMode
+        };
 
     /*!
      * Destructor.

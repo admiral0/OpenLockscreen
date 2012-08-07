@@ -129,6 +129,8 @@ void WidgetsPageListModelPrivate::loadSettings()
 WidgetsPageListModel::WidgetsPageListModel(QObject *parent):
     QAbstractListModel(parent), d_ptr(new WidgetsPageListModelPrivate(this))
 {
+    Q_D(WidgetsPageListModel);
+
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(IndexRole, "index");
@@ -140,6 +142,8 @@ WidgetsPageListModel::WidgetsPageListModel(WidgetsPageListModelPrivate *dd,
                                                    QObject *parent):
     QAbstractListModel(parent), d_ptr(dd)
 {
+    Q_D(WidgetsPageListModel);
+
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(IndexRole, "index");

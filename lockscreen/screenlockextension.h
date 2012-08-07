@@ -20,6 +20,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include "screenlockextensioninterface.h"
+#include "notification/notification.h"
 
 class ScreenLockExtension : public QObject, public ScreenLockExtensionInterface
 {
@@ -44,6 +45,9 @@ Q_SIGNALS:
 private:
     class ScreenLockExtensionPrivate;
     ScreenLockExtensionPrivate * const d;
+
+    Q_PRIVATE_SLOT(d, void slotNotificationUpdated(const Notification &notification))
+    Q_PRIVATE_SLOT(d, void slotNotificationRemoved(uint notificationId))
 
     static ScreenLockExtension *instance_;
 };

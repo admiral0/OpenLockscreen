@@ -14,27 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DEBUGHELPER_H
-#define WIDGETS_DEBUGHELPER_H
+#ifndef NOTIFICATIONSMODEL_H
+#define NOTIFICATIONSMODEL_H
 
-#include <QtCore/QObject>
+#include <QAbstractListModel>
 
-namespace Widgets
-{
-
-class DebugHelper : public QObject
+class NotificationsModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit DebugHelper(QObject *parent = 0);
-    virtual ~DebugHelper();
-public slots:
-    void debug(const QString &data);
+    enum NotificationRole {
+        BodyRole = Qt::UserRole + 1,
+        SummaryRole,
+        IconRole
+    };
+    explicit NotificationsModel(QObject *parent = 0);
+    virtual ~NotificationsModel();
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int count() const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+Q_SIGNALS:
+    void countChanged(int count);
+public Q_SLOTS:
+    void addNotification(const QString &body, const QString &summary, const QString &icon);
 private:
-    class DebugHelperPrivate;
-    DebugHelperPrivate * const d;
+    class NotificationsModelPrivate;
+    NotificationsModelPrivate * const d;
 };
 
-}
-
-#endif // WIDGETS_DEBUGHELPER_H
+#endif // NOTIFICATIONSMODEL_H

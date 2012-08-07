@@ -16,8 +16,13 @@
 
 #include "screenlockextension.h"
 #include "lockscreen.h"
+#include <QtCore/QFile>
 #include <QtGui/QGraphicsLinearLayout>
-#include <QFile>
+#include "notification/notificationmanager.h"
+#include "notification/notificationparameter.h"
+#include "notification/notificationparameters.h"
+#include "notification/notificationwidgetparameterfactory.h"
+#include "notificationsmodel.h"
 
 Q_EXPORT_PLUGIN2(sysuid-screenlock, ScreenLockExtension)
 
@@ -28,25 +33,48 @@ class ScreenLockExtension::ScreenLockExtensionPrivate
 public:
     ScreenLockExtensionPrivate();
     virtual ~ScreenLockExtensionPrivate();
-    Widgets::LockScreen *lockScreen;
+    void slotNotificationUpdated(const Notification &notification);
+    void slotNotificationRemoved(uint notificationId);
+    LockScreen *lockScreen;
     QGraphicsWidget *widget;
-    NotificationManagerInterface *notificationManager;
+    NotificationManager *notificationManager;
+    NotificationsModel *notificationsModel;
+    ScreenLockExtensionInterface::ScreenLockMode mode;
 };
 
 ScreenLockExtension::ScreenLockExtensionPrivate::ScreenLockExtensionPrivate()
 {
     lockScreen = 0;
     notificationManager = 0;
+    notificationsModel = 0;
+    widget = 0;
 }
 
 ScreenLockExtension::ScreenLockExtensionPrivate::~ScreenLockExtensionPrivate()
 {
     if(lockScreen != 0) {
         lockScreen->deleteLater();
-    }
-    if(widget != 0) {
         widget->deleteLater();
     }
+}
+
+void ScreenLockExtension::ScreenLockExtensionPrivate::
+                          slotNotificationUpdated(const Notification &notification)
+{
+    // Get notifications parameters
+    NotificationParameters parameters = notification.parameters();
+    QString body = parameters.value(NotificationWidgetParameterFactory::bodyKey()).toString();
+    QString summary = parameters.value(NotificationWidgetParameterFactory::summaryKey()).toString();
+    QString action = parameters.value(NotificationWidgetParameterFactory::actionKey()).toString();
+    QString icon = parameters.value(NotificationWidgetParameterFactory::iconIdKey()).toString();
+
+    notificationsModel->addNotification(body, summary, icon);
+}
+
+void ScreenLockExtension::ScreenLockExtensionPrivate::
+                          slotNotificationRemoved(uint notificationId)
+{
+
 }
 
 ////// End of private class //////
@@ -55,7 +83,6 @@ ScreenLockExtension::ScreenLockExtension(QObject *parent) :
     QObject(parent), d(new ScreenLockExtensionPrivate())
 {
     instance_ = this;
-    connect(this, SIGNAL(unlocked()), this, SLOT(slotUnlocked()));
 }
 
 ScreenLockExtension::~ScreenLockExtension()
@@ -65,12 +92,17 @@ ScreenLockExtension::~ScreenLockExtension()
 
 void ScreenLockExtension::reset()
 {
-//    d->lockScreen->reset();
 }
 
 void ScreenLockExtension::setNotificationManagerInterface(
                           NotificationManagerInterface &notificationManager) {
-    d->notificationManager = &notificationManager;
+
+    d->notificationManager = static_cast<NotificationManager *>(&notificationManager);
+    if(d->notificationManager != 0) {
+        connect(d->notificationManager, SIGNAL(notificationUpdated(Notification)),
+                this, SLOT(slotNotificationUpdated(Notification)));
+    }
+
 }
 
 QObject * ScreenLockExtension::qObject()
@@ -80,14 +112,13 @@ QObject * ScreenLockExtension::qObject()
 
 void ScreenLockExtension::setMode(ScreenLockMode mode)
 {
-//    d->lockScreen->setMode(mode);
 }
 
 bool ScreenLockExtension::initialize(const QString &interface)
 {
     Q_UNUSED(interface)
-
-    d->lockScreen = new Widgets::LockScreen();
+    d->notificationsModel = new NotificationsModel(this);
+    d->lockScreen = new LockScreen(d->notificationsModel);
     d->widget = new QGraphicsWidget();
     QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(d->widget);
     layout->setContentsMargins(0, 36, 0 , 0);
@@ -101,7 +132,6 @@ bool ScreenLockExtension::initialize(const QString &interface)
 QGraphicsWidget *ScreenLockExtension::widget()
 {
     return d->widget;
-//    return d->lockScreen;
 }
 
 ScreenLockExtension * ScreenLockExtension::instance()
@@ -113,3 +143,5 @@ NotificationManagerInterface *ScreenLockExtension::notificationManagerInterface(
 {
     return d->notificationManager;
 }
+
+#include "moc_screenlockextension.cpp"

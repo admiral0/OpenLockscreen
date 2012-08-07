@@ -16,6 +16,9 @@
 
 #include "lockscreenmanager.h"
 
+#include <QTextStream>
+#include <QFile>
+
 LockScreenManager::LockScreenManager(QObject *parent) :
     QObject(parent)
 {
@@ -23,5 +26,17 @@ LockScreenManager::LockScreenManager(QObject *parent) :
 
 void LockScreenManager::unlock()
 {
+    debug("Unlocked");
     emit unlocked();
+}
+
+void LockScreenManager::debug(const QString &value)
+{
+    QFile * outFile = new QFile("/home/developer/lockscreenlog", this);
+    if (!outFile->open(QIODevice::WriteOnly | QIODevice::Append)) {
+        return;
+    }
+    outFile->write(value.toAscii());
+    outFile->write("\n");
+    outFile->close();
 }

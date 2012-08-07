@@ -1,8 +1,8 @@
 #!/bin/sh
 
-#if [ -e /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop ]; then
-#    rm /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
-#    mv /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
+if [ -e /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop ]; then
+    rm /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
+    mv /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
 
-#    initctl restart xsession/sysuid
-#fi
+    initctl restart xsession/sysuid
+fi

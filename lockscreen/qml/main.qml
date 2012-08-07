@@ -14,53 +14,55 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "debughelper.h"
-#include <QtCore/QFile>
+import QtQuick 1.1
+import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.docks 1.0
 
 
-namespace Widgets
-{
+Image {
+    id: container
+    anchors.fill: parent
+    source: "/home/user/.wallpapers/wallpaper.png"
 
-class DebugHelper::DebugHelperPrivate
-{
-public:
-    DebugHelperPrivate(DebugHelper *parent);
-    ~DebugHelperPrivate();
-    QFile * file;
-    bool ok;
-};
-
-DebugHelper::DebugHelperPrivate::DebugHelperPrivate(DebugHelper *parent)
-{
-    file = new QFile("/home/developer/log", parent);
-    ok = file->open(QIODevice::WriteOnly | QIODevice::Append);
-}
-
-DebugHelper::DebugHelperPrivate::~DebugHelperPrivate()
-{
-    if(ok) {
-        file->close();
+    Component.onCompleted: {
+        WidgetsPageListModelInstance.settings = widgetsSettings
     }
-}
 
-////// End of private class //////
-
-DebugHelper::DebugHelper(QObject *parent) :
-    QObject(parent), d(new DebugHelperPrivate(this))
-{
-}
-
-DebugHelper::~DebugHelper()
-{
-    delete d;
-}
-
-void DebugHelper::debug(const QString &data)
-{
-    if(d->ok) {
-        d->file->write(data.toUtf8());
-        d->file->write("\n");
+    Settings {
+        id: widgetsSettings
+        defaultSettings: [
+            SettingsEntry {
+                group: "widgets"
+                key: "pageCount"
+                value: 5
+            },
+            SettingsEntry {
+                group: "widgets"
+                key: "initialPage"
+                value: 2
+            }
+        ]
     }
-}
+
+    DockedView {
+        content: Item {
+            id: widgets
+            anchors.fill: parent
+
+            WidgetsHorizontalPageView {
+                id: widgetsPage
+            }
+        }
+    }
+
+    MouseArea {
+        id: unlocker
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: 20
+        onClicked: LockScreenManager.unlock()
+    }
 
 }
+

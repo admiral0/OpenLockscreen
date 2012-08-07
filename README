@@ -77,6 +77,9 @@ For additional widgets library
 - CONFIG+=plugindrag enable the drag plugin.
 - CONFIG+=pluginextra enable the extra plugin.
 
+Experimental features
+- CONFIG+=lockscreen enable the lock screen widgets
+
 
 Note that if both mobile and desktop switches are set at the same
 time, nothing is built.

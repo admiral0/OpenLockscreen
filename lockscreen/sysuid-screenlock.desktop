@@ -5,4 +5,4 @@ X-translation-catalog=screenlock
 
 [X-MeeGoApplicationExtension]
 Interface=com.meego.core.ScreenLockExtensionInterface/0.20
-Extension=/opt/widgets/screenlock/lib/meegotouch/applicationextensions/libsysuid-screenlock.so
+Extension=/opt/widgets/lockscreen/lib/meegotouch/applicationextensions/libsysuid-screenlock.so

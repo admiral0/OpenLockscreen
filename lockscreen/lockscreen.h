@@ -14,38 +14,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_LOCKSCREEN_H
-#define WIDGETS_LOCKSCREEN_H
+#ifndef LOCKSCREEN_H
+#define LOCKSCREEN_H
 
 #include <QtGui/QGraphicsProxyWidget>
-//#include <QtGui/QGraphicsWidget>
-#include "screenlockextensioninterface.h"
+#include <QtDeclarative/QDeclarativeView>
 
-namespace Widgets
-{
-
-//class LockScreen : public QGraphicsObject, public QGraphicsLayoutItem
+class NotificationsModel;
 class LockScreen : public QGraphicsProxyWidget
-//class LockScreen : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    LockScreen(QGraphicsWidget *parent = 0);
-//    virtual QRectF boundingRect() const;
-//    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-//    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
-Q_SIGNALS:
+    LockScreen(NotificationsModel *notificationsModel, QGraphicsWidget *parent = 0);
+signals:
     void unlocked();
-public Q_SLOTS:
-    void reset();
-    void setMode(ScreenLockExtensionInterface::ScreenLockMode mode);
-//private Q_SLOTS:
-//    void slotSetGeometry();
 private:
-    class LockScreenPrivate;
-    LockScreenPrivate * const d;
+    QDeclarativeView *view;
 };
 
-}
-
-#endif // WIDGETS_LOCKSCREEN_H
+#endif // LOCKSCREEN_H

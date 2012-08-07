@@ -3,6 +3,7 @@ TEMPLATE =      subdirs
 SUBDIRS +=      qml-plugins api app widgets
 
 contains(CONFIG, tests):SUBDIRS += tests
+contains(CONFIG, lockscreen):SUBDIRS += lockscreen
 
 OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \
                 qtc_packaging/debian_harmattan/README \

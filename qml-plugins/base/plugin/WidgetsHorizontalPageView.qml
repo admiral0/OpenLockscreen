@@ -41,7 +41,12 @@ WidgetsView {
             onMovingChanged: if (moving) {moved = true}
 //            onWidthChanged: if (!moving) {recomputeInitialX()}
 //            onHeightChanged: if (!moving) {recomputeInitialX()}
-            onCurrentIndexChanged: WidgetsPageListModelInstance.currentPage = currentIndex
+            onCurrentIndexChanged: {
+                WidgetsPageListModelInstance.currentPage = currentIndex
+            }
+
+            Component.onCompleted: LockScreenManager.debug("Model : " + WidgetsPageListModelInstance.count)
+
             // TODO : Change the hardcoded 11
             cacheBuffer: view.width * 11
 
