@@ -24,6 +24,30 @@
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 /**
+ * \mainpage libwidgets
+ *
+ * libwidgets is a Qt / QML library that brings widgets
+ * to your application. libwidgets consists of libraries
+ * and QML plugins, that can be imported in any QML project,
+ * and that do not need C++ code to work.
+ *
+ * libwidgets have many features, and many plugins that can
+ * be used.
+ *
+ * \subpage pluginList
+ */
+/** \page pluginList List of all the plugins
+ *
+ * Here is a list of all the plugins that are provided by
+ * libwidgets. Most of them can be disabled using compile-time
+ * flags.
+ *
+ * - \subpage pluginBase
+ * - \subpage pluginColors
+ *
+ *
+ */
+/**
  * @page pluginBase Base QML plugin for widgets
  *
  * libwidgets is a QML library that can be used to create widgets in a
@@ -88,14 +112,13 @@
  *
  * @code{.qml}
  * Item {
- *    id: container
- *    property bool enabled
- *    property variant settings
- *    property int minimumWidth
- *    property int minimumHeight
- *    property int maximumWidth
- *    property int maximumHeight
- *    signal showSettings
+ *     id: container
+ *     property bool enabled
+ *     property variant settings
+ *     property int minimumWidth
+ *     property int minimumHeight
+ *     property int maximumWidth
+ *     property int maximumHeight
  * }
  * @endcode
  *
@@ -123,7 +146,6 @@
  *     id: container
  *     property bool enabled
  *     property variant settings
- *     signal showSettings
  * }
  * @endcode
  *
@@ -134,11 +156,13 @@
  * should stop processing and heavy tasks. \e settings is used to communicate settings
  * to the widget. It uses a QVariantMap to store key / values pairs.
  *
- * @todo showSettings is not used, and should be replaced soon. Document these changes.
- *
  * Only one dock should be defined per folder. It have to be passed to the desktop file to
  * be identified by the package manager. Other QML files that are used in this dock can be
  * declared if needed.
+ *
+ * @section Configuring a widget or a dock
+ *
+ * @todo write this
  *
  * @subsection packageCreationMetaSubsection Desktop file creation
  *

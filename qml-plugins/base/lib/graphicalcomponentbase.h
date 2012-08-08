@@ -38,8 +38,8 @@ class GraphicalComponentBasePrivate;
  * - fileName(), that is the filename of the component.
  * - packageIdentifier(), that is the identifier of the package that this component
  *   belongs to.
- * - settingsEnabled() that is WIP
- * @todo manage settingsEnabled().
+ * - settingsEnabled() that check if this graphical have settings dialog.
+ * - settingsFileName(), that is the filename of the settings component for this component.
  *
  * This class can also be serialized to an XML element. This
  * serialization is incomplete, since none of the information
@@ -64,14 +64,35 @@ class GraphicalComponentBase: public ComponentBase, public XmlSerializableInterf
     Q_PROPERTY(QString packageIdentifier READ packageIdentifier NOTIFY packageIdentifierChanged)
     /**
      * @short Settings enabled
-     * @todo pay attention to this
      */
     Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
+    /**
+     * @short Filename of the settings component of this component
+     */
     Q_PROPERTY(QString settingsFileName READ settingsFileName NOTIFY settingsFileNameChanged)
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit GraphicalComponentBase(QObject *parent = 0);
+    /**
+     * @brief Constructor
+     *
+     * This constructor is used to create a base
+     * for graphical components by providing all the
+     * informations, except the name and description.
+     *
+     * @param fileName filename of the component.
+     * @param packageIdentifier package identifier of the component.
+     * @param settingsFileName filename of the settings component.
+     * @param parent parent object.
+     */
     explicit GraphicalComponentBase(const QString &fileName, const QString &packageIdentifier,
                                     const QString &settingsFileName, QObject *parent = 0);
+    /**
+     * @brief Destructor
+     */
     virtual ~GraphicalComponentBase();
     QString fileName() const;
     QString packageIdentifier() const;

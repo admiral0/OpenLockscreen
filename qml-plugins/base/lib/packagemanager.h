@@ -131,10 +131,24 @@ public:
      * If the dock is not found, an empty string is returned.
      *
      * @param packageIdentifier package identifier.
-     * @param dockFilename dock file name.
+     * @param dockFileName dock file name.
      * @return absolute file path to the QML file.
      */
     Q_INVOKABLE QString dockFile(const QString &packageIdentifier, const QString &dockFileName);
+    /**
+     * @short Dock settings file
+     *
+     * This method is used to get the absolute file path to the QML file
+     * corresponding to the component that is used to setup a dock, providing
+     * the package identifier, the dock file name, and the component file name.
+     *
+     * If the component is not found, an empty string is returned.
+     *
+     * @param packageIdentifier package identifier.
+     * @param dockFileName dock file name.
+     * @param dockSettingsFileName dock settings component file name.
+     * @return absolute file path to the QML file.
+     */
     Q_INVOKABLE QString dockSettingsFile(const QString &packageIdentifier,
                                          const QString &dockFileName,
                                          const QString &dockSettingsFileName);
@@ -147,11 +161,11 @@ public:
      * If the dock is not found, a null pointer is returned.
      *
      * @param packageIdentifier package identifier.
-     * @param dockFilename dock file name.
+     * @param dockFileName dock file name.
      * @return information about the dock.
      */
     Q_INVOKABLE Widgets::DockBaseProperties * dock(const QString &packageIdentifier,
-                                                   const QString &dockFilename);
+                                                   const QString &dockFileName);
     /**
      * @brief Registered docks
      *
@@ -173,10 +187,24 @@ public:
      * If the widget is not found, an empty string is returned.
      *
      * @param packageIdentifier package identifier.
-     * @param widgetFilename widget file name.
+     * @param widgetFileName widget file name.
      * @return absolute file path to the QML file.
      */
     Q_INVOKABLE QString widgetFile(const QString &packageIdentifier, const QString &widgetFileName);
+    /**
+     * @short Widget settings file
+     *
+     * This method is used to get the absolute file path to the QML file
+     * corresponding to the component that is used to setup a widget, providing
+     * the package identifier, the widget file name, and the component file name.
+     *
+     * If the component is not found, an empty string is returned.
+     *
+     * @param packageIdentifier package identifier.
+     * @param widgetFileName widget file name.
+     * @param widgetSettingsFileName widget settings component file name.
+     * @return absolute file path to the QML file.
+     */
     Q_INVOKABLE QString widgetSettingsFile(const QString &packageIdentifier,
                                            const QString &widgetFileName,
                                            const QString &widgetSettingsFileName);
@@ -189,11 +217,11 @@ public:
      * If the widget is not found, a null pointer is returned.
      *
      * @param packageIdentifier package identifier.
-     * @param widgetFilename widget file name.
+     * @param widgetFileName widget file name.
      * @return information about the widget.
      */
     Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &packageIdentifier,
-                                                       const QString &widgetFilename);
+                                                       const QString &widgetFileName);
     /**
      * @brief Registered widgets
      *

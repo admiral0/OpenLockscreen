@@ -190,7 +190,7 @@ QString PackageManager::dockSettingsFile(const QString &packageIdentifier,
 }
 
 DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
-                                          const QString &dockFilename)
+                                          const QString &dockFileName)
 {
     Q_D(const PackageManager);
     DockBaseProperties *value = 0;
@@ -205,7 +205,7 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         QSqlQuery query = QSqlQuery(db);
         query.prepare("SELECT docks.id FROM docks INNER JOIN packages ON docks.packageId=packages.id WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
         query.bindValue(":packageIdentifier", packageIdentifier);
-        query.bindValue(":dockFile", dockFilename);
+        query.bindValue(":dockFile", dockFileName);
         d->executeQuery(&query);
         if (!query.next()) {
             return value;
@@ -214,7 +214,7 @@ DockBaseProperties * PackageManager::dock(const QString &packageIdentifier,
         value = new DockBaseProperties(this);
         int dockId = query.value(0).toInt();
 
-        value->setFileName(dockFilename);
+        value->setFileName(dockFileName);
         value->setPackageIdentifier(packageIdentifier);
 
         query.prepare("SELECT language, name, description FROM componentLocalizedInformation WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
@@ -308,7 +308,7 @@ QString PackageManager::widgetSettingsFile(const QString &packageIdentifier,
 }
 
 WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
-                                              const QString &widgetFilename)
+                                              const QString &widgetFileName)
 {
     Q_D(const PackageManager);
     WidgetBaseProperties *value = 0;
@@ -323,7 +323,7 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         QSqlQuery query = QSqlQuery(db);
         query.prepare("SELECT widgets.id FROM widgets INNER JOIN packages ON widgets.packageId=packages.id WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
         query.bindValue(":packageIdentifier", packageIdentifier);
-        query.bindValue(":widgetFile", widgetFilename);
+        query.bindValue(":widgetFile", widgetFileName);
         d->executeQuery(&query);
         if (!query.next()) {
             return value;
@@ -332,7 +332,7 @@ WidgetBaseProperties * PackageManager::widget(const QString &packageIdentifier,
         value = new WidgetBaseProperties(this);
         int widgetId = query.value(0).toInt();
 
-        value->setFileName(widgetFilename);
+        value->setFileName(widgetFileName);
         value->setPackageIdentifier(packageIdentifier);
 
         query.prepare("SELECT language, name, description FROM componentLocalizedInformation WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
