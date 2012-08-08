@@ -14,9 +14,14 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file graphicalcomponentbase.cpp
+ * @short Implementation of Widgets::GraphicalComponentBase
+ */
+
+
 #include "graphicalcomponentbase.h"
 #include "graphicalcomponentbase_p.h"
-#include "graphicalcomponentbasedefines.h"
 
 #include <QtCore/QDebug>
 
@@ -25,26 +30,45 @@
 namespace Widgets
 {
 
+/**
+ * @brief GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE
+ *
+ * Used in GraphicalComponentBase::fromXmlElement() and GraphicalComponentBase::toXmlElement().
+ */
+static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE = "filename";
+/**
+ * @brief GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG
+ * Used in GraphicalComponentBase::fromXmlElement() and GraphicalComponentBase::toXmlElement().
+ */
+static const char *GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG = "disambiguation";
+
+GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
+    q_ptr(q)
+{
+}
+
+
+////// End of private class //////
+
 GraphicalComponentBase::GraphicalComponentBase(QObject *parent) :
-    ComponentBase(new GraphicalComponentBasePrivate(this), parent),
-    XmlSerializableInterface()
+    QObject(parent),XmlSerializableInterface(), d_pointer(new GraphicalComponentBasePrivate(this))
 {
 }
 
 GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
-                                               const QString &packageIdentifier,
+                                               const QVariantHash &disambiguation,
                                                const QString &settingsFileName,
                                                QObject *parent):
-    ComponentBase(new GraphicalComponentBasePrivate(fileName, packageIdentifier, this), parent),
-    XmlSerializableInterface()
+    QObject(parent),XmlSerializableInterface(), d_pointer(new GraphicalComponentBasePrivate(this))
 {
     W_D(GraphicalComponentBase);
+    d->fileName = fileName;
+    d->disambiguation = disambiguation;
     d->settingsFileName = settingsFileName;
 }
 
 GraphicalComponentBase::GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent):
-    ComponentBase(dd, parent),
-    XmlSerializableInterface()
+    QObject(parent), XmlSerializableInterface(), d_pointer(dd)
 {
 }
 
@@ -58,10 +82,10 @@ QString GraphicalComponentBase::fileName() const
     return d->fileName;
 }
 
-QString GraphicalComponentBase::packageIdentifier() const
+QVariantHash GraphicalComponentBase::disambiguation() const
 {
     W_D(const GraphicalComponentBase);
-    return d->packageIdentifier;
+    return d->disambiguation;
 }
 
 bool GraphicalComponentBase::isSettingsEnabled() const
@@ -81,13 +105,17 @@ bool GraphicalComponentBase::fromXmlElement(const QDomElement &element)
     if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE)) {
         return false;
     }
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE)) {
+
+    QDomElement disambiguationElement
+            = element.firstChildElement(GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG);
+
+
+    if (disambiguationElement.isNull()) {
         return false;
     }
 
     setFileName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE));
-    setPackageIdentifier(
-                element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE));
+    setDisambiguation(Tools::fromXmlElementToVariantHash(disambiguationElement));
 
     return true;
 }
@@ -97,8 +125,11 @@ QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
 {
     QDomElement element = document->createElement(tagName);
     element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE, fileName());
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE,
-                         packageIdentifier());
+
+    QDomElement disambiguationElement
+            = Tools::toXmlElementFromVariantHash(disambiguation(), GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG,
+                                      document);
+    element.appendChild(disambiguationElement);
     return element;
 }
 
@@ -107,16 +138,16 @@ void GraphicalComponentBase::setFileName(const QString &name)
     W_D(GraphicalComponentBase);
     if (d->fileName != name) {
         d->fileName = name;
-        emit fileNameChanged(name);
+        emit fileNameChanged();
     }
 }
 
-void GraphicalComponentBase::setPackageIdentifier(const QString &packageName)
+void GraphicalComponentBase::setDisambiguation(const QVariantHash &disambiguation)
 {
     W_D(GraphicalComponentBase);
-    if (d->packageIdentifier != packageName) {
-        d->packageIdentifier = packageName;
-        emit packageIdentifierChanged(packageName);
+    if (d->disambiguation != disambiguation) {
+        d->disambiguation = disambiguation;
+        emit disambiguationChanged();
     }
 }
 

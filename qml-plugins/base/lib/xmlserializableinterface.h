@@ -19,10 +19,7 @@
 
 /**
  * @file xmlserializableinterface.h
- * @short Definition of XmlSerializableInterface
- *
- * This file contains the definition of the
- * XmlSerializableInterface interface.
+ * @short Definition of Widgets::XmlSerializableInterface
  */
 
 #include <QtXml/QDomElement>

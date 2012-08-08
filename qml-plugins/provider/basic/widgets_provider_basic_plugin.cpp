@@ -14,50 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
+/**
+ * @file widgets_provider_basic_plugin.cpp
+ * @short Implementation of Widgets::Colors::WidgetsColorsPlugin
+ */
 
-#include "graphicalcomponentbase_p.h"
+#include "widgets_provider_basic_plugin.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QVariant>
-
-#include "desktopparser.h"
-#include "tools.h"
-
-static const char *DESKTOP_FILE_COMPONENT_INFO_SETTINGSFILE
-      = "X-Widgets-ComponentInfo-SettingsFile";
-
+#include <QtDeclarative/QtDeclarative>
 
 namespace Widgets
 {
 
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
-    ComponentBasePrivate(q)
-{
-}
-
-GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(const QString &fileName,
-                                                             const QString &packageIdentifier,
-                                                             GraphicalComponentBase *q):
-    ComponentBasePrivate(q), fileName(fileName), packageIdentifier(packageIdentifier)
-{
-}
-
-bool GraphicalComponentBasePrivate::checkValid(const DesktopParser &parser)
+namespace Provider
 {
 
-    return ComponentBasePrivate::checkValid(parser);
-}
-
-void GraphicalComponentBasePrivate::parseDesktopFile(const DesktopParser &parser)
+namespace Basic
 {
-    settingsFileName = parser.value(DESKTOP_FILE_COMPONENT_INFO_SETTINGSFILE).toString();
-    ComponentBasePrivate::parseDesktopFile(parser);
+
+void WidgetsProviderPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri)
+}
+
+void WidgetsProviderPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.colors
 }
 
 }
+
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Provider::Basic::WidgetsProviderPlugin)
+

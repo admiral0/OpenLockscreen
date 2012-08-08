@@ -20,7 +20,7 @@ import org.SfietKonstantin.widgets 1.0
 
 PageStackWindow {
     id: window
-    initialPage: mainPage
+    /*initialPage: mainPage
     Component.onCompleted: {
         theme.inverted = true
         PackageManagerInstance.filter = packageManagerFilters
@@ -52,5 +52,8 @@ PageStackWindow {
 
     MainPage {
         id: mainPage
-    }
+    }*/
+
+
+
 }

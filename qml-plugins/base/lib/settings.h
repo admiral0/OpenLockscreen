@@ -17,14 +17,6 @@
 #ifndef WIDGETS_SETTINGS
 #define WIDGETS_SETTINGS
 
-/**
- * @file settings.h
- * @short Definition of Settings
- *
- * This file contains the definition of the
- * Settings class.
- */
-
 #include <QtCore/QObject>
 #include <QtDeclarative/QDeclarativeListProperty>
 
@@ -45,8 +37,8 @@ public:
     Q_INVOKABLE QVariant value(const QString &group, const QString &key) const;
     QDeclarativeListProperty<SettingsEntry> defaultSettings();
 public Q_SLOTS:
-    void reload();
-    void setValue(const QString &key, const QVariant &value);
+//    void reload();
+//    void setValue(const QString &key, const QVariant &value);
     void setValue(const QString &group, const QString &key, const QVariant &value);
 Q_SIGNALS:
     void componentNameChanged(const QString &componentName);

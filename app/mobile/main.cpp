@@ -16,7 +16,7 @@
 
 /**
  * @file widgets/main.cpp
- * @short Entry point of the application
+ * @short Entry point of the mobile application
  */
 
 #include <QtGui/QApplication>

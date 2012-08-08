@@ -24,18 +24,18 @@
 #include <QtDeclarative/QtDeclarative>
 #include <QtDeclarative/QDeclarativeEngine>
 
-#include "dockbaseproperties.h"
-#include "dockproperties.h"
-#include "widgetbaseproperties.h"
-#include "widgetproperties.h"
+//#include "dockbaseproperties.h"
+//#include "dockproperties.h"
+//#include "widgetbaseproperties.h"
+//#include "widgetproperties.h"
 #include "gridmanager.h"
-#include "packagemanager.h"
+//#include "packagemanager.h"
 #include "settings.h"
 #include "settingsentry.h"
-#include "filterconditionlist.h"
-#include "filtercondition.h"
-#include "widgetspagelistmodel.h"
-#include "configurationmanager.h"
+//#include "filterconditionlist.h"
+//#include "filtercondition.h"
+//#include "widgetspagelistmodel.h"
+//#include "configurationmanager.h"
 
 namespace Widgets
 {
@@ -43,15 +43,15 @@ namespace Widgets
 void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri);
-    Widgets::PackageManager *packageManager = new Widgets::PackageManager(this);
-    Widgets::WidgetsPageListModel *widgetsPageListModel = new Widgets::WidgetsPageListModel(this);
-    widgetsPageListModel->setPackageManager(packageManager);
+//    Widgets::PackageManager *packageManager = new Widgets::PackageManager(this);
+//    Widgets::WidgetsPageListModel *widgetsPageListModel = new Widgets::WidgetsPageListModel(this);
+//    widgetsPageListModel->setPackageManager(packageManager);
 
-    Widgets::ConfigurationManager *configurationManager = new Widgets::ConfigurationManager(this);
+//    Widgets::ConfigurationManager *configurationManager = new Widgets::ConfigurationManager(this);
 
-    engine->rootContext()->setContextProperty("PackageManagerInstance", packageManager);
-    engine->rootContext()->setContextProperty("WidgetsPageListModelInstance", widgetsPageListModel);
-    engine->rootContext()->setContextProperty("ConfigurationManagerInstance", configurationManager);
+//    engine->rootContext()->setContextProperty("PackageManagerInstance", packageManager);
+//    engine->rootContext()->setContextProperty("WidgetsPageListModelInstance", widgetsPageListModel);
+//    engine->rootContext()->setContextProperty("ConfigurationManagerInstance", configurationManager);
 }
 
 void WidgetsPlugin::registerTypes(const char *uri)
@@ -60,21 +60,21 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
     qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
-    QString reason = "Only one instance of PackageManager is allowed";
-    qmlRegisterUncreatableType<Widgets::PackageManager>(uri, 1, 0, "PackageManager", reason);
-    qmlRegisterType<Widgets::FilterConditionList>(uri, 1, 0,"FilterConditionList");
-    qmlRegisterType<Widgets::FilterCondition>(uri, 1, 0,"FilterCondition");
-    qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
-    qmlRegisterType<Widgets::DockProperties>(uri, 1, 0, "DockProperties");
-    qmlRegisterType<Widgets::WidgetBaseProperties>(uri, 1, 0, "WidgetBaseProperties");
-    qmlRegisterType<Widgets::WidgetProperties>(uri, 1, 0, "WidgetProperties");
-    reason = "Only one instance of WidgetsPageListModel is allowed";
-    qmlRegisterUncreatableType<Widgets::WidgetsPageListModel>(uri, 1, 0,
-                                                              "WidgetsPageListModel", reason);
-    qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
-    reason = "Only one instance of ConfigurationManager is allowed";
-    qmlRegisterUncreatableType<Widgets::ConfigurationManager>(uri, 1, 0,
-                                                              "ConfigurationManager", reason);
+//    QString reason = "Only one instance of PackageManager is allowed";
+//    qmlRegisterUncreatableType<Widgets::PackageManager>(uri, 1, 0, "PackageManager", reason);
+//    qmlRegisterType<Widgets::FilterConditionList>(uri, 1, 0,"FilterConditionList");
+//    qmlRegisterType<Widgets::FilterCondition>(uri, 1, 0,"FilterCondition");
+//    qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
+//    qmlRegisterType<Widgets::DockProperties>(uri, 1, 0, "DockProperties");
+//    qmlRegisterType<Widgets::WidgetBaseProperties>(uri, 1, 0, "WidgetBaseProperties");
+//    qmlRegisterType<Widgets::WidgetProperties>(uri, 1, 0, "WidgetProperties");
+//    reason = "Only one instance of WidgetsPageListModel is allowed";
+//    qmlRegisterUncreatableType<Widgets::WidgetsPageListModel>(uri, 1, 0,
+//                                                              "WidgetsPageListModel", reason);
+//    qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
+//    reason = "Only one instance of ConfigurationManager is allowed";
+//    qmlRegisterUncreatableType<Widgets::ConfigurationManager>(uri, 1, 0,
+//                                                              "ConfigurationManager", reason);
 }
 
 }

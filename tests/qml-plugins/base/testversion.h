@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,14 +14,53 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H
-#define WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H
+#ifndef TESTVERSION_H
+#define TESTVERSION_H
 
-namespace Widgets
+/**
+ * @internal
+ * @file testversion.h
+ * @short Definition of TestVersion
+ */
+
+#include <QtTest/QTest>
+
+/**
+ * @internal
+ * @brief Tests for Widgets::Version
+ */
+class TestVersion : public QObject
 {
-static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE = "file_name";
-static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_PACKAGEIDENTIFIER_ATTRIBUTE
-                    = "package_identifier";
-}
+    Q_OBJECT
+private slots:
+    /**
+     * @internal
+     * @brief Data for testCreateVersion()
+     */
+    void testCreateVersion_data();
+    /**
+     * @internal
+     * @brief Test version creation
+     *
+     * This test is used to see if the
+     * version creation using strings
+     * is robust.
+     */
+    void testCreateVersion();
+    /**
+     * @internal
+     * @brief Data for testCompareVersion()
+     */
+    void testCompareVersion_data();
+    /**
+     * @internal
+     * @brief Test version comparison
+     *
+     * This test is used to compare different
+     * versions, and see if the comparison
+     * operators work well.
+     */
+    void testCompareVersion();
+};
 
-#endif // WIDGETS_GRAPHICALCOMPONENTBASEDEFINES_H
+#endif // TESTVERSION_H

@@ -21,6 +21,12 @@
 // file may change from version to version
 // without notice or even be removed.
 
+/**
+ * @internal
+ * @file abstractsettings_p.cpp
+ * @short Implementation of Widgets::AbstractSettingsPrivate
+ */
+
 #include "abstractsettings_p.h"
 
 #include <QtCore/QCoreApplication>

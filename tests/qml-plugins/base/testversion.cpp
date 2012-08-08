@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -12,13 +12,18 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#include "test.h"
-#include "temporarypackagemanager.h"
-#include "../../../qml-plugins/base/version.h"
+#include "testversion.h"
+#include "version.h"
 
-void Test::testCreateVersion_data()
+/**
+ * @internal
+ * @file testversion.cpp
+ * @short Implementation of TestVersion
+ */
+
+void TestVersion::testCreateVersion_data()
 {
     QTest::addColumn<QString>("versionString");
     QTest::addColumn<bool>("valid");
@@ -29,7 +34,7 @@ void Test::testCreateVersion_data()
     QTest::newRow("invalid_with_other_caracters") << "jcio.dcscd?s\nhu.ds<ic\t" << false;
 }
 
-void Test::testCreateVersion()
+void TestVersion::testCreateVersion()
 {
     QFETCH(QString, versionString);
     QFETCH(bool, valid);
@@ -38,7 +43,7 @@ void Test::testCreateVersion()
     QCOMPARE(version.isValid(), valid);
 }
 
-void Test::testCompareVersion_data()
+void TestVersion::testCompareVersion_data()
 {
     QTest::addColumn<int>("version1Major");
     QTest::addColumn<int>("version1Minor");
@@ -52,9 +57,12 @@ void Test::testCompareVersion_data()
     QTest::addColumn<bool>("isGreaterOrEqual");
     QTest::addColumn<bool>("isGreater");
 
+    QTest::newRow("1.0.0 == 1.0.0")
+            << 1 << 0 << 0 << 1 << 0 << 0
+            << true << true << false << true << false;
     QTest::newRow("1.0.0 <= and >= and == 1.0.1")
             << 1 << 0 << 0 << 1 << 0 << 1
-            << true << true << false << true << false;
+            << false << true << false << true << false;
     QTest::newRow("1.1.0 > and >=  1.0.0")
             << 1 << 1 << 0 << 1 << 0 << 0
             << false << false << false << true << true;
@@ -63,7 +71,7 @@ void Test::testCompareVersion_data()
             << false << true << true << false << false;
 }
 
-void Test::testCompareVersion()
+void TestVersion::testCompareVersion()
 {
     QFETCH(int, version1Major);
     QFETCH(int, version1Minor);
@@ -87,46 +95,3 @@ void Test::testCompareVersion()
     QCOMPARE(version1 >= version2, isGreaterOrEqual);
     QCOMPARE(version1 > version2, isGreater);
 }
-
-
-void Test::testPackageManagerCreateTableAndUpdate()
-{
-    TemporaryPackageManager::deleteDb();
-    QBENCHMARK_ONCE {
-        TemporaryPackageManager packageManager;
-        Q_UNUSED(packageManager)
-    }
-}
-
-void Test::testPackageManagerUpdate()
-{
-    TemporaryPackageManager *packageManager = new TemporaryPackageManager;
-    QBENCHMARK_ONCE {
-        packageManager->update();
-    }
-}
-
-void Test::testPackageManagerDefault()
-{
-    QBENCHMARK {
-        TemporaryPackageManager packageManager;
-        Q_UNUSED(packageManager)
-    }
-}
-
-void Test::testPackageManagerGetPackage()
-{
-    TemporaryPackageManager packageManager;
-    Widgets::Package package;
-    QBENCHMARK {
-        package = packageManager.package("org.SfietKonstantin.basicwidgets");
-    }
-    QCOMPARE(package.isValid(), true);
-}
-
-void Test::cleanupTestCase()
-{
-    TemporaryPackageManager::deleteDb();
-}
-
-QTEST_MAIN(Test)

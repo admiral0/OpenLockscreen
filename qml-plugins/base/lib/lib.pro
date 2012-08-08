@@ -13,59 +13,29 @@ HEADERS +=      widgets_global.h \
                 version.h \
                 identifiedelementinterface.h \
                 xmlserializableinterface.h \
+                widgetproviderinterface.h \
                 abstractsettings_p.h \
                 settings.h \
                 settingsentry.h \
-                componentbase.h \
-                componentbase_p.h \
-                graphicalcomponentbase.h \
                 graphicalcomponentbase_p.h \
-                graphicalcomponentbasedefines.h \
-                graphicalcomponent_p.h \
-                dockbaseproperties.h \
-                dockbaseproperties_p.h \
-                dockproperties.h \
-                desktopparser.h \
-                desktopparserdefines.h \
-                package.h \
-                packagemanager.h \
-                packagemanager_p.h \
-                filterconditionlist.h \
-                filtercondition.h \
-                packagemanagerdefines.h \
-                packagemanagerupdaterunnable.h \
-                widgetbaseproperties.h \
-                widgetbaseproperties_p.h \
-                widgetproperties.h \
+                graphicalcomponentbase.h \
                 gridmanager.h \
-                widgetspagemodel.h \
-                widgetspagelistmodel.h \
-                configurationmanager.h
+#                dockmodel.h \
+#                widgetspagemodel.h \
+#                widgetspagelistmodel.h \
+#                configurationmanager.h \
 
-SOURCES +=      version.cpp \
+SOURCES +=      tools.cpp \
+                version.cpp \
                 identifiedelementinterface.cpp \
-                settings.cpp \
                 abstractsettings_p.cpp \
+                settings.cpp \
                 settingsentry.cpp \
-                componentbase.cpp \
                 graphicalcomponentbase.cpp \
-                graphicalcomponentbase_p.cpp \
-                dockbaseproperties.cpp \
-                dockbaseproperties_p.cpp \
-                dockproperties.cpp \
-                desktopparser.cpp \
-                package.cpp \
-                packagemanager.cpp \
-                packagemanager_p.cpp \
-                filterconditionlist.cpp \
-                filtercondition.cpp \
-                packagemanagerupdaterunnable.cpp \
-                widgetbaseproperties.cpp \
-                widgetbaseproperties_p.cpp \
-                widgetproperties.cpp \
-                gridmanager.cpp \
-                widgetspagemodel.cpp \
-                widgetspagelistmodel.cpp \
-                configurationmanager.cpp
+                gridmanager.cpp
+#                dockmodel.cpp \
+#                widgetspagemodel.cpp \
+#                widgetspagelistmodel.cpp \
+#                configurationmanager.cpp \
 
 include(deployment.pri)

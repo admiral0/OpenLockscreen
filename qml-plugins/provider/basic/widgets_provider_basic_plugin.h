@@ -14,11 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_COLORS_PLUGIN_H
-#define WIDGETS_COLORS_PLUGIN_H
+#ifndef WIDGETS_PROVIDER_BASIC_PLUGIN_H
+#define WIDGETS_PROVIDER_BASIC_PLUGIN_H
 
 /**
- * @file widgets_colors_plugin.h
+ * @file widgets_provider_basic_plugin.h
  * @short Definition of Widgets::Colors::WidgetsColorsPlugin
  */
 
@@ -27,42 +27,22 @@
 namespace Widgets
 {
 
-/**
- * @short Namespace for colors plugin in libwidgets
- */
-namespace Colors
+namespace Provider
+{
+
+namespace Basic
 {
 
 /**
- * @page pluginColors QML plugin for colors
+ * @page pluginProviderBasic QML plugin for a basic widget provider
  *
- * libwidgets comes with a plugin that registers many colors, that can be
- * used to provide a consistent and beautiful look and feel. These colors
- * comes from KDE Oxygen palette.
- *
- * To access the colors, you have to import the QML plugin
- * @code{.qml}
- * import org.SfietKonstantin.widgets.colors 1.0
- * @endcode
- *
- * This import creates a global object in the QML context called \e Colors.
- * To use the registered colors, you have to do as follow :
- *
- * @code{.qml}
- * Rectangle {
- *     id: rectangle
- *     color: Colors.woodBrown3
- * }
- * @endcode
- *
- * This plugin do not depend on any plugin. You can use it without importing
- * the main libwidgets plugin.
+ * @todo write this page
  */
 /**
  * @internal
- * @brief QML plugin for colors
+ * @brief QML plugin for basic widget provider
  */
-class WidgetsColorsPlugin : public QDeclarativeExtensionPlugin
+class WidgetsProviderPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 public:
@@ -85,5 +65,7 @@ public:
 
 }
 
-#endif // WIDGETS_COLORS_PLUGIN_H
+}
+
+#endif // WIDGETS_PROVIDER_BASIC_PLUGIN_H
 

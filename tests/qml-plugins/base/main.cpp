@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -12,26 +12,29 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef TESTVERSION_H
-#define TESTVERSION_H
+/**
+ * @internal
+ * @file tests/qml-plugins/base/main.cpp
+ * @short Entry point of the tests for base
+ */
 
-#include <QtTest/QtTest>
+#include <QtCore/QCoreApplication>
 
-class Test : public QObject
+#include "testversion.h"
+#include "testtools.h"
+
+int main(int argc, char **argv)
 {
-    Q_OBJECT
-private slots:
-    void testCreateVersion_data();
-    void testCreateVersion();
-    void testCompareVersion_data();
-    void testCompareVersion();
-    void testPackageManagerCreateTableAndUpdate();
-    void testPackageManagerUpdate();
-    void testPackageManagerDefault();
-    void testPackageManagerGetPackage();
-    void cleanupTestCase();
-};
+    QCoreApplication app (argc, argv);
+    Q_UNUSED(app)
 
-#endif // TESTVERSION_H
+    TestVersion testVersion;
+    QTest::qExec(&testVersion, argc, argv);
+
+    TestTools testTools;
+    QTest::qExec(&testTools, argc, argv);
+
+    return 0;
+}

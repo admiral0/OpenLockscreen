@@ -1,22 +1,13 @@
-QT += sql
+QT += xml sql
 CONFIG  += qtestlib
-LIBS +=     ../../../qml-plugins/base/lib/
+INCLUDEPATH += ../../../qml-plugins/base/lib/
+LIBS += -L../../../qml-plugins/base/lib/ -lwidgetsbase
 
+HEADERS +=  testversion.h \
+            testtools.h
 
-HEADERS +=  test.h \
-            ../../../qml-plugins/base/version.h \
-            ../../../qml-plugins/base/package.h \
-            ../../../qml-plugins/base/desktopparser.h \
-            ../../../qml-plugins/base/packagemanager.h \
-            ../../../qml-plugins/base/packagemanager_p.h \
-            temporarypackagemanager.h
-
-SOURCES += test.cpp \
-            ../../../qml-plugins/base/version.cpp \
-            ../../../qml-plugins/base/desktopparser.cpp \
-            ../../../qml-plugins/base/package.cpp \
-            ../../../qml-plugins/base/packagemanager.cpp \
-            ../../../qml-plugins/base/packagemanager_p.cpp \
-            temporarypackagemanager.cpp
+SOURCES +=  main.cpp \
+            testversion.cpp \
+            testtools.cpp
 
 include(deployment.pri)

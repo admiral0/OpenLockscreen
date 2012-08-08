@@ -18,27 +18,27 @@
 
 #include <QtDeclarative/QtDeclarative>
 
-#include "dockmanager.h"
-#include "dockmodel.h"
+//#include "dockmanager.h"
+//#include "dockmodel.h"
 
 void WidgetsDocksPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Widgets::Docks::DockModel *model = new Widgets::Docks::DockModel(this);
-    model->setContext(engine->rootContext());
-    engine->rootContext()->setContextProperty("DockModelInstance", model);
-    Widgets::Docks::DockManager *manager = new Widgets::Docks::DockManager(this);
-    manager->setDockModel(model);
-    engine->rootContext()->setContextProperty("DockManagerInstance", manager);
+//    Widgets::Docks::DockModel *model = new Widgets::Docks::DockModel(this);
+//    model->setContext(engine->rootContext());
+//    engine->rootContext()->setContextProperty("DockModelInstance", model);
+//    Widgets::Docks::DockManager *manager = new Widgets::Docks::DockManager(this);
+//    manager->setDockModel(model);
+//    engine->rootContext()->setContextProperty("DockManagerInstance", manager);
 }
 
 void WidgetsDocksPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.docks
-    QString reason = "Only one instance of DockManager is allowed.";
-    qmlRegisterUncreatableType<Widgets::Docks::DockManager>(uri, 1, 0, "DockManager", reason);
-    reason = "Only one instance of DockModel is allowed.";
-    qmlRegisterUncreatableType<Widgets::Docks::DockModel>(uri, 1, 0, "DockModel", reason);
+//    QString reason = "Only one instance of DockManager is allowed.";
+//    qmlRegisterUncreatableType<Widgets::Docks::DockManager>(uri, 1, 0, "DockManager", reason);
+//    reason = "Only one instance of DockModel is allowed.";
+//    qmlRegisterUncreatableType<Widgets::Docks::DockModel>(uri, 1, 0, "DockModel", reason);
 }
 
 Q_EXPORT_PLUGIN2(Widgets, WidgetsDocksPlugin)

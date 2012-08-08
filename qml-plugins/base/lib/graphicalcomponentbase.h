@@ -17,10 +17,17 @@
 #ifndef WIDGETS_GRAPHICALCOMPONENTBASE_H
 #define WIDGETS_GRAPHICALCOMPONENTBASE_H
 
+/**
+ * @file graphicalcomponentbase.h
+ * @short Definition of Widgets::GraphicalComponentBase
+ */
+
 #include <QtCore/QObject>
+#include <QtCore/QVariantHash>
+
+#include "widgets_global.h"
 
 #include "xmlserializableinterface.h"
-#include "componentbase.h"
 
 namespace Widgets
 {
@@ -31,13 +38,12 @@ class GraphicalComponentBasePrivate;
  * @brief Base for all graphical components
  *
  * This class is used to represent all the informations
- * that a graphical component, that is, either a widget,
+ * that a graphical component, that can be a widget,
  * or a dock, have. It an be accessed through QML.
  *
  * These informations are
  * - fileName(), that is the filename of the component.
- * - packageIdentifier(), that is the identifier of the package that this component
- *   belongs to.
+ * - disambiguation(), that is a disambiguation parameter.
  * - settingsEnabled() that check if this graphical have settings dialog.
  * - settingsFileName(), that is the filename of the settings component for this component.
  *
@@ -45,13 +51,8 @@ class GraphicalComponentBasePrivate;
  * serialization is incomplete, since none of the information
  * from ComponentBase is saved, but this information can still
  * be retrived using the package manager.
- *
- * The page about \ref packageCreationMetaSubsection "desktop file creation" provides more
- * information about how desktop files should be written.
- *
- * @see Widgets::PackageManager.
  */
-class GraphicalComponentBase: public ComponentBase, public XmlSerializableInterface
+class GraphicalComponentBase: public QObject, public XmlSerializableInterface
 {
     Q_OBJECT
     /**
@@ -59,11 +60,11 @@ class GraphicalComponentBase: public ComponentBase, public XmlSerializableInterf
      */
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
     /**
-     * @short Package idenfifier of the component
+     * @short Disambiguation parameter of the component
      */
-    Q_PROPERTY(QString packageIdentifier READ packageIdentifier NOTIFY packageIdentifierChanged)
+    Q_PROPERTY(QVariantHash disambiguation READ disambiguation NOTIFY disambiguationChanged)
     /**
-     * @short Settings enabled
+     * @short If this component have settings
      */
     Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
     /**
@@ -81,35 +82,96 @@ public:
      *
      * This constructor is used to create a base
      * for graphical components by providing all the
-     * informations, except the name and description.
+     * informations.
      *
      * @param fileName filename of the component.
-     * @param packageIdentifier package identifier of the component.
+     * @param disambiguation disambiguation parameter of the component.
      * @param settingsFileName filename of the settings component.
      * @param parent parent object.
      */
-    explicit GraphicalComponentBase(const QString &fileName, const QString &packageIdentifier,
+    explicit GraphicalComponentBase(const QString &fileName, const QVariantHash &disambiguation,
                                     const QString &settingsFileName, QObject *parent = 0);
     /**
      * @brief Destructor
      */
     virtual ~GraphicalComponentBase();
+    /**
+     * @brief Filename of the component
+     * @return filename of the component.
+     */
     QString fileName() const;
-    QString packageIdentifier() const;
+    /**
+     * @brief Disambiguation parameter of the component
+     * @return disambiguation parameter of the component.
+     */
+    QVariantHash disambiguation() const;
+    /**
+     * @brief If this component have settings
+     * @return if this component have settings.
+     */
     bool isSettingsEnabled() const;
+    /**
+     * @brief Filename of the settings component of this component
+     * @return filename of the settings component of this component.
+     */
     QString settingsFileName() const;
+    /**
+     * @brief Load from XML element
+     * @param elementthe source XML element.
+     * @return if the loading succeded.
+     */
     virtual bool fromXmlElement(const QDomElement &element);
+    /**
+     * @brief Save to XML element
+     *
+     * @param tagName the tag that will be used to create this element.
+     * @param document a pointer to the document that is used to create elements.
+     * @return the class as an XML element.
+     */
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
 Q_SIGNALS:
-    void fileNameChanged(const QString &fileName);
-    void packageIdentifierChanged(const QString &packageIdentifier);
+    /**
+     * @brief Filename changed
+     */
+    void fileNameChanged();
+    /**
+     * @brief Disambiguation changed
+     */
+    void disambiguationChanged();
+    /**
+     * @brief Settings enabled changed
+     */
     void settingsEnabledChanged();
-    void settingsFileNameChanged() const;
+    /**
+     * @brief Settings filename changed
+     */
+    void settingsFileNameChanged();
 protected:
+    /**
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
+     * @param parent parent object.
+     */
     explicit GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent);
+    /**
+     * @brief Set the filename of the component
+     * @param fileName filename of the component.
+     */
     void setFileName(const QString &fileName);
-    void setPackageIdentifier(const QString &packageIdentifier);
+    /**
+     * @brief Set the disambiguation parameter of the component
+     * @param disambiguation disambiguation parameter of the component.
+     */
+    void setDisambiguation(const QVariantHash &disambiguation);
+    /**
+     * @brief Set the filename of the settings component of this component
+     * @param settingsFileName filename of the settings component of this component.
+     */
     void setSettingsFileName(const QString &settingsFileName);
+    /**
+     * @brief D-pointer
+     */
+    QScopedPointer <GraphicalComponentBasePrivate> d_pointer;
 private:
     W_DECLARE_PRIVATE(GraphicalComponentBase)
 };

@@ -24,27 +24,50 @@
 // file may change from version to version
 // without notice or even be removed.
 
-#include "componentbase_p.h"
+/**
+ * @internal
+ * @file graphicalcomponentbase_p.h
+ * @short Definition of Widgets::GraphicalComponentBasePrivate
+ */
+
 #include "graphicalcomponentbase.h"
 
 #include <QtCore/QString>
+#include <QtCore/QVariantHash>
 
 namespace Widgets
 {
 
-class GraphicalComponentBasePrivate: public ComponentBasePrivate
+/**
+ * @internal
+ * @brief Private class for Widgets::GraphicalComponentBase
+ */
+class GraphicalComponentBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
     GraphicalComponentBasePrivate(GraphicalComponentBase *q);
-    GraphicalComponentBasePrivate(const QString &fileName, const QString &packageIdentifier,
-                                  GraphicalComponentBase *q);
+    /**
+     * @internal
+     * @brief Filename of the component
+     */
     QString fileName;
-    QString packageIdentifier;
+    /**
+     * @internal
+     * @brief Disambiguation parameter of the component
+     */
+    QVariantHash disambiguation;
+    /**
+     * @internal
+     * @brief Filename of the settings component of this component
+     */
     QString settingsFileName;
-protected:
-    virtual void parseDesktopFile(const DesktopParser &parser);
-    virtual bool checkValid(const DesktopParser &parser);
 private:
+    GraphicalComponentBase *q_ptr;
     Q_DECLARE_PUBLIC(GraphicalComponentBase)
 };
 

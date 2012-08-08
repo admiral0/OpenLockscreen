@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -12,21 +12,48 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef TEMPORARYPACKAGEMANAGER_H
-#define TEMPORARYPACKAGEMANAGER_H
+#ifndef TESTTOOLS_H
+#define TESTTOOLS_H
 
-#include "../../../qml-plugins/base/plugin/packagemanager.h"
+/**
+ * @internal
+ * @file testtools.h
+ * @short Definition of TestTools
+ */
 
-class TemporaryPackageManagerPrivate;
-class TemporaryPackageManager: public Widgets::PackageManager
+#include <QtTest/QtTest>
+
+/**
+ * @internal
+ * @brief Tests for Widgets::Tools
+ */
+class TestTools : public QObject
 {
-public:
-    TemporaryPackageManager();
-    static void deleteDb();
-private:
-    Q_DECLARE_PRIVATE(TemporaryPackageManager)
+    Q_OBJECT
+private slots:
+    /**
+     * @internal
+     * @brief Data for testToolsBoolean()
+     */
+    void testToolsBoolean_data();
+    /**
+     * @brief Test conversion from and to booleans
+     *
+     * This test is used to see
+     * if the convertion from strings
+     * to booleans is robust.
+     */
+    void testToolsBoolean();
+    /**
+     * @brief Test convertion from XML to variant hash
+     *
+     * This test is used to see
+     * if the convertion from XML
+     * elements to variant hash is robust.
+     */
+    void testToolVariantHashXml();
 };
 
-#endif // TEMPORARYPACKAGEMANAGER_H
+#endif // TESTTOOLS_H
