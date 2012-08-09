@@ -15,12 +15,8 @@
  ****************************************************************************************/
 
 /**
- * @file displayedpagewidgetsmodel.cpp
- * @short Implementation of Widgets::DisplayedPageWidgetsModel
- *
- * This file contains the implemetation of the
- * Widgets::DisplayedPageWidgetsModel class and the declaration and
- * implementation of Widgets::DisplayedPageWidgetsModel::DisplayedPageWidgetsModelPrivate.
+ * @file widgetspagemodel.cpp
+ * @short Implementation of Widgets::WidgetsPageModel
  */
 
 #include "widgetspagemodel.h"
@@ -28,8 +24,8 @@
 
 #include "abstractsettings_p.h"
 #include "gridmanager.h"
+#include "widgetproviderbase.h"
 #include "settings.h"
-#include "packagemanager.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
@@ -43,78 +39,84 @@
 namespace Widgets
 {
 
+/**
+ * @brief WIDGET_ELEMENT
+ *
+ * Used in Widgets::WidgetsPageModel.
+ */
 static const char *WIDGET_ELEMENT = "widget";
 
 /**
  * @internal
- * @short Private class for DisplayedPageWidgetsModel
+ * @short Private class for Widgets::WidgetsPageModelPrivate
  */
 class WidgetsPageModelPrivate: public AbstractSettingsPrivate
 {
 public:
     /**
+     * @internal
      * @short Default constructor
-     *
-     * @param pageIndex index of this page.
-     * @param settings Settings object used to manage settings.
-     * @param packageManager PackageManager object used to provide available widgets.
-     * @param parent parent Q-pointer.
+     * @param q Q-pointer.
      */
     WidgetsPageModelPrivate(WidgetsPageModel *q);
-    virtual ~WidgetsPageModelPrivate();
-    virtual void clear();
-    virtual bool fromXmlElement(const QDomElement &element);
-    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
     /**
-     * @short Load settings
-     *
-     * This method is used to retrieve
-     * the saved widgets and create them.
+     * @internal
+     * @brief Destructor
      */
+    virtual ~WidgetsPageModelPrivate();
+    /**
+     * @internal
+     * @brief Clear
+     */
+    virtual void clear();
+    /**
+     * @internal
+     * @brief Load from XML element
+     *
+     * @param element the source XML element.
+     * @return if the loading succeded.
+     */
+    virtual bool fromXmlElement(const QDomElement &element);
+    /**
+     * @internal
+     * @brief Save to XML element
+     *
+     * @param tagName the tag that will be used to create this element.
+     * @param document a pointer to the document that is used to create elements.
+     * @return the class as an XML element.
+     */
+    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
 //    void loadSettings();
+    /**
+     * @brief Compute a rectangle that is available in the grid
+     *
+     * This method computes a rectangle that is fit to the provided
+     * size. It takes the size of the grid in account, and the other
+     * widgets, in order not to have any overlap.
+     *
+     * If no space was found, an invalid geometry will be returned.
+     *
+     * @param gridManager grid manager used to perform the operation.
+     * @param width width of the widget.
+     * @param height height of the widget.
+     * @return
+     */
     QRect availableRect(Widgets::GridManager *gridManager, int width, int height) const;
     /**
-     * @short Index of this page
+     * @short Page index
      */
     int pageIndex;
     /**
-     * @short A list of WidgetProperties
-     *
-     * This list of WidgetProperties is the
-     * internal storage of the model.
+     * @short Data
      */
     QList<WidgetProperties *> data;
-    /**
-     * @short A list of WidgetProperties sorted by Z
-     *
-     * This list of WidgetProperties is used to
-     * manage z coordinate of the widgets.
-     */
 //    QList<WidgetProperties *> widgetsByZ;
-    /**
-     * @short A map associating identifier to widgets
-     *
-     * This map associates the identifier of a widget
-     * to the WidgetProperties that corresponds.
-     */
 //    QMap<QString, WidgetProperties *> widgetsByIdentifier;
-    /**
-     * @short Identifiers
-     *
-     * This list of identifiers is used to
-     * track the widgets that were added.
-     *
-     * This list is used in settings.
-     */
 //    QStringList identifiers;
     /**
-     * @short %Settings
+     * @short Provider
      */
-//    Settings * const settings;
-    /**
-     * @short Package manager
-     */
-    PackageManager *packageManager;
+    WidgetProviderBase *provider;
 private:
     /**
      * @short Q-pointer
@@ -127,7 +129,7 @@ WidgetsPageModelPrivate::WidgetsPageModelPrivate(WidgetsPageModel *q):
     AbstractSettingsPrivate(q), q_ptr(q)
 {
     pageIndex = -1;
-    packageManager = 0;
+    provider = 0;
 }
 
 WidgetsPageModelPrivate::~WidgetsPageModelPrivate()
@@ -153,7 +155,7 @@ bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
     }
 
     QDomElement widgetElement = element.firstChildElement(WIDGET_ELEMENT);
-    while (!widgetElement.isNull()) {
+    /*while (!widgetElement.isNull()) {
         WidgetProperties *incompleteWidget = new WidgetProperties(q);
         if (incompleteWidget->fromXmlElement(widgetElement)) {
             WidgetBaseProperties *widgetBase =
@@ -172,7 +174,7 @@ bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
         }
         incompleteWidget->deleteLater();
         widgetElement = widgetElement.nextSiblingElement(WIDGET_ELEMENT);
-    }
+    }*/
 
     return true;
 }
@@ -182,46 +184,11 @@ QDomElement WidgetsPageModelPrivate::toXmlElement(const QString &tagName,
 {
     QDomElement element = document->createElement(tagName);
 
-    foreach(WidgetProperties *widget, data) {
+    /*foreach(WidgetProperties *widget, data) {
         element.appendChild(widget->toXmlElement(WIDGET_ELEMENT, document));
-    }
+    }*/
     return element;
 }
-
-//void WidgetsPageModelPrivate::loadSettings()
-//{
-    /*
-    if(settings == 0 || packageManager == 0) {
-        return;
-    }
-
-    // Key and identifiers
-    QString key = QString("page%1/identifiers").arg(pageIndex);
-    QStringList identifiers = settings->value(key).toStringList();
-
-    // Retrieve all widgets
-    foreach (QString identifier, identifiers) {
-
-        // Key to the widget
-        QString key = QString("page%1/widget_%2").arg(pageIndex).arg(identifier);
-        QVariantMap widgetMap = settings->value(key).toMap();
-
-        // Get the widget base properties
-        QString qmlFile = widgetMap.value("qmlFile").toString();
-        WidgetBaseProperties *widgetBase = packageManager->widget(qmlFile);
-
-        // Construct the widget and add it
-        if(widgetBase != 0) {
-            QRect rect = widgetMap.value("rect").toRect();
-            int z = widgetMap.value("z").toInt();
-            QVariantMap settings = widgetMap.value("settings").toMap();
-            q->addWidget(widgetBase, rect.x(), rect.y(), rect.width(), rect.height(),
-                         settings, identifier, z);
-        }
-
-    }*/
-
-//}
 
 QRect WidgetsPageModelPrivate::availableRect(GridManager *gridManager, int width, int height) const
 {
@@ -324,12 +291,6 @@ int WidgetsPageModel::count() const
     return rowCount();
 }
 
-PackageManager * WidgetsPageModel::packageManager() const
-{
-    Q_D(const WidgetsPageModel);
-    return d->packageManager;
-}
-
 QVariant WidgetsPageModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const WidgetsPageModel);
@@ -363,7 +324,7 @@ void WidgetsPageModel::setPageIndex(int index)
 void WidgetsPageModel::load()
 {
     Q_D(WidgetsPageModel);
-    if (d->packageManager == 0) {
+    if (!d->provider) {
         return;
     }
 
@@ -376,12 +337,12 @@ void WidgetsPageModel::load()
 
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  Widgets::GridManager *gridManager,
-                                 const QVariantMap &settings,
+                                 const QVariantHash &settings,
                                  const QString &identifier)
 {
     Q_D(WidgetsPageModel);
 
-    if(widget == 0) {
+    if(!widget) {
         return false;
     }
 
@@ -395,7 +356,7 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
 
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  const QRect &geometry, int z,
-                                 const QVariantMap &settings,
+                                 const QVariantHash &settings,
                                  const QString &identifier)
 {
     Q_D(WidgetsPageModel);
@@ -404,14 +365,16 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
 
     WidgetProperties *newWidget;
     if (identifier.isEmpty()) {
-        newWidget = new WidgetProperties(widget, geometry, z, settings, this);
+        newWidget = new WidgetProperties(widget, geometry.x(), geometry.y(), z,
+                                         geometry.width(), geometry.height(), settings, this);
     } else {
-        newWidget = new WidgetProperties(widget, geometry, z, identifier, settings, this);
+        newWidget = new WidgetProperties(widget, identifier, geometry.x(), geometry.y(), z,
+                                         geometry.width(), geometry.height(), settings, this);
     }
 
     d->data.append(newWidget);
 
-    emit countChanged(rowCount());
+    emit countChanged();
     endInsertRows();
 
     d->requestSave();
@@ -441,7 +404,7 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
 
     emit dataChanged(this->index(0), this->index(rowCount() - 1));
 
-    emit countChanged(rowCount());
+    emit countChanged();
     endRemoveRows();
 
     d->requestSave();
@@ -449,23 +412,20 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
     return true;
 }
 
-void WidgetsPageModel::setPackageManager(PackageManager *packageManager)
+void WidgetsPageModel::setProvider(WidgetProviderBase *provider)
 {
     Q_D(WidgetsPageModel);
-    if (d->packageManager != packageManager) {
-        d->packageManager = packageManager;
-        emit packageManagerChanged();
-    }
+    d->provider = provider;
 
-    if (d->packageManager != 0) {
+    if (d->provider) {
         load();
     }
 }
 
-void WidgetsPageModel::relayout(GridManager *gridManager)
-{
-    Q_UNUSED(gridManager)
-}
+//void WidgetsPageModel::relayout(GridManager *gridManager)
+//{
+//    Q_UNUSED(gridManager)
+//}
 
 
 

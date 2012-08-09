@@ -31,9 +31,11 @@
  */
 
 #include "graphicalcomponentbase.h"
+#include "builderpatterninterfaces_p.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVariantHash>
+#include <QtXml/QDomElement>
 
 namespace Widgets
 {
@@ -66,9 +68,194 @@ public:
      * @brief Filename of the settings component of this component
      */
     QString settingsFileName;
-private:
+protected:
+    /**
+     * @internal
+     * @brief Q-pointer
+     */
     GraphicalComponentBase *q_ptr;
+private:
     Q_DECLARE_PUBLIC(GraphicalComponentBase)
+};
+
+/**
+ * @internal
+ * @brief Helper class for component builder for Widgets::GraphicalComponentBase
+ *
+ * This helper class provides all the information for the
+ * builder class to create the component. It take cares of the
+ * XML component, and parse it, and store the parent of the new
+ * component as well.
+ *
+ * These parameters are set using setProperties().
+ *
+ * It also provides an information about the validity of the XML
+ * element, that can be retrieved using isValid().
+ */
+class GraphicalComponentBaseComponentBuilderHelper
+{
+public:
+    /**
+     * @brief Default constructor
+     */
+    explicit GraphicalComponentBaseComponentBuilderHelper();
+    /**
+     * @brief Destructor
+     */
+    virtual ~GraphicalComponentBaseComponentBuilderHelper();
+    /**
+     * @internal
+     * @brief Set properties
+     *
+     * @param xmlElement XML element that represents the component.
+     * @param parent parent object.
+     */
+    virtual void setProperties(const QDomElement &xmlElement, QObject *parent = 0);
+    /**
+     * @internal
+     * @brief parent
+     * @return parent object.
+     */
+    QObject *parent() const;
+    /**
+     * @internal
+     * @brief If the XML element is valid
+     *
+     * This method is used in buildElement() in
+     * order to check if the XML element contains
+     * valid information.
+     *
+     * @return if the XML element is valid.
+     */
+    virtual bool isValid() const;
+    /**
+     * @brief filename
+     * @return filename.
+     */
+    QString fileName() const;
+    /**
+     * @brief Settings filename
+     * @return settings filename.
+     */
+    QString settingsFileName() const;
+    /**
+     * @brief Disambiguation
+     * @return disambiguation.
+     */
+    QVariantHash disambiguation() const;
+protected:
+    /**
+     * @internal
+     * @brief XML element
+     */
+    QDomElement xmlElement;
+private:
+    /**
+     * @internal
+     * @brief Parent object
+     */
+    QObject *m_parent;
+};
+
+/**
+ * @internal
+ * @brief Component builder for Widgets::GraphicalComponentBase
+ *
+ * This class is used to get a Widgets::GraphicalComponentBase
+ * from an XML component.
+ *
+ * This class build the component in 2 steps.
+ * - call to setProperties() to get the XML element and parent object.
+ * - call to buildElement() to build the component.
+ */
+class GraphicalComponentBaseComponentBuilder:
+        public AbstractBuilder<GraphicalComponentBase *>
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit GraphicalComponentBaseComponentBuilder();
+    /**
+     * @internal
+     * @brief Destructor
+     */
+    virtual ~GraphicalComponentBaseComponentBuilder();
+    /**
+     * @internal
+     * @brief Set properties
+     *
+     * @param xmlElement XML element that represents the component.
+     * @param parent parent object.
+     */
+    virtual void setProperties(const QDomElement &xmlElement, QObject *parent = 0);
+    /**
+     * @internal
+     * @brief Built the component
+     */
+    virtual void buildElement();
+private:
+    /**
+     * @brief Helper class
+     */
+    GraphicalComponentBaseComponentBuilderHelper *m_helper;
+};
+
+/**
+ * @internal
+ * @brief XML builder for Widgets::GraphicalComponentBase
+ *
+ * This class is used to get an XML component from
+ * a Widgets::GraphicalComponentBase
+ *
+ * This class build the component in 2 steps.
+ * - call to setProperties() to get the component, tag and document
+ *   that are used to create the XML element.
+ * - call to buildElement() to build the component.
+ */
+class GraphicalComponentBaseXmlBuilder: public AbstractBuilder<QDomElement>
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit GraphicalComponentBaseXmlBuilder();
+    /**
+     * @internal
+     * @brief Set properties
+     * @param component the component that will be saved in XML.
+     * @param tagName the tag that will be used to create this element.
+     * @param document a pointer to the document that is used to create elements.
+     */
+    virtual void setProperties(GraphicalComponentBase *component, const QString &tagName,
+                               QDomDocument *document);
+    /**
+     * @internal
+     * @brief Built the component
+     */
+    virtual void buildElement();
+protected:
+    /**
+     * @internal
+     * @brief Component
+     * @return component
+     */
+    virtual GraphicalComponentBase *component() const;
+    /**
+     * @brief Tag
+     */
+    QString tagName;
+    /**
+     * @brief Document
+     */
+    QDomDocument *document;
+private:
+    /**
+     * @brief Component
+     */
+    GraphicalComponentBase *m_component;
 };
 
 }

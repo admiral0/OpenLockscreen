@@ -17,21 +17,27 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.provider.basic 1.0
 
 PageStackWindow {
     id: window
-    /*initialPage: mainPage
+    initialPage: mainPage
     Component.onCompleted: {
         theme.inverted = true
-        PackageManagerInstance.filter = packageManagerFilters
+//        PackageManagerInstance.filter = packageManagerFilters
         WidgetsPageListModelInstance.settings = widgetsSettings
+        ProviderManagerInstance.setProvider(provider)
     }
 
-    FilterConditionList {
-        id: packageManagerFilters
-        FilterCondition {
-            tag: "mobile-harmattan"
-        }
+//    FilterConditionList {
+//        id: packageManagerFilters
+//        FilterCondition {
+//            tag: "mobile-harmattan"
+//        }
+//    }
+
+    BasicProvider {
+        id: provider
     }
 
     Settings {
@@ -52,8 +58,6 @@ PageStackWindow {
 
     MainPage {
         id: mainPage
-    }*/
-
-
+    }
 
 }

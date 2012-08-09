@@ -14,11 +14,23 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file widgetbaseproperties.cpp
+ * @short Implementation of Widgets::WidgetBaseProperties
+ */
+
 #include "widgetbaseproperties.h"
 #include "widgetbaseproperties_p.h"
 
 namespace Widgets
 {
+
+WidgetBasePropertiesPrivate::WidgetBasePropertiesPrivate(WidgetBaseProperties *q):
+    GraphicalComponentBasePrivate(q)
+{
+}
+
+////// End of private class //////
 
 WidgetBaseProperties::WidgetBaseProperties(QObject *parent):
     GraphicalComponentBase(new WidgetBasePropertiesPrivate(this), parent)
@@ -26,38 +38,24 @@ WidgetBaseProperties::WidgetBaseProperties(QObject *parent):
 }
 
 WidgetBaseProperties::WidgetBaseProperties(const QString &fileName,
-                                           const QString &packageIdentifier,
+                                           const QVariantHash &disambiguation,
                                            const QString &settingsFileName,
-                                           int width, int height,
+                                           int minimumWidth, int minimumHeight,
+                                           int maximumWidth, int maximumHeight,
                                            QObject *parent):
     GraphicalComponentBase(new WidgetBasePropertiesPrivate(this), parent)
 {
     W_D(WidgetBaseProperties);
     d->fileName = fileName;
-    d->packageIdentifier = packageIdentifier;
+    d->disambiguation = disambiguation;
     d->settingsFileName = settingsFileName;
-    d->minimumSize = QSize(width, height);
+    d->minimumSize = QSize(minimumWidth, minimumHeight);
+    d->maximumSize = QSize(maximumWidth, maximumHeight);
 }
 
 WidgetBaseProperties::WidgetBaseProperties(WidgetBasePropertiesPrivate *dd, QObject *parent):
     GraphicalComponentBase(dd, parent)
 {
-}
-
-WidgetBaseProperties::WidgetBaseProperties(const QString &desktopFile,
-                                           const QString &packageIdentifier,
-                                           QObject *parent):
-    GraphicalComponentBase(new WidgetBasePropertiesPrivate(this), parent)
-{
-    W_D(WidgetBaseProperties);
-    d->packageIdentifier = packageIdentifier;
-    d->fromDesktopFile(desktopFile);
-}
-
-bool WidgetBaseProperties::isValid() const
-{
-    W_D(const WidgetBaseProperties);
-    return d->valid;
 }
 
 int WidgetBaseProperties::minimumWidth() const
@@ -82,60 +80,6 @@ int WidgetBaseProperties::maximumHeight() const
 {
     W_D(const WidgetBaseProperties);
     return d->maximumSize.height();
-}
-
-bool WidgetBaseProperties::fromXmlElement(const QDomElement &element)
-{
-    return GraphicalComponentBase::fromXmlElement(element);
-}
-
-QDomElement WidgetBaseProperties::toXmlElement(const QString &tagName, QDomDocument *document) const
-{
-    QDomElement element = GraphicalComponentBase::toXmlElement(tagName, document);
-    return element;
-}
-
-WidgetBaseProperties * WidgetBaseProperties::fromDesktopFile(const QString &desktopFile,
-                                                             const QString &packageIdentifier,
-                                                             QObject *parent)
-{
-    return new WidgetBaseProperties(desktopFile, packageIdentifier, parent);
-}
-
-void WidgetBaseProperties::setMinimumWidth(int width)
-{
-    W_D(WidgetBaseProperties);
-    if (d->minimumSize.width() != width) {
-        d->minimumSize.setWidth(width);
-        emit minimumWidthChanged(width);
-    }
-}
-
-void WidgetBaseProperties::setMinimumHeight(int height)
-{
-    W_D(WidgetBaseProperties);
-    if (d->minimumSize.height() != height) {
-        d->minimumSize.setHeight(height);
-        emit minimumHeightChanged(height);
-    }
-}
-
-void WidgetBaseProperties::setMaximumWidth(int width)
-{
-    W_D(WidgetBaseProperties);
-    if (d->maximumSize.width() != width) {
-        d->maximumSize.setWidth(width);
-        emit maximumWidthChanged(width);
-    }
-}
-
-void WidgetBaseProperties::setMaximumHeight(int height)
-{
-    W_D(WidgetBaseProperties);
-    if (d->maximumSize.height() != height) {
-        d->maximumSize.setHeight(height);
-        emit maximumHeightChanged(height);
-    }
 }
 
 }

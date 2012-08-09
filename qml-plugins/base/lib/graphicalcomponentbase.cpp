@@ -31,35 +31,146 @@ namespace Widgets
 {
 
 /**
- * @brief GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE
+ * @brief FILENAME_ATTRIBUTE
  *
- * Used in GraphicalComponentBase::fromXmlElement() and GraphicalComponentBase::toXmlElement().
+ * Used in Widgets::GraphicalComponentBase.
  */
-static const char *GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE = "filename";
+static const char *FILENAME_ATTRIBUTE = "filename";
 /**
- * @brief GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG
- * Used in GraphicalComponentBase::fromXmlElement() and GraphicalComponentBase::toXmlElement().
+ * @brief SETTINGS_FILENAME_ATTRIBUTE
+ *
+ * Used in Widgets::GraphicalComponentBase.
  */
-static const char *GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG = "disambiguation";
+static const char *SETTINGS_FILENAME_ATTRIBUTE = "settings_filename";
+/**
+ * @brief DISAMBIGUATION_TAG
+ *
+ * Used in Widgets::GraphicalComponentBase.
+ */
+static const char *DISAMBIGUATION_TAG = "disambiguation";
 
 GraphicalComponentBasePrivate::GraphicalComponentBasePrivate(GraphicalComponentBase *q):
     q_ptr(q)
 {
 }
 
-
-////// End of private class //////
-
-GraphicalComponentBase::GraphicalComponentBase(QObject *parent) :
-    QObject(parent),XmlSerializableInterface(), d_pointer(new GraphicalComponentBasePrivate(this))
+GraphicalComponentBaseComponentBuilderHelper::GraphicalComponentBaseComponentBuilderHelper():
+    m_parent(0)
 {
 }
+
+GraphicalComponentBaseComponentBuilderHelper::~GraphicalComponentBaseComponentBuilderHelper()
+{
+}
+
+void GraphicalComponentBaseComponentBuilderHelper::
+               setProperties(const QDomElement &xmlElementToSet, QObject *parent)
+{
+    xmlElement = xmlElementToSet;
+    m_parent = parent;
+}
+
+QObject * GraphicalComponentBaseComponentBuilderHelper::parent() const
+{
+    return m_parent;
+}
+
+bool GraphicalComponentBaseComponentBuilderHelper::isValid() const
+{
+    if (!xmlElement.hasAttribute(FILENAME_ATTRIBUTE)
+        || !xmlElement.hasAttribute(SETTINGS_FILENAME_ATTRIBUTE)) {
+        return false;
+    }
+
+    QDomElement disambiguationElement = xmlElement.firstChildElement(DISAMBIGUATION_TAG);
+    if (disambiguationElement.isNull()) {
+        return false;
+    }
+
+    return true;
+}
+
+QString GraphicalComponentBaseComponentBuilderHelper::fileName() const
+{
+    return xmlElement.attribute(FILENAME_ATTRIBUTE);
+}
+
+QString GraphicalComponentBaseComponentBuilderHelper::settingsFileName() const
+{
+    return xmlElement.attribute(SETTINGS_FILENAME_ATTRIBUTE);
+}
+
+QVariantHash GraphicalComponentBaseComponentBuilderHelper::disambiguation() const
+{
+    QDomElement disambiguationElement = xmlElement.firstChildElement(DISAMBIGUATION_TAG);
+    return Tools::fromXmlElementToVariantHash(disambiguationElement);
+}
+
+GraphicalComponentBaseComponentBuilder::GraphicalComponentBaseComponentBuilder():
+    AbstractBuilder<GraphicalComponentBase *>()
+{
+    m_helper = new GraphicalComponentBaseComponentBuilderHelper();
+}
+
+GraphicalComponentBaseComponentBuilder::~GraphicalComponentBaseComponentBuilder()
+{
+    delete m_helper;
+}
+
+void GraphicalComponentBaseComponentBuilder::setProperties(const QDomElement &xmlElement,
+                                                           QObject *parent)
+{
+    m_helper->setProperties(xmlElement, parent);
+}
+
+void GraphicalComponentBaseComponentBuilder::buildElement()
+{
+    if (!m_helper->isValid()) {
+        builtElement = 0;
+        return;
+    }
+    builtElement = new GraphicalComponentBase(m_helper->fileName(), m_helper->disambiguation(),
+                                              m_helper->settingsFileName(), m_helper->parent());
+}
+
+GraphicalComponentBaseXmlBuilder::GraphicalComponentBaseXmlBuilder():
+    m_component(0)
+{
+}
+
+void GraphicalComponentBaseXmlBuilder::setProperties(GraphicalComponentBase *componentToSet,
+                                                         const QString &tagNameToSet,
+                                                         QDomDocument *documentToSet)
+{
+    m_component = componentToSet;
+    tagName = tagNameToSet;
+    document = documentToSet;
+}
+
+void GraphicalComponentBaseXmlBuilder::buildElement()
+{
+    builtElement = document->createElement(tagName);
+    builtElement.setAttribute(FILENAME_ATTRIBUTE, component()->fileName());
+    builtElement.setAttribute(SETTINGS_FILENAME_ATTRIBUTE, component()->settingsFileName());
+
+    QDomElement disambiguationElement
+            = Tools::toXmlElementFromVariantHash(component()->disambiguation(), DISAMBIGUATION_TAG,
+                                                 document);
+    builtElement.appendChild(disambiguationElement);
+}
+
+GraphicalComponentBase * GraphicalComponentBaseXmlBuilder::component() const
+{
+    return m_component;
+}
+
+////// End of private class //////
 
 GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
                                                const QVariantHash &disambiguation,
                                                const QString &settingsFileName,
                                                QObject *parent):
-    QObject(parent),XmlSerializableInterface(), d_pointer(new GraphicalComponentBasePrivate(this))
+    QObject(parent), d_pointer(new GraphicalComponentBasePrivate(this))
 {
     W_D(GraphicalComponentBase);
     d->fileName = fileName;
@@ -68,7 +179,7 @@ GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
 }
 
 GraphicalComponentBase::GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent):
-    QObject(parent), XmlSerializableInterface(), d_pointer(dd)
+    QObject(parent), d_pointer(dd)
 {
 }
 
@@ -98,68 +209,6 @@ QString GraphicalComponentBase::settingsFileName() const
 {
     W_D(const GraphicalComponentBase);
     return d->settingsFileName;
-}
-
-bool GraphicalComponentBase::fromXmlElement(const QDomElement &element)
-{
-    if (!element.hasAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE)) {
-        return false;
-    }
-
-    QDomElement disambiguationElement
-            = element.firstChildElement(GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG);
-
-
-    if (disambiguationElement.isNull()) {
-        return false;
-    }
-
-    setFileName(element.attribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE));
-    setDisambiguation(Tools::fromXmlElementToVariantHash(disambiguationElement));
-
-    return true;
-}
-
-QDomElement GraphicalComponentBase::toXmlElement(const QString &tagName,
-                                                         QDomDocument *document) const
-{
-    QDomElement element = document->createElement(tagName);
-    element.setAttribute(GRAPHICAL_ELEMENT_BASE_PROPERTIES_FILENAME_ATTRIBUTE, fileName());
-
-    QDomElement disambiguationElement
-            = Tools::toXmlElementFromVariantHash(disambiguation(), GRAPHICAL_ELEMENT_BASE_DISAMBIGUATION_TAG,
-                                      document);
-    element.appendChild(disambiguationElement);
-    return element;
-}
-
-void GraphicalComponentBase::setFileName(const QString &name)
-{
-    W_D(GraphicalComponentBase);
-    if (d->fileName != name) {
-        d->fileName = name;
-        emit fileNameChanged();
-    }
-}
-
-void GraphicalComponentBase::setDisambiguation(const QVariantHash &disambiguation)
-{
-    W_D(GraphicalComponentBase);
-    if (d->disambiguation != disambiguation) {
-        d->disambiguation = disambiguation;
-        emit disambiguationChanged();
-    }
-}
-
-void GraphicalComponentBase::setSettingsFileName(const QString &settingsFileName)
-{
-    W_D(GraphicalComponentBase);
-    if (d->settingsFileName != settingsFileName) {
-        d->settingsFileName = settingsFileName;
-
-        emit settingsEnabledChanged();
-        emit settingsFileNameChanged();
-    }
 }
 
 }

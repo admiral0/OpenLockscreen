@@ -43,9 +43,27 @@
  * flags.
  *
  * - \subpage pluginBase
+ * - \subpage providers
+ *   - \ref pluginProviderBasic
+ *   - \ref pluginProviderPackageManager
  * - \subpage pluginColors
  *
  *
+ */
+/**
+ * @page providers Providers
+ *
+ * A widget engine must be used with a provider, that provides widget
+ * to the widget engine. Providers are C++ components that have to be
+ * implemented and registered to the \e WidgetsPageListModelInstance
+ * when they are initialized.
+ *
+ * Fortunately, some providers are alredy implemented :
+ * - \subpage pluginProviderBasic
+ * - \subpage pluginProviderPackageManager
+ *
+ * The documentation on implementing a provider is on the page of the
+ * class Widgets::WidgetProviderInterface.
  */
 /**
  * @page pluginBase Base QML plugin for widgets
@@ -61,206 +79,18 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
- * While imported, this plugin provides the following components:
- * - A package manager
- * - A widgets pages model
- *
- * The first component is used to provide docks and widgets.It stores names,
- * descriptions, and files of packages that contains widgets and docks, and
- * is used to retrieve them quickly.
- *
- * The second component is a global model that is used to represent the widgets
+ * While imported, this plugin provides a widgets pages model
+ * that is a global model that is used to represent the widgets
  * in different screens. It provides loading and saving capabilities, and can
  * be edited easliy.
  *
- * These two components are available as global objects, that are called
- * - PackageManagerInstance
- * - WidgetsPageListModelInstance
+ * This model is available as a global object, named \e WidgetsPageListModelInstance.
  *
  * You can use the @e WidgetsPageListModelInstance in any view, but we recommand
  * using provided views such as @e WidgetsHorizontalPageView, or subclassing the
  * provided @e WidgetsView.
  *
- * @section packageCreationSection Package creation
- *
- * Extending libwidgets is done through packages, that are an organized filesystem
- * hiearchy. Each package is named with an unique identifier, and each component,
- * either widget or dock also have an identifier. The following organization should
- * be respected.
- * @code{.txt}
- * |-- package.desktop
- * |-- widgets/
- *   |-- widget1/
- *     |-- metadata.desktop
- *     |-- somewidgetqmlfile.qml
- *     |-- somewidgetdatafile.png
- *   |-- widget2/
- *   |-- ...
- * |-- docks/
- *   |-- dock1/
- *     |-- metadata.desktop
- *     |-- somedockqmlfile.qml
- *     |-- somedockdatafile.png
- *   |-- dock2/
- *   |-- ...
- * @endcode
- *
- * @subsection packageCreationWidgetSubsection Widget creation
- *
- * A widget is a declarative item that subclass \e Widget. It needs
- * to provide some informations about size. \e Widget is defined as follow
- *
- * @code{.qml}
- * Item {
- *     id: container
- *     property bool enabled
- *     property variant settings
- *     property int minimumWidth
- *     property int minimumHeight
- *     property int maximumWidth
- *     property int maximumHeight
- * }
- * @endcode
- *
- * Defining the size of the widget can be done in two ways. Either by setting \e width
- * and \e height, so the widget is fixed size, or providing  \e minimumWidth, \e minimumHeight,
- * \e maximumWidth and \e maximumHeight, that creates a resizable widget (in the future).
- *
- * \e enabled property is used to enable the widget. If it is disabled, the widget
- * should stop processing and heavy tasks. \e settings is used to communicate settings
- * to the widget. It uses a QVariantMap to store key / values pairs.
- *
- * @todo showSettings is not used, and should be replaced soon. Document these changes.
- *
- * Only one widget should be defined per folder. It have to be passed to the desktop file to
- * be identified by the package manager. Other QML files that are used in this widget can be
- * declared if needed.
- *
- * @subsection packageCreationDockSubsection Dock creation
- *
- * A dock is a declarative item that subclass \e Dock. It needs
- * to provide some informations about size and anchoring. \e Dock is defined as follow
- *
- * @code{.qml}
- * Item {
- *     id: container
- *     property bool enabled
- *     property variant settings
- * }
- * @endcode
- *
- * Size and anchors should be provided in such a fashion that the dock is well defined.
- * For example, the dock can be anchors top / left / right, and a specific height.
- *
- * \e enabled property is used to enable the dock. If it is disabled, the dock
- * should stop processing and heavy tasks. \e settings is used to communicate settings
- * to the widget. It uses a QVariantMap to store key / values pairs.
- *
- * Only one dock should be defined per folder. It have to be passed to the desktop file to
- * be identified by the package manager. Other QML files that are used in this dock can be
- * declared if needed.
- *
- * @section Configuring a widget or a dock
- *
- * @todo write this
- *
- * @subsection packageCreationMetaSubsection Desktop file creation
- *
- * Two types of desktop files are used to provide metadata to the package. The first type
- * is used to provide metadata to the package itself. The typical desktop file are
- * described as follow
- *
- * @code{.desktop}
- * [Desktop Entry]
- * Name=My package
- * Name[en_GB]=My package in british english
- * ...
- * Comment=Comment on the package
- * Comment[en_GB]=Comment on the package in british english
- * ...
- * Icon=Some icon
- * Type=Service
- * X-Widgets-ServiceType=plugin
- * X-Widgets-PluginInfo-Id=com.mycompany.mypluginname
- * X-Widgets-PluginInfo-Author=Some author
- * X-Widgets-PluginInfo-Email=some@email.com
- * X-Widgets-PluginInfo-Website=http://some.website.com
- * X-Widgets-PluginInfo-Tags=sometag;someothertag
- * X-Widgets-PluginInfo-Name=pluginname
- * X-Widgets-PluginInfo-Version=X.Y.Z
- * X-Widgets-PluginInfo-Visible=true
- * @endcode
- *
- * This file must be named \b package.desktop, and be in the package root folder.
- *
- * The first entries are like a normal desktop file. Name, comment, and icon should
- * be provided to display information about the package. The \e Type entry must be set
- * to \b Service.
- *
- * All the entries starting with \e X-Widgets are mandatory, except \e X-Widgets-PluginInfo-Visible.
- * - \b X-Widgets-ServiceType must be set to \b plugin.
- * - \b X-Widgets-PluginInfo-Id is the unique identifier of this package. This id is used
- * everywhere, in the package manager to store information about the package, as well as to
- * retrieve docks and widgets associated to this package.
- * - \b X-Widgets-PluginInfo-Author is the author of this package.
- * - \b X-Widgets-PluginInfo-Email is the email of the author.
- * - \b X-Widgets-PluginInfo-Website is the website of this package.
- * - \b X-Widgets-PluginInfo-Tags are the tags that can be used to find this package.
- * - \b X-Widgets-PluginInfo-Name is the C++ plugin that should be loaded with this package.
- * - \b X-Widgets-PluginInfo-Version is the version of this package, in the \e X.Y.Z format, where
- * X, Y and Z are numbers.
- * - \b X-Widgets-PluginInfo-Visible set if the package is visible in the package manager. If this
- * parameter is set to false, the package is hidden, but can still be used. Packages that are
- * hidden can be useful for system components. If not present, this parameter is considered to
- * be true.
- *
- * The second type of desktop file are those describing widgets or docks. They are described as
- * follow, with slight differences between widgets and docks. They are described as follow
- *
- * @code{.desktop}
- * [Desktop Entry]
- * Name=My widget
- * Name[en_GB]=My widget in british english
- * ...
- * Comment=Comment on the widget
- * Comment[en_GB]=Comment on the widget in british english
- * ...
- * Icon=
- * Type=Service
- * X-Widgets-ServiceType=widget
- * X-Widgets-WidgetInfo-File=WidgetFile.qml
- * @endcode
- *
- * for a widget.
- *
- * @code{.desktop}
- * [Desktop Entry]
- * Name=My dock
- * Name[en_GB]=My dock in british english
- * ...
- * Comment=Comment on the dock
- * Comment[en_GB]=Comment on the dock in british english
- * ...
- * Icon=
- * Type=Service
- * X-Widgets-ServiceType=dock
- * X-Widgets-DockInfo-File=DockFile.qml
- * @endcode
- *
- * for a dock.
- *
- * These file must be named \b metadata.desktop, and be in the widget or dock folder.
- *
- * The first entries are like a normal desktop file. Name, comment, and icon should
- * be provided to display information about the dock or widget. The \e Type entry must be set
- * to \b Service.
- *
- * After that, we have two of these three entries
- * - \b X-Widgets-ServiceType that should be set either to widget or to dock.
- * - \b X-Widgets-WidgetInfo-File that is used to provide the QML file for a widget.
- * - \b X-Widgets-DockInfo-File that is used to provide the QML file for a dock.
- * @see Widgets::WidgetsPageListModel
- * @see Widgets::PackageManager
+ * @see WidgetsPageListModel.
  */
 
 /**

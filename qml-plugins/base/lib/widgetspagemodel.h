@@ -15,11 +15,8 @@
  ****************************************************************************************/
 
 /**
- * @file displayedpagewidgetsmodel.h
- * @short Definition of Widgets::DisplayedPageWidgetsModel
- *
- * This file contains the definition of the
- * Widgets::DisplayedPageWidgetsModel class.
+ * @file widgetspagemodel.h
+ * @short Definition of Widgets::WidgetsPageModel
  */
 
 #ifndef WIDGETS_WIDGETSVIEWPAGEMODEL_H
@@ -35,10 +32,10 @@ namespace Widgets
 
 class GridManager;
 class Settings;
-class PackageManager;
+class WidgetProviderBase;
 class WidgetsPageModelPrivate;
 /**
- * @short Model for displayed widget page
+ * @short Model for a widget page
  *
  * This class is the model that manages the content
  * of a page, like the type, position, size and
@@ -51,46 +48,36 @@ class WidgetsPageModelPrivate;
  * Modifying this model can be done using
  * - addWidget()
  * - removeWidget()
- * - updateWidget()
  *
  * The first build a WidgetProperties based
  * on a WidgetBaseProperties and assign
  * given properties to the new parameters.
  * The second removes a widget based on a
- * WidgetProperties. The last one is used
- * to update a widget based on it's index
- * and position / size parameters.
+ * WidgetProperties.
  *
- * This class is used as a bridge between
- * all sources that can change the position of
- * a widget and the view, that places the widgets
- * according to this model.
+ * Please note that Widget::WidgetProperties objects
+ * created with addWidget are automatically linked to
+ * the real QML widget, and also to settings. If the properties
+ * this object are changed, they will automatically be reflected
+ * in a graphical change and saved.
  *
- * This class needs a Settings object to be provided
- * since the models needs to save settings.
+ * This class save settings as XML files. They are stored as
+ * widget-\<page index\>.xml, using QDesktopServices::DataLocation.
+ * Loading the settings is done when calling load(). Saving is
+ * managed automatically, when widgets changes, are added or
+ * removed.
  */
 class WidgetsPageModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
-     * @short Number of rows in the model
-     *
-     * This property is mainly used in QML context
-     * and is used by the views to track the number
-     * of elements in the model.
-     *
-     * This property is nearly equivalent to
-     * rowCount().
+     * @short Page index
      */
     Q_PROPERTY(int pageIndex READ pageIndex NOTIFY pageIndexChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
     /**
-     * @short Index of this page
-     *
-     * This property is mainly used in QML context
-     * and is used to retrieve the index of this page.
+     * @short Count
      */
-//    Q_PROPERTY(int pageIndex READ pageIndex CONSTANT)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     /**
      * @short Model roles
@@ -104,9 +91,6 @@ public:
     /**
      * @short Default constructor
      *
-     * @param pageIndex index of this page.
-     * @param settings Settings object used to manage settings.
-     * @param packageManager PackageManager object used to provide available widgets.
      * @param parent parent object.
      */
     explicit WidgetsPageModel(QObject *parent = 0);
@@ -114,35 +98,25 @@ public:
      * @short Destructor
      */
     virtual ~WidgetsPageModel();
+    /**
+     * @brief Page index
+     * @return page index.
+     */
     int pageIndex() const;
     /**
      * @short Reimplementation of rowCount
-     *
-     * This method is the reimplementation of
-     * QAbstractListModel::rowCount(). It
-     * simply returns the number of rows in this model.
      *
      * @param parent parent model index.
      * @return the number of rows in this model.
      */
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     /**
-     * @short Number of rows in this model
-     *
-     * This method is used to retrieve the number
-     * of rows in this model.
-     *
-     * @return number of rows in this model.
+     * @short Count
+     * @return count.
      */
     int count() const;
-    PackageManager * packageManager() const;
     /**
      * @short Reimplementation of data
-     *
-     * This method is the reimplementation of
-     * QAbstractListModel::data(). It is used
-     * by views to retrieve the different
-     * roles of the model, based on the row.
      *
      * @param index model index where retrieve the data.
      * @param role role to retrieve.
@@ -150,100 +124,87 @@ public:
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     /**
-     * @short Index of this page
-     *
-     * This method is used to retrieve the
-     * index of this page.
-     *
-     * @return the index of this page.
+     * @brief Set page index
+     * @param index page index.
      */
-//    int pageIndex() const;
-    /**
-     * @short Properties of a widget
-     *
-     * This method is used to have a direct access
-     * to the properties of a widget at a given
-     * index.
-     *
-     * @param index index to retrieve the widget.
-     * @return the widget at the given index.
-     */
-//    Q_INVOKABLE Widgets::WidgetProperties * widget(int index) const;
     void setPageIndex(int index);
+    /**
+     * @brief Load
+     *
+     * Load settings from the XML file associated to
+     * this page.
+     */
     void load();
+    /**
+     * @short Add widget
+     * @param widget base properties of the widget to add.
+     * @param gridManager grid manager.
+     * @param settings widget settings.
+     * @param identifier widget identifier.
+     * @return if the operation is successful.
+     */
     bool addWidget(Widgets::WidgetBaseProperties *widget,
                    Widgets::GridManager *gridManager,
-                   const QVariantMap &settings = QVariantMap(),
+                   const QVariantHash &settings = QVariantHash(),
                    const QString &identifier = QString());
+    /**
+     * @short Add widget
+     * @param widget base properties of the widget to add.
+     * @param geometry widget geometry.
+     * @param z widget z.
+     * @param settings widget settings.
+     * @param identifier widget identifier.
+     * @return if the operation is successful.
+     */
     bool addWidget(Widgets::WidgetBaseProperties *widget,
                    const QRect &geometry, int z,
-                   const QVariantMap &settings = QVariantMap(),
+                   const QVariantHash &settings = QVariantHash(),
                    const QString &identifier = QString());
     /**
      * @short Remove a widget
-     *
-     * This method is used to remove a widget
-     * that is in the model.
-     *
-     * @param widget the widget to remove.
+     * @param widget widget to remove.
+     * @return if the operation is successful.
      */
     bool removeWidget(Widgets::WidgetProperties *widget);
 Q_SIGNALS:
+    /**
+     * @brief Page index changed
+     */
     void pageIndexChanged();
-    void packageManagerChanged();
     /**
      * @short Count changed
-     *
-     * Notify that the row count
-     * has changed.
-     *
-     * @param count value of the new row count.
      */
-    void countChanged(int count);
+    void countChanged();
 public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
-    void relayout(Widgets::GridManager *gridManager);
-
     /**
-     * @short Add a widget
-     *
-     * This method is used to add a widget
-     * to the model. The widget to add is
-     * caracterized by a WidgetBaseProperties.
-     *
-     * Missing properties such as position and
-     * dimensions, identifier, and settings
-     * are either provided or added by this method.
-     *
-     * @param widget the widget to add.
-     * @param x the x coordinate of the widget to add.
-     * @param y the y coordinate of the widget to add.
-     * @param width the width of the widget to add.
-     * @param height the height of the widget to add.
-     * @param settings settings of the widget to add.
-     * @param identifier identifier of the widget to add (only used during loading).
-     * @param z the z coordinate of the widget to add (only used during loading).
+     * @brief Set provider
+     * @param provider provider to set.
      */
+    void setProvider(WidgetProviderBase *provider);
+//    void relayout(Widgets::GridManager *gridManager);
+
 //    void addWidget(Widgets::WidgetBaseProperties *widget,
 //                   int x = 0, int y = 0,
 //                   int width = 0, int height = 0,
 //                   const QVariantMap &settings = QVariantMap(),
 //                   const QString &identifier = QString(), int z = -1);
-    /**
-     * @short Update a widget
-     *
-     * Update the position and dimensions
-     * of a widget.
-     *
-     * @param identifier identifier of the widget to update.
-     * @param x new x coordinate.
-     * @param y new y coordinate.
-     * @param width new width.
-     * @param height new height.
-     */
 //    void updateWidget(const QString &identifier, int x, int y, int width, int height);
 protected:
+    /**
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
+     * @param parent parent object.
+     */
     explicit WidgetsPageModel(WidgetsPageModelPrivate *dd, QObject *parent = 0);
+    /**
+     * @brief Reimplementation of event
+     *
+     * This reimplementation is done to enable a
+     * queued save.
+     *
+     * @param event event to react to.
+     * @return
+     */
     virtual bool event(QEvent *event);
     /**
      * @short D-pointer

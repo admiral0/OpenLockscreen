@@ -15,11 +15,8 @@
  ****************************************************************************************/
 
 /**
- * @file displayedpagesmodel.h
- * @short Definition of Widgets::DisplayedPagesModel
- *
- * This file contains the definition of the
- * Widgets::DisplayedPagesModel class.
+ * @file widgetspagelistmodel.h
+ * @short Definition of Widgets::WidgetsPageListModel
  */
 
 #ifndef WIDGETS_WIDGETSVIEWPAGELISTMODEL_H
@@ -30,21 +27,21 @@
 #include "widgetspagemodel.h"
 #include "settings.h"
 #include "gridmanager.h"
-#include "packagemanager.h"
 
 namespace Widgets
 {
 
+class ProviderManager;
 class WidgetsPageListModelPrivate;
 /**
- * @short Model for widgets page
+ * @short Base model for widgets
  *
  * This class is the base model for the widgets
  * view. This model simply controls the number
  * of pages that this view have, without managing
  * the content of these pages.
  *
- * Each item of this model is a ViewWidgetPageModel
+ * Each item of this model is a Widgets::WidgetPageModel
  * that is used to control the content of each page,
  * with an index that is used to know the index of
  * the current page.
@@ -52,35 +49,54 @@ class WidgetsPageListModelPrivate;
  * Modifying this model can be done using
  * - addPage()
  * - removePage()
+ * - setPageCount()
  *
  * The first method appends a page to the model
- * and the last removes the last page.
+ * the second removes the last page. The last one
+ * adjust the number of pages, adding or removing
+ * them.
  *
- * This class needs a Settings object to be provided
- * since the models needs to save settings.
+ * This model is also used to manage widgets that
+ * are contained in the pages. The following methods
+ * are used
+ * - addWidget()
+ * - removeWidget()
+ * The first add a widget to a given page, by providing
+ * the necessary properties. The second remove a widget
+ * on a given page.
+ *
+ * This class needs a Widgets::Settings object to be provided
+ * since the models needs to save settings. It also
+ * uses a Widgets::GridManager to interact with the grid.
+ * @todo check if the grid manager is really useful.
  *
  * This class is used in QML context. Accessing
- * it is done using the "displayedPagesModel" global object.
+ * it is done using the "WidgetsPageListModelInstance" global object.
  */
 class WidgetsPageListModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
-     * @short Number of rows in the model
-     *
-     * This property is mainly used in QML context
-     * and is used by the views to track the number
-     * of elements in the model.
-     *
-     * This property is nearly equivalent to
-     * rowCount().
+     * @short Count
      */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
+    /**
+     * @short Initial page
+     */
     Q_PROPERTY(int initialPage READ initialPage NOTIFY initialPageChanged)
+    /**
+     * @short Current Page
+     */
     Q_PROPERTY(int currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
+    /**
+     * @short %Settings
+     */
     Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
-    Q_PROPERTY(Widgets::GridManager * gridManager READ gridManager WRITE setGridManager
-               NOTIFY gridManagerChanged)
+    /**
+     * @short Grid manager
+     */
+//    Q_PROPERTY(Widgets::GridManager * gridManager READ gridManager WRITE setGridManager
+//               NOTIFY gridManagerChanged)
 public:
     /**
      * @short Model roles
@@ -97,7 +113,6 @@ public:
     };
     /**
      * @short Default constructor
-     *
      * @param parent parent object.
      */
     explicit WidgetsPageListModel(QObject *parent = 0);
@@ -108,67 +123,100 @@ public:
     /**
      * @short Reimplementation of rowCount
      *
-     * This method is the reimplementation of
-     * QAbstractListModel::rowCount(). It
-     * simply returns the number of rows in this model.
-     *
      * @param parent parent model index.
-     * @return the number of rows in this model.
+     * @return number of rows in this model.
      */
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     /**
-     * @short Number of rows in this model
-     *
-     * This method is used to retrieve the number
-     * of rows in this model.
-     *
+     * @short Count
      * @return number of rows in this model.
      */
     int count() const;
+    /**
+     * @brief Initial page
+     * @return initial page.
+     */
     int initialPage() const;
+    /**
+     * @brief Current page
+     * @return current page.
+     */
     int currentPage() const;
+    /**
+     * @brief %Settings
+     * @return settings.
+     */
     Settings * settings() const;
-    GridManager * gridManager() const;
-    PackageManager * packageManager() const;
+//    GridManager * gridManager() const;
     /**
      * @short Reimplementation of data
-     *
-     * This method is the reimplementation of
-     * QAbstractListModel::data(). It is used
-     * by views to retrieve the different
-     * roles of the model, based on the row.
      *
      * @param index model index where retrieve the data.
      * @param role role to retrieve.
      * @return retrieved data as a variant.
      */
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
+    /**
+     * @short Add widget
+     * @param pageIndex page index.
+     * @param widget base properties of the widget to add.
+     * @param gridManager grid manager.
+     * @param settings widget settings.
+     * @param identifier widget identifier.
+     * @return if the operation is successful.
+     */
     Q_INVOKABLE bool addWidget(int pageIndex,
                                Widgets::WidgetBaseProperties *widget,
                                Widgets::GridManager *gridManager,
-                               const QVariantMap &settings = QVariantMap(),
+                               const QVariantHash &settings = QVariantHash(),
                                const QString &identifier = QString());
+    /**
+     * @short Remove widget
+     * @param pageIndex page index.
+     * @param widget widget to remove.
+     * @return if the operation is successful.
+     */
     Q_INVOKABLE bool removeWidget(int pageIndex, Widgets::WidgetProperties *widget);
+    /**
+     * @brief Set the provider manager
+     *
+     * This method is called to set the current provider manager.
+     * It should not be called from a QML context, but be called
+     * when the plugin is loaded, to set the provider to the global
+     * provider.
+     *
+     * @param providerManager
+     */
+    void setProviderManager(ProviderManager *providerManager);
 Q_SIGNALS:
     /**
      * @short Count changed
-     *
-     * Notify that the row count
-     * has changed.
-     *
-     * @param count value of the new row count.
      */
-    void countChanged(int count);
-    void initialPageChanged(int page);
-    void currentPageChanged(int page);
+    void countChanged();
+    /**
+     * @brief Initial page changed
+     */
+    void initialPageChanged();
+    /**
+     * @brief Current page changed
+     */
+    void currentPageChanged();
+    /**
+     * @brief Settings changed
+     */
     void settingsChanged();
-    void gridManagerChanged();
-    void packageManagerChanged();
+//    void gridManagerChanged();
 public Q_SLOTS:
+    /**
+     * @brief Set settings
+     * @param settings settings.
+     */
     void setSettings(Settings *settings);
-    void setGridManager(GridManager *gridManager);
-    void setPackageManager(PackageManager *packageManager);
+//    void setGridManager(GridManager *gridManager);
+    /**
+     * @brief Set current page
+     * @param currentPage current page.
+     */
     void setCurrentPage(int currentPage);
     /**
      * @short Set page count
@@ -196,6 +244,11 @@ public Q_SLOTS:
      */
     void removePage();
 protected:
+    /**
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
+     * @param parent parent object.
+     */
     WidgetsPageListModel(WidgetsPageListModelPrivate *dd, QObject *parent);
     /**
      * @short D-pointer
@@ -203,6 +256,7 @@ protected:
     const QScopedPointer<WidgetsPageListModelPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(WidgetsPageListModel)
+    Q_PRIVATE_SLOT(d_func(), void refreshProvider())
 };
 
 }

@@ -14,16 +14,37 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file settingsentry.cpp
+ * @short Implementation of Widgets::SettingsEntry
+ */
+
 #include "settingsentry.h"
 
 namespace Widgets
 {
 
-class SettingsEntryPrivate
+/**
+ * @internal
+ * @brief Private struct for Widgets::SettingsEntry
+ */
+struct SettingsEntryPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Group
+     */
     QString group;
+    /**
+     * @internal
+     * @brief Key
+     */
     QString key;
+    /**
+     * @internal
+     * @brief Value
+     */
     QVariant value;
 };
 
@@ -66,7 +87,7 @@ void SettingsEntry::setGroup(const QString &group)
     Q_D(SettingsEntry);
     if(d->group != group) {
         d->group = group;
-        emit groupChanged(group);
+        emit groupChanged();
     }
 }
 
@@ -75,7 +96,7 @@ void SettingsEntry::setKey(const QString &key)
     Q_D(SettingsEntry);
     if(d->key != key) {
         d->key = key;
-        emit keyChanged(key);
+        emit keyChanged();
     }
 }
 
@@ -84,7 +105,7 @@ void SettingsEntry::setValue(const QVariant &value)
     Q_D(SettingsEntry);
     if(d->value != value) {
         d->value = value;
-        emit valueChanged(value);
+        emit valueChanged();
     }
 }
 

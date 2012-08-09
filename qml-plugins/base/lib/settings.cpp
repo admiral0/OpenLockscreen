@@ -14,35 +14,74 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file settings.cpp
+ * @short Implementation of Widgets::Settings
+ */
+
 #include "settings.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
-#include <QtCore/QVariantMap>
+#include <QtCore/QVariantHash>
 #include <QtGui/QDesktopServices>
 
 #include "widgets_global.h"
-#include "xmlserializableinterface.h"
 
 
 namespace Widgets
 {
+
+/**
+ * @internal
+ * @brief Private class for Widgets::Settings
+ */
 class SettingsPrivate
 {
 public:
+    /**
+     * @internal
+     * @short Default constructor
+     * @param q Q-pointer.
+     */
     SettingsPrivate(Settings *q = 0);
+    /**
+     * @internal
+     * @brief Set default value
+     *
+     * This method is used to set default values for
+     * some settings.
+     *
+     * @param group group of the settings value.
+     * @param key key of the settings value.
+     * @param value the settings value.
+     */
     void setDefaultValue(const QString &group, const QString &key, const QVariant &value);
-    void copyDefaultValues();
+    /**
+     * @internal
+     * @brief Append default value
+     *
+     * This method is here for interfacing with QML.
+     *
+     * @param list declarative list property.
+     * @param entry settings entry.
+     */
     static void appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,
                                       SettingsEntry *entry);
-
-    QMap<QString, QVariantMap> defaultSettings;
+    /**
+     * @internal
+     * @brief %Settings
+     */
     QSettings settings;
 
 private:
-    Q_DECLARE_PUBLIC(Settings)
+    /**
+     * @internal
+     * @brief Q-pointer
+     */
     Settings * const q_ptr;
+    Q_DECLARE_PUBLIC(Settings)
 };
 
 SettingsPrivate::SettingsPrivate(Settings *q):
@@ -55,15 +94,6 @@ void SettingsPrivate::setDefaultValue(const QString &group, const QString &key,
 {
     Q_Q(Settings);
 
-    if (!defaultSettings.contains(group)) {
-        defaultSettings.insert(group, QVariantMap());
-    }
-
-    if(!defaultSettings[group].contains(key)) {
-        defaultSettings[group].insert(key, value);
-        emit q->valueChanged(group, key, value);
-    }
-
     settings.beginGroup(group);
 
     if(!settings.contains(key)) {
@@ -72,33 +102,6 @@ void SettingsPrivate::setDefaultValue(const QString &group, const QString &key,
     }
 
     settings.endGroup();
-}
-
-void SettingsPrivate::copyDefaultValues()
-{
-    QMapIterator<QString, QVariantMap> groupIterator =
-            QMapIterator<QString, QVariantMap>(defaultSettings);
-    while (groupIterator.hasNext()) {
-        groupIterator.next();
-        QString group = groupIterator.key();
-        QVariantMap pair = groupIterator.value();
-
-        settings.beginGroup(group);
-
-        QMapIterator<QString, QVariant> pairIterator =
-                QMapIterator<QString, QVariant>(pair);
-        while (pairIterator.hasNext()) {
-            pairIterator.next();
-            QString key = pairIterator.key();
-            QVariant value = pairIterator.value();
-
-            settings.setValue(key, value);
-        }
-
-        settings.endGroup();
-    }
-
-    defaultSettings.clear();
 }
 
 void SettingsPrivate::appendDefaultSettings(QDeclarativeListProperty<SettingsEntry> *list,

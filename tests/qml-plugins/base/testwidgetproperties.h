@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,42 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-//import org.SfietKonstantin.widgets.docks 1.0
-//import org.SfietKonstantin.widgets.background 1.0
+#ifndef TESTWIDGETPROPERTIES_H
+#define TESTWIDGETPROPERTIES_H
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+/**
+ * @internal
+ * @file testwidgetproperties.h
+ * @short Definition of TestWidgetProperties
+ */
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include <QtTest/QtTest>
 
-    /*
-    Background {
-        anchors.fill: parent
-        id: background
-        // Currently disabled because of bugs in PageView
-        // view: widgetsPage.view
-        // initialX: widgetsPage.initialX
-    }
+/**
+ * @internal
+ * @brief Tests for Widgets::WidgetProperties
+ */
+class TestWidgetProperties : public QObject
+{
+    Q_OBJECT
+private slots:
+    /**
+     * @brief Test convertions between XML and component
+     *
+     * This test is used to see
+     * if the convertion from component
+     * to XML is robust.
+     */
+    void testWidgetProperties();
+};
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
-
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }*/
-
-    WidgetsHorizontalPageView {
-        id: widgetsPage
-    }
-}
+#endif // TESTWIDGETPROPERTIES_H

@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,39 +14,54 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_WIDGETBASEPROPERTIES_P_H
-#define WIDGETS_WIDGETBASEPROPERTIES_P_H
+/**
+ * @file widgetproviderbase.cpp
+ * @short Implementation of Widgets::WidgetProviderBase
+ */
 
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
-
-#include "graphicalcomponentbase_p.h"
-#include "widgetbaseproperties.h"
-
-#include <QtCore/QSize>
+#include "widgetproviderbase.h"
 
 namespace Widgets
 {
 
-class WidgetBasePropertiesPrivate: public GraphicalComponentBasePrivate
+WidgetProviderBase::WidgetProviderBase(QObject *parent) :
+    QObject(parent)
 {
-public:
-    WidgetBasePropertiesPrivate(WidgetBaseProperties *q);
-    WidgetBasePropertiesPrivate(const QString &fileName,
-                                const QString &packageIdentifier,
-                                WidgetBaseProperties *q);
-    virtual bool checkValid(const DesktopParser &parser);
-    virtual void parseDesktopFile(const DesktopParser &parser);
-    QSize minimumSize;
-    QSize maximumSize;
-private:
-    Q_DECLARE_PUBLIC(WidgetBaseProperties)
-};
-
 }
 
-#endif // WIDGETS_WIDGETBASEPROPERTIES_P_H
+bool WidgetProviderBase::available() const
+{
+    return false;
+}
+
+QStringList WidgetProviderBase::registeredWidgets(const QVariantHash &disambiguation) const
+{
+    Q_UNUSED(disambiguation);
+    return QStringList();
+}
+
+QString WidgetProviderBase::widgetFile(const QString &fileName,
+                                       const QVariantHash &disambiguation) const
+{
+    Q_UNUSED(fileName)
+    Q_UNUSED(disambiguation)
+    return QString();
+}
+
+QString WidgetProviderBase::widgetSettingsFile(const QString &fileName,
+                                               const QVariantHash &disambiguation) const
+{
+    Q_UNUSED(fileName)
+    Q_UNUSED(disambiguation)
+    return QString();
+}
+
+WidgetBaseProperties * WidgetProviderBase::widget(const QString &fileName,
+                                                  const QVariantHash &disambiguation)
+{
+    Q_UNUSED(fileName)
+    Q_UNUSED(disambiguation)
+    return 0;
+}
+
+}

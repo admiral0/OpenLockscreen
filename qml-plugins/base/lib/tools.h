@@ -31,7 +31,7 @@ namespace Widgets
 {
 
 /**
- * @brief Tool class
+ * @brief %Tools
  *
  * This class groups some tools, that are used to
  * perform conversions. One of the most notable

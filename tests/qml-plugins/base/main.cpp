@@ -24,7 +24,20 @@
 
 #include "testversion.h"
 #include "testtools.h"
+#include "testgraphicalcomponentbase.h"
+#include "testwidgetproperties.h"
 
+/**
+ * @internal
+ * @short Main
+ *
+ * Entry point of the test application
+ * that tests base widgets QML plugin.
+ *
+ * @param argc argc.
+ * @param argv argv.
+ * @return exit code.
+ */
 int main(int argc, char **argv)
 {
     QCoreApplication app (argc, argv);
@@ -35,6 +48,12 @@ int main(int argc, char **argv)
 
     TestTools testTools;
     QTest::qExec(&testTools, argc, argv);
+
+    TestGraphicalComponentBase testGraphicalComponentBase;
+    QTest::qExec(&testGraphicalComponentBase, argc, argv);
+
+    TestWidgetProperties testWidgetProperties;
+    QTest::qExec(&testWidgetProperties, argc, argv);
 
     return 0;
 }

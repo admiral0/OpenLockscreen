@@ -14,42 +14,39 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-//import org.SfietKonstantin.widgets.docks 1.0
-//import org.SfietKonstantin.widgets.background 1.0
+/**
+ * @file widgets_provider_packagemanager_plugin.cpp
+ * @short Implementation of Widgets::Colors::WidgetsColorsPlugin
+ */
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+#include "widgets_provider_packagemanager_plugin.h"
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include <QtDeclarative/QtDeclarative>
 
-    /*
-    Background {
-        anchors.fill: parent
-        id: background
-        // Currently disabled because of bugs in PageView
-        // view: widgetsPage.view
-        // initialX: widgetsPage.initialX
-    }
+namespace Widgets
+{
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+namespace Provider
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }*/
+namespace PackageManager
+{
 
-    WidgetsHorizontalPageView {
-        id: widgetsPage
-    }
+void WidgetsProviderPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri)
 }
+
+void WidgetsProviderPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.provider.packagemanager
+}
+
+}
+
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Provider::PackageManager::WidgetsProviderPlugin)
+

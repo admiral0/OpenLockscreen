@@ -16,12 +16,14 @@
 
 /**
  * @file widgets_provider_basic_plugin.cpp
- * @short Implementation of Widgets::Colors::WidgetsColorsPlugin
+ * @short Implementation of Widgets::Provider::Basic::WidgetsProviderPlugin
  */
 
 #include "widgets_provider_basic_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
+
+#include "basicprovider.h"
 
 namespace Widgets
 {
@@ -39,7 +41,8 @@ void WidgetsProviderPlugin::initializeEngine(QDeclarativeEngine *engine, const c
 
 void WidgetsProviderPlugin::registerTypes(const char *uri)
 {
-    // @uri org.SfietKonstantin.widgets.colors
+    // @uri org.SfietKonstantin.widgets.provider.basic
+    qmlRegisterType<Widgets::Provider::Basic::BasicProvider>(uri, 1, 0, "BasicProvider");
 }
 
 }

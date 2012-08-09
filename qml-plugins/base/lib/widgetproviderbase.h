@@ -14,24 +14,24 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_WIDGETPROVIDERINTERFACE_H
-#define WIDGETS_WIDGETPROVIDERINTERFACE_H
+#ifndef WIDGETPROVIDERBASE_H
+#define WIDGETPROVIDERBASE_H
 
 /**
- * @file widgetproviderinterface.h
- * @short Definition of Widgets::WidgetProviderInterface
+ * @file widgetproviderbase.h
+ * @short Definition of Widgets::WidgetProviderBase
  */
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtCore/QVariantHash>
+
+#include "widgetbaseproperties.h"
 
 namespace Widgets
 {
 
-class WidgetBaseProperties;
 /**
- * @brief Interface for widget providers
+ * @brief Base for widget providers
  *
  * Component widget are classes that are used to
  * provide path and information about a widget
@@ -62,15 +62,37 @@ class WidgetBaseProperties;
  *
  * The use of disambiguation parameter is up to the
  * implementor.
+ *
+ * A provider might need some time to be loaded and available.
+ * The available property is used to check the avalibility
+ * of the provider. If the provider is set to be non available,
+ * most process, including widget display and editing, will not
+ * be available. It is up to the implementor to take care
+ * of this information.
+ *
+ * Remark: this class is fully implemented due to the need
+ * of an implemented class for QML metatype system. But this
+ * provider do not provide anything. It should not be used.
  */
-class WidgetProviderInterface: public QObject
+class WidgetProviderBase : public QObject
 {
     Q_OBJECT
 public:
     /**
-     * @brief Destructor
+     * @short If the provider is available
      */
-    virtual ~WidgetProviderInterface() {};
+    Q_PROPERTY(bool available READ available NOTIFY availableChanged)
+public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit WidgetProviderBase(QObject *parent = 0);
+    /**
+     * @brief If the provider is available
+     * @return if the provider is available.
+     */
+    virtual bool available() const;
     /**
      * @short Registered widgets
      *
@@ -81,7 +103,7 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return a list of registered widgets.
      */
-    Q_INVOKABLE virtual QStringList registeredWidgets(const QVariantHash &disambiguation) const = 0;
+    Q_INVOKABLE virtual QStringList registeredWidgets(const QVariantHash &disambiguation) const;
     /**
      * @short Absolute path to the widget file
      *
@@ -94,7 +116,7 @@ public:
      * @return absolute path to the widget file.
      */
     Q_INVOKABLE virtual QString widgetFile(const QString &fileName,
-                                           const QVariantHash &disambiguation) const = 0;
+                                           const QVariantHash &disambiguation) const;
     /**
      * @short Absolute path to the widget configuration component file
      *
@@ -108,7 +130,7 @@ public:
      * @return absolute path to the widget configuration component file.
      */
     Q_INVOKABLE virtual QString widgetSettingsFile(const QString &fileName,
-                                                   const QVariantHash &disambiguation) const = 0;
+                                                   const QVariantHash &disambiguation) const;
     /**
      * @short Widget properties
      *
@@ -122,9 +144,15 @@ public:
      */
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation) const = 0;
+                               const QVariantHash &disambiguation);
+
+Q_SIGNALS:
+    /**
+     * @brief Available changed
+     */
+    void availableChanged();
 };
 
 }
 
-#endif // WIDGETS_WIDGETPROVIDERINTERFACE_H
+#endif // WIDGETPROVIDERBASE_H

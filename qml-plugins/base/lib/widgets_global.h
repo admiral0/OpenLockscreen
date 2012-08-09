@@ -25,7 +25,6 @@
 #include <QtCore/QtGlobal>
 
 /**
- * @macro W_ASSERT
  * @short Assert and execute
  *
  * This macro is similar to Q_ASSERT, but

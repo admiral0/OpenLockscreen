@@ -14,42 +14,57 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-//import org.SfietKonstantin.widgets.docks 1.0
-//import org.SfietKonstantin.widgets.background 1.0
+#ifndef WIDGETS_WIDGETBASEPROPERTIES_P_H
+#define WIDGETS_WIDGETBASEPROPERTIES_P_H
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+/**
+ * @internal
+ * @file widgetbaseproperties_p.h
+ * @short Definition of Widgets::WidgetBasePropertiesPrivate
+ */
 
-    /*
-    Background {
-        anchors.fill: parent
-        id: background
-        // Currently disabled because of bugs in PageView
-        // view: widgetsPage.view
-        // initialX: widgetsPage.initialX
-    }
+#include "graphicalcomponentbase_p.h"
+#include "widgetbaseproperties.h"
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+#include <QtCore/QSize>
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }*/
+namespace Widgets
+{
 
-    WidgetsHorizontalPageView {
-        id: widgetsPage
-    }
+/**
+ * @internal
+ * @brief Private class for Widgets::WidgetBaseProperties
+ */
+class WidgetBasePropertiesPrivate: public GraphicalComponentBasePrivate
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
+    WidgetBasePropertiesPrivate(WidgetBaseProperties *q);
+    /**
+     * @internal
+     * @brief Minimum size
+     */
+    QSize minimumSize;
+    /**
+     * @internal
+     * @brief Maximum size
+     */
+    QSize maximumSize;
+private:
+    Q_DECLARE_PUBLIC(WidgetBaseProperties)
+};
+
 }
+
+#endif // WIDGETS_WIDGETBASEPROPERTIES_P_H

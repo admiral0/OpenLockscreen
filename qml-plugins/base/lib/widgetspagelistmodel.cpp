@@ -15,22 +15,35 @@
  ****************************************************************************************/
 
 /**
- * @file displayedpagesmodel.cpp
- * @short Implementation of Widgets::DisplayedPagesModel
- *
- * This file contains the implemetation of the
- * Widgets::DisplayedPagesModel class and the declaration and
- * implementation of Widgets::DisplayedPagesModel::DisplayedPagesModelPrivate
- * and Widgets::WidgetViewModelItem.
+ * @file widgetspagelistmodel.cpp
+ * @short Implementation of Widgets::WidgetsPageListModel
  */
+
 
 #include "widgetspagelistmodel.h"
 #include "widgetspagemodel.h"
 
+#include "providermanager.h"
+
 #include <QtCore/QDebug>
 
+/**
+ * @brief WIDGETS_GROUP
+ *
+ * Used in Widgets::WidgetsPageListModel.
+ */
 static const char *WIDGETS_GROUP = "widgets";
+/**
+ * @brief WIDGETS_PAGE_COUNT
+ *
+ * Used in Widgets::WidgetsPageListModel.
+ */
 static const char *WIDGETS_PAGE_COUNT = "pageCount";
+/**
+ * @brief WIDGETS_INITIAL_PAGE
+ *
+ * Used in Widgets::WidgetsPageListModel.
+ */
 static const char *WIDGETS_INITIAL_PAGE = "initialPage";
 
 namespace Widgets
@@ -38,25 +51,41 @@ namespace Widgets
 
 /**
  * @internal
- * @short Private class for DisplayedPagesModel
+ * @short Private class for Widgets::WidgetsPageListModel
  */
 class WidgetsPageListModelPrivate
 {
 public:
     /**
+     * @internal
      * @short Default constructor
      *
-     * @param settings Settings object used to manage settings.
-     * @param packageManager PackageManager object used to provide available widgets.
      * @param parent parent Q-pointer.
      */
     WidgetsPageListModelPrivate(WidgetsPageListModel *parent);
     /**
+     * @internal
      * @short Destructor
      */
     ~WidgetsPageListModelPrivate();
+    /**
+     * @internal
+     * @brief Refresh the provider
+     *
+     * This method is called when the provider has changed.
+     * It sends the new provider to all the pages.
+     */
+    void refreshProvider();
+    /**
+     * @internal
+     * @brief Load settings
+     *
+     * This method is only used to load settings related
+     * to the number of pages.
+     */
     void loadSettings();
     /**
+     * @internal
      * @short Slot that watch the pages
      *
      * This slot is connected to DisplayedPagesModel::rowsInserted()
@@ -69,25 +98,34 @@ public:
      */
     void slotRowsInserted(const QModelIndex &parent, int start, int end);
     /**
-     * @short A list of WidgetViewModelItem
-     *
-     * This list of WidgetViewModelItem is the
-     * internal storage of the model.
+     * @internal
+     * @short Items
      */
     QList<WidgetsPageModel *> items;
+    /**
+     * @internal
+     * @brief Initial page
+     */
     int initialPage;
+    /**
+     * @internal
+     * @brief Current page
+     */
     int currentPage;
     /**
+     * @internal
      * @short %Settings
      */
     Settings *settings;
-    GridManager *gridManager;
+//    GridManager *gridManager;
     /**
-     * @short Package manager
+     * @internal
+     * @short Provider manager
      */
-    PackageManager *packageManager;
+    ProviderManager *providerManager;
 private:
     /**
+     * @internal
      * @short Q-pointer
      */
     WidgetsPageListModel *q_ptr;
@@ -98,8 +136,8 @@ WidgetsPageListModelPrivate::WidgetsPageListModelPrivate(WidgetsPageListModel* q
     q_ptr(q)
 {
     settings = 0;
-    gridManager = 0;
-    packageManager = 0;
+//    gridManager = 0;
+    providerManager = 0;
     initialPage = -1;
     currentPage = -1;
 }
@@ -112,6 +150,20 @@ WidgetsPageListModelPrivate::~WidgetsPageListModelPrivate()
     }
 }
 
+void WidgetsPageListModelPrivate::refreshProvider()
+{
+    if (!providerManager) {
+        return;
+    }
+    if (!providerManager->provider()) {
+        return;
+    }
+
+    foreach (WidgetsPageModel *item, items) {
+        item->setProvider(providerManager->provider());
+    }
+}
+
 void WidgetsPageListModelPrivate::loadSettings()
 {
     Q_Q(WidgetsPageListModel);
@@ -119,8 +171,8 @@ void WidgetsPageListModelPrivate::loadSettings()
     q->setPageCount(pageCount);
     initialPage = settings->value(WIDGETS_GROUP, WIDGETS_INITIAL_PAGE).toInt();
     currentPage = initialPage;
-    emit q->initialPageChanged(initialPage);
-    emit q->currentPageChanged(currentPage);
+    emit q->initialPageChanged();
+    emit q->currentPageChanged();
 }
 
 
@@ -129,8 +181,6 @@ void WidgetsPageListModelPrivate::loadSettings()
 WidgetsPageListModel::WidgetsPageListModel(QObject *parent):
     QAbstractListModel(parent), d_ptr(new WidgetsPageListModelPrivate(this))
 {
-    Q_D(WidgetsPageListModel);
-
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(IndexRole, "index");
@@ -142,8 +192,6 @@ WidgetsPageListModel::WidgetsPageListModel(WidgetsPageListModelPrivate *dd,
                                                    QObject *parent):
     QAbstractListModel(parent), d_ptr(dd)
 {
-    Q_D(WidgetsPageListModel);
-
     // Definition of roles
     QHash <int, QByteArray> roles;
     roles.insert(IndexRole, "index");
@@ -185,17 +233,11 @@ Settings * WidgetsPageListModel::settings() const
     return d->settings;
 }
 
-GridManager * WidgetsPageListModel::gridManager() const
-{
-    Q_D(const WidgetsPageListModel);
-    return d->gridManager;
-}
-
-PackageManager * WidgetsPageListModel::packageManager() const
-{
-    Q_D(const WidgetsPageListModel);
-    return d->packageManager;
-}
+//GridManager * WidgetsPageListModel::gridManager() const
+//{
+//    Q_D(const WidgetsPageListModel);
+//    return d->gridManager;
+//}
 
 QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
 {
@@ -221,7 +263,7 @@ QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
 bool WidgetsPageListModel::addWidget(int pageIndex,
                                      WidgetBaseProperties *widget,
                                      Widgets::GridManager *gridManager,
-                                     const QVariantMap &settings,
+                                     const QVariantHash &settings,
                                      const QString &identifier)
 {
     Q_D(WidgetsPageListModel);
@@ -242,6 +284,16 @@ bool WidgetsPageListModel::removeWidget(int pageIndex, WidgetProperties *widget)
     return d->items[pageIndex]->removeWidget(widget);
 }
 
+void WidgetsPageListModel::setProviderManager(ProviderManager *providerManager)
+{
+    Q_D(WidgetsPageListModel);
+    if (d->providerManager != providerManager) {
+        d->providerManager = providerManager;
+
+        connect(d->providerManager, SIGNAL(providerChanged()), this, SLOT(refreshProvider()));
+    }
+}
+
 void WidgetsPageListModel::setSettings(Settings *settings)
 {
     Q_D(WidgetsPageListModel);
@@ -252,36 +304,21 @@ void WidgetsPageListModel::setSettings(Settings *settings)
     }
 }
 
-void WidgetsPageListModel::setGridManager(GridManager *gridManager)
-{
-    Q_D(WidgetsPageListModel);
-    if (d->gridManager != gridManager) {
-        d->gridManager = gridManager;
-        emit gridManagerChanged();
-    }
-}
-
-void WidgetsPageListModel::setPackageManager(PackageManager *packageManager)
-{
-    Q_D(WidgetsPageListModel);
-    if (d->packageManager != packageManager) {
-        d->packageManager = packageManager;
-        emit packageManagerChanged();
-    }
-
-    if (d->packageManager != 0) {
-        foreach (WidgetsPageModel *item, d->items) {
-            item->setPackageManager(d->packageManager);
-        }
-    }
-}
+//void WidgetsPageListModel::setGridManager(GridManager *gridManager)
+//{
+//    Q_D(WidgetsPageListModel);
+//    if (d->gridManager != gridManager) {
+//        d->gridManager = gridManager;
+//        emit gridManagerChanged();
+//    }
+//}
 
 void WidgetsPageListModel::setCurrentPage(int currentPage)
 {
     Q_D(WidgetsPageListModel);
     if (d->currentPage != currentPage) {
         d->currentPage = currentPage;
-        emit currentPageChanged(currentPage);
+        emit currentPageChanged();
     }
 }
 
@@ -305,12 +342,15 @@ void WidgetsPageListModel::addPage()
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     WidgetsPageModel *item = new WidgetsPageModel(this);
-    item->setPackageManager(d->packageManager);
+
+    if (d->providerManager) {
+        item->setProvider(d->providerManager->provider());
+    }
     item->setPageIndex(rowCount());
 
     d->items.append(item);
 
-    emit countChanged(rowCount());
+    emit countChanged();
     endInsertRows();
 }
 
@@ -327,7 +367,7 @@ void WidgetsPageListModel::removePage()
     WidgetsPageModel *item = d->items.takeLast();
     item->deleteLater();
 
-    emit countChanged(rowCount());
+    emit countChanged();
     endRemoveRows();
 }
 

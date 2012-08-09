@@ -41,7 +41,7 @@ namespace Widgets
 {
 
 AbstractSettingsPrivate::AbstractSettingsPrivate(QObject *settingsObject):
-    XmlSerializableInterface(), settingsObject(settingsObject), mutex()
+    settingsObject(settingsObject)
 {
 }
 
@@ -57,8 +57,6 @@ QString AbstractSettingsPrivate::settingsFilePath() const
 
 void AbstractSettingsPrivate::load()
 {
-    QMutexLocker locker (&mutex);
-    Q_UNUSED(locker)
     if (componentName.isEmpty()) {
         return;
     }

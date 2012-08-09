@@ -27,8 +27,6 @@
 
 #include "widgets_global.h"
 
-#include "xmlserializableinterface.h"
-
 namespace Widgets
 {
 
@@ -46,43 +44,29 @@ class GraphicalComponentBasePrivate;
  * - disambiguation(), that is a disambiguation parameter.
  * - settingsEnabled() that check if this graphical have settings dialog.
  * - settingsFileName(), that is the filename of the settings component for this component.
- *
- * This class can also be serialized to an XML element. This
- * serialization is incomplete, since none of the information
- * from ComponentBase is saved, but this information can still
- * be retrived using the package manager.
  */
-class GraphicalComponentBase: public QObject, public XmlSerializableInterface
+class GraphicalComponentBase: public QObject
 {
     Q_OBJECT
     /**
      * @short Filename of the component
      */
-    Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
+    Q_PROPERTY(QString fileName READ fileName CONSTANT)
     /**
      * @short Disambiguation parameter of the component
      */
-    Q_PROPERTY(QVariantHash disambiguation READ disambiguation NOTIFY disambiguationChanged)
+    Q_PROPERTY(QVariantHash disambiguation READ disambiguation CONSTANT)
     /**
      * @short If this component have settings
      */
-    Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled NOTIFY settingsEnabledChanged)
+    Q_PROPERTY(bool settingsEnabled READ isSettingsEnabled CONSTANT)
     /**
      * @short Filename of the settings component of this component
      */
-    Q_PROPERTY(QString settingsFileName READ settingsFileName NOTIFY settingsFileNameChanged)
+    Q_PROPERTY(QString settingsFileName READ settingsFileName CONSTANT)
 public:
     /**
      * @brief Default constructor
-     * @param parent parent object.
-     */
-    explicit GraphicalComponentBase(QObject *parent = 0);
-    /**
-     * @brief Constructor
-     *
-     * This constructor is used to create a base
-     * for graphical components by providing all the
-     * informations.
      *
      * @param fileName filename of the component.
      * @param disambiguation disambiguation parameter of the component.
@@ -115,37 +99,7 @@ public:
      * @return filename of the settings component of this component.
      */
     QString settingsFileName() const;
-    /**
-     * @brief Load from XML element
-     * @param elementthe source XML element.
-     * @return if the loading succeded.
-     */
-    virtual bool fromXmlElement(const QDomElement &element);
-    /**
-     * @brief Save to XML element
-     *
-     * @param tagName the tag that will be used to create this element.
-     * @param document a pointer to the document that is used to create elements.
-     * @return the class as an XML element.
-     */
-    virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
 Q_SIGNALS:
-    /**
-     * @brief Filename changed
-     */
-    void fileNameChanged();
-    /**
-     * @brief Disambiguation changed
-     */
-    void disambiguationChanged();
-    /**
-     * @brief Settings enabled changed
-     */
-    void settingsEnabledChanged();
-    /**
-     * @brief Settings filename changed
-     */
-    void settingsFileNameChanged();
 protected:
     /**
      * @brief Constructor for D-pointer
@@ -153,21 +107,6 @@ protected:
      * @param parent parent object.
      */
     explicit GraphicalComponentBase(GraphicalComponentBasePrivate *dd, QObject *parent);
-    /**
-     * @brief Set the filename of the component
-     * @param fileName filename of the component.
-     */
-    void setFileName(const QString &fileName);
-    /**
-     * @brief Set the disambiguation parameter of the component
-     * @param disambiguation disambiguation parameter of the component.
-     */
-    void setDisambiguation(const QVariantHash &disambiguation);
-    /**
-     * @brief Set the filename of the settings component of this component
-     * @param settingsFileName filename of the settings component of this component.
-     */
-    void setSettingsFileName(const QString &settingsFileName);
     /**
      * @brief D-pointer
      */

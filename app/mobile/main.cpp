@@ -40,8 +40,8 @@
  *
  * Entry point of the application.
  *
- * @param argc argc
- * @param argv argv
+ * @param argc argc.
+ * @param argv argv.
  * @return exit code.
  */
 Q_DECL_EXPORT int main(int argc, char *argv[])

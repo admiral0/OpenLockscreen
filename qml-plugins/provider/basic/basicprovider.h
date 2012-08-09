@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,15 +14,10 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_PROVIDER_BASIC_PLUGIN_H
-#define WIDGETS_PROVIDER_BASIC_PLUGIN_H
+#ifndef WIDGETS_PROVIDER_BASIC_BASICPROVIDER_H
+#define WIDGETS_PROVIDER_BASIC_BASICPROVIDER_H
 
-/**
- * @file widgets_provider_basic_plugin.h
- * @short Definition of Widgets::Provider::Basic::WidgetsProviderPlugin
- */
-
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include "widgetproviderbase.h"
 
 namespace Widgets
 {
@@ -33,32 +28,32 @@ namespace Provider
 namespace Basic
 {
 
-/**
- * @page pluginProviderBasic QML plugin for a basic widget provider
- *
- * @todo write this page
- */
-/**
- * @internal
- * @brief QML plugin for basic widget provider
- */
-class WidgetsProviderPlugin : public QDeclarativeExtensionPlugin
+class BasicProviderPrivate;
+class BasicProvider: public WidgetProviderBase
 {
     Q_OBJECT
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
 public:
-    /**
-     * @internal
-     * @brief Initialize engine
-     * @param engine QML engine.
-     * @param uri uri used in the import.
-     */
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
-    /**
-     * @internal
-     * @short Register types
-     * @param uri uri used in the import.
-     */
-    void registerTypes(const char *uri);
+    explicit BasicProvider(QObject *parent = 0);
+    virtual ~BasicProvider();
+    bool available() const;
+    QString path() const;
+    Q_INVOKABLE virtual QStringList registeredWidgets(const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QString widgetFile(const QString &fileName,
+                                           const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QString widgetSettingsFile(const QString &fileName,
+                                                   const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
+                        widget(const QString &fileName,
+                               const QVariantHash &disambiguation);
+public Q_SLOTS:
+    void setPath(const QString &path);
+Q_SIGNALS:
+    void pathChanged();
+protected:
+    QScopedPointer<BasicProviderPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(BasicProvider)
 };
 
 }
@@ -67,5 +62,4 @@ public:
 
 }
 
-#endif // WIDGETS_PROVIDER_BASIC_PLUGIN_H
-
+#endif // BASICPROVIDER_H

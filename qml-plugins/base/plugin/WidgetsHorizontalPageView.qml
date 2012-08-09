@@ -26,6 +26,7 @@ WidgetsView {
 
     content: Item {
         anchors.fill: parent
+
         ListView {
             id: view
             property bool moved: false
@@ -45,14 +46,18 @@ WidgetsView {
                 WidgetsPageListModelInstance.currentPage = currentIndex
             }
 
-            Component.onCompleted: LockScreenManager.debug("Model : " + WidgetsPageListModelInstance.count)
-
             // TODO : Change the hardcoded 11
             cacheBuffer: view.width * 11
 
             delegate: Item {
                 width: view.width
                 height: view.height
+
+                Rectangle {
+                    width: 200
+                    height: 200
+                    anchors.centerIn: parent
+                }
 
                 WidgestPage {
                     anchors.fill: parent
@@ -63,11 +68,12 @@ WidgetsView {
             Connections {
                 target: WidgetsPageListModelInstance
                 onInitialPageChanged: {
-                    if (page != -1) {
+                    if (WidgetsPageListModelInstance.initialPage != -1) {
 //                        var newPage = page - 1
 
-                        view.positionViewAtIndex(page, ListView.Visible)
-                        view.currentIndex = page
+                        view.positionViewAtIndex(WidgetsPageListModelInstance.initialPage,
+                                                 ListView.Visible)
+                        view.currentIndex = WidgetsPageListModelInstance.initialPage
 //                        view.recomputeInitialX()
                     }
                 }

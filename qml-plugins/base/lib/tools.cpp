@@ -31,25 +31,25 @@ namespace Widgets
 /**
  * @brief HASH_ITEM_TAG
  *
- * Used in Tools::fromXmlVariantHash() and Tools::toXmlVariantHash().
+ * Used in Widgets::Tools.
  */
 static const char *HASH_ITEM_TAG = "item";
 /**
  * @brief HASH_ITEM_KEY_ATTRIBUTE
  *
- * Used in Tools::fromXmlVariantHash() and Tools::toXmlVariantHash().
+ * Used in Widgets::Tools.
  */
 static const char *HASH_ITEM_KEY_ATTRIBUTE = "key";
 /**
  * @brief HASH_ITEM_VALUE_ATTRIBUTE
  *
- * Used in Tools::fromXmlVariantHash() and Tools::toXmlVariantHash().
+ * Used in Widgets::Tools.
  */
 static const char *HASH_ITEM_VALUE_ATTRIBUTE = "value";
 /**
  * @brief HASH_ITEM_VALUE_TYPE_ATTRIBUTE
  *
- * Used in Tools::fromXmlVariantHash() and Tools::toXmlVariantHash().
+ * Used in Widgets::Tools.
  */
 static const char *HASH_ITEM_VALUE_TYPE_ATTRIBUTE= "type";
 

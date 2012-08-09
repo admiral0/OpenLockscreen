@@ -30,13 +30,17 @@
  * @short Definition of Widgets::AbstractSettingsPrivate
  */
 
-#include "xmlserializableinterface.h"
 #include <QtCore/QObject>
-#include <QtCore/QMutex>
+#include <QtXml/QDomElement>
 
 namespace Widgets
 {
 
+/**
+ * @brief SETTINGS_ELEMENT
+ *
+ * Used in Widgets::AbstractSettingsPrivate.
+ */
 static const char *SETTINGS_ELEMENT = "settings";
 
 /**
@@ -44,8 +48,14 @@ static const char *SETTINGS_ELEMENT = "settings";
  * @brief A private class that is used for saving settings to XML
  *
  * This class is used to provide an easy way for components to
- * be saved in XML. It implements Widgets::XmlSerializableInterface
- * and also provide these methods
+ * be saved in XML. It provides these virtual methods
+ * - clear()
+ * - fromXmlElement()
+ * - toXmlElement()
+ *
+ * The first method is used to clear settings, and is useful before
+ * loading. The second and third method are used to translate the
+ * settings from or to XML. It also provides these public methods
  * - load()
  * - save()
  * - requestSave()
@@ -56,7 +66,7 @@ static const char *SETTINGS_ELEMENT = "settings";
  * filename and the path of the settings file.
  *
  * It will be in the following form:
- * /path/to/data/location/settings-<componentName>.xml
+ * /path/to/data/location/settings-\<componentName\>.xml
  *
  * The last method is used to trigger a save request. The save request
  * will be sent to the settingsObject, as a QEvent(QEvent::UpdateEvent).
@@ -65,17 +75,8 @@ static const char *SETTINGS_ELEMENT = "settings";
  *
  * Triggering save requests is a nice way to save settings once when many
  * parameters were modified.
- *
- * In order to use this class, these methods should be implemented:
- * - clear()
- * - fromXmlElement()
- * - toXmlElement()
- *
- * The first method is used to clear settings, and is useful before
- * loading. The second and third method are used to translate the
- * settings into XML.
  */
-class AbstractSettingsPrivate: public XmlSerializableInterface
+class AbstractSettingsPrivate
 {
 public:
     /**
@@ -147,12 +148,8 @@ private:
      * @brief object that is used to react to the save request
      */
     QObject *settingsObject;
-    /**
-     * @internal
-     * @brief Mutex that is used to protect load and save
-     */
-    QMutex mutex;
 };
+
 
 }
 

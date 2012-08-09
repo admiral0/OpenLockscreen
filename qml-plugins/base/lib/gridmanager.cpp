@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file gridmanager.cpp
+ * @short Implementation of Widgets::GridManager
+ */
+
 #include "gridmanager.h"
 
 #include <QtCore/QDebug>
@@ -22,26 +27,55 @@
 
 #include "settings.h"
 
+/**
+ * @brief GRID_GROUP
+ *
+ * Used in Widgets::GridManager.
+ */
 static const char *GRID_GROUP = "grid";
+/**
+ * @brief GRID_CELL_WIDTH_KEY
+ *
+ * Used in Widgets::GridManager.
+ */
 static const char *GRID_CELL_WIDTH_KEY = "cellWidth";
+/**
+ * @brief GRID_CELL_HEIGHT_KEY
+ *
+ * Used in Widgets::GridManager.
+ */
 static const char *GRID_CELL_HEIGHT_KEY = "cellHeight";
+/**
+ * @brief GRID_CELL_HMARGIN_KEY
+ *
+ * Used in Widgets::GridManager.
+ */
 static const char *GRID_CELL_HMARGIN_KEY = "cellHorizontalMargin";
+/**
+ * @brief GRID_CELL_VMARGIN_KEY
+ *
+ * Used in Widgets::GridManager.
+ */
 static const char *GRID_CELL_VMARGIN_KEY = "cellVerticalMargin";
 
 namespace Widgets
 {
 
+/**
+ * @internal
+ * @brief Private class for GridManager
+ */
 class GridManagerPrivate
 {
 public:
     /**
+     * @internal
      * @short Default constructor
-     *
-     * @param settingsWrapper SettingsWrapper object used provide settings.
      * @param q Q-pointer.
      */
     GridManagerPrivate(GridManager *q);
     /**
+     * @internal
      * @short Recompute the grid count
      *
      * This method is used to recompute the grid count.
@@ -49,25 +83,57 @@ public:
      * or if the grid cell parameters has changed.
      */
     void recomputeGridCount();
+    /**
+     * @internal
+     * @brief Load settings
+     *
+     * This method is used to load settings from the
+     * settings object.
+     *
+     * It triggers a grid recompute.
+     */
     void loadSettings();
+    /**
+     * @internal
+     * @brief Slot value changed
+     *
+     * This slot is used to react from change of settings.
+     * It triggers a grid recompute.
+     *
+     * @param group settings group.
+     * @param key settings key.
+     * @param value settings value.
+     */
     void slotValueChanged(const QString &group, const QString &key, const QVariant &value);
     /**
+     * @internal
      * @short View size
      */
     QSize viewSize;
+    /**
+     * @internal
+     * @brief Grid cell size
+     */
     QSize gridCellSize;
+    /**
+     * @internal
+     * @brief Grid margins size
+     */
     QSize gridCellMarginsSize;
     /**
+     * @internal
      * @short Grid size
      */
     QSize gridSize;
     /**
+     * @internal
      * @short %Settings
      */
     Settings * settings;
 private:
     Q_DECLARE_PUBLIC(GridManager)
     /**
+     * @internal
      * @short Q-pointer
      */
     GridManager * const q_ptr;
@@ -107,14 +173,14 @@ void GridManagerPrivate::recomputeGridCount()
 
     if (newGridWidth != gridSize.width()) {
         gridSize.setWidth(newGridWidth);
-        emit q->gridWidthChanged(newGridWidth);
-        emit q->containerWidthChanged(q->containerWidth());
+        emit q->gridWidthChanged();
+        emit q->containerWidthChanged();
     }
 
     if (newGridHeight != gridSize.height()) {
         gridSize.setHeight(newGridHeight );
-        emit q->gridHeightChanged(newGridHeight);
-        emit q->containerHeightChanged(q->containerHeight());
+        emit q->gridHeightChanged();
+        emit q->containerHeightChanged();
     }
 }
 
@@ -137,20 +203,25 @@ void GridManagerPrivate::loadSettings()
 void GridManagerPrivate::slotValueChanged(const QString &group, const QString &key,
                                           const QVariant &value)
 {
+    Q_Q(GridManager);
     if (group != GRID_GROUP) {
         return;
     }
 
     if(key == GRID_CELL_WIDTH_KEY) {
         gridCellSize.setWidth(value.toInt());
+        emit q->gridCellWidthChanged();
         recomputeGridCount();
     } else if(key == GRID_CELL_HEIGHT_KEY) {
+        emit q->gridCellHeightChanged();
         gridCellSize.setHeight(value.toInt());
         recomputeGridCount();
     } else if(key == GRID_CELL_HMARGIN_KEY) {
+        emit q->gridCellHorizontalMarginChanged();
         gridCellMarginsSize.setWidth(value.toInt());
         recomputeGridCount();
     } else if(key == GRID_CELL_VMARGIN_KEY) {
+        emit q->gridCellVerticalMarginChanged();
         gridCellMarginsSize.setHeight(value.toInt());
         recomputeGridCount();
     }
@@ -202,17 +273,17 @@ int GridManager::gridWidth() const
     return d->gridSize.width();
 }
 
+int GridManager::gridHeight() const
+{
+    Q_D(const GridManager);
+    return d->gridSize.height();
+}
+
 int GridManager::containerWidth() const
 {
     Q_D(const GridManager);
     int cellAndMargin = d->gridCellSize.width() + d->gridCellMarginsSize.width();
     return cellAndMargin * d->gridSize.width() - d->gridCellMarginsSize.width();
-}
-
-int GridManager::gridHeight() const
-{
-    Q_D(const GridManager);
-    return d->gridSize.height();
 }
 
 int GridManager::containerHeight() const
