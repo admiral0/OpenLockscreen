@@ -107,6 +107,10 @@ public:
      * @return maximum height.
      */
     int maximumHeight() const;
+    static WidgetBaseProperties * fromQmlFile(const QString &qmlFile,
+                                              const QVariantHash &disambiguation,
+                                              const QString &settingsFileName,
+                                              QObject *parent = 0);
 protected:
     /**
      * @brief Constructor for D-pointer

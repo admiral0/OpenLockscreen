@@ -22,6 +22,10 @@
 #include "widgetbaseproperties.h"
 #include "widgetbaseproperties_p.h"
 
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
+#include <QtCore/QRegExp>
+
 namespace Widgets
 {
 
@@ -80,6 +84,137 @@ int WidgetBaseProperties::maximumHeight() const
 {
     W_D(const WidgetBaseProperties);
     return d->maximumSize.height();
+}
+
+WidgetBaseProperties * WidgetBaseProperties::fromQmlFile(const QString &qmlFile,
+                                                         const QVariantHash &disambiguation,
+                                                         const QString &settingsFileName,
+                                                         QObject *parent)
+{
+    QFileInfo fileInfo (qmlFile);
+    if (!fileInfo.exists()) {
+        return 0;
+    }
+
+    QString fileName = fileInfo.fileName();
+
+    QFile file (qmlFile);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return 0;
+    }
+
+    // Cleaned version of the file
+    QString data;
+
+    bool haveBlockComment = false;
+    QRegExp commentLine ("//(.+)");
+    QRegExp blockCommentLineStart ("/\\*.*");
+    QRegExp blockCommentLineEnd ("[^*/]*\\*/");
+    while (!file.atEnd()) {
+        QString line = file.readLine();
+        line = line.remove(commentLine);
+
+        if (line.indexOf(blockCommentLineStart) != -1) {
+            haveBlockComment = true;
+            line = line.remove(blockCommentLineStart);
+        }
+
+        if (haveBlockComment) {
+            int indexOfBlockCommentLineEnd = line.indexOf(blockCommentLineEnd);
+            if (indexOfBlockCommentLineEnd != -1) {
+                line = line.right(line.size() - indexOfBlockCommentLineEnd);
+                line = line.remove(blockCommentLineEnd);
+
+                haveBlockComment = false;
+            } else {
+                line = "";
+            }
+        }
+
+        line = line.trimmed();
+        if (!line.isEmpty()) {
+            line = line.append("\n");
+            line = line.replace(";", "\n");
+            line = line.replace("{", "\n{\n");
+            line = line.replace("}", "\n}\n");
+            data.append(line);
+        }
+    }
+
+    int firstBracket = data.indexOf("{");
+    firstBracket = data.indexOf("{", firstBracket + 1);
+
+    int lastBracket = data.lastIndexOf("}");
+    lastBracket = data.lastIndexOf("}", lastBracket - data.size());
+
+    data = data.remove(firstBracket, lastBracket - firstBracket - 1);
+
+    // Check if the document is valid
+    if(!data.contains("import org.SfietKonstantin.widgets")) {
+        return 0;
+    }
+
+    bool haveWidget = false;
+    QRegExp dockRegExp ("Widget(\\s*)\\{");
+    if (data.indexOf(dockRegExp) != -1) {
+        haveWidget = true;
+    }
+
+    if (!haveWidget) {
+        return 0;
+    }
+
+    // Width and height
+    QRegExp minimumWidthRegExp ("minimumWidth\\s*:\\s*(\\d+)");
+    QRegExp minimumHeightRegExp ("minimumHeight\\s*:\\s*(\\d+)");
+
+    int minimumWidth = -1;
+    int minimumHeight = -1;
+    if (minimumWidthRegExp.indexIn(data) != -1) {
+        minimumWidth = minimumWidthRegExp.cap(1).toInt();
+    }
+    if (minimumHeightRegExp.indexIn(data) != -1) {
+        minimumHeight = minimumHeightRegExp.cap(1).toInt();
+    }
+
+    QRegExp maximumWidthRegExp ("maximumWidth\\s*:\\s*(\\d+)");
+    QRegExp maximumHeightRegExp ("maximumHeight\\s*:\\s*(\\d+)");
+
+    int maximumWidth = -1;
+    int maximumHeight = -1;
+    if (maximumWidthRegExp.indexIn(data) != -1) {
+        maximumWidth = maximumWidthRegExp.cap(1).toInt();
+    }
+    if (maximumHeightRegExp.indexIn(data) != -1) {
+        maximumHeight = maximumHeightRegExp.cap(1).toInt();
+    }
+
+    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
+    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
+
+    if (minimumWidth == -1 && minimumHeight == -1
+        && maximumWidth == -1 && maximumHeight == -1) {
+        if (widthRegExp.indexIn(data) != -1) {
+            int width = widthRegExp.cap(1).toInt();
+            minimumWidth = width;
+            maximumWidth = width;
+        }
+        if (heightRegExp.indexIn(data) != -1) {
+            int height = heightRegExp.cap(1).toInt();
+            minimumHeight = height;
+            maximumHeight = height;
+        }
+    }
+
+    bool sizeOk = (minimumWidth != -1 && minimumHeight != -1 &&
+                   maximumWidth != -1 && maximumHeight != -1);
+    if (!sizeOk) {
+        return 0;
+    }
+
+    return new WidgetBaseProperties(fileName, disambiguation, settingsFileName,
+                                    minimumWidth, minimumHeight, maximumWidth, maximumHeight,
+                                    parent);
 }
 
 }

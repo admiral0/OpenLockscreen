@@ -104,7 +104,10 @@ QString BasicProvider::widgetSettingsFile(const QString &fileName,
 WidgetBaseProperties * BasicProvider::widget(const QString &fileName,
                                              const QVariantHash &disambiguation)
 {
-    return new WidgetBaseProperties(fileName, disambiguation, "", 200, 200, 120, 200, this);
+    QDir dir = QDir(path());
+    QString file = dir.absoluteFilePath(fileName);
+
+    return WidgetBaseProperties::fromQmlFile(file, disambiguation, "", this);
 }
 
 void BasicProvider::setPath(const QString &path)
