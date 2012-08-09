@@ -223,6 +223,16 @@ public:
      */
     virtual void setProperties(const QDomElement &xmlElement, QObject *parent = 0);
     /**
+     * @brief filename
+     * @return filename.
+     */
+    QString fileName() const;
+    /**
+     * @brief Disambiguation
+     * @return disambiguation.
+     */
+    QVariantHash disambiguation() const;
+    /**
      * @internal
      * @brief Set widget base properties
      * @param widgetBaseProperties widget base properties.

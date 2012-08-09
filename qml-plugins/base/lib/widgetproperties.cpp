@@ -195,6 +195,16 @@ void WidgetPropertiesComponentBuilder::setProperties(const QDomElement &xmlEleme
     m_helper->setProperties(xmlElement, parent);
 }
 
+QString WidgetPropertiesComponentBuilder::fileName() const
+{
+    return m_helper->fileName();
+}
+
+QVariantHash WidgetPropertiesComponentBuilder::disambiguation() const
+{
+    return m_helper->disambiguation();
+}
+
 void WidgetPropertiesComponentBuilder
      ::setWidgetBaseProperties(WidgetBaseProperties *widgetBaseProperties)
 {
@@ -567,10 +577,8 @@ void WidgetProperties::setSettings(const QVariantHash &settings)
 {
 
     W_D(WidgetProperties);
-    qDebug() << d->settings << settings;
     if (d->settings != settings) {
         d->settings = settings;
-        qDebug() << settings;
         emit settingsChanged();
     }
 }

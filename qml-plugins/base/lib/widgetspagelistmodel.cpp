@@ -168,6 +168,7 @@ void WidgetsPageListModelPrivate::loadSettings()
 {
     Q_Q(WidgetsPageListModel);
     int pageCount = settings->value(WIDGETS_GROUP, WIDGETS_PAGE_COUNT).toInt();
+
     q->setPageCount(pageCount);
     initialPage = settings->value(WIDGETS_GROUP, WIDGETS_INITIAL_PAGE).toInt();
     currentPage = initialPage;

@@ -103,7 +103,8 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return a list of registered widgets.
      */
-    Q_INVOKABLE virtual QStringList registeredWidgets(const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QStringList
+                registeredWidgets(const QVariantHash &disambiguation = QVariantHash()) const;
     /**
      * @short Absolute path to the widget file
      *
@@ -115,8 +116,9 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return absolute path to the widget file.
      */
-    Q_INVOKABLE virtual QString widgetFile(const QString &fileName,
-                                           const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QString
+                widgetFile(const QString &fileName,
+                           const QVariantHash &disambiguation = QVariantHash()) const;
     /**
      * @short Absolute path to the widget configuration component file
      *
@@ -129,8 +131,9 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return absolute path to the widget configuration component file.
      */
-    Q_INVOKABLE virtual QString widgetSettingsFile(const QString &fileName,
-                                                   const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QString
+                widgetSettingsFile(const QString &fileName,
+                                   const QVariantHash &disambiguation = QVariantHash()) const;
     /**
      * @short Widget properties
      *
@@ -144,7 +147,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation);
+                               const QVariantHash &disambiguation = QVariantHash());
 
 Q_SIGNALS:
     /**

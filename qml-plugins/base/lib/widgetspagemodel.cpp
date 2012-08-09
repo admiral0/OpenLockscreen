@@ -20,11 +20,11 @@
  */
 
 #include "widgetspagemodel.h"
-#include "widgetproperties.h"
 
 #include "abstractsettings_p.h"
 #include "gridmanager.h"
 #include "widgetproviderbase.h"
+#include "widgetproperties_p.h"
 #include "settings.h"
 
 #include <QtCore/QDebug>
@@ -154,27 +154,31 @@ bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
         return false;
     }
 
-    QDomElement widgetElement = element.firstChildElement(WIDGET_ELEMENT);
-    /*while (!widgetElement.isNull()) {
-        WidgetProperties *incompleteWidget = new WidgetProperties(q);
-        if (incompleteWidget->fromXmlElement(widgetElement)) {
-            WidgetBaseProperties *widgetBase =
-                    packageManager->widget(incompleteWidget->packageIdentifier(),
-                                           incompleteWidget->fileName());
-            if (widgetBase != 0) {
-                QRect geometry = QRect(incompleteWidget->x(), incompleteWidget->y(),
-                                       incompleteWidget->width(), incompleteWidget->height());
-                int z = incompleteWidget->z();
+    if (!provider) {
+        return false;
+    }
 
-                q->addWidget(widgetBase, geometry, z,
-                             incompleteWidget->settings(),
-                             incompleteWidget->identifier());
-                widgetBase->deleteLater();
-            }
-        }
-        incompleteWidget->deleteLater();
+    WidgetPropertiesComponentBuilder *builder = new WidgetPropertiesComponentBuilder();
+    BuildManager<WidgetProperties *> *buildManager = new BuildManager<WidgetProperties *>();
+    buildManager->setBuilder(builder);
+
+
+    QDomElement widgetElement = element.firstChildElement(WIDGET_ELEMENT);
+    while (!widgetElement.isNull()) {
+        builder->setProperties(widgetElement, q);
+        WidgetBaseProperties *base = provider->widget(builder->fileName(),
+                                                      builder->disambiguation());
+        builder->setWidgetBaseProperties(base);
+        buildManager->build();
+
+        q->addWidget(buildManager->element());
+        base->deleteLater();
+
         widgetElement = widgetElement.nextSiblingElement(WIDGET_ELEMENT);
-    }*/
+    }
+
+    delete builder;
+    delete buildManager;
 
     return true;
 }
@@ -184,9 +188,18 @@ QDomElement WidgetsPageModelPrivate::toXmlElement(const QString &tagName,
 {
     QDomElement element = document->createElement(tagName);
 
-    /*foreach(WidgetProperties *widget, data) {
-        element.appendChild(widget->toXmlElement(WIDGET_ELEMENT, document));
-    }*/
+    WidgetPropertiesXmlBuilder *builder = new WidgetPropertiesXmlBuilder();
+    BuildManager<QDomElement> *buildManager = new BuildManager<QDomElement>();
+    buildManager->setBuilder(builder);
+
+    foreach(WidgetProperties *widget, data) {
+        builder->setProperties(widget, WIDGET_ELEMENT, document);
+        buildManager->build();
+        element.appendChild(buildManager->element());
+    }
+
+    delete builder;
+    delete buildManager;
     return element;
 }
 
@@ -351,40 +364,45 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
         return false;
     }
 
-    return addWidget(widget, geometry, 0, settings, identifier);
+    return addWidget(widget, geometry.x(), geometry.y(), 0,
+                     geometry.width(), geometry.height(), settings, identifier);
 }
 
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
-                                 const QRect &geometry, int z,
+                                 int x, int y, int z,
+                                 int width, int height,
                                  const QVariantHash &settings,
                                  const QString &identifier)
+{
+    Widgets::WidgetProperties *newWidget;
+    if (identifier.isEmpty()) {
+        newWidget = new WidgetProperties(widget, x, y, z, width, height, settings, this);
+    } else {
+        newWidget = new WidgetProperties(widget, identifier,
+                                         x, y, z, width, height, settings, this);
+    }
+
+    return addWidget(newWidget);
+}
+
+bool WidgetsPageModel::addWidget(WidgetProperties *widget)
 {
     Q_D(WidgetsPageModel);
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-    WidgetProperties *newWidget;
-    if (identifier.isEmpty()) {
-        newWidget = new WidgetProperties(widget, geometry.x(), geometry.y(), z,
-                                         geometry.width(), geometry.height(), settings, this);
-    } else {
-        newWidget = new WidgetProperties(widget, identifier, geometry.x(), geometry.y(), z,
-                                         geometry.width(), geometry.height(), settings, this);
-    }
-
-    d->data.append(newWidget);
+    d->data.append(widget);
 
     emit countChanged();
     endInsertRows();
 
     d->requestSave();
 
-    connect(newWidget, SIGNAL(xChanged(int)), this, SLOT(requestSave()));
-    connect(newWidget, SIGNAL(yChanged(int)), this, SLOT(requestSave()));
-    connect(newWidget, SIGNAL(widthChanged(int)), this, SLOT(requestSave()));
-    connect(newWidget, SIGNAL(heightChanged(int)), this, SLOT(requestSave()));
-    connect(newWidget, SIGNAL(settingsChanged(QVariantMap)), this, SLOT(requestSave()));
-
+    connect(widget, SIGNAL(xChanged()), this, SLOT(requestSave()));
+    connect(widget, SIGNAL(yChanged()), this, SLOT(requestSave()));
+    connect(widget, SIGNAL(widthChanged()), this, SLOT(requestSave()));
+    connect(widget, SIGNAL(heightChanged()), this, SLOT(requestSave()));
+    connect(widget, SIGNAL(settingsChanged()), this, SLOT(requestSave()));
     return true;
 }
 
@@ -557,6 +575,7 @@ void WidgetsPageModel::setProvider(WidgetProviderBase *provider)
 bool WidgetsPageModel::event(QEvent *event)
 {
     Q_D(WidgetsPageModel);
+
     if (event->type() == QEvent::UpdateRequest) {
         d->save();
         return true;

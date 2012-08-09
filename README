@@ -66,9 +66,9 @@ For the project
 - CONFIG+=mobile enables mobile app and mobile widgets.
 - CONFIG+=desktop enables desktop app and desktop widgets.
 
-For core widgets library
-- CONFIG+=nopackagemanager disable package management features.
-- CONFIG+=nodocks disable everything related to docks.
+For providers options
+- CONFIG+=pluginproviderbasic enable the basic provider.
+- CONFIG+=pluginproviderpackagemanager enable the package manager based provider.
 
 For additional widgets library
 - CONFIG+=plugincolors enable the QML plugin that provides colors.

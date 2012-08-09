@@ -29,10 +29,8 @@ Item {
             height: model.widget.height
             scale: 0
             widget: model.widget
-            qmlFile: ProviderManagerInstance.available
-                     ? ProviderManagerInstance.provider.widgetFile(model.widget.packageIdentifier,
-                                                                   model.widget.fileName)
-                     : ""
+            qmlFile: ProviderManagerInstance.provider.widgetFile(model.widget.fileName,
+                                                                 model.widget.disambiguation)
             visible: model.widget.visible
 
             Component.onCompleted: scale = 1

@@ -53,12 +53,6 @@ WidgetsView {
                 width: view.width
                 height: view.height
 
-                Rectangle {
-                    width: 200
-                    height: 200
-                    anchors.centerIn: parent
-                }
-
                 WidgestPage {
                     anchors.fill: parent
                     pageModel: model.pageModel

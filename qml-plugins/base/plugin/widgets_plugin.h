@@ -34,7 +34,25 @@
  * libwidgets have many features, and many plugins that can
  * be used.
  *
- * \subpage pluginList
+ * Getting started
+ * - \subpage tutorials
+ * - \subpage pluginList
+ */
+/**
+ * \page tutorials Tutorials
+ *
+ * - \subpage tutorial1
+ *
+ */
+/**
+ * \page tutorial1 Tutorial 1: create your first widgets view.
+ *
+ * Creating a widgets view can be done with only a few steps, but some
+ * of them are tricky. This tutorial is here to show the different points
+ * to pay attention when creating a widgets view.
+ *
+ * A widgets view is composed of a display, and a model.
+ * @todo continue this.
  */
 /** \page pluginList List of all the plugins
  *
@@ -47,7 +65,6 @@
  *   - \ref pluginProviderBasic
  *   - \ref pluginProviderPackageManager
  * - \subpage pluginColors
- *
  *
  */
 /**

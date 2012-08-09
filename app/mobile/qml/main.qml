@@ -29,16 +29,13 @@ PageStackWindow {
         ProviderManagerInstance.setProvider(provider)
     }
 
+
 //    FilterConditionList {
 //        id: packageManagerFilters
 //        FilterCondition {
 //            tag: "mobile-harmattan"
 //        }
 //    }
-
-    BasicProvider {
-        id: provider
-    }
 
     Settings {
         id: widgetsSettings

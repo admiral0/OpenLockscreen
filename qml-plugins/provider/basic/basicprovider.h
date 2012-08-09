@@ -38,14 +38,17 @@ public:
     virtual ~BasicProvider();
     bool available() const;
     QString path() const;
-    Q_INVOKABLE virtual QStringList registeredWidgets(const QVariantHash &disambiguation) const;
-    Q_INVOKABLE virtual QString widgetFile(const QString &fileName,
-                                           const QVariantHash &disambiguation) const;
-    Q_INVOKABLE virtual QString widgetSettingsFile(const QString &fileName,
-                                                   const QVariantHash &disambiguation) const;
+    Q_INVOKABLE virtual QStringList
+                registeredWidgets(const QVariantHash &disambiguation = QVariantHash()) const;
+    Q_INVOKABLE virtual QString
+                widgetFile(const QString &fileName,
+                           const QVariantHash &disambiguation = QVariantHash()) const;
+    Q_INVOKABLE virtual QString
+                widgetSettingsFile(const QString &fileName,
+                                   const QVariantHash &disambiguation = QVariantHash()) const;
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation);
+                               const QVariantHash &disambiguation = QVariantHash());
 public Q_SLOTS:
     void setPath(const QString &path);
 Q_SIGNALS:

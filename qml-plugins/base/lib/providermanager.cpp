@@ -105,8 +105,6 @@ void ProviderManager::setProvider(WidgetProviderBase *provider)
         connect (d->provider, SIGNAL(availableChanged()), this, SLOT(slotAvailable()));
         d->slotAvailable();
     }
-
-    qDebug() << provider;
 }
 
 }

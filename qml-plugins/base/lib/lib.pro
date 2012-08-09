@@ -25,10 +25,8 @@ HEADERS +=      widgets_global.h \
                 widgetproperties.h \
                 widgetproperties_p.h \
                 gridmanager.h \
-#                dockmodel.h \
                 widgetspagemodel.h \
                 widgetspagelistmodel.h \
-#                configurationmanager.h \
 
 SOURCES +=      tools.cpp \
                 version.cpp \
@@ -42,9 +40,7 @@ SOURCES +=      tools.cpp \
                 widgetbaseproperties.cpp \
                 widgetproperties.cpp \
                 gridmanager.cpp \
-#                dockmodel.cpp \
                 widgetspagemodel.cpp \
                 widgetspagelistmodel.cpp \
-#                configurationmanager.cpp \
 
 include(deployment.pri)

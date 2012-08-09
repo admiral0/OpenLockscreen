@@ -150,16 +150,26 @@ public:
     /**
      * @short Add widget
      * @param widget base properties of the widget to add.
-     * @param geometry widget geometry.
-     * @param z widget z.
+     * @param x xcoordinate.
+     * @param y y coordinate.
+     * @param z z coordinate.
+     * @param width width.
+     * @param height height.
      * @param settings widget settings.
      * @param identifier widget identifier.
      * @return if the operation is successful.
      */
     bool addWidget(Widgets::WidgetBaseProperties *widget,
-                   const QRect &geometry, int z,
+                   int x, int y, int z,
+                   int width, int height,
                    const QVariantHash &settings = QVariantHash(),
                    const QString &identifier = QString());
+    /**
+     * @brief Add widget
+     * @param widget the widget to add.
+     * @return if the operation is successful.
+     */
+    bool addWidget(Widgets::WidgetProperties *widget);
     /**
      * @short Remove a widget
      * @param widget widget to remove.

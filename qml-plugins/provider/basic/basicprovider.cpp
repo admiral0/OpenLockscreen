@@ -40,7 +40,7 @@ public:
 ////// End of private class //////
 
 BasicProvider::BasicProvider(QObject *parent):
-    WidgetProviderBase(parent)
+    WidgetProviderBase(parent), d_ptr(new BasicProviderPrivate())
 {
 }
 

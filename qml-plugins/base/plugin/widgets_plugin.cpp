@@ -24,18 +24,12 @@
 #include <QtDeclarative/QtDeclarative>
 #include <QtDeclarative/QDeclarativeEngine>
 
-//#include "dockbaseproperties.h"
-//#include "dockproperties.h"
 #include "widgetbaseproperties.h"
 #include "widgetproperties.h"
 #include "gridmanager.h"
-//#include "packagemanager.h"
 #include "settings.h"
 #include "settingsentry.h"
-//#include "filterconditionlist.h"
-//#include "filtercondition.h"
 #include "widgetspagelistmodel.h"
-//#include "configurationmanager.h"
 #include "providermanager.h"
 
 #include "widgetproviderbase.h"
@@ -50,15 +44,9 @@ void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri
     Widgets::ProviderManager *providerManager = new Widgets::ProviderManager(this);
     engine->rootContext()->setContextProperty("ProviderManagerInstance", providerManager);
 
-//    Widgets::PackageManager *packageManager = new Widgets::PackageManager(this);
     Widgets::WidgetsPageListModel *widgetsPageListModel = new Widgets::WidgetsPageListModel(this);
     widgetsPageListModel->setProviderManager(providerManager);
-
-//    Widgets::ConfigurationManager *configurationManager = new Widgets::ConfigurationManager(this);
-
-//    engine->rootContext()->setContextProperty("PackageManagerInstance", packageManager);
     engine->rootContext()->setContextProperty("WidgetsPageListModelInstance", widgetsPageListModel);
-//    engine->rootContext()->setContextProperty("ConfigurationManagerInstance", configurationManager);
 
 
 }
@@ -71,24 +59,12 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
     QString reason = "Only one instance of ProviderManager is allowed";
     qmlRegisterUncreatableType<Widgets::ProviderManager>(uri, 1, 0, "ProviderManager", reason);
-//    QString reason = "Only one instance of PackageManager is allowed";
-//    qmlRegisterUncreatableType<Widgets::PackageManager>(uri, 1, 0, "PackageManager", reason);
-//    qmlRegisterType<Widgets::FilterConditionList>(uri, 1, 0,"FilterConditionList");
-//    qmlRegisterType<Widgets::FilterCondition>(uri, 1, 0,"FilterCondition");
-//    qmlRegisterType<Widgets::DockBaseProperties>(uri, 1, 0, "DockBaseProperties");
-//    qmlRegisterType<Widgets::DockProperties>(uri, 1, 0, "DockProperties");
     qmlRegisterType<Widgets::WidgetBaseProperties>(uri, 1, 0, "WidgetBaseProperties");
     qmlRegisterType<Widgets::WidgetProperties>(uri, 1, 0, "WidgetProperties");
     reason = "Only one instance of WidgetsPageListModel is allowed";
     qmlRegisterUncreatableType<Widgets::WidgetsPageListModel>(uri, 1, 0,
                                                               "WidgetsPageListModel", reason);
     qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
-//    reason = "Only one instance of ConfigurationManager is allowed";
-//    qmlRegisterUncreatableType<Widgets::ConfigurationManager>(uri, 1, 0,
-//                                                              "ConfigurationManager", reason);
-
-
-
     reason = "This provider is invalid";
     qmlRegisterUncreatableType<Widgets::WidgetProviderBase>(uri, 1, 0, "WidgetProviderBase",
                                                             reason);

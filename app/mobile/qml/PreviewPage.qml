@@ -49,7 +49,22 @@ Page {
         }
     }*/
 
+    // Testing
     WidgetsHorizontalPageView {
         id: widgetsPage
+    }
+
+    MouseArea {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        height: 100
+
+        onClicked: {
+            var list = provider.registeredWidgets()
+            var widgetFile = list[0]
+
+            var widget = provider.widget(widgetFile)
+            WidgetsPageListModelInstance.addWidget(0, widget, widgetsPage.gridManagerInstance)
+        }
     }
 }

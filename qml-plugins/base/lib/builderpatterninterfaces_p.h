@@ -96,7 +96,7 @@ public:
      * @internal
      * @brief Build
      */
-    virtual void build() {builder->buildElement();}
+    void build() {builder->buildElement();}
     /**
      * @internal
      * @brief Built element
