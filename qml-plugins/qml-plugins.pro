@@ -9,5 +9,5 @@ contains(CONFIG, plugindocks): SUBDIRS += docks
 
 contains(CONFIG, mobile)|contains(CONFIG, desktop) {
 #    SUBDIRS += colors background docks extra drag
-    SUBDIRS += colors background docks
+#    SUBDIRS += colors background docks
 }
