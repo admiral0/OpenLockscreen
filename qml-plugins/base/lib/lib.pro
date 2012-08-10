@@ -4,7 +4,7 @@ TEMPLATE = lib
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
 TARGET = widgetsbase
-QT = core gui sql xml
+QT = core gui xml
 
 contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 
@@ -14,6 +14,7 @@ HEADERS +=      widgets_global.h \
                 version.h \
                 identifiedelementinterface.h \
                 widgetproviderbase.h \
+                widgetproviderbase_p.h \
                 providermanager.h \
                 abstractsettings_p.h \
                 settings.h \

@@ -96,10 +96,12 @@ class GraphicalComponentBaseComponentBuilderHelper
 {
 public:
     /**
+     * @internal
      * @brief Default constructor
      */
     explicit GraphicalComponentBaseComponentBuilderHelper();
     /**
+     * @internal
      * @brief Destructor
      */
     virtual ~GraphicalComponentBaseComponentBuilderHelper();
@@ -129,16 +131,19 @@ public:
      */
     virtual bool isValid() const;
     /**
+     * @internal
      * @brief filename
      * @return filename.
      */
     QString fileName() const;
     /**
+     * @internal
      * @brief Settings filename
      * @return settings filename.
      */
     QString settingsFileName() const;
     /**
+     * @internal
      * @brief Disambiguation
      * @return disambiguation.
      */
@@ -197,6 +202,7 @@ public:
     virtual void buildElement();
 private:
     /**
+     * @internal
      * @brief Helper class
      */
     GraphicalComponentBaseComponentBuilderHelper *m_helper;
@@ -244,15 +250,18 @@ protected:
      */
     virtual GraphicalComponentBase *component() const;
     /**
+     * @internal
      * @brief Tag
      */
     QString tagName;
     /**
+     * @internal
      * @brief Document
      */
     QDomDocument *document;
 private:
     /**
+     * @internal
      * @brief Component
      */
     GraphicalComponentBase *m_component;

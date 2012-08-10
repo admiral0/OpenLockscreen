@@ -39,18 +39,34 @@ public:
      */
     explicit ProviderManagerPrivate(ProviderManager *q);
     /**
+     * @internal
      * @brief Slot for available
      *
      * This method is used to check if the provider
      * is available.
+     *
+     * @param available if the provider is available.
      */
-    void slotAvailable();
+    void slotAvailable(bool available);
     /**
+     * @internal
+     * @brief Set status
+     * @param status status to set.
+     */
+    void setStatus(ProviderManager::ProviderStatus status);
+    /**
+     * @internal
      * @brief Provider
      */
     WidgetProviderBase *provider;
+    /**
+     * @internal
+     * @brief Provider status
+     */
+    ProviderManager::ProviderStatus status;
 private:
     /**
+     * @internal
      * @short Q-pointer.
      */
     ProviderManager *q_ptr;
@@ -60,12 +76,25 @@ private:
 ProviderManagerPrivate::ProviderManagerPrivate(ProviderManager *q):
     provider(0), q_ptr(q)
 {
+    status = ProviderManager::ProviderInvalid;
 }
 
-void ProviderManagerPrivate::slotAvailable()
+void ProviderManagerPrivate::slotAvailable(bool available)
+{
+    if (available) {
+        setStatus(ProviderManager::ProviderAvailable);
+    } else {
+        setStatus(ProviderManager::ProviderUnavailable);
+    }
+}
+
+void ProviderManagerPrivate::setStatus(ProviderManager::ProviderStatus statusToSet)
 {
     Q_Q(ProviderManager);
-    emit q->providerAvailableChanged();
+    if (status != statusToSet) {
+        status = statusToSet;
+        emit q->providerStatusChanged();
+    }
 }
 
 ////// End of private class //////
@@ -79,14 +108,10 @@ ProviderManager::~ProviderManager()
 {
 }
 
-bool ProviderManager::isProviderAvailable() const
+ProviderManager::ProviderStatus ProviderManager::providerStatus() const
 {
     Q_D(const ProviderManager);
-    if (!d->provider) {
-        return false;
-    }
-
-    return d->provider->available();
+    return d->status;
 }
 
 WidgetProviderBase * ProviderManager::provider() const
@@ -102,8 +127,13 @@ void ProviderManager::setProvider(WidgetProviderBase *provider)
         d->provider = provider;
         emit providerChanged();
 
-        connect (d->provider, SIGNAL(availableChanged()), this, SLOT(slotAvailable()));
-        d->slotAvailable();
+        connect (d->provider, SIGNAL(availableChanged(bool)), this, SLOT(slotAvailable(bool)));
+        if (d->provider->isAvailable()) {
+            d->setStatus(ProviderManager::ProviderAvailable);
+        } else {
+            d->setStatus(ProviderManager::ProviderUnavailable);
+        }
+        d->slotAvailable(d->provider->isAvailable());
     }
 }
 

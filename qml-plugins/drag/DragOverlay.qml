@@ -63,7 +63,8 @@ Item {
 
     // Create a dragger
     function createDragger(widget) {
-        var qmlFile = PackageManagerInstance.widgetFile(widget.packageIdentifier, widget.fileName)
+        var qmlFile = ProviderManagerInstance.provider.widgetFile(widget.fileName,
+                                                                  widget.disambiguation)
         var component = Qt.createComponent("WidgetDragger.qml")
         if (component.status == Component.Ready) {
             var dragger = component.createObject(contentsContainer,

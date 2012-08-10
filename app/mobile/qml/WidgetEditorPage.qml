@@ -20,7 +20,7 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.drag 1.0
-import org.SfietKonstantin.widgets.extra 1.0
+import org.SfietKonstantin.widgets.extra.widget 1.0
 import "UiConstants.js" as Ui
 
 Page {
@@ -66,7 +66,7 @@ Page {
             id: view
             anchors.fill: parent
             model: WidgetInformationModel {
-                packageManager: PackageManagerInstance
+                providerManager: ProviderManagerInstance
             }
             clip: true
             delegate: ClickableEntry {
@@ -74,7 +74,8 @@ Page {
                 subText: model.description
                 indicatorIcon: ""
                 onClicked: {
-                    var widget = PackageManagerInstance.widget(model.package, model.file)
+                    var widget = ProviderManagerInstance.provider.widget(model.file,
+                                                                         model.disambiguation)
                     WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
                                                            widget, widgetsPage.gridManagerInstance)
                     addWidgetSheet.accept()
@@ -83,6 +84,7 @@ Page {
         }
     }
 
+    /*
     Sheet {
         id: configureWidgetSheet
         property Item settingsItem
@@ -127,7 +129,7 @@ Page {
                 ConfigurationManagerInstance.setCurrentWidget(0)
             }
         }
-    }
+    }*/
 
     Item {
         id: falseToolbar
@@ -162,6 +164,7 @@ Page {
             onClicked: {
                 DragManagerInstance.locked = !DragManagerInstance.locked
             }
+            enabled: ProviderManagerInstance.providerStatus == ProviderManager.ProviderAvailable
         }
 
     }

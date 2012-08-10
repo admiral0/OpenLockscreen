@@ -1,3 +1,5 @@
+include(globals.pri)
+
 TEMPLATE =      subdirs
 
 SUBDIRS +=      qml-plugins api app widgets

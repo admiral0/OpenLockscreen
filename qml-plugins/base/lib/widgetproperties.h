@@ -38,7 +38,7 @@ class WidgetPropertiesPrivate;
  *
  * This class is used to represent a widget,
  * with all position properties, and other
- * dynamic properties.
+ * dynamical properties.
  *
  * These properties are
  * - identifier()
@@ -120,10 +120,6 @@ public:
                               int x, int y, int z, int width, int height,
                               const QVariantHash &settings = QVariantHash(),
                               QObject *parent = 0);
-//    explicit WidgetProperties(WidgetBaseProperties *base,
-//                              const QRect &geometry, int z,
-//                              const QVariantHash &settings = QVariantHash(),
-//                              QObject *parent = 0);
     /**
      * @brief Constructor
      *
@@ -146,11 +142,6 @@ public:
                               int x, int y, int z, int width, int height,
                               const QVariantHash &settings = QVariantHash(),
                               QObject *parent = 0);
-//    explicit WidgetProperties(WidgetBaseProperties *base,
-//                              const QRect &geometry, int z,
-//                              const QString &identifier,
-//                              const QVariantHash &settings = QVariantHash(),
-//                              QObject *parent = 0);
     /**
      * @brief Identifier
      * @return identifier.
@@ -191,35 +182,6 @@ public:
      * @return settings.
      */
     QVariantHash settings() const;
-Q_SIGNALS:
-    /**
-     * @short X coordinate changed
-     */
-    void xChanged();
-    /**
-     * @short Y coordinate changed
-     */
-    void yChanged();
-    /**
-     * @short Z coordinate changed
-     */
-    void zChanged();
-    /**
-     * @short Width changed
-     */
-    void widthChanged();
-    /**
-     * @short Height changed
-     */
-    void heightChanged();
-    /**
-     * @short Visibility changed
-     */
-    void visibleChanged();
-    /**
-     * @short Settings changed changed
-     */
-    void settingsChanged();
 public Q_SLOTS:
     /**
      * @short Set the x coordinate
@@ -256,6 +218,35 @@ public Q_SLOTS:
      * @param settings settings.
      */
     void setSettings(const QVariantHash &settings);
+Q_SIGNALS:
+    /**
+     * @short X coordinate changed
+     */
+    void xChanged();
+    /**
+     * @short Y coordinate changed
+     */
+    void yChanged();
+    /**
+     * @short Z coordinate changed
+     */
+    void zChanged();
+    /**
+     * @short Width changed
+     */
+    void widthChanged();
+    /**
+     * @short Height changed
+     */
+    void heightChanged();
+    /**
+     * @short Visibility changed
+     */
+    void visibleChanged();
+    /**
+     * @short Settings changed changed
+     */
+    void settingsChanged();
 protected:
     /**
      * @brief Constructor for D-pointer

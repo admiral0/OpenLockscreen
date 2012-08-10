@@ -92,16 +92,11 @@ class WidgetsPageListModel : public QAbstractListModel
      * @short %Settings
      */
     Q_PROPERTY(Widgets::Settings * settings READ settings WRITE setSettings NOTIFY settingsChanged)
-    /**
-     * @short Grid manager
-     */
-//    Q_PROPERTY(Widgets::GridManager * gridManager READ gridManager WRITE setGridManager
-//               NOTIFY gridManagerChanged)
 public:
     /**
      * @short Model roles
      */
-    enum DisplayedPagesRole {
+    enum WidgetsPageListModelRole {
         /**
          * @short Index role
          */
@@ -147,7 +142,6 @@ public:
      * @return settings.
      */
     Settings * settings() const;
-//    GridManager * gridManager() const;
     /**
      * @short Reimplementation of data
      *
@@ -205,14 +199,12 @@ Q_SIGNALS:
      * @brief Settings changed
      */
     void settingsChanged();
-//    void gridManagerChanged();
 public Q_SLOTS:
     /**
      * @brief Set settings
      * @param settings settings.
      */
     void setSettings(Settings *settings);
-//    void setGridManager(GridManager *gridManager);
     /**
      * @brief Set current page
      * @param currentPage current page.

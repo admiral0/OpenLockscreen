@@ -37,7 +37,7 @@ AbstractNavigationPage {
     }
     onShow: {
         if(page == "showPackageList") {
-            window.pageStack.push(packageListPage)
+//            window.pageStack.push(packageListPage)
         }
         if(page == "showDockList") {
             window.pageStack.push(dockListPage)
@@ -47,9 +47,9 @@ AbstractNavigationPage {
         }
     }
 
-    PackageListPage {
-        id: packageListPage
-    }
+//    PackageListPage {
+//        id: packageListPage
+//    }
     DockListPage {
         id: dockListPage
     }

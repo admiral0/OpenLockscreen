@@ -17,7 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.provider.basic 1.0
+import org.SfietKonstantin.widgets.provider.basic.mixed 1.0
 
 PageStackWindow {
     id: window
@@ -55,6 +55,12 @@ PageStackWindow {
 
     MainPage {
         id: mainPage
+    }
+
+    BasicMixedProvider {
+        id: provider
+        widgetsPath: "/home/sk/qml/widgets/"
+        docksPath: "/home/sk/qml/docks/"
     }
 
 }

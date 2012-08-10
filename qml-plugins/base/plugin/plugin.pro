@@ -1,7 +1,7 @@
 TEMPLATE =      lib
 
 TARGET =        widgetsbase
-QT =            core gui sql xml declarative
+QT =            core gui xml declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../lib/
 LIBS +=         -L ../lib/ -lwidgetsbase
@@ -12,7 +12,6 @@ SOURCES +=      widgets_plugin.cpp \
 
 OTHER_FILES =   qmldir \
                 Widget.qml \
-                Dock.qml \
                 SettingsItem.qml \
                 WidgetContainer.qml \
                 WidgestPage.qml \

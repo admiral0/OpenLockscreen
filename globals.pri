@@ -77,3 +77,14 @@ DEFINES += 'USER_WIDGETS=\'\"$${USER_WIDGETS_FOLDER}\"\''
 DEFINES += 'WIDGETS_VERSION_MAJOR=$${VERSION_MAJOR}'
 DEFINES += 'WIDGETS_VERSION_MINOR=$${VERSION_MINOR}'
 DEFINES += 'WIDGETS_VERSION_PATCH=$${VERSION_PATCH}'
+
+# Config overriding
+contains(CONFIG, mobile)|contains(CONFIG, desktop) {
+    CONFIG += plugincolors pluginbackground plugindocks pluginextra plugindrag
+    CONFIG += pluginproviderpackagemanager
+}
+
+contains(CONFIG, tests) {
+    CONFIG += plugincolors pluginbackground plugindocks pluginextra plugindrag
+    CONFIG += pluginproviderbasic pluginproviderpackagemanager
+}

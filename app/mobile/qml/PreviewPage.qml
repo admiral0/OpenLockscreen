@@ -17,7 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-//import org.SfietKonstantin.widgets.docks 1.0
+import org.SfietKonstantin.widgets.docks 1.0
 //import org.SfietKonstantin.widgets.background 1.0
 
 Page {
@@ -50,21 +50,15 @@ Page {
     }*/
 
     // Testing
-    WidgetsHorizontalPageView {
-        id: widgetsPage
-    }
+    DockedView {
+        content: Item {
+            id: widgets
+            anchors.fill: parent
 
-    MouseArea {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        height: 100
-
-        onClicked: {
-            var list = provider.registeredWidgets()
-            var widgetFile = list[0]
-
-            var widget = provider.widget(widgetFile)
-            WidgetsPageListModelInstance.addWidget(0, widget, widgetsPage.gridManagerInstance)
+            WidgetsHorizontalPageView {
+                id: widgetsPage
+            }
         }
     }
+
 }

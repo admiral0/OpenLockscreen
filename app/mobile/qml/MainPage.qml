@@ -30,13 +30,13 @@ AbstractNavigationPage {
             window.pageStack.push(previewPage)
         }
         if (page == "showSettings") {
-//            window.pageStack.push(settingsPage)
+            window.pageStack.push(settingsPage)
         }
         if(page == "showInfo") {
-//            window.pageStack.push(infoPage)
+            window.pageStack.push(infoPage)
         }
         if(page == "showAbout") {
-//            window.pageStack.push(aboutPage)
+            window.pageStack.push(aboutPage)
         }
     }
     model: ListModel {
@@ -70,15 +70,15 @@ AbstractNavigationPage {
 //        }
     }
 
-//    SettingsPage {
-//        id: settingsPage
-//    }
+    SettingsPage {
+        id: settingsPage
+    }
 
-//    InformationsPage {
-//        id: infoPage
-//    }
+    InformationsPage {
+        id: infoPage
+    }
 
-//    AboutPage {
-//        id: aboutPage
-//    }
+    AboutPage {
+        id: aboutPage
+    }
 }

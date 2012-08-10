@@ -61,6 +61,7 @@
  * flags.
  *
  * - \subpage pluginBase
+ * - \subpage pluginDocks
  * - \subpage providers
  *   - \ref pluginProviderBasic
  *   - \ref pluginProviderPackageManager
@@ -96,18 +97,16 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
- * While imported, this plugin provides a widgets pages model
- * that is a global model that is used to represent the widgets
- * in different screens. It provides loading and saving capabilities, and can
- * be edited easliy.
- *
- * This model is available as a global object, named \e WidgetsPageListModelInstance.
+ * While imported, this plugin provides a global model that is used to represent
+ * the widgets in different screens. This model have loading and saving capabilities,
+ * and can be edited easliy. The model can be accessed through the global
+ * variable \e WidgetsPageListModelInstance.
  *
  * You can use the @e WidgetsPageListModelInstance in any view, but we recommand
  * using provided views such as @e WidgetsHorizontalPageView, or subclassing the
  * provided @e WidgetsView.
  *
- * @see WidgetsPageListModel.
+ * @see Widgets::WidgetsPageListModel.
  */
 
 /**
@@ -117,7 +116,7 @@ namespace Widgets
 {
 /**
  * @internal
- * @short Base QML plugin for Widgets
+ * @short Base QML plugin for widgets
  */
 class WidgetsPlugin : public QDeclarativeExtensionPlugin
 {
@@ -131,6 +130,7 @@ public:
      */
     virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     /**
+     * @internal
      * @short Register types
      * @param uri uri used in the import.
      */

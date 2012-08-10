@@ -117,7 +117,6 @@ public:
      * @short %Settings
      */
     Settings *settings;
-//    GridManager *gridManager;
     /**
      * @internal
      * @short Provider manager
@@ -136,7 +135,6 @@ WidgetsPageListModelPrivate::WidgetsPageListModelPrivate(WidgetsPageListModel* q
     q_ptr(q)
 {
     settings = 0;
-//    gridManager = 0;
     providerManager = 0;
     initialPage = -1;
     currentPage = -1;
@@ -152,10 +150,7 @@ WidgetsPageListModelPrivate::~WidgetsPageListModelPrivate()
 
 void WidgetsPageListModelPrivate::refreshProvider()
 {
-    if (!providerManager) {
-        return;
-    }
-    if (!providerManager->provider()) {
+    if (providerManager->providerStatus() != ProviderManager::ProviderAvailable) {
         return;
     }
 
@@ -234,12 +229,6 @@ Settings * WidgetsPageListModel::settings() const
     return d->settings;
 }
 
-//GridManager * WidgetsPageListModel::gridManager() const
-//{
-//    Q_D(const WidgetsPageListModel);
-//    return d->gridManager;
-//}
-
 QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const WidgetsPageListModel);
@@ -291,7 +280,7 @@ void WidgetsPageListModel::setProviderManager(ProviderManager *providerManager)
     if (d->providerManager != providerManager) {
         d->providerManager = providerManager;
 
-        connect(d->providerManager, SIGNAL(providerChanged()), this, SLOT(refreshProvider()));
+        connect(d->providerManager, SIGNAL(providerStatusChanged()), this, SLOT(refreshProvider()));
     }
 }
 
@@ -304,15 +293,6 @@ void WidgetsPageListModel::setSettings(Settings *settings)
         d->loadSettings();
     }
 }
-
-//void WidgetsPageListModel::setGridManager(GridManager *gridManager)
-//{
-//    Q_D(WidgetsPageListModel);
-//    if (d->gridManager != gridManager) {
-//        d->gridManager = gridManager;
-//        emit gridManagerChanged();
-//    }
-//}
 
 void WidgetsPageListModel::setCurrentPage(int currentPage)
 {

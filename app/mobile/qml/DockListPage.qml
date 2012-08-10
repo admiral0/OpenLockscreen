@@ -16,7 +16,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets.extra 1.0
+import org.SfietKonstantin.widgets.extra.dock 1.0
 import "UiConstants.js" as Ui
 
 AbstractPage {
@@ -40,6 +40,6 @@ AbstractPage {
 
     DockInformationModel {
         id: dockInformationModel
-        packageManager: PackageManagerInstance
+        providerManager: ProviderManagerInstance
     }
 }

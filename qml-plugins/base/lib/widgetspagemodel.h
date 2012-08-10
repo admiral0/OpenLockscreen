@@ -41,7 +41,7 @@ class WidgetsPageModelPrivate;
  * of a page, like the type, position, size and
  * parameters of the displayed widgets in a page.
  *
- * Each item of this model is a WidgetProperties
+ * Each item of this model is a Widgets::WidgetProperties
  * that is used to control all the parameters
  * related to displayed widgets.
  *
@@ -49,11 +49,11 @@ class WidgetsPageModelPrivate;
  * - addWidget()
  * - removeWidget()
  *
- * The first build a WidgetProperties based
- * on a WidgetBaseProperties and assign
+ * The first build a Widgets::WidgetProperties based
+ * on a Widgets::WidgetBaseProperties and assign
  * given properties to the new parameters.
  * The second removes a widget based on a
- * WidgetProperties.
+ * Widgets::WidgetProperties.
  *
  * Please note that Widget::WidgetProperties objects
  * created with addWidget are automatically linked to
@@ -62,7 +62,7 @@ class WidgetsPageModelPrivate;
  * in a graphical change and saved.
  *
  * This class save settings as XML files. They are stored as
- * widget-\<page index\>.xml, using QDesktopServices::DataLocation.
+ * settings-widget-\<page index\>.xml, using QDesktopServices::DataLocation.
  * Loading the settings is done when calling load(). Saving is
  * managed automatically, when widgets changes, are added or
  * removed.
@@ -82,7 +82,7 @@ public:
     /**
      * @short Model roles
      */
-    enum DisplayedPageWidgetsRole {
+    enum WidgetsPageModelRole {
         /**
          * @short Widget role
          */
@@ -90,7 +90,6 @@ public:
     };
     /**
      * @short Default constructor
-     *
      * @param parent parent object.
      */
     explicit WidgetsPageModel(QObject *parent = 0);
@@ -98,6 +97,11 @@ public:
      * @short Destructor
      */
     virtual ~WidgetsPageModel();
+    /**
+     * @brief Set provider
+     * @param provider provider to set.
+     */
+    void setProvider(WidgetProviderBase *provider);
     /**
      * @brief Page index
      * @return page index.
@@ -136,7 +140,7 @@ public:
      */
     void load();
     /**
-     * @short Add widget
+     * @short Add a widget
      * @param widget base properties of the widget to add.
      * @param gridManager grid manager.
      * @param settings widget settings.
@@ -148,7 +152,7 @@ public:
                    const QVariantHash &settings = QVariantHash(),
                    const QString &identifier = QString());
     /**
-     * @short Add widget
+     * @short Add a widget
      * @param widget base properties of the widget to add.
      * @param x xcoordinate.
      * @param y y coordinate.
@@ -165,7 +169,7 @@ public:
                    const QVariantHash &settings = QVariantHash(),
                    const QString &identifier = QString());
     /**
-     * @brief Add widget
+     * @brief Add a widget
      * @param widget the widget to add.
      * @return if the operation is successful.
      */
@@ -176,6 +180,16 @@ public:
      * @return if the operation is successful.
      */
     bool removeWidget(Widgets::WidgetProperties *widget);
+public Q_SLOTS:
+
+//    void relayout(Widgets::GridManager *gridManager);
+
+//    void addWidget(Widgets::WidgetBaseProperties *widget,
+//                   int x = 0, int y = 0,
+//                   int width = 0, int height = 0,
+//                   const QVariantMap &settings = QVariantMap(),
+//                   const QString &identifier = QString(), int z = -1);
+//    void updateWidget(const QString &identifier, int x, int y, int width, int height);
 Q_SIGNALS:
     /**
      * @brief Page index changed
@@ -185,20 +199,6 @@ Q_SIGNALS:
      * @short Count changed
      */
     void countChanged();
-public Q_SLOTS:
-    /**
-     * @brief Set provider
-     * @param provider provider to set.
-     */
-    void setProvider(WidgetProviderBase *provider);
-//    void relayout(Widgets::GridManager *gridManager);
-
-//    void addWidget(Widgets::WidgetBaseProperties *widget,
-//                   int x = 0, int y = 0,
-//                   int width = 0, int height = 0,
-//                   const QVariantMap &settings = QVariantMap(),
-//                   const QString &identifier = QString(), int z = -1);
-//    void updateWidget(const QString &identifier, int x, int y, int width, int height);
 protected:
     /**
      * @brief Constructor for D-pointer
@@ -213,7 +213,7 @@ protected:
      * queued save.
      *
      * @param event event to react to.
-     * @return
+     * @return if the event succeeded.
      */
     virtual bool event(QEvent *event);
     /**

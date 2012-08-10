@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.colors 1.0
 
 Dock {

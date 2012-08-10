@@ -86,8 +86,8 @@ public:
      * @return the class as an XML element.
      */
     virtual QDomElement toXmlElement(const QString &tagName, QDomDocument *document) const;
-//    void loadSettings();
     /**
+     * @internal
      * @brief Compute a rectangle that is available in the grid
      *
      * This method computes a rectangle that is fit to the provided
@@ -103,10 +103,12 @@ public:
      */
     QRect availableRect(Widgets::GridManager *gridManager, int width, int height) const;
     /**
+     * @internal
      * @short Page index
      */
     int pageIndex;
     /**
+     * @internal
      * @short Data
      */
     QList<WidgetProperties *> data;
@@ -114,11 +116,13 @@ public:
 //    QMap<QString, WidgetProperties *> widgetsByIdentifier;
 //    QStringList identifiers;
     /**
+     * @internal
      * @short Provider
      */
     WidgetProviderBase *provider;
 private:
     /**
+     * @internal
      * @short Q-pointer
      */
     WidgetsPageModel * const q_ptr;
@@ -154,10 +158,6 @@ bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
         return false;
     }
 
-    if (!provider) {
-        return false;
-    }
-
     WidgetPropertiesComponentBuilder *builder = new WidgetPropertiesComponentBuilder();
     BuildManager<WidgetProperties *> *buildManager = new BuildManager<WidgetProperties *>();
     buildManager->setBuilder(builder);
@@ -168,11 +168,12 @@ bool WidgetsPageModelPrivate::fromXmlElement(const QDomElement &element)
         builder->setProperties(widgetElement, q);
         WidgetBaseProperties *base = provider->widget(builder->fileName(),
                                                       builder->disambiguation());
-        builder->setWidgetBaseProperties(base);
-        buildManager->build();
-
-        q->addWidget(buildManager->element());
-        base->deleteLater();
+        if (base) {
+            builder->setWidgetBaseProperties(base);
+            buildManager->build();
+            q->addWidget(buildManager->element());
+            base->deleteLater();
+        }
 
         widgetElement = widgetElement.nextSiblingElement(WIDGET_ELEMENT);
     }
@@ -286,6 +287,13 @@ WidgetsPageModel::~WidgetsPageModel()
 {
 }
 
+void WidgetsPageModel::setProvider(WidgetProviderBase *provider)
+{
+    Q_D(WidgetsPageModel);
+    d->provider = provider;
+    load();
+}
+
 int WidgetsPageModel::pageIndex() const
 {
     Q_D(const WidgetsPageModel);
@@ -338,6 +346,10 @@ void WidgetsPageModel::load()
 {
     Q_D(WidgetsPageModel);
     if (!d->provider) {
+        return;
+    }
+
+    if (!d->provider->isAvailable()) {
         return;
     }
 
@@ -428,16 +440,6 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
     d->requestSave();
 
     return true;
-}
-
-void WidgetsPageModel::setProvider(WidgetProviderBase *provider)
-{
-    Q_D(WidgetsPageModel);
-    d->provider = provider;
-
-    if (d->provider) {
-        load();
-    }
 }
 
 //void WidgetsPageModel::relayout(GridManager *gridManager)

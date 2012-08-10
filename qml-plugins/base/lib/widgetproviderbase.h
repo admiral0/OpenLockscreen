@@ -30,6 +30,7 @@
 namespace Widgets
 {
 
+class WidgetProviderBasePrivate;
 /**
  * @brief Base for widget providers
  *
@@ -45,13 +46,17 @@ namespace Widgets
  * - widgetFile()
  * - widgetSettingsFile()
  * - widget()
+ * - widgetName()
+ * - widgetDescription()
  *
  * The first method is used to list the available
  * widgets, the second and third are used to provide
  * an absolute file path to either the widget file,
  * or the file for the configuration component associated
- * to the widget. The last method is used to query the
- * properties of a widget.
+ * to the widget. The fourth method is used to query the
+ * properties of a widget. The last two methods are used
+ * to provide human readable names and descriptions of the
+ * widget.
  *
  * All these methods use a disambiguation parameter, that
  * can be used to provide a hiearchy, that can represent,
@@ -60,8 +65,10 @@ namespace Widgets
  * be queried by passing the folder to the disambiguation
  * parameter.
  *
- * The use of disambiguation parameter is up to the
- * implementor.
+ * The disambiguation parameters are returned through the
+ * disambiguationList() parameter. While reimplementing
+ * this parameter, please make sure to at least return
+ * a single element in this list.
  *
  * A provider might need some time to be loaded and available.
  * The available property is used to check the avalibility
@@ -70,9 +77,19 @@ namespace Widgets
  * be available. It is up to the implementor to take care
  * of this information.
  *
+ * A provider might also need to notify that it have new
+ * information. The only way to do this is to set the provider
+ * as unavailable first, before setting it available. Synchronous
+ * providers can do this by simply setting the availabiliy to false
+ * and then to true.
+ *
  * Remark: this class is fully implemented due to the need
  * of an implemented class for QML metatype system. But this
  * provider do not provide anything. It should not be used.
+ *
+ * Remark: by default, the availibility is set to false. For
+ * synchronous classes, you might need to set the availability to
+ * true in the constructor.
  */
 class WidgetProviderBase : public QObject
 {
@@ -81,7 +98,7 @@ public:
     /**
      * @short If the provider is available
      */
-    Q_PROPERTY(bool available READ available NOTIFY availableChanged)
+    Q_PROPERTY(bool available READ isAvailable NOTIFY availableChanged)
 public:
     /**
      * @brief Default constructor
@@ -89,10 +106,29 @@ public:
      */
     explicit WidgetProviderBase(QObject *parent = 0);
     /**
+     * @brief Destructor
+     */
+    virtual ~WidgetProviderBase();
+    /**
      * @brief If the provider is available
      * @return if the provider is available.
      */
-    virtual bool available() const;
+    bool isAvailable() const;
+    /**
+     * @brief List of disambiguation parameters
+     *
+     * This method lists all the disambiguation parameters.
+     * Disambiguations are optionnal parameters but can be
+     * used to group some widgets together. By default, this
+     * list returns a single element, that is an empty variant
+     * hash.
+     *
+     * While reimplementing this method, you should make sure to
+     * return at least the empty hash.
+     *
+     * @return a list of disambiguation parameters.
+     */
+    virtual QList<QVariantHash> disambiguationList() const;
     /**
      * @short Registered widgets
      *
@@ -148,12 +184,56 @@ public:
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
                                const QVariantHash &disambiguation = QVariantHash());
+    /**
+     * @short Name of the widget
+     *
+     * This method is used to provide a human-readable name
+     * of the widget. By default, it returns the filename.
+     *
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return name of the widget.
+     */
+    Q_INVOKABLE virtual QString
+                widgetName(const QString &fileName,
+                           const QVariantHash &disambiguation = QVariantHash()) const;
+    /**
+     * @short Description
+     *
+     * This method is used to provide a human-readable of the
+     * description of the widget. By default, it returns noting.
+     *
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return description of the widget.
+     */
+    Q_INVOKABLE virtual QString
+                widgetDescription(const QString &fileName,
+                                  const QVariantHash &disambiguation = QVariantHash()) const;
 
 Q_SIGNALS:
     /**
      * @brief Available changed
      */
-    void availableChanged();
+    void availableChanged(bool available);
+protected:
+    /**
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
+     * @param parent parent object.
+     */
+    WidgetProviderBase(WidgetProviderBasePrivate *dd, QObject *parent = 0);
+    /**
+     * @brief Set availability
+     * @param available if the provider is available.
+     */
+    void setAvailable(bool available);
+    /**
+     * @brief D-pointer
+     */
+    QScopedPointer<WidgetProviderBasePrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(WidgetProviderBase)
 };
 
 }

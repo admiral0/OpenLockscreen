@@ -38,7 +38,7 @@ class WidgetBasePropertiesPrivate;
  * properties includes their inherent
  * properties that should be constant.
  *
- * These properties are all related th the expected
+ * These properties are all related to the expected
  * size of the widget:
  * - minimumWidth()
  * - minimumHeight()
@@ -73,9 +73,9 @@ public:
     /**
      * @brief Default constructor
      *
-     * @param fileName filename of the component.
-     * @param disambiguation disambiguation parameter of the component.
-     * @param settingsFileName filename of the settings component.
+     * @param fileName filename of the widget.
+     * @param disambiguation disambiguation parameter of the widget.
+     * @param settingsFileName filename of the settings widget.
      * @param minimumWidth minimum width.
      * @param minimumHeight minimum height.
      * @param maximumWidth maximum width.
@@ -107,6 +107,19 @@ public:
      * @return maximum height.
      */
     int maximumHeight() const;
+    /**
+     * @brief Get information from QML file
+     *
+     * This methiod is a conveinent method that
+     * extracts informations about the widget and
+     * creates a widget base properties from a QML file.
+     *
+     * @param qmlFile path to the QML file.
+     * @param disambiguation disambituation parameter.
+     * @param settingsFileName settings component file name.
+     * @param parent parent object.
+     * @return the widget base properties.
+     */
     static WidgetBaseProperties * fromQmlFile(const QString &qmlFile,
                                               const QVariantHash &disambiguation,
                                               const QString &settingsFileName,

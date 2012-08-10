@@ -17,7 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.extra 1.0
+import org.SfietKonstantin.widgets.extra.dock 1.0
 import "UiConstants.js" as Ui
 
 AbstractPage {
@@ -41,7 +41,8 @@ AbstractPage {
 
 
         delegate: ClickableEntry {
-            text: model.dock.name
+            text: ProviderManagerInstance.provider.dockName(model.dock.fileName,
+                                                            model.dock.disambiguation)
             indicatorIcon: ""
             onPressAndHold: {
                 listView.selectedDock = model.dock
@@ -57,7 +58,7 @@ AbstractPage {
             id: view
             anchors.fill: parent
             model: DockInformationModel {
-                packageManager: PackageManagerInstance
+                providerManager: ProviderManagerInstance
             }
             clip: true
             delegate: ClickableEntry {
@@ -65,7 +66,14 @@ AbstractPage {
                 subText: model.description
                 indicatorIcon: ""
                 onClicked: {
-                    var dock = PackageManagerInstance.dock(model.package, model.file)
+                    if (DockModelInstance.hasDock(model.file, model.disambiguation)) {
+                        dockPresent.open()
+                        addDockSheet.reject()
+                        return
+                    }
+
+                    var dock = ProviderManagerInstance.provider.dock(model.file,
+                                                                     model.disambiguation)
                     DockModelInstance.addDock(dock)
                     addDockSheet.accept()
                 }
@@ -81,5 +89,13 @@ AbstractPage {
                 onClicked: DockModelInstance.removeDock(listView.selectedDock)
             }
         }
+    }
+
+    QueryDialog {
+        id: dockPresent
+        titleText: qsTr("The dock is already present")
+        message: qsTr("The dock you are trying to add is already present. Only one dock of\
+each type can be added.")
+        acceptButtonText: qsTr("Close")
     }
 }

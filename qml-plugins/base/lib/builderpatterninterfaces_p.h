@@ -20,7 +20,7 @@
 /**
  * @internal
  * @file builderpatterninterfaces_p.h
- * @short Definition of builder pattern interfaces.
+ * @short Definition of builder pattern interfaces
  */
 
 // Warning

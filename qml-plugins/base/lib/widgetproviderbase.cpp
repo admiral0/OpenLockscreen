@@ -20,18 +20,43 @@
  */
 
 #include "widgetproviderbase.h"
+#include "widgetproviderbase_p.h"
 
 namespace Widgets
 {
 
+WidgetProviderBasePrivate::WidgetProviderBasePrivate()
+{
+    available = false;
+}
+
+////// End of private class //////
+
 WidgetProviderBase::WidgetProviderBase(QObject *parent) :
-    QObject(parent)
+    QObject(parent), d_ptr(new WidgetProviderBasePrivate())
 {
 }
 
-bool WidgetProviderBase::available() const
+WidgetProviderBase::WidgetProviderBase(WidgetProviderBasePrivate *dd, QObject *parent):
+    QObject(parent), d_ptr(dd)
 {
-    return false;
+}
+
+WidgetProviderBase::~WidgetProviderBase()
+{
+}
+
+bool WidgetProviderBase::isAvailable() const
+{
+    Q_D(const WidgetProviderBase);
+    return d->available;
+}
+
+QList<QVariantHash> WidgetProviderBase::disambiguationList() const
+{
+    QList<QVariantHash> values;
+    values.append(QVariantHash());
+    return values;
 }
 
 QStringList WidgetProviderBase::registeredWidgets(const QVariantHash &disambiguation) const
@@ -62,6 +87,30 @@ WidgetBaseProperties * WidgetProviderBase::widget(const QString &fileName,
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
     return 0;
+}
+
+QString WidgetProviderBase::widgetName(const QString &fileName,
+                                       const QVariantHash &disambiguation) const
+{
+    Q_UNUSED(disambiguation)
+    return fileName;
+}
+
+QString WidgetProviderBase::widgetDescription(const QString &fileName,
+                                              const QVariantHash &disambiguation) const
+{
+    Q_UNUSED(fileName)
+    Q_UNUSED(disambiguation)
+    return QString();
+}
+
+void WidgetProviderBase::setAvailable(bool available)
+{
+    Q_D(WidgetProviderBase);
+    if (d->available != available) {
+        d->available = available;
+        emit availableChanged(d->available);
+    }
 }
 
 }

@@ -1,13 +1,12 @@
+include(../globals.pri)
+
 TEMPLATE = subdirs
 
-SUBDIRS += base provider
+SUBDIRS += base
 contains(CONFIG, plugincolors): SUBDIRS += colors
 #contains(CONFIG, pluginbackground): SUBDIRS += background
 contains(CONFIG, plugindocks): SUBDIRS += docks
-#contains(CONFIG, pluginextra): SUBDIRS += drag
-#contains(CONFIG, plugindrag): SUBDIRS += extra
+contains(CONFIG, pluginextra): SUBDIRS += extra
+contains(CONFIG, plugindrag): SUBDIRS += drag
 
-contains(CONFIG, mobile)|contains(CONFIG, desktop) {
-#    SUBDIRS += colors background docks extra drag
-#    SUBDIRS += colors background docks
-}
+SUBDIRS += provider

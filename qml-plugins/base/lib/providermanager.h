@@ -37,20 +37,46 @@ class ProviderManagerPrivate;
  * The provider manager is used manage widget providers.
  * It simply provide a property that can be accessed through QML,
  * though providing a way to set a custom provider from QML.
+ *
+ * This provider manager is created without any provider. The status
+ * of the provider should be queried through the providerStatus()
+ * proerty. It is set as ProviderManager::ProviderInvalid if no provider
+ * has been set. It is set as ProviderManager::ProviderUnavailable when
+ * the provider is set, but still unavailable. If the provider is finally
+ * available, the status is ProviderManager::ProviderAvailable.
  */
 class ProviderManager: public QObject
 {
     Q_OBJECT
+    Q_ENUMS(ProviderStatus)
     /**
-     * @short Provider available
+     * @short Provider status
      */
-    Q_PROPERTY(bool providerAvailable READ isProviderAvailable NOTIFY providerAvailableChanged)
+    Q_PROPERTY(ProviderStatus providerStatus READ providerStatus NOTIFY providerStatusChanged)
     /**
      * @short Provider
      */
     Q_PROPERTY(Widgets::WidgetProviderBase *provider READ provider WRITE setProvider
                NOTIFY providerChanged)
 public:
+    /**
+     * @brief Describe provider status
+     */
+    enum ProviderStatus {
+        /**
+         * @short The provider is invalid
+         */
+        ProviderInvalid,
+        /**
+         * @short The provider is unavailable
+         */
+        ProviderUnavailable,
+        /**
+         * @short The provider is available
+         */
+        ProviderAvailable
+    };
+
     /**
      * @brief Default constructor
      * @param parent parent object.
@@ -61,10 +87,10 @@ public:
      */
     virtual ~ProviderManager();
     /**
-     * @brief If the provider is available
-     * @return if the provider is available.
+     * @brief Provider status
+     * @return provider status.
      */
-    bool isProviderAvailable() const;
+    ProviderStatus providerStatus() const;
     /**
      * @brief Provider
      * @return provider.
@@ -72,9 +98,9 @@ public:
     WidgetProviderBase * provider() const;
 Q_SIGNALS:
     /**
-     * @brief Provider availability changed
+     * @brief Provider status changed
      */
-    void providerAvailableChanged();
+    void providerStatusChanged();
     /**
      * @brief Provider changed
      */
@@ -92,7 +118,7 @@ protected:
     QScopedArrayPointer<ProviderManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(ProviderManager)
-    Q_PRIVATE_SLOT(d_func(), void slotAvailable())
+    Q_PRIVATE_SLOT(d_func(), void slotAvailable(bool available))
 };
 
 }

@@ -40,7 +40,7 @@ namespace Widgets
 
 /**
  * @internal
- * @brief Private class for Widgets::WidgetPropertiesPrivate
+ * @brief Private class for Widgets::WidgetProperties
  */
 class WidgetPropertiesPrivate: public WidgetBasePropertiesPrivate
 {
@@ -58,27 +58,30 @@ public:
      */
     void copyFromBase(WidgetBaseProperties *base);
     /**
+     * @internal
      * @brief Identifier
      */
     QString identifier;
     /**
+     * @internal
      * @brief Settings
      */
     QVariantHash settings;
     /**
+     * @internal
      * @brief Geometry
      */
     QRect geometry;
     /**
+     * @internal
      * @brief Z
      */
     int z;
     /**
+     * @internal
      * @brief Visibility
      */
     bool visible;
-
-
 private:
     Q_DECLARE_PUBLIC(WidgetBaseProperties)
 };
@@ -188,6 +191,7 @@ private:
      */
     WidgetBaseProperties *m_widgetBaseProperties;
 };
+
 /**
  * @internal
  * @brief Component builder for Widgets::WidgetProperties
@@ -199,9 +203,8 @@ private:
  * - call to setProperties() to get the XML element and parent object.
  * - call to setWidgetBaseProperties() to get the widget base properties.
  * - call to buildElement() to build the component.
- *
  */
-class WidgetPropertiesComponentBuilder: public AbstractBuilder<WidgetProperties *>//,
+class WidgetPropertiesComponentBuilder: public AbstractBuilder<WidgetProperties *>
 {
 public:
     /**
@@ -223,11 +226,13 @@ public:
      */
     virtual void setProperties(const QDomElement &xmlElement, QObject *parent = 0);
     /**
+     * @internal
      * @brief filename
      * @return filename.
      */
     QString fileName() const;
     /**
+     * @internal
      * @brief Disambiguation
      * @return disambiguation.
      */
@@ -245,6 +250,7 @@ public:
     virtual void buildElement();
 private:
     /**
+     * @internal
      * @brief Helper class
      */
     WidgetPropertiesComponentBuilderHelper *m_helper;
@@ -255,7 +261,7 @@ private:
  * @brief XML builder for Widgets::WidgetProperties
  *
  * This class is used to get an XML component from
- * a Widgets::WidgetProperties
+ * a Widgets::WidgetProperties.
  */
 class WidgetPropertiesXmlBuilder: public GraphicalComponentBaseXmlBuilder
 {
