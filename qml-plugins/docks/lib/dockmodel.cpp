@@ -227,22 +227,15 @@ DockModel::~DockModel()
 {
 }
 
-void DockModel::setContext(QDeclarativeContext *context)
+void DockModel::setProviderManager(ProviderManager *providerManager)
 {
     Q_D(DockModel);
+    if (d->providerManager != providerManager) {
+        d->providerManager = providerManager;
 
-    QVariant providerManagerVariant = context->contextProperty("ProviderManagerInstance");
-    QObject *providerManagerObject = providerManagerVariant.value<QObject *>();
-
-    ProviderManager *providerManager = qobject_cast<ProviderManager *>(providerManagerObject);
-    if (providerManager == 0) {
-        return;
+        connect(d->providerManager, SIGNAL(providerStatusChanged()), this, SLOT(refreshProvider()));
+        d->refreshProvider();
     }
-
-    d->providerManager = providerManager;
-    connect(d->providerManager, SIGNAL(providerStatusChanged()), this, SLOT(refreshProvider()));
-
-    d->refreshProvider();
 }
 
 int DockModel::rowCount(const QModelIndex &parent) const

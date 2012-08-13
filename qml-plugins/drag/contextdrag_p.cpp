@@ -15,11 +15,13 @@
  ****************************************************************************************/
 
 /**
- * @file dragparameters.cpp
- * @short Implementation of Widgets::Drag::DragParameters
+ * @internal
+ * @file contextdrag_p.cpp
+ * @short Implementation of Widgets::Drag::ContextDragPrivate
  */
 
-#include "dragparameters.h"
+#include "contextdrag_p.h"
+#include <QtDeclarative/QDeclarativeContext>
 
 namespace Widgets
 {
@@ -27,64 +29,20 @@ namespace Widgets
 namespace Drag
 {
 
-/**
- * @internal
- * @brief Private class for Widgets::Drag::DragParameters
- */
-class DragParametersPrivate
+DragManager * ContextDragPrivate::dragManager(QDeclarativeContext *context, QObject *parent)
 {
-public:
-    /**
-     * @internal
-     * @brief Remove button source
-     */
-    QString removeButtonSource;
-    /**
-     * @internal
-     * @brief Edit button source
-     */
-    QString editButtonSource;
-};
+    QVariant dragManagerVariant = context->property("DragManagerInstance");
+    QObject *dragManagerObject = dragManagerVariant.value<QObject *>();
+    DragManager *dragManager = qobject_cast<DragManager *>(dragManagerObject);
 
-////// End of private class //////
-
-DragParameters::DragParameters(QObject *parent) :
-    QObject(parent), d_ptr(new DragParametersPrivate())
-{
-}
-
-DragParameters::~DragParameters()
-{
-}
-
-QString DragParameters::removeButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->removeButtonSource;
-}
-
-QString DragParameters::editButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->editButtonSource;
-}
-
-void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->removeButtonSource != removeButtonSource) {
-        d->removeButtonSource = removeButtonSource;
-        emit removeButtonSourceChanged();
+    if (dragManager) {
+        return dragManager;
     }
-}
 
-void DragParameters::setEditButtonSource(const QString &editButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->editButtonSource != editButtonSource) {
-        d->editButtonSource = editButtonSource;
-        emit editButtonSourceChanged();
-    }
+    dragManager = new DragManager(parent);
+    dragManager->setWidgetsPageListModel(widgetsPageListModel(context, parent));
+    context->setContextProperty("DragManagerInstance", dragManager);
+    return dragManager;
 }
 
 }

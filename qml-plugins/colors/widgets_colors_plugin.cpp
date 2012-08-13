@@ -36,15 +36,14 @@ void WidgetsColorsPlugin::initializeEngine(QDeclarativeEngine *engine, const cha
     Q_UNUSED(uri)
 
     // @uri org.SfietKonstantin.widgets.colors
-    engine->rootContext()->setContextProperty("Colors",
-                                              new Widgets::Colors::OxygenColors(this));
+    engine->rootContext()->setContextProperty("Colors", new OxygenColors(this));
 }
 
 void WidgetsColorsPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.colors
     QString reason = "Only one instance of Colors is allowed.";
-    qmlRegisterUncreatableType<Widgets::Colors::OxygenColors>(uri, 1, 0, "OxygenColors", reason);
+    qmlRegisterUncreatableType<OxygenColors>(uri, 1, 0, "OxygenColors", reason);
 }
 
 }

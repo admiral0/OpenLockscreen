@@ -24,6 +24,7 @@
 #include <QtDeclarative/QtDeclarative>
 #include <QtDeclarative/QDeclarativeEngine>
 
+#include "contextbase_p.h"
 #include "widgetbaseproperties.h"
 #include "widgetproperties.h"
 #include "gridmanager.h"
@@ -31,7 +32,6 @@
 #include "settingsentry.h"
 #include "widgetspagelistmodel.h"
 #include "providermanager.h"
-
 #include "widgetproviderbase.h"
 
 namespace Widgets
@@ -41,33 +41,25 @@ void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri
 {
     Q_UNUSED(uri);
 
-    Widgets::ProviderManager *providerManager = new Widgets::ProviderManager(this);
-    engine->rootContext()->setContextProperty("ProviderManagerInstance", providerManager);
-
-    Widgets::WidgetsPageListModel *widgetsPageListModel = new Widgets::WidgetsPageListModel(this);
-    widgetsPageListModel->setProviderManager(providerManager);
-    engine->rootContext()->setContextProperty("WidgetsPageListModelInstance", widgetsPageListModel);
-
-
+    ContextBasePrivate::providerManager(engine->rootContext(), this);
+    ContextBasePrivate::widgetsPageListModel(engine->rootContext(), this);
 }
 
 void WidgetsPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets
-    qmlRegisterType<Widgets::Settings>(uri, 1, 0, "Settings");
-    qmlRegisterType<Widgets::SettingsEntry>(uri, 1, 0, "SettingsEntry");
-    qmlRegisterType<Widgets::GridManager>(uri, 1, 0, "GridManager");
+    qmlRegisterType<Settings>(uri, 1, 0, "Settings");
+    qmlRegisterType<SettingsEntry>(uri, 1, 0, "SettingsEntry");
+    qmlRegisterType<GridManager>(uri, 1, 0, "GridManager");
     QString reason = "Only one instance of ProviderManager is allowed";
-    qmlRegisterUncreatableType<Widgets::ProviderManager>(uri, 1, 0, "ProviderManager", reason);
-    qmlRegisterType<Widgets::WidgetBaseProperties>(uri, 1, 0, "WidgetBaseProperties");
-    qmlRegisterType<Widgets::WidgetProperties>(uri, 1, 0, "WidgetProperties");
+    qmlRegisterUncreatableType<ProviderManager>(uri, 1, 0, "ProviderManager", reason);
+    qmlRegisterType<WidgetBaseProperties>(uri, 1, 0, "WidgetBaseProperties");
+    qmlRegisterType<WidgetProperties>(uri, 1, 0, "WidgetProperties");
     reason = "Only one instance of WidgetsPageListModel is allowed";
-    qmlRegisterUncreatableType<Widgets::WidgetsPageListModel>(uri, 1, 0,
-                                                              "WidgetsPageListModel", reason);
-    qmlRegisterType<Widgets::WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
+    qmlRegisterUncreatableType<WidgetsPageListModel>(uri, 1, 0, "WidgetsPageListModel", reason);
+    qmlRegisterType<WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
     reason = "This provider is invalid";
-    qmlRegisterUncreatableType<Widgets::WidgetProviderBase>(uri, 1, 0, "WidgetProviderBase",
-                                                            reason);
+    qmlRegisterUncreatableType<WidgetProviderBase>(uri, 1, 0, "WidgetProviderBase", reason);
 }
 
 }

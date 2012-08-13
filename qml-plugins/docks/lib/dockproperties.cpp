@@ -34,13 +34,13 @@ namespace Docks
 /**
  * @brief IDENTIFIER_ATTRIBUTE
  *
- * Used in Widgets::DockProperties.
+ * Used in Widgets::Docks::DockProperties.
  */
 static const char *IDENTIFIER_ATTRIBUTE = "identifier";
 /**
  * @brief SETTINGS_TAGNAME
  *
- * Used in Widgets::DockProperties.
+ * Used in Widgets::Docks::DockProperties.
  */
 static const char *SETTINGS_TAGNAME = "settings";
 

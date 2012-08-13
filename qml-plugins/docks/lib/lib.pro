@@ -10,7 +10,8 @@ LIBS += -L../../base/lib/ -lwidgetsbase
 
 contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 
-HEADERS +=      dockbaseproperties.h \
+HEADERS +=      contextdocks_p.h \
+                dockbaseproperties.h \
                 dockbaseproperties_p.h \
                 dockproperties.h \
                 dockproperties_p.h \
@@ -18,7 +19,8 @@ HEADERS +=      dockbaseproperties.h \
                 dockedviewmanager.h \
                 mixedproviderbase.h \
 
-SOURCES +=      dockbaseproperties.cpp \
+SOURCES +=      contextdocks_p.cpp \
+                dockbaseproperties.cpp \
                 dockproperties.cpp \
                 dockmodel.cpp \
                 dockedviewmanager.cpp \

@@ -32,7 +32,11 @@
  * and that do not need C++ code to work.
  *
  * libwidgets have many features, and many plugins that can
- * be used.
+ * be used. Here is a small list of the features
+ * - Displaying widgets in pages
+ * - Alignment in a grid
+ * - Docks to display tools
+ * - Moving widgets
  *
  * Getting started
  * - \subpage tutorials
@@ -62,6 +66,8 @@
  *
  * - \subpage pluginBase
  * - \subpage pluginDocks
+ * - \subpage pluginDrag
+ * - \subpage pluginExtra
  * - \subpage providers
  *   - \ref pluginProviderBasic
  *   - \ref pluginProviderPackageManager

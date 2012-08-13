@@ -66,12 +66,7 @@ class WidgetsPageListModelPrivate;
  * on a given page.
  *
  * This class needs a Widgets::Settings object to be provided
- * since the models needs to save settings. It also
- * uses a Widgets::GridManager to interact with the grid.
- * @todo check if the grid manager is really useful.
- *
- * This class is used in QML context. Accessing
- * it is done using the "WidgetsPageListModelInstance" global object.
+ * since the models needs to save settings.
  */
 class WidgetsPageListModel : public QAbstractListModel
 {

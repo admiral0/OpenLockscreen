@@ -14,6 +14,12 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file draggermanager.cpp
+ * @short Implementation of Widgets::Drag::DraggerManager
+ */
+
+
 #include "draggermanager.h"
 
 #include <QtCore/QDebug>
@@ -28,11 +34,30 @@ namespace Widgets
 namespace Drag
 {
 
+/**
+ * @internal
+ * @short Private class for Widgets::Drag::DraggerManager
+ */
 class DraggerManagerPrivate
 {
 public:
+    /**
+     * @internal
+     * @short Destructor
+     */
     ~DraggerManagerPrivate();
+    /**
+     * @internal
+     * @brief Clear
+     *
+     * This method clears the draggers container, and
+     * delete them.
+     */
     void clear();
+    /**
+     * @internal
+     * @brief Data
+     */
     QHash<WidgetProperties *, QDeclarativeItem *> draggers;
 };
 
@@ -69,17 +94,6 @@ bool DraggerManager::draggerExists(WidgetProperties *widgetProperties)
     return (d->draggers.contains(widgetProperties));
 }
 
-void DraggerManager::disableDraggers()
-{
-    Q_D(DraggerManager);
-    QHashIterator<WidgetProperties *, QDeclarativeItem *> iterator =
-            QHashIterator<WidgetProperties *, QDeclarativeItem *>(d->draggers);
-    while (iterator.hasNext()) {
-        iterator.next();
-        iterator.value()->setVisible(false);
-    }
-}
-
 void DraggerManager::registerDragger(WidgetProperties *widgetProperties, QDeclarativeItem *dragger)
 {
     Q_D(DraggerManager);
@@ -105,6 +119,17 @@ void DraggerManager::unregisterDraggers()
 {
     Q_D(DraggerManager);
     d->clear();
+}
+
+void DraggerManager::disableDraggers()
+{
+    Q_D(DraggerManager);
+    QHashIterator<WidgetProperties *, QDeclarativeItem *> iterator =
+            QHashIterator<WidgetProperties *, QDeclarativeItem *>(d->draggers);
+    while (iterator.hasNext()) {
+        iterator.next();
+        iterator.value()->setVisible(false);
+    }
 }
 
 }

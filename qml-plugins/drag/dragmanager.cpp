@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file dragmanager.cpp
+ * @short Implementation of Widgets::Drag::DragManager
+ */
+
 #include "dragmanager.h"
 #include "widgetspagelistmodel.h"
 
@@ -27,20 +32,72 @@ namespace Widgets
 namespace Drag
 {
 
+/**
+ * @internal
+ * @brief Private class for Widgets::Drag::DragManager
+ */
 class DragManagerPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer
+     */
     DragManagerPrivate(DragManager *q);
+    /**
+     * @internal
+     * @brief Establish connection to a widget page
+     *
+     * This method is used to establish a connection
+     * between a widget page and this object to
+     * react from a change in the count of widgets.
+     * While a new widget is added, this class will
+     * create a dragger for it.
+     */
     void establishPageConnection();
+    /**
+     * @internal
+     * @brief Create draggers
+     *
+     * This method is used to request the creation
+     * of draggers.
+     */
     void createDraggers();
-    void slotCurrentPageChanged(int page);
+    /**
+     * @internal
+     * @brief busy
+     */
     bool busy;
+    /**
+     * @internal
+     * @brief locked
+     */
     bool locked;
-    QDeclarativeContext *context;
+    /**
+     * @internal
+     * @brief Model for the widgets page list
+     */
     WidgetsPageListModel *widgetsPageListModel;
+    /**
+     * @internal
+     * @brief Grid manager
+     */
     GridManager *gridManager;
+    /**
+     * @internal
+     * @brief Previous position
+     *
+     * This position is used when a widget is dragged,
+     * to track the previous position of the widget on
+     * the grid, and to emit the DragManager::widgetDragged()
+     * signal only when needed.
+     */
     QRect previousPosition;
 private:
+    /**
+     * @brief Q-pointer
+     */
     DragManager * const q_ptr;
     Q_DECLARE_PUBLIC(DragManager)
 };
@@ -50,7 +107,6 @@ DragManagerPrivate::DragManagerPrivate(DragManager *q):
 {
     busy = false;
     locked = true;
-    context = 0;
     widgetsPageListModel = 0;
     gridManager = 0;
 }
@@ -62,7 +118,7 @@ void DragManagerPrivate::establishPageConnection()
     QVariant pageModelVariant = widgetsPageListModel->data(widgetsPageListModel->index(index),
                                                            WidgetsPageListModel::PageModelRole);
     WidgetsPageModel *pageModel = pageModelVariant.value<WidgetsPageModel *>();
-    q->connect(pageModel, SIGNAL(countChanged(int)), q, SLOT(createDraggers()));
+    q->connect(pageModel, SIGNAL(countChanged()), q, SLOT(createDraggers()));
 
 }
 
@@ -100,11 +156,16 @@ DragManager::~DragManager()
 {
 }
 
-void DragManager::setContext(QDeclarativeContext *context)
+void DragManager::setWidgetsPageListModel(WidgetsPageListModel *widgetsPageListModel)
 {
     Q_D(DragManager);
-    d->context = context;
-    load();
+    if (d->widgetsPageListModel == 0) {
+        d->widgetsPageListModel = widgetsPageListModel;
+
+        // Connections
+        connect(d->widgetsPageListModel, SIGNAL(countChanged()),
+                this, SLOT(establishPageConnection()));
+    }
 }
 
 bool DragManager::busy() const
@@ -123,32 +184,6 @@ GridManager * DragManager::gridManager() const
 {
     Q_D(const DragManager);
     return d->gridManager;
-}
-
-void DragManager::load()
-{
-    Q_D(DragManager);
-    if (d->context == 0) {
-        return;
-    }
-
-    if (d->widgetsPageListModel == 0) {
-
-        QVariant pageListModelVariant = d->context->contextProperty("WidgetsPageListModelInstance");
-        QObject *pageListModelObject
-                = qobject_cast<QObject *>(pageListModelVariant.value<QObject *>());
-        WidgetsPageListModel *pageListModel
-                = qobject_cast<WidgetsPageListModel *>(pageListModelObject);
-
-        if (pageListModel == 0) {
-            return;
-        }
-
-        d->widgetsPageListModel = pageListModel;
-        // Connections
-        connect(d->widgetsPageListModel, SIGNAL(countChanged(int)),
-                this, SLOT(establishPageConnection()));
-    }
 }
 
 void DragManager::setBusy(bool busy)

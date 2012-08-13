@@ -9,6 +9,7 @@ QT = core gui xml
 contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 
 HEADERS +=      widgets_global.h \
+                contextbase_p.h \
                 builderpatterninterfaces_p.h \
                 tools.h \
                 version.h \
@@ -29,7 +30,8 @@ HEADERS +=      widgets_global.h \
                 widgetspagemodel.h \
                 widgetspagelistmodel.h \
 
-SOURCES +=      tools.cpp \
+SOURCES +=      contextbase_p.cpp \
+                tools.cpp \
                 version.cpp \
                 identifiedelementinterface.cpp \
                 widgetproviderbase.cpp \

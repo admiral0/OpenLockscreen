@@ -29,7 +29,7 @@ namespace Extra
 void WidgetsExtraDockPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.extra
-    qmlRegisterType<Widgets::Extra::DockInformationModel>(uri, 1, 0, "DockInformationModel");
+    qmlRegisterType<DockInformationModel>(uri, 1, 0, "DockInformationModel");
 }
 
 }

@@ -14,79 +14,64 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_DOCKS_CONTEXTDOCKS_P_H
+#define WIDGETS_DOCKS_CONTEXTDOCKS_P_H
+
 /**
- * @file dragparameters.cpp
- * @short Implementation of Widgets::Drag::DragParameters
+ * @internal
+ * @file contextdocks_p.h
+ * @short Definition of Widgets::Docks::ContextDocksPrivate
  */
 
-#include "dragparameters.h"
+#include "contextbase_p.h"
+#include "dockmodel.h"
+#include "dockedviewmanager.h"
 
 namespace Widgets
 {
 
-namespace Drag
+namespace Docks
 {
 
 /**
  * @internal
- * @brief Private class for Widgets::Drag::DragParameters
+ * @brief Manage context for docks plugin
+ *
+ * This class extends Widgets::ContextBasePrivate and
+ * provide unique instance of global objects for the
+ * docks plugin.
  */
-class DragParametersPrivate
+class ContextDocksPrivate: public ContextBasePrivate
 {
 public:
     /**
-     * @internal
-     * @brief Remove button source
+     * @brief Dock model
+     *
+     * Returns the dock model registered in the provided QML
+     * context. Creates it using the provided parent if no
+     * dock model was registered in the context.
+     *
+     * @param context QML context
+     * @param parent parent object.
+     * @return the dock model.
      */
-    QString removeButtonSource;
+    static DockModel * dockModel(QDeclarativeContext *context, QObject *parent = 0);
     /**
-     * @internal
-     * @brief Edit button source
+     * @brief Docked view manager
+     *
+     * Returns the docked view manager registered in the provided QML
+     * context. Creates it using the provided parent if no
+     * docked view manager was registered in the context.
+     *
+     * @param context QML context
+     * @param parent parent object.
+     * @return the dock model.
      */
-    QString editButtonSource;
+    static DockedViewManager * dockedViewManager(QDeclarativeContext *context, QObject *parent = 0);
 };
 
-////// End of private class //////
-
-DragParameters::DragParameters(QObject *parent) :
-    QObject(parent), d_ptr(new DragParametersPrivate())
-{
-}
-
-DragParameters::~DragParameters()
-{
-}
-
-QString DragParameters::removeButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->removeButtonSource;
-}
-
-QString DragParameters::editButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->editButtonSource;
-}
-
-void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->removeButtonSource != removeButtonSource) {
-        d->removeButtonSource = removeButtonSource;
-        emit removeButtonSourceChanged();
-    }
-}
-
-void DragParameters::setEditButtonSource(const QString &editButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->editButtonSource != editButtonSource) {
-        d->editButtonSource = editButtonSource;
-        emit editButtonSourceChanged();
-    }
 }
 
 }
 
-}
+#endif // WIDGETS_DOCKS_CONTEXTDOCKS_P_H

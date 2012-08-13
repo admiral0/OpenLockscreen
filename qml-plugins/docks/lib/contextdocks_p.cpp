@@ -15,76 +15,54 @@
  ****************************************************************************************/
 
 /**
- * @file dragparameters.cpp
- * @short Implementation of Widgets::Drag::DragParameters
+ * @internal
+ * @file contextdocks_p.cpp
+ * @short Implementation of Widgets::Docks::ContextDocksPrivate
  */
 
-#include "dragparameters.h"
+#include "contextdocks_p.h"
+
+#include <QtDeclarative/QDeclarativeContext>
 
 namespace Widgets
 {
 
-namespace Drag
+namespace Docks
 {
 
-/**
- * @internal
- * @brief Private class for Widgets::Drag::DragParameters
- */
-class DragParametersPrivate
+DockModel * ContextDocksPrivate::dockModel(QDeclarativeContext *context, QObject *parent)
 {
-public:
-    /**
-     * @internal
-     * @brief Remove button source
-     */
-    QString removeButtonSource;
-    /**
-     * @internal
-     * @brief Edit button source
-     */
-    QString editButtonSource;
-};
+    QVariant modelVariant = context->property("DockModelInstance");
+    QObject *modelObject = modelVariant.value<QObject *>();
+    DockModel *model = qobject_cast<DockModel *>(modelObject);
 
-////// End of private class //////
-
-DragParameters::DragParameters(QObject *parent) :
-    QObject(parent), d_ptr(new DragParametersPrivate())
-{
-}
-
-DragParameters::~DragParameters()
-{
-}
-
-QString DragParameters::removeButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->removeButtonSource;
-}
-
-QString DragParameters::editButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->editButtonSource;
-}
-
-void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->removeButtonSource != removeButtonSource) {
-        d->removeButtonSource = removeButtonSource;
-        emit removeButtonSourceChanged();
+    if (model) {
+        return model;
     }
+
+
+    model = new DockModel(parent);
+    model->setProviderManager(providerManager(context, parent));
+    context->setContextProperty("DockModelInstance", model);
+
+    return model;
 }
 
-void DragParameters::setEditButtonSource(const QString &editButtonSource)
+DockedViewManager * ContextDocksPrivate::dockedViewManager(QDeclarativeContext *context,
+                                                           QObject *parent)
 {
-    Q_D(DragParameters);
-    if (d->editButtonSource != editButtonSource) {
-        d->editButtonSource = editButtonSource;
-        emit editButtonSourceChanged();
+    QVariant managerVariant = context->property("DockedViewManagerInstance");
+    QObject *managerObject = managerVariant.value<QObject *>();
+    DockedViewManager *manager = qobject_cast<DockedViewManager *>(managerObject);
+
+    if (manager) {
+        return manager;
     }
+
+    manager = new DockedViewManager(parent);
+    manager->setDockModel(dockModel(context, parent));
+    context->setContextProperty("DockedViewManagerInstance", manager);
+    return manager;
 }
 
 }

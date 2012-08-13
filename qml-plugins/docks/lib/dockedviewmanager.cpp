@@ -33,7 +33,7 @@ namespace Docks
 
 /**
  * @internal
- * @brief Private class for Widgets::DockedViewManager
+ * @brief Private class for Widgets::Docks::DockedViewManager
  */
 class DockedViewManagerPrivate
 {

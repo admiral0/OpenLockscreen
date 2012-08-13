@@ -29,7 +29,7 @@ namespace Extra
 void WidgetsExtraWidgetPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.extra
-    qmlRegisterType<Widgets::Extra::WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
+    qmlRegisterType<WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
 }
 
 }

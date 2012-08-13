@@ -43,7 +43,7 @@ namespace Docks
 
 /**
  * @internal
- * @brief Private class for Widgets::DockBaseProperties
+ * @brief Private class for Widgets::Docks::DockBaseProperties
  */
 class DockBasePropertiesPrivate: public GraphicalComponentBasePrivate
 {

@@ -14,12 +14,17 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_DRAG_CONTEXTDRAG_P_H
+#define WIDGETS_DRAG_CONTEXTDRAG_P_H
+
 /**
- * @file dragparameters.cpp
- * @short Implementation of Widgets::Drag::DragParameters
+ * @internal
+ * @file contextdrag_p.h
+ * @short Definition of Widgets::Drag::ContextDragPrivate
  */
 
-#include "dragparameters.h"
+#include "contextbase_p.h"
+#include "dragmanager.h"
 
 namespace Widgets
 {
@@ -29,64 +34,32 @@ namespace Drag
 
 /**
  * @internal
- * @brief Private class for Widgets::Drag::DragParameters
+ * @brief Manage context for drag plugin
+ *
+ * This class extends Widgets::ContextBasePrivate and
+ * provide unique instance of global objects for the
+ * drag plugin.
  */
-class DragParametersPrivate
+class ContextDragPrivate: public ContextBasePrivate
 {
 public:
     /**
      * @internal
-     * @brief Remove button source
+     * @brief Drag manager
+     *
+     * Returns the drag manager registered in the provided QML
+     * context. Creates it using the provided parent if no
+     * drag manager was registered in the context.
+     *
+     * @param context QML context
+     * @param parent parent object.
+     * @return the drag manager.
      */
-    QString removeButtonSource;
-    /**
-     * @internal
-     * @brief Edit button source
-     */
-    QString editButtonSource;
+    static DragManager * dragManager(QDeclarativeContext *context, QObject *parent = 0);
 };
 
-////// End of private class //////
-
-DragParameters::DragParameters(QObject *parent) :
-    QObject(parent), d_ptr(new DragParametersPrivate())
-{
-}
-
-DragParameters::~DragParameters()
-{
-}
-
-QString DragParameters::removeButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->removeButtonSource;
-}
-
-QString DragParameters::editButtonSource() const
-{
-    Q_D(const DragParameters);
-    return d->editButtonSource;
-}
-
-void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->removeButtonSource != removeButtonSource) {
-        d->removeButtonSource = removeButtonSource;
-        emit removeButtonSourceChanged();
-    }
-}
-
-void DragParameters::setEditButtonSource(const QString &editButtonSource)
-{
-    Q_D(DragParameters);
-    if (d->editButtonSource != editButtonSource) {
-        d->editButtonSource = editButtonSource;
-        emit editButtonSourceChanged();
-    }
 }
 
 }
 
-}
+#endif // WIDGETS_DRAG_CONTEXTDRAG_P_H

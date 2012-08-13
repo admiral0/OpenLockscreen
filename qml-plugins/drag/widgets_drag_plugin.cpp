@@ -14,20 +14,33 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file widgets_drag_plugin.cpp
+ * @short Implementation of Widgets::Drag::WidgetsDragPlugin
+ */
+
 #include "widgets_drag_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 
+#include "contextdrag_p.h"
 #include "dragmanager.h"
 #include "draggermanager.h"
 #include "dragparameters.h"
 
+namespace Widgets
+{
+
+namespace Drag
+{
+
 void WidgetsDragPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Widgets::Drag::DragManager *dragManager = new Widgets::Drag::DragManager(this);
-    dragManager->setContext(engine->rootContext());
-    engine->rootContext()->setContextProperty("DragManagerInstance", dragManager);
+    ContextDragPrivate::dragManager(engine->rootContext(), this);
+//    Widgets::Drag::DragManager *dragManager = new Widgets::Drag::DragManager(this);
+//    dragManager->setContext(engine->rootContext());
+//    engine->rootContext()->setContextProperty("DragManagerInstance", dragManager);
 
     Widgets::Drag::DragParameters *dragParameters = new Widgets::Drag::DragParameters(this);
     engine->rootContext()->setContextProperty("DragParametersInstance", dragParameters);
@@ -37,12 +50,16 @@ void WidgetsDragPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.drag
     QString reason = "Only one instance of DragManager is allowed.";
-    qmlRegisterUncreatableType<Widgets::Drag::DragManager>(uri, 1, 0, "DragManager", reason);
+    qmlRegisterUncreatableType<DragManager>(uri, 1, 0, "DragManager", reason);
 
     reason = "Only one instance of DragParameters is allowed";
-    qmlRegisterUncreatableType<Widgets::Drag::DragParameters>(uri, 1, 0, "DragParameters", reason);
-    qmlRegisterType<Widgets::Drag::DraggerManager>(uri, 1, 0, "DraggerManager");
+    qmlRegisterUncreatableType<DragParameters>(uri, 1, 0, "DragParameters", reason);
+    qmlRegisterType<DraggerManager>(uri, 1, 0, "DraggerManager");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsDragPlugin)
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Drag::WidgetsDragPlugin)
 

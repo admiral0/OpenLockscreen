@@ -29,13 +29,13 @@ class QDeclarativeContext;
 namespace Widgets
 {
 
+class ProviderManager;
 namespace Docks
 {
 
 class DockBaseProperties;
 class DockProperties;
 class DockModelPrivate;
-
 /**
  * @short Model for docks
  *
@@ -93,18 +93,16 @@ public:
      */
     virtual ~DockModel();
     /**
-     * @brief Set context
+     * @brief Set the provider manager
      *
-     * This method is only used during initialization,
-     * to search for the provider manager. This method
-     * uses the QML context to search for this manager.
+     * This method is called to set the current provider manager.
+     * It should not be called from a QML context, but be called
+     * when the plugin is loaded, to set the provider to the global
+     * provider.
      *
-     * Be sure that the manager is already initialized.
-     * This can be done by importing the base module first.
-     *
-     * @param context QML context.
+     * @param providerManager
      */
-    void setContext(QDeclarativeContext *context);
+    void setProviderManager(ProviderManager *providerManager);
     /**
      * @short Reimplementation of rowCount
      *
