@@ -17,6 +17,8 @@
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.docks 1.0
+import org.SfietKonstantin.widgets.provider.packagemanager 1.0
+
 
 
 Image {
@@ -26,6 +28,7 @@ Image {
 
     Component.onCompleted: {
         WidgetsPageListModelInstance.settings = widgetsSettings
+        ProviderManagerInstance.provider = provider
     }
 
     Settings {
@@ -42,6 +45,18 @@ Image {
                 value: 2
             }
         ]
+    }
+
+    PackageManager {
+        id: provider
+        filter: packageManagerFilters
+    }
+
+    FilterConditionList {
+        id: packageManagerFilters
+        FilterCondition {
+            tag: "mobile-harmattan"
+        }
     }
 
     DockedView {

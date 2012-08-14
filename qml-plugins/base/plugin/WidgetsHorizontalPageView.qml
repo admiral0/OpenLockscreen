@@ -20,31 +20,33 @@ import org.SfietKonstantin.widgets 1.0
 WidgetsView {
     id: container
     property Item view: view
-    property int initialX: 0
+    signal initialized()
     busy: view.moving
     clip: true
 
     content: Item {
         anchors.fill: parent
 
+        EventTimer {
+            id: timer
+            onTriggered: {
+                view.positionViewAtIndex(WidgetsPageListModelInstance.initialPage, ListView.Visible)
+                container.initialized()
+            }
+            Component.onCompleted: start()
+        }
+
         ListView {
             id: view
-            property bool moved: false
-            function recomputeInitialX() {
-                container.initialX = view.contentX -
-                                     container.width * WidgetsPageListModelInstance.initialPage
-            }
             orientation: ListView.Horizontal
             anchors.fill: parent
             spacing: container.parent.width - view.width
             snapMode: ListView.SnapOneItem
             highlightRangeMode: ListView.StrictlyEnforceRange
-            onMovingChanged: if (moving) {moved = true}
-//            onWidthChanged: if (!moving) {recomputeInitialX()}
-//            onHeightChanged: if (!moving) {recomputeInitialX()}
             onCurrentIndexChanged: {
                 WidgetsPageListModelInstance.currentPage = currentIndex
             }
+            onWidthChanged: timer.start()
 
             // TODO : Change the hardcoded 11
             cacheBuffer: view.width * 11
@@ -59,19 +61,6 @@ WidgetsView {
                 }
             }
             model: WidgetsPageListModelInstance
-            Connections {
-                target: WidgetsPageListModelInstance
-                onInitialPageChanged: {
-                    if (WidgetsPageListModelInstance.initialPage != -1) {
-//                        var newPage = page - 1
-
-                        view.positionViewAtIndex(WidgetsPageListModelInstance.initialPage,
-                                                 ListView.Visible)
-                        view.currentIndex = WidgetsPageListModelInstance.initialPage
-//                        view.recomputeInitialX()
-                    }
-                }
-            }
         }
     }
 }

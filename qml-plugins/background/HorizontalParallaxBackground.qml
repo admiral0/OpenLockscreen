@@ -20,26 +20,12 @@ import org.SfietKonstantin.widgets.background 1.0
 // Background with a parallax effect
 Item {
     id: container
-    property Item view
-    property int initialX: 0
-    property real parallax: 0
+    property Item horizontalPageView
     property QtObject settings
+    property QtObject scrollingManagerInstance: scrollingManager
     clip: true
 
     anchors.fill: parent
-
-    // Update the position of the background
-    // based on the current position
-    // of the view
-    function updateParallax() {
-        if(view.model.count > 1) {
-            var value = (view.contentX - container.initialX) /
-                        (view.contentWidth - view.width)
-            container.parallax = Math.min(Math.max(value ,0) ,1)
-        } else {
-            container.parallax = 0.5
-        }
-    }
 
     BackgroundManager {
         id: backgroundManager
@@ -53,7 +39,7 @@ Item {
                backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
                0
         color: "black"
-        x: - container.parallax * (background.width - container.width)
+        x: - scrollingManager.position * (background.width - container.width)
 
         Image {
             id: backgroundImage
@@ -63,16 +49,25 @@ Item {
             anchors.centerIn: parent
             clip: true
             fillMode: Image.PreserveAspectCrop
+            asynchronous: true
             source: backgroundManager.wallpaperSource
         }
     }
 
-    // Need to update the parallax value even if
-    // the view is resizing
+    ScrollingManager {
+        id: scrollingManager
+        x: horizontalPageView.view.contentX
+        pageWidth: horizontalPageView.view.width
+        width: horizontalPageView.view.contentWidth
+    }
+
     Connections {
-        target: view
-        onContentXChanged: updateParallax()
-        onWidthChanged: updateParallax()
-        onHeightChanged: updateParallax()
+        target: horizontalPageView
+        onInitialized: {
+            var initialX =
+                    horizontalPageView.view.contentX - WidgetsPageListModelInstance.currentPage
+                                                       * horizontalPageView.width
+            scrollingManager.initialX = initialX
+        }
     }
 }

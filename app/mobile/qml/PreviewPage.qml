@@ -17,8 +17,8 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
-//import org.SfietKonstantin.widgets.background 1.0
 
 Page {
     id: mainPage
@@ -29,27 +29,12 @@ Page {
         onPinchFinished: window.pageStack.pop()
     }
 
-    /*
     Background {
         anchors.fill: parent
         id: background
-        // Currently disabled because of bugs in PageView
-        // view: widgetsPage.view
-        // initialX: widgetsPage.initialX
+        horizontalPageView: widgetsPage
     }
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
-
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }*/
-
-    // Testing
     DockedView {
         content: Item {
             id: widgets

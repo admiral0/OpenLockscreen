@@ -33,6 +33,7 @@
 #include "widgetspagelistmodel.h"
 #include "providermanager.h"
 #include "widgetproviderbase.h"
+#include "eventtimer.h"
 
 namespace Widgets
 {
@@ -61,6 +62,7 @@ void WidgetsPlugin::registerTypes(const char *uri)
     qmlRegisterType<WidgetsPageModel>(uri, 1, 0, "WidgetsPageModel");
     reason = "This provider is invalid";
     qmlRegisterUncreatableType<WidgetProviderBase>(uri, 1, 0, "WidgetProviderBase", reason);
+    qmlRegisterType<EventTimer>(uri, 1, 0, "EventTimer");
 }
 
 }

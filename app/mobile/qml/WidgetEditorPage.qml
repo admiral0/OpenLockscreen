@@ -32,15 +32,11 @@ Page {
         DragParametersInstance.editButtonSource = "image://theme/icon-l-settings"
     }
 
-    // The background slows down the transition
-    // Therefore it is removed until a better solution is found
-//    Background {
-//        anchors.fill: parent
-//        id: background
-        // Currently disabled because of bugs in PageView
-        //view: widgetsPage.view
-        // initialX: widgetsPage.initialX
-//    }
+    Background {
+        anchors.fill: parent
+        id: background
+        horizontalPageView: widgetsPage
+    }
 
     EmptyDockedView {
         content: Item {
@@ -110,14 +106,21 @@ Page {
                 } else {
                     console.debug("Cannot create the configure from file " + qmlFile +
                                   "\nerror : " + component.errorString())
-//                    createDummy()
+                    createDummy()
                 }
                 component.destroy()
             } else {
-//                createDummy()
+                createDummy()
             }
             configureWidgetSheet.open()
         }
+
+        function createDummy() {
+            content = Qt.createQmlObject('import QtQuick 1.0;' +
+                'Rectangle {color: "red"; width: ' + contentContainer.width +
+                '; height: ' + contentContainer.height+ '}', contentContainer)
+        }
+
         onAccepted: {
             WidgetConfigurationHelperInstance.requestSaveSettings(configureWidgetSheet.widget)
         }

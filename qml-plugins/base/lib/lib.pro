@@ -29,7 +29,8 @@ HEADERS +=      widgets_global.h \
                 gridmanager.h \
                 widgetspagemodel.h \
                 widgetspagelistmodel.h \
-                widgetconfigurationhelper.h
+                widgetconfigurationhelper.h \
+                eventtimer.h \
 
 SOURCES +=      contextbase_p.cpp \
                 tools.cpp \
@@ -46,6 +47,7 @@ SOURCES +=      contextbase_p.cpp \
                 gridmanager.cpp \
                 widgetspagemodel.cpp \
                 widgetspagelistmodel.cpp \
-                widgetconfigurationhelper.cpp
+                widgetconfigurationhelper.cpp \
+                eventtimer.cpp \
 
 include(deployment.pri)

@@ -26,6 +26,7 @@
 #include <QtDeclarative/QtDeclarative>
 
 #include "backgroundmanager.h"
+#include "scrollingmanager.h"
 
 namespace Widgets
 {
@@ -40,6 +41,7 @@ void WidgetsBackgroundPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.background
     qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
+    qmlRegisterType<Widgets::Background::ScrollingManager>(uri, 1, 0, "ScrollingManager");
 }
 
 }
