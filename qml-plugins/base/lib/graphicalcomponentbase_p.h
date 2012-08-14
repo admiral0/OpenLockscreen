@@ -34,7 +34,7 @@
 #include "builderpatterninterfaces_p.h"
 
 #include <QtCore/QString>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 #include <QtXml/QDomElement>
 
 namespace Widgets
@@ -62,7 +62,7 @@ public:
      * @internal
      * @brief Disambiguation parameter of the component
      */
-    QVariantHash disambiguation;
+    QVariantMap disambiguation;
     /**
      * @internal
      * @brief Filename of the settings component of this component
@@ -147,7 +147,7 @@ public:
      * @brief Disambiguation
      * @return disambiguation.
      */
-    QVariantHash disambiguation() const;
+    QVariantMap disambiguation() const;
 protected:
     /**
      * @internal

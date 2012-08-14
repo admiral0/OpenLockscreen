@@ -24,7 +24,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 #include <QtGui/QDesktopServices>
 
 #include "widgets_global.h"

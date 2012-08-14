@@ -66,7 +66,7 @@ public:
      * @internal
      * @brief Settings
      */
-    QVariantHash settings;
+    QVariantMap settings;
     /**
      * @internal
      * @brief Geometry
@@ -166,7 +166,7 @@ public:
      * @short Settings
      * @return settings.
      */
-    QVariantHash settings() const;
+    QVariantMap settings() const;
     /**
      * @internal
      * @brief Widget base properties
@@ -236,7 +236,7 @@ public:
      * @brief Disambiguation
      * @return disambiguation.
      */
-    QVariantHash disambiguation() const;
+    QVariantMap disambiguation() const;
     /**
      * @internal
      * @brief Set widget base properties

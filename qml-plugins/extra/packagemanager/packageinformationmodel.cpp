@@ -156,8 +156,8 @@ void PackageInformationModel::update()
     }
     clear();
 
-    QList<QVariantHash> disambiguationList = d->packageManager->disambiguationList();
-    foreach(QVariantHash disambiguation, disambiguationList) {
+    QList<QVariantMap> disambiguationList = d->packageManager->disambiguationList();
+    foreach(QVariantMap disambiguation, disambiguationList) {
 
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         Provider::PackageManager::Package *package = packageManager()->package(disambiguation);

@@ -253,7 +253,7 @@ QVariant WidgetsPageListModel::data(const QModelIndex &index, int role) const
 bool WidgetsPageListModel::addWidget(int pageIndex,
                                      WidgetBaseProperties *widget,
                                      Widgets::GridManager *gridManager,
-                                     const QVariantHash &settings,
+                                     const QVariantMap &settings,
                                      const QString &identifier)
 {
     Q_D(WidgetsPageListModel);

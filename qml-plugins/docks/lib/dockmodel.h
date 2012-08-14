@@ -134,7 +134,7 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return if this model have the dock.
      */
-    Q_INVOKABLE bool hasDock(const QString &fileName, const QVariantHash &disambiguation) const;
+    Q_INVOKABLE bool hasDock(const QString &fileName, const QVariantMap &disambiguation) const;
 public Q_SLOTS:
     /**
      * @brief Load
@@ -149,7 +149,7 @@ public Q_SLOTS:
      * @param identifier identifier.
      */
     void addDock(Widgets::Docks::DockBaseProperties *dock,
-                 const QVariantHash &settings = QVariantHash(),
+                 const QVariantMap &settings = QVariantMap(),
                  const QString &identifier = QString());
     /**
      * @brief Add a dock

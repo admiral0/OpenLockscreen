@@ -31,7 +31,7 @@
  */
 
 #include <QtCore/QString>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 #include <QtSql/QSqlDatabase>
 
 #include "widgetbaseproperties.h"
@@ -147,7 +147,7 @@ public:
      *
      * This method is used to add information to
      * any component. The information is provided as
-     * a variant hash, with the name of the information
+     * a variant map, with the name of the information
      * associated to the value.
      *
      * @param type type of the component.
@@ -155,7 +155,7 @@ public:
      * @param informations informations to add.
      */
     static void addInformation(const char *type, qlonglong componentId,
-                               const QVariantHash &informations);
+                               const QVariantMap &informations);
     /**
      * @internal
      * @brief Database id associated to a tag

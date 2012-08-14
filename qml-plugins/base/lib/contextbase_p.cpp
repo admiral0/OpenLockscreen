@@ -34,7 +34,7 @@
 namespace Widgets
 {
 
-ProviderManager * ContextBasePrivate::providerManager(QDeclarativeContext *context, QObject *parent)
+ProviderManager * ContextBase::providerManager(QDeclarativeContext *context, QObject *parent)
 {
     QVariant providerManagerVariant = context->property("ProviderManagerInstance");
     QObject *providerManagerObject = providerManagerVariant.value<QObject *>();
@@ -49,8 +49,8 @@ ProviderManager * ContextBasePrivate::providerManager(QDeclarativeContext *conte
     return providerManager;
 }
 
-WidgetsPageListModel * ContextBasePrivate::widgetsPageListModel(QDeclarativeContext *context,
-                                                                QObject *parent)
+WidgetsPageListModel * ContextBase::widgetsPageListModel(QDeclarativeContext *context,
+                                                         QObject *parent)
 {
     QVariant modelVariant = context->property("WidgetsPageListModelInstance");
     QObject *modelObject = modelVariant.value<QObject *>();
@@ -64,6 +64,22 @@ WidgetsPageListModel * ContextBasePrivate::widgetsPageListModel(QDeclarativeCont
     model->setProviderManager(providerManager(context, parent));
     context->setContextProperty("WidgetsPageListModelInstance", model);
     return model;
+}
+
+WidgetConfigurationHelper * ContextBase::widgetConfigurationHelper(QDeclarativeContext *context,
+                                                                     QObject *parent)
+{
+    QVariant managerVariant = context->property("WidgetConfigurationHelperInstance");
+    QObject *managerObject = managerVariant.value<QObject *>();
+    WidgetConfigurationHelper *manager = qobject_cast<WidgetConfigurationHelper *>(managerObject);
+
+    if (manager) {
+        return manager;
+    }
+
+    manager = new WidgetConfigurationHelper(parent);
+    context->setContextProperty("WidgetConfigurationHelperInstance", manager);
+    return manager;
 }
 
 }

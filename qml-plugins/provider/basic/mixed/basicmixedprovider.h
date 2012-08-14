@@ -83,7 +83,7 @@ public:
      * @return a list of registered widgets.
      */
     Q_INVOKABLE virtual QStringList
-                registeredWidgets(const QVariantHash &disambiguation = QVariantHash()) const;
+                registeredWidgets(const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget file
      *
@@ -93,7 +93,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetFile(const QString &fileName,
-                           const QVariantHash &disambiguation = QVariantHash()) const;
+                           const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget configuration component file
      *
@@ -103,7 +103,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetSettingsFile(const QString &fileName,
-                                   const QVariantHash &disambiguation = QVariantHash()) const;
+                                   const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Widget properties
      *
@@ -113,7 +113,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation = QVariantHash());
+                               const QVariantMap &disambiguation = QVariantMap());
     /**
      * @short Registered docks
      *
@@ -121,7 +121,7 @@ public:
      * @return a list of registered docks.
      */
     Q_INVOKABLE virtual QStringList
-                registeredDocks(const QVariantHash &disambiguation = QVariantHash()) const;
+                registeredDocks(const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the dock file
      *
@@ -131,7 +131,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockFile(const QString &fileName,
-                         const QVariantHash &disambiguation = QVariantHash()) const;
+                         const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the dock configuration component file
      *
@@ -141,7 +141,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockSettingsFile(const QString &fileName,
-                                 const QVariantHash &disambiguation = QVariantHash()) const;
+                                 const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Dock properties
      *
@@ -151,7 +151,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::Docks::DockBaseProperties *
                         dock(const QString &fileName,
-                             const QVariantHash &disambiguation = QVariantHash());
+                             const QVariantMap &disambiguation = QVariantMap());
 public Q_SLOTS:
     /**
      * @brief Set the path to search for widgets

@@ -23,7 +23,7 @@
  */
 
 #include <QtCore/QString>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 
 class QDomElement;
 class QDomDocument;
@@ -37,7 +37,7 @@ namespace Widgets
  * perform conversions. One of the most notable
  * convertion is the convertion from a string to
  * a boolean. There is also convertions between
- * a variant hash and an XML element.
+ * a variant map and an XML element.
  */
 class Tools
 {
@@ -76,33 +76,33 @@ public:
         }
     }
     /**
-     * @brief Convert a XML element to a variant hash
+     * @brief Convert a XML element to a variant map
      *
-     * This method converts an XML element to a variant hash,
-     * identifying the "item" tag as a hash item, and
+     * This method converts an XML element to a variant map,
+     * identifying the "item" tag as a map item, and
      * using the "key", "value" and "type" attributes of this
      * element to get the key, and the value as a correctly typed
      * variant.
      *
      * @param element XML element to convert.
-     * @return the XML element as a variant hash.
+     * @return the XML element as a variant map.
      */
-    static QVariantHash fromXmlElementToVariantHash(const QDomElement &element);
+    static QVariantMap fromXmlElementToVariantMap(const QDomElement &element);
     /**
-     * @brief Convert a variant hash to an XML element
+     * @brief Convert a variant map to an XML element
      *
-     * This method converts a variant hash to an XML element,
+     * This method converts a variant map to an XML element,
      * using elements with "item" tag to store the values, and
      * using the "key", "value" and "type" attributes of this
      * element to set the key, and the value as a correctly typed
      * variant.
      *
-     * @param variantHash the variant hash to convert.
+     * @param variantMap the variant map to convert.
      * @param tagName the tag that will be used to create this element.
      * @param document a pointer to the document that is used to create elements.
-     * @return the variant hash as an XML element.
+     * @return the variant map as an XML element.
      */
-    static QDomElement toXmlElementFromVariantHash(const QVariantHash &variantHash,
+    static QDomElement toXmlElementFromVariantMap(const QVariantMap &variantMap,
                                                    const QString &tagName,
                                                    QDomDocument *document);
 };

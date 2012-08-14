@@ -118,14 +118,14 @@ QString BasicWidgetProvider::widgetsPath() const
     return d->widgetsPath;
 }
 
-QStringList BasicWidgetProvider::registeredWidgets(const QVariantHash &disambiguation) const
+QStringList BasicWidgetProvider::registeredWidgets(const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicWidgetProvider);
     return d->widgetsData.uniqueKeys();
 }
 
-QString BasicWidgetProvider::widgetFile(const QString &fileName, const QVariantHash &disambiguation) const
+QString BasicWidgetProvider::widgetFile(const QString &fileName, const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicWidgetProvider);
@@ -141,7 +141,7 @@ QString BasicWidgetProvider::widgetFile(const QString &fileName, const QVariantH
 
 
 QString BasicWidgetProvider::widgetSettingsFile(const QString &fileName,
-                                          const QVariantHash &disambiguation) const
+                                          const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicWidgetProvider);
@@ -156,7 +156,7 @@ QString BasicWidgetProvider::widgetSettingsFile(const QString &fileName,
 }
 
 WidgetBaseProperties * BasicWidgetProvider::widget(const QString &fileName,
-                                             const QVariantHash &disambiguation)
+                                             const QVariantMap &disambiguation)
 {
     Q_D(const BasicWidgetProvider);
     QString fileNameTrimmed = fileName.trimmed();

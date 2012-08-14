@@ -547,7 +547,7 @@ void DatabaseInterfacePrivate::addLocalizedInformation(const char *type, qlonglo
 
 
 void DatabaseInterfacePrivate::addInformation(const char *type, qlonglong componentId,
-                                              const QVariantHash &informations)
+                                              const QVariantMap &informations)
 {
     qlonglong typeId = componentTypeId(type);
     {
@@ -722,7 +722,7 @@ void DatabaseInterfacePrivate::addPackage(Package *package, const QString &path)
     }
     addLocalizedInformation(COMPONENT_TYPE_PACKAGE, packageId, languages, names, descriptions);
 
-    QVariantHash informations;
+    QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, package->icon());
     informations.insert(PACKAGE_INFORMATION_AUTHOR, package->author());
     informations.insert(PACKAGE_INFORMATION_EMAIL, package->email());
@@ -811,7 +811,7 @@ void DatabaseInterfacePrivate::addDock(qlonglong packageId, const QString &subdi
     }
     addLocalizedInformation(COMPONENT_TYPE_DOCK, dockId, languages, names, descriptions);
 
-    QVariantHash informations;
+    QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, metadata->icon());
     informations.insert(COMPONENT_INFORMATION_SETTINGS_FILE, metadata->settingsFileName());
     informations.insert(DOCK_INFORMATION_WIDTH, dock->width());
@@ -883,7 +883,7 @@ void DatabaseInterfacePrivate::addWidget(qlonglong packageId, const QString &sub
     }
     addLocalizedInformation(COMPONENT_TYPE_WIDGET, widgetId, languages, names, descriptions);
 
-    QVariantHash informations;
+    QVariantMap informations;
     informations.insert(COMPONENT_INFORMATION_ICON, metadata->icon());
     informations.insert(COMPONENT_INFORMATION_SETTINGS_FILE, metadata->settingsFileName());
     informations.insert(WIDGET_INFORMATION_MINIMUM_WIDTH, widget->minimumWidth());
@@ -973,8 +973,8 @@ Package * DatabaseInterfacePrivate::package(const QString &identifier, QObject *
 
         QString defaultName;
         QString defaultDescription;
-        QHash<QString, QString> names;
-        QHash<QString, QString> descriptions;
+        QMap<QString, QString> names;
+        QMap<QString, QString> descriptions;
 
         query.prepare("SELECT language, name, description FROM componentLocalizedInformation \
                        WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
@@ -999,7 +999,7 @@ Package * DatabaseInterfacePrivate::package(const QString &identifier, QObject *
             }
         }
         query.finish();
-        QHash<QString, QString> informations;
+        QMap<QString, QString> informations;
 
         query.prepare("SELECT name, value FROM componentInformation \
                       INNER JOIN componentInformationProperties \
@@ -1119,9 +1119,9 @@ ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &pack
         int widgetId = query.value(0).toInt();
 
         QString defaultName;
-        QHash<QString, QString> names;
+        QMap<QString, QString> names;
         QString defaultDescription;
-        QHash<QString, QString> descriptions;
+        QMap<QString, QString> descriptions;
         query.prepare("SELECT language, name, description \
                       FROM componentLocalizedInformation \
                       WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
@@ -1147,7 +1147,7 @@ ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &pack
         }
         query.finish();
 
-        QHash<QString, QString> informations;
+        QMap<QString, QString> informations;
 
         query.prepare("SELECT name, value FROM componentInformation \
                        INNER JOIN componentInformationProperties \
@@ -1168,7 +1168,7 @@ ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &pack
         QString icon = informations.value(COMPONENT_INFORMATION_ICON);
         QString settingsFileName = informations.value(COMPONENT_INFORMATION_SETTINGS_FILE);
 
-        QVariantHash disambiguation;
+        QVariantMap disambiguation;
         disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
         returnedValue = new ComponentMetadata(icon, defaultName, defaultDescription,
                                               names, descriptions,
@@ -1208,9 +1208,9 @@ ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packag
         int widgetId = query.value(0).toInt();
 
         QString defaultName;
-        QHash<QString, QString> names;
+        QMap<QString, QString> names;
         QString defaultDescription;
-        QHash<QString, QString> descriptions;
+        QMap<QString, QString> descriptions;
         query.prepare("SELECT language, name, description \
                       FROM componentLocalizedInformation \
                       WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
@@ -1236,7 +1236,7 @@ ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packag
         }
         query.finish();
 
-        QHash<QString, QString> informations;
+        QMap<QString, QString> informations;
 
         query.prepare("SELECT name, value FROM componentInformation \
                        INNER JOIN componentInformationProperties \
@@ -1257,7 +1257,7 @@ ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packag
         QString icon = informations.value(COMPONENT_INFORMATION_ICON);
         QString settingsFileName = informations.value(COMPONENT_INFORMATION_SETTINGS_FILE);
 
-        QVariantHash disambiguation;
+        QVariantMap disambiguation;
         disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
         returnedValue = new ComponentMetadata(icon, defaultName, defaultDescription,
                                               names, descriptions,
@@ -1294,7 +1294,7 @@ WidgetBaseProperties * DatabaseInterfacePrivate::widget(const QString &packageId
         }
 
         int widgetId = query.value(0).toInt();
-        QHash<QString, QString> informations;
+        QMap<QString, QString> informations;
 
         query.prepare("SELECT name, value FROM componentInformation \
                        INNER JOIN componentInformationProperties \
@@ -1319,7 +1319,7 @@ WidgetBaseProperties * DatabaseInterfacePrivate::widget(const QString &packageId
         int maximumWidth = informations.value(WIDGET_INFORMATION_MAXIMUM_WIDTH).toInt();
         int maximumHeight = informations.value(WIDGET_INFORMATION_MAXIMUM_HEIGHT).toInt();
 
-        QVariantHash disambiguation;
+        QVariantMap disambiguation;
         disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
         returnedValue = new WidgetBaseProperties(fileName, disambiguation, settingsFileName,
                                          minimumWidth, minimumHeight,
@@ -1356,7 +1356,7 @@ Docks::DockBaseProperties * DatabaseInterfacePrivate::dock(const QString &packag
         }
 
         int dockId = query.value(0).toInt();
-        QHash<QString, QString> informations;
+        QMap<QString, QString> informations;
 
         query.prepare("SELECT name, value FROM componentInformation \
                       INNER JOIN componentInformationProperties \
@@ -1387,7 +1387,7 @@ Docks::DockBaseProperties * DatabaseInterfacePrivate::dock(const QString &packag
         bool anchorsLeft = Tools::stringToBool(anchorsLeftString);
         bool anchorsRight = Tools::stringToBool(anchorsRightString);
 
-        QVariantHash disambiguation;
+        QVariantMap disambiguation;
         disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
         returnedValue = new Docks::DockBaseProperties(fileName, disambiguation, settingsFileName,
                                               width, height,
@@ -1654,7 +1654,7 @@ void DatabaseInterfacePrivate::scanFolderForWidgets(const QString &path,
         if (metadata->type() == ComponentMetadata::WidgetComponentType) {
             QString file = folder.absoluteFilePath(metadata->fileName());
             QString settingsFile = metadata->settingsFileName();
-            QVariantHash disambiguation;
+            QVariantMap disambiguation;
             disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
             WidgetBaseProperties *widget = WidgetBaseProperties::fromQmlFile(file,
                                                                              disambiguation,
@@ -1687,7 +1687,7 @@ void DatabaseInterfacePrivate::scanFolderForDocks(const QString &path,
         if (metadata->type() == ComponentMetadata::DockComponentType) {
             QString file = folder.absoluteFilePath(metadata->fileName());
             QString settingsFile = metadata->settingsFileName();
-            QVariantHash disambiguation;
+            QVariantMap disambiguation;
             disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
             Docks::DockBaseProperties *dock
                     = Docks::DockBaseProperties::fromQmlFile(file, disambiguation,
@@ -1713,14 +1713,14 @@ DatabaseInterface::~DatabaseInterface()
 {
 }
 
-QVariantHash DatabaseInterface::disambiguation(const QString &packageIdentifier)
+QVariantMap DatabaseInterface::disambiguation(const QString &packageIdentifier)
 {
-    QVariantHash data;
+    QVariantMap data;
     data.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
     return data;
 }
 
-QString DatabaseInterface::packageIdentifier(const QVariantHash &disambiguation)
+QString DatabaseInterface::packageIdentifier(const QVariantMap &disambiguation)
 {
     return disambiguation.value(PACKAGE_IDENTIFIER_KEY).toString();
 }

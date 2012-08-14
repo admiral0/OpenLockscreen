@@ -149,7 +149,7 @@ public:
      */
     bool addWidget(Widgets::WidgetBaseProperties *widget,
                    Widgets::GridManager *gridManager,
-                   const QVariantHash &settings = QVariantHash(),
+                   const QVariantMap &settings = QVariantMap(),
                    const QString &identifier = QString());
     /**
      * @short Add a widget
@@ -166,7 +166,7 @@ public:
     bool addWidget(Widgets::WidgetBaseProperties *widget,
                    int x, int y, int z,
                    int width, int height,
-                   const QVariantHash &settings = QVariantHash(),
+                   const QVariantMap &settings = QVariantMap(),
                    const QString &identifier = QString());
     /**
      * @brief Add a widget

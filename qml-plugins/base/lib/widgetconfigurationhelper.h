@@ -14,49 +14,66 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_CONFIGURATIONMANAGER_H
-#define WIDGETS_CONFIGURATIONMANAGER_H
+#ifndef WIDGETS_WIDGETCONFIGURATIONHELPER_H
+#define WIDGETS_WIDGETCONFIGURATIONHELPER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
 
 #include "widgetproperties.h"
-#include "dockproperties.h"
 
 namespace Widgets
 {
 
-class ConfigurationManagerPrivate;
-class ConfigurationManager : public QObject
+/**
+ * @brief Configuration helper
+ *
+ * This class is a helper class that is used to
+ * help settings parameters to widgets. This class
+ * have two roles.
+ *
+ * It is first used to set settings, using
+ * saveSettings(). This method will set the
+ * settings variant map to the passed widget
+ * properties, and in QML context, the variant map
+ * should be a JS object.
+ *
+ * It is also used to request a save, using
+ * requestSaveSettings(). This method, often
+ * used by a view manager, will cause the
+ * emission of saveSettingsRequested(). Any
+ * component that is listening to this signal
+ * should save the settings.
+ */
+class WidgetConfigurationHelper : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::DockProperties * currentDock READ currentDock WRITE setCurrentDock
-               NOTIFY currentDockChanged)
-    Q_PROPERTY(Widgets::WidgetProperties * currentWidget READ currentWidget WRITE setCurrentWidget
-               NOTIFY currentWidgetChanged)
 public:
-    explicit ConfigurationManager(QObject *parent = 0);
-    virtual ~ConfigurationManager();
-    DockProperties *currentDock() const;
-    WidgetProperties *currentWidget() const;
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
+    explicit WidgetConfigurationHelper(QObject *parent = 0);
 Q_SIGNALS:
-    void currentDockChanged();
-    void currentWidgetChanged();
-    void saveDockSettingsRequested();
-    void saveWidgetSettingsRequested();
+    /**
+     * @brief Save settings requested
+     * @param widget the widget to setup.
+     */
+    void saveSettingsRequested(Widgets::WidgetProperties *widget);
 public Q_SLOTS:
-    void setCurrentDock(Widgets::DockProperties *currentDock);
-    void setCurrentWidget(Widgets::WidgetProperties *currentWidget);
-    void requestSaveDockSettings();
-    void requestSaveWidgetSettings();
-    void saveDockSettings(const QVariantMap &settings);
-    void saveWidgetSettings(const QVariantMap &settings);
-protected:
-    QScopedPointer <ConfigurationManagerPrivate> d_ptr;
-private:
-    Q_DECLARE_PRIVATE(ConfigurationManager)
+    /**
+     * @brief Request save settings
+     * @param widget the widget to setup.
+     */
+    void requestSaveSettings(Widgets::WidgetProperties *widget);
+    /**
+     * @brief Save settings
+     * @param widget the widget to setup.
+     * @param settings settings to set.
+     */
+    static void saveSettings(Widgets::WidgetProperties *widget, const QVariantMap &settings);
 };
 
 }
 
-#endif // WIDGETS_CONFIGURATIONMANAGER_H
+#endif // WIDGETS_WIDGETCONFIGURATIONHELPER_H

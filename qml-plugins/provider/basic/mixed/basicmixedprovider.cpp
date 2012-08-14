@@ -170,7 +170,7 @@ QString BasicMixedProvider::docksPath() const
     return d->docksPath;
 }
 
-QStringList BasicMixedProvider::registeredWidgets(const QVariantHash &disambiguation) const
+QStringList BasicMixedProvider::registeredWidgets(const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -178,7 +178,7 @@ QStringList BasicMixedProvider::registeredWidgets(const QVariantHash &disambigua
 }
 
 QString BasicMixedProvider::widgetFile(const QString &fileName,
-                                       const QVariantHash &disambiguation) const
+                                       const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -194,7 +194,7 @@ QString BasicMixedProvider::widgetFile(const QString &fileName,
 
 
 QString BasicMixedProvider::widgetSettingsFile(const QString &fileName,
-                                               const QVariantHash &disambiguation) const
+                                               const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -209,7 +209,7 @@ QString BasicMixedProvider::widgetSettingsFile(const QString &fileName,
 }
 
 WidgetBaseProperties * BasicMixedProvider::widget(const QString &fileName,
-                                                  const QVariantHash &disambiguation)
+                                                  const QVariantMap &disambiguation)
 {
     Q_D(const BasicMixedProvider);
     QString fileNameTrimmed = fileName.trimmed();
@@ -225,7 +225,7 @@ WidgetBaseProperties * BasicMixedProvider::widget(const QString &fileName,
                                              d->widgetsData.value(fileNameTrimmed), this);
 }
 
-QStringList BasicMixedProvider::registeredDocks(const QVariantHash &disambiguation) const
+QStringList BasicMixedProvider::registeredDocks(const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -233,7 +233,7 @@ QStringList BasicMixedProvider::registeredDocks(const QVariantHash &disambiguati
 }
 
 QString BasicMixedProvider::dockFile(const QString &fileName,
-                                     const QVariantHash &disambiguation) const
+                                     const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -248,7 +248,7 @@ QString BasicMixedProvider::dockFile(const QString &fileName,
 }
 
 QString BasicMixedProvider::dockSettingsFile(const QString &fileName,
-                                             const QVariantHash &disambiguation) const
+                                             const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicMixedProvider);
@@ -263,7 +263,7 @@ QString BasicMixedProvider::dockSettingsFile(const QString &fileName,
 }
 
 Docks::DockBaseProperties * BasicMixedProvider::dock(const QString &fileName,
-                                                     const QVariantHash &disambiguation)
+                                                     const QVariantMap &disambiguation)
 {
 
     Q_D(const BasicMixedProvider);

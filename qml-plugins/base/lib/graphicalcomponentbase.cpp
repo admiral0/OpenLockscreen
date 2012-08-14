@@ -103,10 +103,10 @@ QString GraphicalComponentBaseComponentBuilderHelper::settingsFileName() const
     return xmlElement.attribute(SETTINGS_FILENAME_ATTRIBUTE);
 }
 
-QVariantHash GraphicalComponentBaseComponentBuilderHelper::disambiguation() const
+QVariantMap GraphicalComponentBaseComponentBuilderHelper::disambiguation() const
 {
     QDomElement disambiguationElement = xmlElement.firstChildElement(DISAMBIGUATION_TAG);
-    return Tools::fromXmlElementToVariantHash(disambiguationElement);
+    return Tools::fromXmlElementToVariantMap(disambiguationElement);
 }
 
 GraphicalComponentBaseComponentBuilder::GraphicalComponentBaseComponentBuilder():
@@ -157,7 +157,7 @@ void GraphicalComponentBaseXmlBuilder::buildElement()
     builtElement.setAttribute(SETTINGS_FILENAME_ATTRIBUTE, component()->settingsFileName());
 
     QDomElement disambiguationElement
-            = Tools::toXmlElementFromVariantHash(component()->disambiguation(), DISAMBIGUATION_TAG,
+            = Tools::toXmlElementFromVariantMap(component()->disambiguation(), DISAMBIGUATION_TAG,
                                                  document);
     builtElement.appendChild(disambiguationElement);
 }
@@ -170,7 +170,7 @@ GraphicalComponentBase * GraphicalComponentBaseXmlBuilder::component() const
 ////// End of private class //////
 
 GraphicalComponentBase::GraphicalComponentBase(const QString &fileName,
-                                               const QVariantHash &disambiguation,
+                                               const QVariantMap &disambiguation,
                                                const QString &settingsFileName,
                                                QObject *parent):
     QObject(parent), d_pointer(new GraphicalComponentBasePrivate(this))
@@ -196,7 +196,7 @@ QString GraphicalComponentBase::fileName() const
     return d->fileName;
 }
 
-QVariantHash GraphicalComponentBase::disambiguation() const
+QVariantMap GraphicalComponentBase::disambiguation() const
 {
     W_D(const GraphicalComponentBase);
     return d->disambiguation;

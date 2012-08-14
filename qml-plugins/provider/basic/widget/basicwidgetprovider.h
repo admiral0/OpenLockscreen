@@ -75,7 +75,7 @@ public:
      * @return a list of registered widgets.
      */
     Q_INVOKABLE virtual QStringList
-                registeredWidgets(const QVariantHash &disambiguation = QVariantHash()) const;
+                registeredWidgets(const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget file
      *
@@ -85,7 +85,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetFile(const QString &fileName,
-                           const QVariantHash &disambiguation = QVariantHash()) const;
+                           const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget configuration component file
      *
@@ -95,7 +95,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetSettingsFile(const QString &fileName,
-                                   const QVariantHash &disambiguation = QVariantHash()) const;
+                                   const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Widget properties
      *
@@ -105,7 +105,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation = QVariantHash());
+                               const QVariantMap &disambiguation = QVariantMap());
 public Q_SLOTS:
     /**
      * @brief Set the path to search for widgets

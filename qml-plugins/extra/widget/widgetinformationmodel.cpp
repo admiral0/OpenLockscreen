@@ -28,7 +28,7 @@ namespace Extra
 
 struct WidgetInformationModelPrivateItem
 {
-    QVariantHash disambiguation;
+    QVariantMap disambiguation;
     QString fileName;
     QString name;
     QString description;
@@ -172,8 +172,8 @@ void WidgetInformationModel::update()
 
     WidgetProviderBase *provider = d->providerManager->provider();
 
-    QList<QVariantHash> disambiguationList = provider->disambiguationList();
-    foreach (QVariantHash disambiguation, disambiguationList) {
+    QList<QVariantMap> disambiguationList = provider->disambiguationList();
+    foreach (QVariantMap disambiguation, disambiguationList) {
         QStringList registeredWidgets = provider->registeredWidgets(disambiguation);
 
         foreach (QString file, registeredWidgets) {

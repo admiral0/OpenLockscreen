@@ -119,8 +119,8 @@ public:
      */
     explicit ComponentMetadata(const QString &icon,
                                const QString &defaultName, const QString &defaultDescription,
-                               const QHash<QString, QString> &names,
-                               const QHash<QString, QString> &descriptions,
+                               const QMap<QString, QString> &names,
+                               const QMap<QString, QString> &descriptions,
                                ComponentType type,
                                const QString fileName, const QString settingsFileName,
                                QObject *parent = 0);

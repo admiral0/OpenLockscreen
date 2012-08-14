@@ -42,7 +42,7 @@ WidgetBaseProperties::WidgetBaseProperties(QObject *parent):
 }
 
 WidgetBaseProperties::WidgetBaseProperties(const QString &fileName,
-                                           const QVariantHash &disambiguation,
+                                           const QVariantMap &disambiguation,
                                            const QString &settingsFileName,
                                            int minimumWidth, int minimumHeight,
                                            int maximumWidth, int maximumHeight,
@@ -87,7 +87,7 @@ int WidgetBaseProperties::maximumHeight() const
 }
 
 WidgetBaseProperties * WidgetBaseProperties::fromQmlFile(const QString &qmlFile,
-                                                         const QVariantHash &disambiguation,
+                                                         const QVariantMap &disambiguation,
                                                          const QString &settingsFileName,
                                                          QObject *parent)
 {

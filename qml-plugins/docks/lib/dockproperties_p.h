@@ -67,7 +67,7 @@ public:
      * @internal
      * @brief Settings
      */
-    QVariantHash settings;
+    QVariantMap settings;
 
 private:
     Q_DECLARE_PUBLIC(DockProperties)
@@ -122,7 +122,7 @@ public:
      * @short Settings
      * @return settings.
      */
-    QVariantHash settings() const;
+    QVariantMap settings() const;
     /**
      * @internal
      * @brief Dock base properties
@@ -187,7 +187,7 @@ public:
      * @brief Disambiguation
      * @return disambiguation.
      */
-    QVariantHash disambiguation() const;
+    QVariantMap disambiguation() const;
     /**
      * @internal
      * @brief Set dock base properties

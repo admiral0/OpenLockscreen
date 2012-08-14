@@ -28,7 +28,7 @@ namespace Extra
 
 struct DockInformationModelPrivateItem
 {
-    QVariantHash disambiguation;
+    QVariantMap disambiguation;
     QString fileName;
     QString name;
     QString description;
@@ -175,8 +175,8 @@ void DockInformationModel::update()
         return;
     }
 
-    QList<QVariantHash> disambiguationList = provider->disambiguationList();
-    foreach (QVariantHash disambiguation, disambiguationList) {
+    QList<QVariantMap> disambiguationList = provider->disambiguationList();
+    foreach (QVariantMap disambiguation, disambiguationList) {
         QStringList registeredDocks = provider->registeredDocks(disambiguation);
 
         foreach (QString file, registeredDocks) {

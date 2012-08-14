@@ -45,11 +45,11 @@ SettingsItem {
     id: container
 
     Connections {
-        target: ConfigurationManagerInstance
-        onSaveWidgetSettingsRequested: {
+        target: WidgetConfigurationHelperInstance
+        onSaveSettingsRequested: {
             var settings = new Object
             settings.color = "red"
-            ConfigurationManagerInstance.saveWidgetSettings(settings)
+            WidgetConfigurationHelperInstance.saveSettings(widget, settings)
         }
     }
 

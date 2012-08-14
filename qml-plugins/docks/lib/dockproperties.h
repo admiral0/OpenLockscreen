@@ -61,7 +61,7 @@ class DockProperties: public DockBaseProperties, private IdentifiedElementInterf
     /**
      * @short Settings
      */
-    Q_PROPERTY(QVariantHash settings READ settings NOTIFY settingsChanged)
+    Q_PROPERTY(QVariantMap settings READ settings NOTIFY settingsChanged)
 public:
     /**
      * @brief Invalid constructor
@@ -83,7 +83,7 @@ public:
      * @param parent parent object.
      */
     explicit DockProperties(DockBaseProperties *base,
-                            const QVariantHash &settings = QVariantHash(),
+                            const QVariantMap &settings = QVariantMap(),
                             QObject *parent = 0);
     /**
      * @brief Constructor
@@ -99,7 +99,7 @@ public:
      */
     explicit DockProperties(DockBaseProperties *base,
                             const QString &identifier,
-                            const QVariantHash &settings = QVariantHash(),
+                            const QVariantMap &settings = QVariantMap(),
                             QObject *parent = 0);
     /**
      * @brief Identifier
@@ -110,13 +110,13 @@ public:
      * @short Settings
      * @return settings.
      */
-    QVariantHash settings() const;
+    QVariantMap settings() const;
 public Q_SLOTS:
     /**
      * @short Set the settings
      * @param settings settings.
      */
-    void setSettings(const QVariantHash &settings);
+    void setSettings(const QVariantMap &settings);
 Q_SIGNALS:
     /**
      * @short Settings changed changed

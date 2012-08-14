@@ -166,9 +166,9 @@ int WidgetPropertiesComponentBuilderHelper::height() const
     return geometryXmlElement.attribute(GEOMETRY_HEIGHT_ATTRIBUTE).toInt();
 }
 
-QVariantHash WidgetPropertiesComponentBuilderHelper::settings() const
+QVariantMap WidgetPropertiesComponentBuilderHelper::settings() const
 {
-    return Tools::fromXmlElementToVariantHash(settingsXmlElement);
+    return Tools::fromXmlElementToVariantMap(settingsXmlElement);
 }
 
 WidgetBaseProperties * WidgetPropertiesComponentBuilderHelper::widgetBaseProperties() const
@@ -197,7 +197,7 @@ QString WidgetPropertiesComponentBuilder::fileName() const
     return m_helper->fileName();
 }
 
-QVariantHash WidgetPropertiesComponentBuilder::disambiguation() const
+QVariantMap WidgetPropertiesComponentBuilder::disambiguation() const
 {
     return m_helper->disambiguation();
 }
@@ -239,7 +239,7 @@ void WidgetPropertiesXmlBuilder::buildElement()
     geometryElement.setAttribute(GEOMETRY_HEIGHT_ATTRIBUTE, component()->height());
     builtElement.appendChild(geometryElement);
 
-    QDomElement settingsElement = Tools::toXmlElementFromVariantHash(component()->settings(),
+    QDomElement settingsElement = Tools::toXmlElementFromVariantMap(component()->settings(),
                                                                      SETTINGS_TAGNAME,
                                                                      document);
     builtElement.appendChild(settingsElement);
@@ -259,7 +259,7 @@ WidgetProperties::WidgetProperties(QObject *parent):
 
 WidgetProperties::WidgetProperties(WidgetBaseProperties *base,
                                    int x, int y, int z, int width, int height,
-                                   const QVariantHash &settings, QObject *parent):
+                                   const QVariantMap &settings, QObject *parent):
     WidgetBaseProperties(new WidgetPropertiesPrivate(this), parent)
 {
     W_D(WidgetProperties);
@@ -272,7 +272,7 @@ WidgetProperties::WidgetProperties(WidgetBaseProperties *base,
 
 WidgetProperties::WidgetProperties(WidgetBaseProperties *base, const QString &identifier,
                                    int x, int y, int z, int width, int height,
-                                   const QVariantHash &settings, QObject *parent):
+                                   const QVariantMap &settings, QObject *parent):
     WidgetBaseProperties(new WidgetPropertiesPrivate(this), parent)
 {
     W_D(WidgetProperties);
@@ -330,7 +330,7 @@ bool WidgetProperties::isVisible() const
     return d->visible;
 }
 
-QVariantHash WidgetProperties::settings() const
+QVariantMap WidgetProperties::settings() const
 {
     W_D(const WidgetProperties);
     return d->settings;
@@ -390,7 +390,7 @@ void WidgetProperties::setVisible(bool visible)
     }
 }
 
-void WidgetProperties::setSettings(const QVariantHash &settings)
+void WidgetProperties::setSettings(const QVariantMap &settings)
 {
 
     W_D(WidgetProperties);

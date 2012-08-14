@@ -33,7 +33,7 @@
 #include "desktopcomponent.h"
 #include "builderpatterninterfaces_p.h"
 
-#include <QtCore/QHash>
+#include <QtCore/QMap>
 #include <QtCore/QStringList>
 
 
@@ -79,12 +79,12 @@ public:
      * @internal
      * @brief Translated names
      */
-    QHash<QString, QString> names;
+    QMap<QString, QString> names;
     /**
      * @internal
      * @brief Translated descriptions
      */
-    QHash<QString, QString> descriptions;
+    QMap<QString, QString> descriptions;
     /**
      * @internal
      * @brief Icon
@@ -169,13 +169,13 @@ public:
      * @brief Names
      * @return names.
      */
-    QHash<QString, QString> names() const;
+    QMap<QString, QString> names() const;
     /**
      * @internal
      * @brief Descriptions
      * @return descriptions.
      */
-    QHash<QString, QString> descriptions() const;
+    QMap<QString, QString> descriptions() const;
     /**
      * @internal
      * @brief Icon

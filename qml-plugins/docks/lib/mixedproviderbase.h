@@ -78,7 +78,7 @@ public:
      * @return a list of registered docks.
      */
     Q_INVOKABLE virtual QStringList
-                registeredDocks(const QVariantHash &disambiguation = QVariantHash()) const;
+                registeredDocks(const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the dock file
      *
@@ -92,7 +92,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockFile(const QString &fileName,
-                           const QVariantHash &disambiguation = QVariantHash()) const;
+                           const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the dock configuration component file
      *
@@ -107,7 +107,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockSettingsFile(const QString &fileName,
-                                   const QVariantHash &disambiguation = QVariantHash()) const;
+                                   const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Dock properties
      *
@@ -121,7 +121,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::Docks::DockBaseProperties *
                         dock(const QString &fileName,
-                               const QVariantHash &disambiguation = QVariantHash());
+                               const QVariantMap &disambiguation = QVariantMap());
 
     /**
      * @short Name of the dock
@@ -135,7 +135,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockName(const QString &fileName,
-                         const QVariantHash &disambiguation = QVariantHash()) const;
+                         const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Description
      *
@@ -148,7 +148,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 dockDescription(const QString &fileName,
-                                const QVariantHash &disambiguation = QVariantHash()) const;
+                                const QVariantMap &disambiguation = QVariantMap()) const;
 protected:
     /**
      * @brief Constructor for D-pointer

@@ -14,59 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DRAG_CONTEXTDRAG_P_H
-#define WIDGETS_DRAG_CONTEXTDRAG_P_H
-
-// Warning
-//
-// This file exists for the convenience
-// of other Widgets classes. This header
-// file may change from version to version
-// without notice or even be removed.
-
-/**
- * @internal
- * @file contextdrag_p.h
- * @short Definition of Widgets::Drag::ContextDragPrivate
- */
-
-#include "contextbase_p.h"
-#include "dragmanager.h"
+#include "widgetconfigurationhelper.h"
+#include <QtCore/QDebug>
 
 namespace Widgets
 {
 
-namespace Drag
+WidgetConfigurationHelper::WidgetConfigurationHelper(QObject *parent) :
+    QObject(parent)
 {
+}
 
-/**
- * @internal
- * @brief Manage context for drag plugin
- *
- * This class extends Widgets::ContextBasePrivate and
- * provide unique instance of global objects for the
- * drag plugin.
- */
-class ContextDragPrivate: public ContextBase
+void WidgetConfigurationHelper::requestSaveSettings(WidgetProperties *widget)
 {
-public:
-    /**
-     * @internal
-     * @brief Drag manager
-     *
-     * Returns the drag manager registered in the provided QML
-     * context. Creates it using the provided parent if no
-     * drag manager was registered in the context.
-     *
-     * @param context QML context
-     * @param parent parent object.
-     * @return the drag manager.
-     */
-    static DragManager * dragManager(QDeclarativeContext *context, QObject *parent = 0);
-};
+    emit saveSettingsRequested(widget);
+}
 
+void WidgetConfigurationHelper::saveSettings(WidgetProperties *widget, const QVariantMap &settings)
+{
+    if (!widget) {
+        return;
+    }
+    widget->setSettings(settings);
 }
 
 }
-
-#endif // WIDGETS_DRAG_CONTEXTDRAG_P_H

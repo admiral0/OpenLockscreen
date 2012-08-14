@@ -105,9 +105,9 @@ QString DockPropertiesComponentBuilderHelper::identifier() const
     return xmlElement.attribute(IDENTIFIER_ATTRIBUTE);
 }
 
-QVariantHash DockPropertiesComponentBuilderHelper::settings() const
+QVariantMap DockPropertiesComponentBuilderHelper::settings() const
 {
-    return Tools::fromXmlElementToVariantHash(settingsXmlElement);
+    return Tools::fromXmlElementToVariantMap(settingsXmlElement);
 }
 
 DockBaseProperties * DockPropertiesComponentBuilderHelper::dockBaseProperties() const
@@ -136,7 +136,7 @@ QString DockPropertiesComponentBuilder::fileName() const
     return m_helper->fileName();
 }
 
-QVariantHash DockPropertiesComponentBuilder::disambiguation() const
+QVariantMap DockPropertiesComponentBuilder::disambiguation() const
 {
     return m_helper->disambiguation();
 }
@@ -168,7 +168,7 @@ void DockPropertiesXmlBuilder::buildElement()
     GraphicalComponentBaseXmlBuilder::buildElement();
     builtElement.setAttribute(IDENTIFIER_ATTRIBUTE, component()->identifier());
 
-    QDomElement settingsElement = Tools::toXmlElementFromVariantHash(component()->settings(),
+    QDomElement settingsElement = Tools::toXmlElementFromVariantMap(component()->settings(),
                                                                      SETTINGS_TAGNAME,
                                                                      document);
     builtElement.appendChild(settingsElement);
@@ -188,7 +188,7 @@ DockProperties::DockProperties(QObject *parent):
 }
 
 DockProperties::DockProperties(DockBaseProperties *base,
-                               const QVariantHash &settings,
+                               const QVariantMap &settings,
                                QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
@@ -200,7 +200,7 @@ DockProperties::DockProperties(DockBaseProperties *base,
 
 DockProperties::DockProperties(DockBaseProperties *base,
                                const QString &identifier,
-                               const QVariantHash &settings,
+                               const QVariantMap &settings,
                                QObject *parent):
     DockBaseProperties(new DockPropertiesPrivate(this), parent)
 {
@@ -221,13 +221,13 @@ QString DockProperties::identifier() const
     return d->identifier;
 }
 
-QVariantHash DockProperties::settings() const
+QVariantMap DockProperties::settings() const
 {
     W_D(const DockProperties);
     return d->settings;
 }
 
-void DockProperties::setSettings(const QVariantHash &settings)
+void DockProperties::setSettings(const QVariantMap &settings)
 {
     W_D(DockProperties);
     if (d->settings != settings) {

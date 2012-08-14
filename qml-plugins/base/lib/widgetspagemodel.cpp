@@ -362,7 +362,7 @@ void WidgetsPageModel::load()
 
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  Widgets::GridManager *gridManager,
-                                 const QVariantHash &settings,
+                                 const QVariantMap &settings,
                                  const QString &identifier)
 {
     Q_D(WidgetsPageModel);
@@ -383,7 +383,7 @@ bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  int x, int y, int z,
                                  int width, int height,
-                                 const QVariantHash &settings,
+                                 const QVariantMap &settings,
                                  const QString &identifier)
 {
     Widgets::WidgetProperties *newWidget;

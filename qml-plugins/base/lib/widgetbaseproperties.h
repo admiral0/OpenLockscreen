@@ -82,7 +82,7 @@ public:
      * @param maximumHeight maximum height.
      * @param parent parent object.
      */
-    explicit WidgetBaseProperties(const QString &fileName, const QVariantHash &disambiguation,
+    explicit WidgetBaseProperties(const QString &fileName, const QVariantMap &disambiguation,
                                   const QString &settingsFileName,
                                   int minimumWidth, int minimumHeight,
                                   int maximumWidth, int maximumHeight,
@@ -121,7 +121,7 @@ public:
      * @return the widget base properties.
      */
     static WidgetBaseProperties * fromQmlFile(const QString &qmlFile,
-                                              const QVariantHash &disambiguation,
+                                              const QVariantMap &disambiguation,
                                               const QString &settingsFileName,
                                               QObject *parent = 0);
 protected:

@@ -31,6 +31,7 @@
  */
 
 #include "providermanager.h"
+#include "widgetconfigurationhelper.h"
 #include "widgetspagelistmodel.h"
 
 class QDeclarativeContext;
@@ -48,7 +49,7 @@ namespace Widgets
  * was registered in the provided context, otherwise, they return
  * the registered component in the context.
  */
-class ContextBasePrivate
+class ContextBase
 {
 public:
     /**
@@ -78,6 +79,20 @@ public:
      */
     static WidgetsPageListModel * widgetsPageListModel(QDeclarativeContext *context,
                                                        QObject *parent = 0);
+    /**
+     * @internal
+     * @brief Widget configuration helper
+     *
+     * Returns the widgets configuration helper registered in the provided QML
+     * context. Creates it using the provided parent if no widget configuration helper
+     * was registered in the context.
+     *
+     * @param context QML context
+     * @param parent parent object.
+     * @return the widget configuration manager.
+     */
+    static WidgetConfigurationHelper * widgetConfigurationHelper(QDeclarativeContext *context,
+                                                                 QObject *parent = 0);
 };
 
 }

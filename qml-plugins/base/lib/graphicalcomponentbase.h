@@ -23,7 +23,7 @@
  */
 
 #include <QtCore/QObject>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 
 #include "widgets_global.h"
 
@@ -59,7 +59,7 @@ class GraphicalComponentBase: public QObject
     /**
      * @short Disambiguation parameter of the component
      */
-    Q_PROPERTY(QVariantHash disambiguation READ disambiguation CONSTANT)
+    Q_PROPERTY(QVariantMap disambiguation READ disambiguation CONSTANT)
     /**
      * @short If this component have settings
      */
@@ -77,7 +77,7 @@ public:
      * @param settingsFileName filename of the settings component.
      * @param parent parent object.
      */
-    explicit GraphicalComponentBase(const QString &fileName, const QVariantHash &disambiguation,
+    explicit GraphicalComponentBase(const QString &fileName, const QVariantMap &disambiguation,
                                     const QString &settingsFileName, QObject *parent = 0);
     /**
      * @brief Destructor
@@ -92,7 +92,7 @@ public:
      * @brief Disambiguation parameter of the component
      * @return disambiguation parameter of the component.
      */
-    QVariantHash disambiguation() const;
+    QVariantMap disambiguation() const;
     /**
      * @brief If this component have settings
      * @return if this component have settings.

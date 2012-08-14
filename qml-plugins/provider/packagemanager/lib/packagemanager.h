@@ -76,7 +76,7 @@ class PackageManagerPrivate;
  * - widgetSettingsFile()
  * - widget()
  *
- * The disambiguation paramters are a variant hash that associate the key
+ * The disambiguation paramters are a variant map that associate the key
  * "identifier" to the package identifier. Therefore, these methods will
  * only retrieve the dock or widget properties that corresponds to
  * a filename in a given package.
@@ -112,12 +112,12 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return information about the package.
      */
-    Package * package(const QVariantHash &disambiguation);
+    Package * package(const QVariantMap &disambiguation);
     /**
      * @brief List of disambiguation parameters
      * @return a list of disambiguation parameters.
      */
-    QList<QVariantHash> disambiguationList() const;
+    QList<QVariantMap> disambiguationList() const;
     /**
      * @short Absolute path to the dock file
      *
@@ -126,7 +126,7 @@ public:
      * @return absolute path to the dock file.
      */
     Q_INVOKABLE QString dockFile(const QString &fileName,
-                                 const QVariantHash &disambiguation) const;
+                                 const QVariantMap &disambiguation) const;
     /**
      * @short Absolute path to the dock configuration component file
      *
@@ -135,7 +135,7 @@ public:
      * @return absolute path to the dock configuration component file.
      */
     Q_INVOKABLE QString dockSettingsFile(const QString &fileName,
-                                         const QVariantHash &disambiguation) const;
+                                         const QVariantMap &disambiguation) const;
     /**
      * @short Get a dock
      *
@@ -144,7 +144,7 @@ public:
      * @return information about the dock.
      */
     Q_INVOKABLE Widgets::Docks::DockBaseProperties * dock(const QString &fileName,
-                                                          const QVariantHash &disambiguation);
+                                                          const QVariantMap &disambiguation);
     /**
      * @short Name of the dock
      *
@@ -153,7 +153,7 @@ public:
      * @return name of the dock.
      */
     Q_INVOKABLE QString dockName(const QString &fileName,
-                                 const QVariantHash &disambiguation) const;
+                                 const QVariantMap &disambiguation) const;
     /**
      * @short Description of the dock
      *
@@ -162,13 +162,13 @@ public:
      * @return description of the dock.
      */
     Q_INVOKABLE QString dockDescription(const QString &fileName,
-                                        const QVariantHash &disambiguation) const;
+                                        const QVariantMap &disambiguation) const;
     /**
      * @brief Registered docks identifiers
      * @param disambiguation disambiguation parameter.
      * @return all the registered docks identifiers.
      */
-    QStringList registeredDocks(const QVariantHash &disambiguation) const;
+    QStringList registeredDocks(const QVariantMap &disambiguation) const;
     /**
      * @internal
      * @brief Absolute path to the widget file
@@ -178,7 +178,7 @@ public:
      * @return absolute path to the widget file.
      */
     Q_INVOKABLE QString widgetFile(const QString &fileName,
-                                   const QVariantHash &disambiguation) const;
+                                   const QVariantMap &disambiguation) const;
     /**
      * @brief Absolute path to the widget settings file
      *
@@ -187,7 +187,7 @@ public:
      * @return absolute path to the widget settings file.
      */
     Q_INVOKABLE QString widgetSettingsFile(const QString &fileName,
-                                           const QVariantHash &disambiguation) const;
+                                           const QVariantMap &disambiguation) const;
     /**
      * @short Get a widget
      *
@@ -196,7 +196,7 @@ public:
      * @return information about the widget.
      */
     Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &fileName,
-                                                       const QVariantHash &disambiguation);
+                                                       const QVariantMap &disambiguation);
     /**
      * @short Name of the widget
      *
@@ -205,7 +205,7 @@ public:
      * @return name of the widget.
      */
     Q_INVOKABLE QString widgetName(const QString &fileName,
-                                   const QVariantHash &disambiguation) const;
+                                   const QVariantMap &disambiguation) const;
     /**
      * @short Description of the widget
      *
@@ -214,13 +214,13 @@ public:
      * @return description of the widget.
      */
     Q_INVOKABLE QString widgetDescription(const QString &fileName,
-                                          const QVariantHash &disambiguation) const;
+                                          const QVariantMap &disambiguation) const;
     /**
      * @brief Registered widgets identifiers
      * @param disambiguation disambiguation parameter.
      * @return all the registered widgets identifiers.
      */
-    QStringList registeredWidgets(const QVariantHash &disambiguation) const;
+    QStringList registeredWidgets(const QVariantMap &disambiguation) const;
     /**
      * @brief %Package manager filter
      * @return the package manager filter.

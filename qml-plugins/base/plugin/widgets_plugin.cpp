@@ -41,8 +41,9 @@ void WidgetsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri
 {
     Q_UNUSED(uri);
 
-    ContextBasePrivate::providerManager(engine->rootContext(), this);
-    ContextBasePrivate::widgetsPageListModel(engine->rootContext(), this);
+    ContextBase::providerManager(engine->rootContext(), this);
+    ContextBase::widgetsPageListModel(engine->rootContext(), this);
+    ContextBase::widgetConfigurationHelper(engine->rootContext(), this);
 }
 
 void WidgetsPlugin::registerTypes(const char *uri)

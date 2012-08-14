@@ -100,8 +100,8 @@ public:
      */
     explicit DesktopComponent(const QString &icon,
                               const QString &defaultName, const QString &defaultDescription,
-                              const QHash<QString, QString> &names,
-                              const QHash<QString, QString> &descriptions,
+                              const QMap<QString, QString> &names,
+                              const QMap<QString, QString> &descriptions,
                               QObject *parent = 0);
     /**
      * @brief Destructor

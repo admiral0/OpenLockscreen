@@ -268,7 +268,7 @@ QVariant DockModel::data(const QModelIndex &index, int role) const
     }
 }
 
-bool DockModel::hasDock(const QString &fileName, const QVariantHash &disambiguation) const
+bool DockModel::hasDock(const QString &fileName, const QVariantMap &disambiguation) const
 {
     Q_D(const DockModel);
     bool added = false;
@@ -298,7 +298,7 @@ void DockModel::load()
     d->load();
 }
 
-void DockModel::addDock(DockBaseProperties *dock, const QVariantHash &settings,
+void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings,
                         const QString &identifier)
 {
     if(dock == 0) {

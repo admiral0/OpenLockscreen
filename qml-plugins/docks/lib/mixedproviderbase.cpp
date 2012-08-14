@@ -37,14 +37,14 @@ MixedProviderBase::MixedProviderBase(WidgetProviderBasePrivate *dd, QObject *par
 {
 }
 
-QStringList MixedProviderBase::registeredDocks(const QVariantHash &disambiguation) const
+QStringList MixedProviderBase::registeredDocks(const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation)
     return QStringList();
 }
 
 QString MixedProviderBase::dockFile(const QString &fileName,
-                                    const QVariantHash &disambiguation) const
+                                    const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -52,7 +52,7 @@ QString MixedProviderBase::dockFile(const QString &fileName,
 }
 
 QString MixedProviderBase::dockSettingsFile(const QString &fileName,
-                                            const QVariantHash &disambiguation) const
+                                            const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -60,7 +60,7 @@ QString MixedProviderBase::dockSettingsFile(const QString &fileName,
 }
 
 DockBaseProperties * MixedProviderBase::dock(const QString &fileName,
-                                             const QVariantHash &disambiguation)
+                                             const QVariantMap &disambiguation)
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -68,14 +68,14 @@ DockBaseProperties * MixedProviderBase::dock(const QString &fileName,
 }
 
 QString MixedProviderBase::dockName(const QString &fileName,
-                                    const QVariantHash &disambiguation) const
+                                    const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation)
     return fileName;
 }
 
 QString MixedProviderBase::dockDescription(const QString &fileName,
-                                           const QVariantHash &disambiguation) const
+                                           const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)

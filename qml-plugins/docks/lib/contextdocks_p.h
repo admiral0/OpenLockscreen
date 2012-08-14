@@ -48,7 +48,7 @@ namespace Docks
  * provide unique instance of global objects for the
  * docks plugin.
  */
-class ContextDocksPrivate: public ContextBasePrivate
+class ContextDocksPrivate: public ContextBase
 {
 public:
     /**

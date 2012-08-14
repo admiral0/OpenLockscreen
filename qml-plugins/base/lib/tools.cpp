@@ -29,79 +29,79 @@ namespace Widgets
 {
 
 /**
- * @brief HASH_ITEM_TAG
+ * @brief MAP_ITEM_TAG
  *
  * Used in Widgets::Tools.
  */
-static const char *HASH_ITEM_TAG = "item";
+static const char *MAP_ITEM_TAG = "item";
 /**
- * @brief HASH_ITEM_KEY_ATTRIBUTE
+ * @brief MAP_ITEM_KEY_ATTRIBUTE
  *
  * Used in Widgets::Tools.
  */
-static const char *HASH_ITEM_KEY_ATTRIBUTE = "key";
+static const char *MAP_ITEM_KEY_ATTRIBUTE = "key";
 /**
- * @brief HASH_ITEM_VALUE_ATTRIBUTE
+ * @brief MAP_ITEM_VALUE_ATTRIBUTE
  *
  * Used in Widgets::Tools.
  */
-static const char *HASH_ITEM_VALUE_ATTRIBUTE = "value";
+static const char *MAP_ITEM_VALUE_ATTRIBUTE = "value";
 /**
- * @brief HASH_ITEM_VALUE_TYPE_ATTRIBUTE
+ * @brief MAP_ITEM_VALUE_TYPE_ATTRIBUTE
  *
  * Used in Widgets::Tools.
  */
-static const char *HASH_ITEM_VALUE_TYPE_ATTRIBUTE= "type";
+static const char *MAP_ITEM_VALUE_TYPE_ATTRIBUTE= "type";
 
-QVariantHash Tools::fromXmlElementToVariantHash(const QDomElement &element)
+QVariantMap Tools::fromXmlElementToVariantMap(const QDomElement &element)
 {
-    QVariantHash variantHash;
+    QVariantMap variantMap;
 
-    QDomElement hashElement = element.firstChildElement(HASH_ITEM_TAG);
-    while (!hashElement.isNull()) {
+    QDomElement mapElement = element.firstChildElement(MAP_ITEM_TAG);
+    while (!mapElement.isNull()) {
 
         // Extract the key
-        QString key = hashElement.attribute(HASH_ITEM_KEY_ATTRIBUTE);
+        QString key = mapElement.attribute(MAP_ITEM_KEY_ATTRIBUTE);
 
         if (!key.isNull()) {
             // Extract the value and type
-            QString valueString = hashElement.attribute(HASH_ITEM_VALUE_ATTRIBUTE);
-            QString valueTypeString = hashElement.attribute(HASH_ITEM_VALUE_TYPE_ATTRIBUTE);
+            QString valueString = mapElement.attribute(MAP_ITEM_VALUE_ATTRIBUTE);
+            QString valueTypeString = mapElement.attribute(MAP_ITEM_VALUE_TYPE_ATTRIBUTE);
             QVariant::Type type = QVariant::Type(QMetaType::type(valueTypeString.toAscii()));
 
             if (type) {
                 QVariant value = QVariant(valueString);
                 if (value.convert(type) || value.isNull()) {
                     // Insert the value
-                    variantHash.insert(key, value);
+                    variantMap.insert(key, value);
                 }
             }
         }
-        hashElement = hashElement.nextSiblingElement(HASH_ITEM_TAG);
+        mapElement = mapElement.nextSiblingElement(MAP_ITEM_TAG);
     }
-    return variantHash;
+    return variantMap;
 }
 
-QDomElement Tools::toXmlElementFromVariantHash(const QVariantHash &variantHash,
+QDomElement Tools::toXmlElementFromVariantMap(const QVariantMap &variantMap,
                                                const QString &tagName,
                                                QDomDocument *document)
 {
     QDomElement element = document->createElement(tagName);
-    QHashIterator<QString, QVariant> iterator = QHashIterator<QString, QVariant>(variantHash);
+    QMapIterator<QString, QVariant> iterator = QMapIterator<QString, QVariant>(variantMap);
     while (iterator.hasNext()) {
         iterator.next();
 
-        QDomElement hashElement = document->createElement(HASH_ITEM_TAG);
+        QDomElement mapElement = document->createElement(MAP_ITEM_TAG);
 
         // Store the key
-        hashElement.setAttribute(HASH_ITEM_KEY_ATTRIBUTE, iterator.key());
+        mapElement.setAttribute(MAP_ITEM_KEY_ATTRIBUTE, iterator.key());
 
         // Store the value and it's type
-        hashElement.setAttribute(HASH_ITEM_VALUE_ATTRIBUTE, iterator.value().toString());
-        hashElement.setAttribute(HASH_ITEM_VALUE_TYPE_ATTRIBUTE,
+        mapElement.setAttribute(MAP_ITEM_VALUE_ATTRIBUTE, iterator.value().toString());
+        mapElement.setAttribute(MAP_ITEM_VALUE_TYPE_ATTRIBUTE,
                                  QMetaType::typeName(iterator.value().type()));
 
-        element.appendChild(hashElement);
+        element.appendChild(mapElement);
     }
 
     return element;

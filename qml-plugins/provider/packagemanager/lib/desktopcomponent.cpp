@@ -156,11 +156,11 @@ QString DesktopComponentBuilderHelper::defaultDescription() const
     }
 }
 
-QHash<QString, QString> DesktopComponentBuilderHelper::names() const
+QMap<QString, QString> DesktopComponentBuilderHelper::names() const
 {
     QRegExp nameRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_NAME));
 
-    QHash<QString, QString> data;
+    QMap<QString, QString> data;
 
     foreach (QString key, desktopFileParser->keys()) {
         if (nameRegEx.indexIn(key) != -1) {
@@ -178,11 +178,11 @@ QHash<QString, QString> DesktopComponentBuilderHelper::names() const
     return data;
 }
 
-QHash<QString, QString> DesktopComponentBuilderHelper::descriptions() const
+QMap<QString, QString> DesktopComponentBuilderHelper::descriptions() const
 {
     QRegExp commentRegEx (QString("^%1\\[(\\w+)\\]$").arg(DESKTOP_FILE_COMMENT));
 
-    QHash<QString, QString> data;
+    QMap<QString, QString> data;
 
     foreach (QString key, desktopFileParser->keys()) {
         if (commentRegEx.indexIn(key) != -1) {
@@ -238,8 +238,8 @@ void DesktopComponentBuilder::buildElement()
 
 DesktopComponent::DesktopComponent(const QString &icon,
                                    const QString &defaultName, const QString &defaultDescription,
-                                   const QHash<QString, QString> &names,
-                                   const QHash<QString, QString> &descriptions,
+                                   const QMap<QString, QString> &names,
+                                   const QMap<QString, QString> &descriptions,
                                    QObject *parent):
     QObject(parent), d_pointer(new DesktopComponentPrivate(this))
 {

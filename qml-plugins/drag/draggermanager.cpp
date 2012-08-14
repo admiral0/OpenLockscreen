@@ -23,7 +23,7 @@
 #include "draggermanager.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QHash>
+#include <QtCore/QMap>
 #include <QtDeclarative/QDeclarativeItem>
 
 #include "widgetproperties.h"
@@ -58,7 +58,7 @@ public:
      * @internal
      * @brief Data
      */
-    QHash<WidgetProperties *, QDeclarativeItem *> draggers;
+    QMap<WidgetProperties *, QDeclarativeItem *> draggers;
 };
 
 DraggerManagerPrivate::~DraggerManagerPrivate()
@@ -68,8 +68,8 @@ DraggerManagerPrivate::~DraggerManagerPrivate()
 
 void DraggerManagerPrivate::clear()
 {
-    QHashIterator<WidgetProperties *, QDeclarativeItem *> iterator =
-            QHashIterator<WidgetProperties *, QDeclarativeItem *>(draggers);
+    QMapIterator<WidgetProperties *, QDeclarativeItem *> iterator =
+            QMapIterator<WidgetProperties *, QDeclarativeItem *>(draggers);
     while (iterator.hasNext()) {
         iterator.next();
         iterator.value()->deleteLater();
@@ -124,8 +124,8 @@ void DraggerManager::unregisterDraggers()
 void DraggerManager::disableDraggers()
 {
     Q_D(DraggerManager);
-    QHashIterator<WidgetProperties *, QDeclarativeItem *> iterator =
-            QHashIterator<WidgetProperties *, QDeclarativeItem *>(d->draggers);
+    QMapIterator<WidgetProperties *, QDeclarativeItem *> iterator =
+            QMapIterator<WidgetProperties *, QDeclarativeItem *>(d->draggers);
     while (iterator.hasNext()) {
         iterator.next();
         iterator.value()->setVisible(false);

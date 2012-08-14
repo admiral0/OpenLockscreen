@@ -52,21 +52,21 @@ bool WidgetProviderBase::isAvailable() const
     return d->available;
 }
 
-QList<QVariantHash> WidgetProviderBase::disambiguationList() const
+QList<QVariantMap> WidgetProviderBase::disambiguationList() const
 {
-    QList<QVariantHash> values;
-    values.append(QVariantHash());
+    QList<QVariantMap> values;
+    values.append(QVariantMap());
     return values;
 }
 
-QStringList WidgetProviderBase::registeredWidgets(const QVariantHash &disambiguation) const
+QStringList WidgetProviderBase::registeredWidgets(const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     return QStringList();
 }
 
 QString WidgetProviderBase::widgetFile(const QString &fileName,
-                                       const QVariantHash &disambiguation) const
+                                       const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -74,7 +74,7 @@ QString WidgetProviderBase::widgetFile(const QString &fileName,
 }
 
 QString WidgetProviderBase::widgetSettingsFile(const QString &fileName,
-                                               const QVariantHash &disambiguation) const
+                                               const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -82,7 +82,7 @@ QString WidgetProviderBase::widgetSettingsFile(const QString &fileName,
 }
 
 WidgetBaseProperties * WidgetProviderBase::widget(const QString &fileName,
-                                                  const QVariantHash &disambiguation)
+                                                  const QVariantMap &disambiguation)
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)
@@ -90,14 +90,14 @@ WidgetBaseProperties * WidgetProviderBase::widget(const QString &fileName,
 }
 
 QString WidgetProviderBase::widgetName(const QString &fileName,
-                                       const QVariantHash &disambiguation) const
+                                       const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation)
     return fileName;
 }
 
 QString WidgetProviderBase::widgetDescription(const QString &fileName,
-                                              const QVariantHash &disambiguation) const
+                                              const QVariantMap &disambiguation) const
 {
     Q_UNUSED(fileName)
     Q_UNUSED(disambiguation)

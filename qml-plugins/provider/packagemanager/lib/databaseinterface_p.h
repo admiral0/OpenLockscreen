@@ -31,7 +31,7 @@
  */
 
 #include <QtCore/QObject>
-#include <QtCore/QVariantHash>
+#include <QtCore/QVariantMap>
 
 namespace Widgets
 {
@@ -89,7 +89,7 @@ class Package;
  * This class also provides some small utilities functions, like
  * - disambiguation()
  * - packageIdentifier()
- * that are used to switch from the variant-hash based disambiguation
+ * that are used to switch from the variant-map based disambiguation
  * system and the string based package identifier system.
  */
 class DatabaseInterface: public QObject
@@ -117,7 +117,7 @@ public:
      * @param packageIdentifier package identifier.
      * @return disambiguation parameter.
      */
-    static QVariantHash disambiguation(const QString &packageIdentifier);
+    static QVariantMap disambiguation(const QString &packageIdentifier);
     /**
      * @internal
      * @brief Package identifier
@@ -128,7 +128,7 @@ public:
      * @param disambiguation disambiguation parameter.
      * @return package identifier.
      */
-    static QString packageIdentifier(const QVariantHash &disambiguation);
+    static QString packageIdentifier(const QVariantMap &disambiguation);
     /**
      * @internal
      * @brief Prepare the database

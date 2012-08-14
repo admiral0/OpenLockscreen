@@ -84,10 +84,10 @@ Page {
         }
     }
 
-    /*
     Sheet {
         id: configureWidgetSheet
         property Item settingsItem
+        property variant widget
         acceptButtonText: qsTr("Close")
         content: Item {
             id: contentContainer
@@ -99,10 +99,9 @@ Page {
         }
 
         function configure(widget) {
-            ConfigurationManagerInstance.setCurrentWidget(widget)
-            var qmlFile = PackageManagerInstance.widgetSettingsFile(widget.packageIdentifier,
-                                                                    widget.fileName,
-                                                                    widget.settingsFileName)
+            configureWidgetSheet.widget = widget
+            var provider = ProviderManagerInstance.provider
+            var qmlFile = provider.widgetSettingsFile(widget.fileName, widget.disambiguation)
             if(qmlFile != "") {
                 var component = Qt.createComponent(qmlFile)
                 if (component.status == Component.Ready) {
@@ -120,16 +119,18 @@ Page {
             configureWidgetSheet.open()
         }
         onAccepted: {
-            ConfigurationManagerInstance.requestSaveWidgetSettings()
+            WidgetConfigurationHelperInstance.requestSaveSettings(configureWidgetSheet.widget)
         }
 
         onStatusChanged: {
             if (status == DialogStatus.Closed) {
-                settingsItem.destroy()
-                ConfigurationManagerInstance.setCurrentWidget(0)
+                if (settingsItem != null) {
+                    settingsItem.destroy()
+                    configureWidgetSheet.widget = 0
+                }
             }
         }
-    }*/
+    }
 
     Item {
         id: falseToolbar

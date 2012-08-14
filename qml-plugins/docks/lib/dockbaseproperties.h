@@ -97,7 +97,7 @@ public:
      * @param anchorsRight if the dock is anchored using right anchor.
      * @param parent
      */
-    explicit DockBaseProperties(const QString &fileName, const QVariantHash &disambiguation,
+    explicit DockBaseProperties(const QString &fileName, const QVariantMap &disambiguation,
                                 const QString &settingsFileName,
                                 int width, int height,
                                 bool anchorsTop, bool anchorsBottom,
@@ -147,7 +147,7 @@ public:
      * @return the widget base properties.
      */
     static DockBaseProperties * fromQmlFile(const QString &qmlFile,
-                                            const QVariantHash &disambiguation,
+                                            const QVariantMap &disambiguation,
                                             const QString &settingsFileName,
                                             QObject *parent = 0);
 protected:

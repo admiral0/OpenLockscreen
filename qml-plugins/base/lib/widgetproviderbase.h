@@ -121,14 +121,14 @@ public:
      * Disambiguations are optionnal parameters but can be
      * used to group some widgets together. By default, this
      * list returns a single element, that is an empty variant
-     * hash.
+     * map.
      *
      * While reimplementing this method, you should make sure to
-     * return at least the empty hash.
+     * return at least the empty map.
      *
      * @return a list of disambiguation parameters.
      */
-    virtual QList<QVariantHash> disambiguationList() const;
+    virtual QList<QVariantMap> disambiguationList() const;
     /**
      * @short Registered widgets
      *
@@ -140,7 +140,7 @@ public:
      * @return a list of registered widgets.
      */
     Q_INVOKABLE virtual QStringList
-                registeredWidgets(const QVariantHash &disambiguation = QVariantHash()) const;
+                registeredWidgets(const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget file
      *
@@ -154,7 +154,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetFile(const QString &fileName,
-                           const QVariantHash &disambiguation = QVariantHash()) const;
+                           const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Absolute path to the widget configuration component file
      *
@@ -169,7 +169,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetSettingsFile(const QString &fileName,
-                                   const QVariantHash &disambiguation = QVariantHash()) const;
+                                   const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Widget properties
      *
@@ -183,7 +183,7 @@ public:
      */
     Q_INVOKABLE virtual Widgets::WidgetBaseProperties *
                         widget(const QString &fileName,
-                               const QVariantHash &disambiguation = QVariantHash());
+                               const QVariantMap &disambiguation = QVariantMap());
     /**
      * @short Name of the widget
      *
@@ -196,7 +196,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetName(const QString &fileName,
-                           const QVariantHash &disambiguation = QVariantHash()) const;
+                           const QVariantMap &disambiguation = QVariantMap()) const;
     /**
      * @short Description
      *
@@ -209,7 +209,7 @@ public:
      */
     Q_INVOKABLE virtual QString
                 widgetDescription(const QString &fileName,
-                                  const QVariantHash &disambiguation = QVariantHash()) const;
+                                  const QVariantMap &disambiguation = QVariantMap()) const;
 
 Q_SIGNALS:
     /**

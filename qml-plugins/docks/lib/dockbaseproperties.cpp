@@ -80,7 +80,7 @@ DockBaseProperties::DockBaseProperties(QObject *parent):
 }
 
 DockBaseProperties::DockBaseProperties(const QString &fileName,
-                                       const QVariantHash &disambiguation,
+                                       const QVariantMap &disambiguation,
                                        const QString &settingsFileName,
                                        int width, int height,
                                        bool anchorsTop, bool anchorsBottom,
@@ -141,7 +141,7 @@ bool DockBaseProperties::anchorsRight() const
 }
 
 DockBaseProperties * DockBaseProperties::fromQmlFile(const QString &qmlFile,
-                                                     const QVariantHash &disambiguation,
+                                                     const QVariantMap &disambiguation,
                                                      const QString &settingsFileName,
                                                      QObject *parent)
 {

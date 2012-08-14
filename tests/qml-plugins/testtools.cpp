@@ -62,8 +62,8 @@ void TestTools::testToolVariantHashXml()
     hash.insert("bool_false", QVariant(false));
 
     QDomDocument document = QDomDocument();
-    QDomElement element = Widgets::Tools::toXmlElementFromVariantHash(hash, "test", &document);
-    QVariantHash convertedHash = Widgets::Tools::fromXmlElementToVariantHash(element);
+    QDomElement element = Widgets::Tools::toXmlElementFromVariantMap(hash, "test", &document);
+    QVariantHash convertedHash = Widgets::Tools::fromXmlElementToVariantMap(element);
 
     QCOMPARE(convertedHash.value("an_integer"), hash.value("an_integer"));
     QCOMPARE(convertedHash.value("a_double"), hash.value("a_double"));

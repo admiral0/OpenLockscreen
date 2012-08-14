@@ -157,7 +157,7 @@ public:
     Q_INVOKABLE bool addWidget(int pageIndex,
                                Widgets::WidgetBaseProperties *widget,
                                Widgets::GridManager *gridManager,
-                               const QVariantHash &settings = QVariantHash(),
+                               const QVariantMap &settings = QVariantMap(),
                                const QString &identifier = QString());
     /**
      * @short Remove widget
