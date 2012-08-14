@@ -234,13 +234,6 @@ class WidgetsProviderPlugin : public QDeclarativeExtensionPlugin
 public:
     /**
      * @internal
-     * @brief Initialize engine
-     * @param engine QML engine.
-     * @param uri uri used in the import.
-     */
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
-    /**
-     * @internal
      * @short Register types
      * @param uri uri used in the import.
      */

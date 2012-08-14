@@ -106,26 +106,13 @@ public:
      * @brief Destructor
      */
     virtual ~PackageManager();
-    /*
+    /**
      * @brief Get a package
      *
-     * This method is used to get a package through an identifier.
-     * If there is no package corresponding to the identifier, a
-     * null package is returned.
-     *
-     * @param identifier the identifier of the package.
-     * @return a package corresponding to the identifier.
+     * @param disambiguation disambiguation parameter.
+     * @return information about the package.
      */
-//    Package * package(const QString &identifier);
-    /*
-     * @brief Registered packages identifiers
-     *
-     * This method is used to get a list of the registered packages
-     * through their identifiers.
-     *
-     * @return all the registered packages identifiers.
-     */
-//    QStringList registeredPackages() const;
+    Package * package(const QVariantHash &disambiguation);
     /**
      * @brief List of disambiguation parameters
      * @return a list of disambiguation parameters.

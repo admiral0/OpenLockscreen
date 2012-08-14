@@ -75,6 +75,12 @@ PackageManager::~PackageManager()
 {
 }
 
+Package * PackageManager::package(const QVariantHash &disambiguation)
+{
+    Q_D(const PackageManager);
+    return d->interface->package(d->interface->packageIdentifier(disambiguation), this);
+}
+
 QList<QVariantHash> PackageManager::disambiguationList() const
 {
     Q_D(const PackageManager);

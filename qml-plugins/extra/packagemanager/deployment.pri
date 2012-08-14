@@ -1,6 +1,6 @@
-include(../../globals.pri)
+include(../../../globals.pri)
 
-installPath = $${QML_PLUGIN_PATH}/extra
+installPath = $${QML_PLUGIN_PATH}/extra/packagemanager
 
 # Path for QML files
 qmlFiles.path = $${installPath}

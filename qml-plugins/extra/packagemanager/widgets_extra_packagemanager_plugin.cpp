@@ -14,21 +14,28 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "widgets_extra_plugin.h"
+#include "widgets_extra_packagemanager_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 
-//#include "dockinformationmodel.h"
-//#include "widgetinformationmodel.h"
-//#include "packageinformationmodel.h"
+#include "packageinformationmodel.h"
 
-void WidgetsExtraPlugin::registerTypes(const char *uri)
+namespace Widgets
 {
-    // @uri org.SfietKonstantin.widgets.extra
-//    qmlRegisterType<Widgets::Extra::PackageInformationModel>(uri, 1, 0, "PackageInformationModel");
-//    qmlRegisterType<Widgets::Extra::DockInformationModel>(uri, 1, 0, "DockInformationModel");
-//    qmlRegisterType<Widgets::Extra::WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
+
+namespace Extra
+{
+
+
+void WidgetsExtraPackageManagerPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.extra.packagemanager
+    qmlRegisterType<Widgets::Extra::PackageInformationModel>(uri, 1, 0, "PackageInformationModel");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsExtraPlugin)
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Extra::WidgetsExtraPackageManagerPlugin)
 

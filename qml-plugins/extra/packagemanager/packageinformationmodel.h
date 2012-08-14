@@ -12,7 +12,7 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WIDGETS_EXTRA_PACKAGEINFORMATIONMODEL_H
 #define WIDGETS_EXTRA_PACKAGEINFORMATIONMODEL_H
@@ -32,8 +32,8 @@ class PackageInformationModelPrivate;
 class PackageInformationModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Widgets::PackageManager * packageManager READ packageManager
-               WRITE setPackageManager NOTIFY packageManagerChanged)
+    Q_PROPERTY(Widgets::Provider::PackageManager::PackageManager * packageManager
+               READ packageManager WRITE setPackageManager NOTIFY packageManagerChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum PackageRole
@@ -47,7 +47,7 @@ public:
     };
     explicit PackageInformationModel(QObject *parent = 0);
     virtual ~PackageInformationModel();
-    PackageManager * packageManager() const;
+    Provider::PackageManager::PackageManager * packageManager() const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int count() const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -56,7 +56,7 @@ Q_SIGNALS:
     void packageManagerChanged();
     void countChanged(int count);
 public Q_SLOTS:
-    void setPackageManager(PackageManager *packageManager);
+    void setPackageManager(Widgets::Provider::PackageManager::PackageManager *packageManager);
     void update();
 protected:
     const QScopedPointer<PackageInformationModelPrivate> d_ptr;

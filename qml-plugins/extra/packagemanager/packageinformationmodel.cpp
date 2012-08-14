@@ -33,8 +33,8 @@ public:
     PackageInformationModelPrivate();
     ~PackageInformationModelPrivate();
     void clear();
-    PackageManager *packageManager;
-    QList<Package *> data;
+    Provider::PackageManager::PackageManager *packageManager;
+    QList<Provider::PackageManager::Package *> data;
 };
 
 PackageInformationModelPrivate::PackageInformationModelPrivate()
@@ -73,7 +73,7 @@ PackageInformationModel::~PackageInformationModel()
 {
 }
 
-PackageManager * PackageInformationModel::packageManager() const
+Provider::PackageManager::PackageManager * PackageInformationModel::packageManager() const
 {
     Q_D(const PackageInformationModel);
     return d->packageManager;
@@ -99,7 +99,7 @@ QVariant PackageInformationModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    Package *package = d->data.at(row);
+    Provider::PackageManager::Package *package = d->data.at(row);
     switch(role) {
     case NameRole:
         return package->name();
@@ -135,7 +135,8 @@ void PackageInformationModel::clear()
     endRemoveRows();
 }
 
-void PackageInformationModel::setPackageManager(PackageManager *packageManager)
+void PackageInformationModel::setPackageManager(
+        Provider::PackageManager::PackageManager *packageManager)
 {
     Q_D(PackageInformationModel);
     if (d->packageManager != packageManager) {
@@ -155,16 +156,14 @@ void PackageInformationModel::update()
     }
     clear();
 
-    QStringList registeredPackages = d->packageManager->registeredPackages();
-    foreach(QString identifier, registeredPackages) {
+    QList<QVariantHash> disambiguationList = d->packageManager->disambiguationList();
+    foreach(QVariantHash disambiguation, disambiguationList) {
+
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-
-        Package *package = packageManager()->package(identifier);
-        if (package->isVisible()) {
-            d->data.append(package);
-        }
-
+        Provider::PackageManager::Package *package = packageManager()->package(disambiguation);
+        d->data.append(package);
         endInsertRows();
+
     }
     emit countChanged(rowCount());
 }

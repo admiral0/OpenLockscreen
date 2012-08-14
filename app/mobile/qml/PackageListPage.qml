@@ -17,7 +17,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.extra 1.0
+import org.SfietKonstantin.widgets.extra.packagemanager 1.0
 import "UiConstants.js" as Ui
 
 AbstractPage {
@@ -47,7 +47,7 @@ AbstractPage {
 
     PackageInformationModel {
         id: packageInformationModel
-        packageManager: PackageManagerInstance
+        packageManager: ProviderManagerInstance.provider
     }
 
     PackageDetailPage {

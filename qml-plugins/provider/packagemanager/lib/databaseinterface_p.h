@@ -49,6 +49,7 @@ namespace PackageManager
 
 class FilterConditionList;
 class DatabaseInterfacePrivate;
+class Package;
 
 /**
  * @internal
@@ -169,6 +170,14 @@ public:
      * @return all the registered docks identifiers.
      */
     QStringList registeredDocks(const QString &packageIdentifier) const;
+    /**
+     * @brief Get a package
+     *
+     * @param packageIdentifier the identifier of the package.
+     * @param parent parent object.
+     * @return information about the package.
+     */
+    Package * package(const QString &packageIdentifier, QObject *parent = 0) const;
     /**
      * @internal
      * @brief Absolute path to the widget file

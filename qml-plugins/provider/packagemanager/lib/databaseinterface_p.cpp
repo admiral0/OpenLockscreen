@@ -913,17 +913,28 @@ QStringList DatabaseInterfacePrivate::registeredPackages(FilterConditionList *fi
         } else {
             QStringList queryConditions;
             QString queryString = "SELECT DISTINCT packages.identifier \
-                                   FROM packages INNER JOIN packageTags \
-                                   ON packages.id=packageTags.packageId \
-                                   INNER JOIN tags ON \
-                                   packageTags.tagId=tags.id WHERE %1";
+                                    FROM packages INNER JOIN packageTags \
+                                    ON packages.id=packageTags.packageId \
+                                    INNER JOIN tags ON \
+                                    packageTags.tagId=tags.id \
+                                    INNER JOIN componentInformation ON \
+                                    componentInformation.componentId=packages.id\
+                                    INNER JOIN componentInformationProperties ON \
+                                    componentInformation.informationId\
+                                    =componentInformationProperties.id\
+                                    WHERE componentInformation.componentTypeId=?\
+                                    AND componentInformationProperties.name=?\
+                                    AND componentInformation.value=? AND %1";
             for (int i = 0; i < tags.count(); i++) {
                 queryConditions.append("tags.name=?");
             }
             queryString = queryString.arg(queryConditions.join(" OR "));
             query.prepare(queryString);
+            query.bindValue(0, componentTypeId(COMPONENT_TYPE_PACKAGE));
+            query.bindValue(1, PACKAGE_INFORMATION_VISIBLE);
+            query.bindValue(2, QVariant(true));
             for (int i = 0; i < tags.count(); i++) {
-                query.bindValue(i, tags.at(i));
+                query.bindValue(i + 3, tags.at(i));
             }
         }
 
@@ -1773,6 +1784,12 @@ QStringList DatabaseInterface::registeredDocks(const QString &packageIdentifier)
 {
     Q_D(const DatabaseInterface);
     return d->registeredDocks(packageIdentifier);
+}
+
+Package * DatabaseInterface::package(const QString &packageIdentifier, QObject *parent) const
+{
+    Q_D(const DatabaseInterface);
+    return d->package(packageIdentifier, parent);
 }
 
 QString DatabaseInterface::widgetFile(const QString &packageIdentifier,

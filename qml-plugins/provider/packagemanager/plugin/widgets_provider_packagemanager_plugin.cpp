@@ -38,11 +38,6 @@ namespace Provider
 namespace PackageManager
 {
 
-void WidgetsProviderPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
-{
-    Q_UNUSED(uri)
-}
-
 void WidgetsProviderPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.provider.packagemanager

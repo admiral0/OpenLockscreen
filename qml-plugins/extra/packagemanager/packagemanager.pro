@@ -1,20 +1,20 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsextra
+TARGET =        widgetsextrapackagemanager
 QT +=           declarative
 CONFIG +=       qt plugin
-INCLUDEPATH +=  ../base/lib/
-LIBS +=         -L ../base/lib/ -lwidgetsbase
+INCLUDEPATH +=  ../../base/lib/
+INCLUDEPATH +=  ../../docks/lib/
+INCLUDEPATH +=  ../../provider/packagemanager/lib/
+LIBS +=         -L../../base/lib/ -lwidgetsbase
+LIBS +=         -L../../docks/lib/ -lwidgetsdocks
+LIBS +=         -L../../provider/packagemanager/lib/ -lwidgetspackagemanagerprovider
 
-HEADERS +=      widgets_extra_plugin.h \
-#                packageinformationmodel.h \
-                dockinformationmodel.h \
-                widgetinformationmodel.h
+HEADERS +=      widgets_extra_packagemanager_plugin.h \
+                packageinformationmodel.h \
 
-SOURCES +=      widgets_extra_plugin.cpp \
-#                packageinformationmodel.cpp \
-                dockinformationmodel.cpp \
-                widgetinformationmodel.cpp
+SOURCES +=      widgets_extra_packagemanager_plugin.cpp \
+                packageinformationmodel.cpp \
 
 OTHER_FILES =   qmldir \
 
