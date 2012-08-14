@@ -108,6 +108,21 @@ Docks::DockBaseProperties * PackageManager::dock(const QString &fileName,
     return d->interface->dock(d->interface->packageIdentifier(disambiguation), fileName, this);
 }
 
+QString PackageManager::dockName(const QString &fileName,
+                                 const QVariantHash &disambiguation) const
+{
+    Q_D(const PackageManager);
+    return d->interface->dockName(d->interface->packageIdentifier(disambiguation), fileName);
+}
+
+QString PackageManager::dockDescription(const QString &fileName,
+                                        const QVariantHash &disambiguation) const
+{
+    Q_D(const PackageManager);
+    return d->interface->dockDescription(d->interface->packageIdentifier(disambiguation),
+                                         fileName);
+}
+
 
 QStringList PackageManager::registeredDocks(const QVariantHash &disambiguation) const
 {
@@ -137,6 +152,22 @@ Widgets::WidgetBaseProperties * PackageManager::widget(const QString &fileName,
     Q_D(const PackageManager);
     return d->interface->widget(d->interface->packageIdentifier(disambiguation), fileName, this);
 }
+
+QString PackageManager::widgetName(const QString &fileName,
+                                   const QVariantHash &disambiguation) const
+{
+    Q_D(const PackageManager);
+    return d->interface->widgetName(d->interface->packageIdentifier(disambiguation), fileName);
+}
+
+QString PackageManager::widgetDescription(const QString &fileName,
+                                          const QVariantHash &disambiguation) const
+{
+    Q_D(const PackageManager);
+    return d->interface->widgetDescription(d->interface->packageIdentifier(disambiguation),
+                                           fileName);
+}
+
 
 QStringList PackageManager::registeredWidgets(const QVariantHash &disambiguation) const
 {

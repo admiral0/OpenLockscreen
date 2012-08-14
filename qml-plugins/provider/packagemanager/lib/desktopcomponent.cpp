@@ -135,6 +135,9 @@ QString DesktopComponentBuilderHelper::defaultName() const
     QVariant nameVariant = desktopFileParser->value(DESKTOP_FILE_NAME);
     if (nameVariant.type() == QVariant::String) {
         return nameVariant.toString();
+    } else if (nameVariant.type() == QVariant::StringList) {
+        QString name = nameVariant.toStringList().join(", ");
+        return name;
     } else {
         return QString();
     }
@@ -142,9 +145,12 @@ QString DesktopComponentBuilderHelper::defaultName() const
 
 QString DesktopComponentBuilderHelper::defaultDescription() const
 {
-    QVariant descriptionVariant = desktopFileParser->value(DESKTOP_FILE_COMMENT);
-    if (descriptionVariant.type() == QVariant::String) {
-        return descriptionVariant.toString();
+    QVariant commentVariant = desktopFileParser->value(DESKTOP_FILE_COMMENT);
+    if (commentVariant.type() == QVariant::String) {
+        return commentVariant.toString();
+    } else if (commentVariant.type() == QVariant::StringList) {
+        QString comment = commentVariant.toStringList().join(", ");
+        return comment;
     } else {
         return QString();
     }
@@ -162,6 +168,9 @@ QHash<QString, QString> DesktopComponentBuilderHelper::names() const
             QVariant nameVariant = desktopFileParser->value(DESKTOP_FILE_NAME, language);
             if (nameVariant.type() == QVariant::String) {
                 data.insert(language, nameVariant.toString());
+            } else if (nameVariant.type() == QVariant::StringList) {
+                QString name = nameVariant.toStringList().join(", ");
+                data.insert(language, name);
             }
         }
     }
@@ -178,12 +187,17 @@ QHash<QString, QString> DesktopComponentBuilderHelper::descriptions() const
     foreach (QString key, desktopFileParser->keys()) {
         if (commentRegEx.indexIn(key) != -1) {
             QString language = commentRegEx.cap(1);
-            QVariant commentVariant = desktopFileParser->value(DESKTOP_FILE_NAME, language);
+            QVariant commentVariant = desktopFileParser->value(DESKTOP_FILE_COMMENT, language);
             if (commentVariant.type() == QVariant::String) {
                 data.insert(language, commentVariant.toString());
+            } else if (commentVariant.type() == QVariant::StringList) {
+                QString comment = commentVariant.toStringList().join(", ");
+                data.insert(language, comment);
             }
         }
     }
+
+
     return data;
 }
 

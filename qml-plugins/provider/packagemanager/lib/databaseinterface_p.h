@@ -116,7 +116,7 @@ public:
      * @param packageIdentifier package identifier.
      * @return disambiguation parameter.
      */
-    QVariantHash disambiguation(const QString &packageIdentifier);
+    static QVariantHash disambiguation(const QString &packageIdentifier);
     /**
      * @internal
      * @brief Package identifier
@@ -135,19 +135,19 @@ public:
      * Prepare the database by adding default
      * entries.
      */
-    void prepareDatabase();
+    void prepareDatabase() const;
     /**
      * @internal
      * @brief Clean the database
      */
-    void cleanDatabase();
+    void cleanDatabase() const;
     /**
      * @internal
      * @brief Scan
      *
      * Scan the system for packages, widgets and docks.
      */
-    void scan();
+    void scan() const;
     /**
      * @internal
      * @brief Registered packages identifiers
@@ -177,7 +177,7 @@ public:
      * @param fileName widget filename.
      * @return absolute path to the widget file.
      */
-    QString widgetFile(const QString &packageIdentifier, const QString &fileName);
+    QString widgetFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the widget settings file
@@ -186,7 +186,7 @@ public:
      * @param fileName widget filename.
      * @return absolute path to the widget settings file.
      */
-    QString widgetSettingsFile(const QString &packageIdentifier, const QString &fileName);
+    QString widgetSettingsFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @short Get a widget
      *
@@ -196,7 +196,23 @@ public:
      * @return information about the widget.
      */
     WidgetBaseProperties * widget(const QString &packageIdentifier, const QString &fileName,
-                                  QObject *parent = 0);
+                                  QObject *parent = 0) const;
+    /**
+     * @short Name of the widget
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName widget file name.
+     * @return name of the widget.
+     */
+    QString widgetName(const QString &packageIdentifier, const QString &fileName) const;
+    /**
+     * @short Description of the widget
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName widget file name.
+     * @return description of the widget.
+     */
+    QString widgetDescription(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the dock file
@@ -205,7 +221,7 @@ public:
      * @param fileName dock filename.
      * @return absolute path to the dock file.
      */
-    QString dockFile(const QString &packageIdentifier, const QString &fileName);
+    QString dockFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the dock settings file
@@ -214,7 +230,7 @@ public:
      * @param fileName dock filename.
      * @return absolute path to the dock settings file.
      */
-    QString dockSettingsFile(const QString &packageIdentifier, const QString &fileName);
+    QString dockSettingsFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @short Get a dock
      *
@@ -224,7 +240,23 @@ public:
      * @return information about the dock.
      */
     Docks::DockBaseProperties * dock(const QString &packageIdentifier, const QString &fileName,
-                                     QObject *parent = 0);
+                                     QObject *parent = 0) const;
+    /**
+     * @short Name of the dock
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName dock file name.
+     * @return name of the dock.
+     */
+    QString dockName(const QString &packageIdentifier, const QString &fileName) const;
+    /**
+     * @short Description of the dock
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName dock file name.
+     * @return description of the dock.
+     */
+    QString dockDescription(const QString &packageIdentifier, const QString &fileName) const;
 protected:
     /**
      * @brief D-pointer

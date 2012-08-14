@@ -251,10 +251,30 @@ public:
      */
     static QStringList registeredDocks(const QString &packageIdentifier);
     /**
+     * @internal
+     * @brief Widget metadata
+     * @param packageIdentifier package identifier.
+     * @param fileName the widget filename.
+     * @param parent parent object.
+     * @return widget metadata.
+     */
+    static ComponentMetadata * widgetMetadata(const QString &packageIdentifier,
+                                              const QString &fileName, QObject *parent = 0);
+    /**
+     * @internal
+     * @brief Dock metadata
+     * @param packageIdentifier package identifier.
+     * @param fileName the dock filename.
+     * @param parent parent object.
+     * @return dock metadata.
+     */
+    static ComponentMetadata * dockMetadata(const QString &packageIdentifier,
+                                            const QString &fileName, QObject *parent = 0);
+    /**
      * @short Get a widget
      *
      * @param packageIdentifier package identifier.
-     * @param fileName widget file name.
+     * @param fileName widget filename.
      * @param parent parent object.
      * @return information about the widget.
      */
@@ -264,7 +284,7 @@ public:
      * @short Get a dock
      *
      * @param packageIdentifier package identifier.
-     * @param fileName dock file name.
+     * @param fileName dock filename.
      * @param parent parent object.
      * @return information about the dock.
      */
@@ -274,7 +294,7 @@ public:
     /**
      * @brief Absolute widget folder
      * @param packageIdentifier package identifier.
-     * @param fileName filename.
+     * @param fileName widget filename.
      * @return absolute widget folder.
      */
     static QString widgetAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);
@@ -299,7 +319,7 @@ public:
     /**
      * @brief Absolute dock folder
      * @param packageIdentifier package identifier.
-     * @param fileName filename.
+     * @param fileName dock filename.
      * @return absolute dock folder.
      */
     static QString dockAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);

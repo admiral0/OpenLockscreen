@@ -159,6 +159,24 @@ public:
     Q_INVOKABLE Widgets::Docks::DockBaseProperties * dock(const QString &fileName,
                                                           const QVariantHash &disambiguation);
     /**
+     * @short Name of the dock
+     *
+     * @param fileName the dock filename.
+     * @param disambiguation disambiguation parameter.
+     * @return name of the dock.
+     */
+    Q_INVOKABLE QString dockName(const QString &fileName,
+                                 const QVariantHash &disambiguation) const;
+    /**
+     * @short Description of the dock
+     *
+     * @param fileName the dock filename.
+     * @param disambiguation disambiguation parameter.
+     * @return description of the dock.
+     */
+    Q_INVOKABLE QString dockDescription(const QString &fileName,
+                                        const QVariantHash &disambiguation) const;
+    /**
      * @brief Registered docks identifiers
      * @param disambiguation disambiguation parameter.
      * @return all the registered docks identifiers.
@@ -192,6 +210,24 @@ public:
      */
     Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &fileName,
                                                        const QVariantHash &disambiguation);
+    /**
+     * @short Name of the widget
+     *
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return name of the widget.
+     */
+    Q_INVOKABLE QString widgetName(const QString &fileName,
+                                   const QVariantHash &disambiguation) const;
+    /**
+     * @short Description of the widget
+     *
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return description of the widget.
+     */
+    Q_INVOKABLE QString widgetDescription(const QString &fileName,
+                                          const QVariantHash &disambiguation) const;
     /**
      * @brief Registered widgets identifiers
      * @param disambiguation disambiguation parameter.

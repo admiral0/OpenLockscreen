@@ -178,7 +178,6 @@ void WidgetInformationModel::update()
 
         foreach (QString file, registeredWidgets) {
             beginInsertRows(QModelIndex(), rowCount(), rowCount());
-
             QString name = provider->widgetName(file, disambiguation);
             QString description = provider->widgetDescription(file, disambiguation);
             WidgetInformationModelPrivateItem *item = new WidgetInformationModelPrivateItem;

@@ -1081,6 +1081,184 @@ QStringList DatabaseInterfacePrivate::registeredDocks(const QString &packageIden
 }
 
 
+ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &packageIdentifier,
+                                                             const QString &fileName,
+                                                             QObject *parent)
+{
+    ComponentMetadata *returnedValue = 0;
+
+    qlonglong widgetTypeId = componentTypeId(COMPONENT_TYPE_WIDGET);
+
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_widget_metadata");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT widgets.id FROM widgets INNER JOIN packages \
+                      ON widgets.packageId=packages.id \
+                      WHERE packages.identifier=:packageIdentifier AND widgets.file=:widgetFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":widgetFile", fileName);
+        executeQuery(&query);
+        if (!query.next()) {
+            return returnedValue;
+        }
+
+        int widgetId = query.value(0).toInt();
+
+        QString defaultName;
+        QHash<QString, QString> names;
+        QString defaultDescription;
+        QHash<QString, QString> descriptions;
+        query.prepare("SELECT language, name, description \
+                      FROM componentLocalizedInformation \
+                      WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
+        query.bindValue(":componentTypeId", widgetTypeId);
+        query.bindValue(":componentId", widgetId);
+        executeQuery(&query);
+        while (query.next()) {
+            QString language = query.value(0).toString();
+            QString name = query.value(1).toString();
+            QString description = query.value(2).toString();
+
+            if (language == COMPONENT_INFORMATION_DEFAULT_LANGUAGE) {
+                defaultName = name;
+                defaultDescription = description;
+            } else {
+                if (!name.isEmpty()) {
+                    names.insert(language, name);
+                }
+                if (!description.isEmpty()) {
+                    descriptions.insert(language, description);
+                }
+            }
+        }
+        query.finish();
+
+        QHash<QString, QString> informations;
+
+        query.prepare("SELECT name, value FROM componentInformation \
+                       INNER JOIN componentInformationProperties \
+                       ON componentInformation.informationId = componentInformationProperties.id \
+                       WHERE componentInformation.componentId=:componentId \
+                       AND componentInformation.componentTypeId=:componentTypeId");
+        query.bindValue(":componentId", widgetId);
+        query.bindValue(":componentTypeId", widgetTypeId);
+        executeQuery(&query);
+
+        while (query.next()) {
+            QString name = query.value(0).toString();
+            QString value = query.value(1).toString();
+            informations.insert(name, value);
+        }
+        query.finish();
+
+        QString icon = informations.value(COMPONENT_INFORMATION_ICON);
+        QString settingsFileName = informations.value(COMPONENT_INFORMATION_SETTINGS_FILE);
+
+        QVariantHash disambiguation;
+        disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
+        returnedValue = new ComponentMetadata(icon, defaultName, defaultDescription,
+                                              names, descriptions,
+                                              ComponentMetadata::WidgetComponentType,
+                                              fileName, settingsFileName, parent);
+
+    }
+    QSqlDatabase::removeDatabase("get_widget_metadata");
+
+    return returnedValue;
+}
+
+ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packageIdentifier,
+                                                           const QString &fileName,
+                                                           QObject *parent)
+{
+    ComponentMetadata *returnedValue = 0;
+
+    qlonglong widgetTypeId = componentTypeId(COMPONENT_TYPE_DOCK);
+
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "get_dock_metadata");
+        db.setDatabaseName(databasePath());
+        W_ASSERT(db.open());
+
+        QSqlQuery query = QSqlQuery(db);
+        query.prepare("SELECT docks.id FROM docks INNER JOIN packages \
+                      ON docks.packageId=packages.id \
+                      WHERE packages.identifier=:packageIdentifier AND docks.file=:dockFile");
+        query.bindValue(":packageIdentifier", packageIdentifier);
+        query.bindValue(":dockFile", fileName);
+        executeQuery(&query);
+        if (!query.next()) {
+            return returnedValue;
+        }
+
+        int widgetId = query.value(0).toInt();
+
+        QString defaultName;
+        QHash<QString, QString> names;
+        QString defaultDescription;
+        QHash<QString, QString> descriptions;
+        query.prepare("SELECT language, name, description \
+                      FROM componentLocalizedInformation \
+                      WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
+        query.bindValue(":componentTypeId", widgetTypeId);
+        query.bindValue(":componentId", widgetId);
+        executeQuery(&query);
+        while (query.next()) {
+            QString language = query.value(0).toString();
+            QString name = query.value(1).toString();
+            QString description = query.value(2).toString();
+
+            if (language == COMPONENT_INFORMATION_DEFAULT_LANGUAGE) {
+                defaultName = name;
+                defaultDescription = description;
+            } else {
+                if (!name.isEmpty()) {
+                    names.insert(language, name);
+                }
+                if (!description.isEmpty()) {
+                    descriptions.insert(language, description);
+                }
+            }
+        }
+        query.finish();
+
+        QHash<QString, QString> informations;
+
+        query.prepare("SELECT name, value FROM componentInformation \
+                       INNER JOIN componentInformationProperties \
+                       ON componentInformation.informationId = componentInformationProperties.id \
+                       WHERE componentInformation.componentId=:componentId \
+                       AND componentInformation.componentTypeId=:componentTypeId");
+        query.bindValue(":componentId", widgetId);
+        query.bindValue(":componentTypeId", widgetTypeId);
+        executeQuery(&query);
+
+        while (query.next()) {
+            QString name = query.value(0).toString();
+            QString value = query.value(1).toString();
+            informations.insert(name, value);
+        }
+        query.finish();
+
+        QString icon = informations.value(COMPONENT_INFORMATION_ICON);
+        QString settingsFileName = informations.value(COMPONENT_INFORMATION_SETTINGS_FILE);
+
+        QVariantHash disambiguation;
+        disambiguation.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
+        returnedValue = new ComponentMetadata(icon, defaultName, defaultDescription,
+                                              names, descriptions,
+                                              ComponentMetadata::DockComponentType,
+                                              fileName, settingsFileName, parent);
+
+    }
+    QSqlDatabase::removeDatabase("get_dock_metadata");
+
+    return returnedValue;
+}
+
 WidgetBaseProperties * DatabaseInterfacePrivate::widget(const QString &packageIdentifier,
                                                         const QString &fileName, QObject *parent)
 {
@@ -1524,12 +1702,6 @@ DatabaseInterface::~DatabaseInterface()
 {
 }
 
-void DatabaseInterface::prepareDatabase()
-{
-    Q_D(DatabaseInterface);
-    d->prepareDatabase();
-}
-
 QVariantHash DatabaseInterface::disambiguation(const QString &packageIdentifier)
 {
     QVariantHash data;
@@ -1542,15 +1714,22 @@ QString DatabaseInterface::packageIdentifier(const QVariantHash &disambiguation)
     return disambiguation.value(PACKAGE_IDENTIFIER_KEY).toString();
 }
 
-void DatabaseInterface::cleanDatabase()
+
+void DatabaseInterface::prepareDatabase() const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
+    d->prepareDatabase();
+}
+
+void DatabaseInterface::cleanDatabase() const
+{
+    Q_D(const DatabaseInterface);
     d->clean();
 }
 
-void DatabaseInterface::scan()
+void DatabaseInterface::scan() const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     // First search in system widgets directories
     QDir systemWidgetsFolder = QDir(SYSTEM_WIDGETS);
 
@@ -1596,44 +1775,98 @@ QStringList DatabaseInterface::registeredDocks(const QString &packageIdentifier)
     return d->registeredDocks(packageIdentifier);
 }
 
-QString DatabaseInterface::widgetFile(const QString &packageIdentifier, const QString &fileName)
+QString DatabaseInterface::widgetFile(const QString &packageIdentifier,
+                                      const QString &fileName) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     return d->widgetFile(packageIdentifier, fileName);
 }
 
 QString DatabaseInterface::widgetSettingsFile(const QString &packageIdentifier,
-                                              const QString &fileName)
+                                              const QString &fileName) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     return d->widgetSettingsFile(packageIdentifier, fileName);
 }
 
 WidgetBaseProperties * DatabaseInterface::widget(const QString &packageIdentifier,
-                                                 const QString &fileName, QObject *parent)
+                                                 const QString &fileName, QObject *parent) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     return d->widget(packageIdentifier, fileName, parent);
 }
 
-QString DatabaseInterface::dockFile(const QString &packageIdentifier, const QString &fileName)
+QString DatabaseInterface::widgetName(const QString &packageIdentifier,
+                                      const QString &fileName) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
+    QString name;
+    ComponentMetadata *metadata = d->widgetMetadata(packageIdentifier, fileName);
+    if (metadata) {
+        name = metadata->name();
+        metadata->deleteLater();
+    }
+    return name;
+}
+
+QString DatabaseInterface::widgetDescription(const QString &packageIdentifier,
+                                             const QString &fileName) const
+{
+    Q_D(const DatabaseInterface);
+    QString description;
+    ComponentMetadata *metadata = d->widgetMetadata(packageIdentifier, fileName);
+    if (metadata) {
+        description = metadata->description();
+        metadata->deleteLater();
+    }
+    return description;
+}
+
+QString DatabaseInterface::dockFile(const QString &packageIdentifier,
+                                    const QString &fileName) const
+{
+    Q_D(const DatabaseInterface);
     return d->dockFile(packageIdentifier, fileName);
 }
 
 QString DatabaseInterface::dockSettingsFile(const QString &packageIdentifier,
-                                            const QString &fileName)
+                                            const QString &fileName) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     return d->dockSettingsFile(packageIdentifier, fileName);
 }
 
 Docks::DockBaseProperties * DatabaseInterface::dock(const QString &packageIdentifier,
-                                                    const QString &fileName, QObject *parent)
+                                                    const QString &fileName, QObject *parent) const
 {
-    Q_D(DatabaseInterface);
+    Q_D(const DatabaseInterface);
     return d->dock(packageIdentifier, fileName, parent);
+}
+
+QString DatabaseInterface::dockName(const QString &packageIdentifier,
+                                    const QString &fileName) const
+{
+    Q_D(const DatabaseInterface);
+    QString name;
+    ComponentMetadata *metadata = d->dockMetadata(packageIdentifier, fileName);
+    if (metadata) {
+        name = metadata->name();
+        metadata->deleteLater();
+    }
+    return name;
+}
+
+QString DatabaseInterface::dockDescription(const QString &packageIdentifier,
+                                           const QString &fileName) const
+{
+    Q_D(const DatabaseInterface);
+    QString description;
+    ComponentMetadata *metadata = d->dockMetadata(packageIdentifier, fileName);
+    if (metadata) {
+        description = metadata->description();
+        metadata->deleteLater();
+    }
+    return description;
 }
 
 }
