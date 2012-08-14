@@ -24,7 +24,6 @@ Dock {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
-//    settingsEnabled: true
 
     Item {
         id: bar
@@ -71,43 +70,44 @@ Dock {
         }
     }
 
-//    Item {
-//        id: leftDesktopCountcontainer
-//        height: parent.height
-//        anchors.left: parent.left; anchors.right: bar.left
+    Item {
+        id: leftDesktopCountcontainer
+        height: parent.height
+        anchors.left: parent.left; anchors.right: bar.left
 
-//        Row {
-//            anchors.centerIn: parent
-//            spacing: 5
-//            Repeater {
-//                model: api.currentPage
-//                delegate: Rectangle {
-//                    width: 10; height: 10
-//                    radius: 5
-//                    opacity: 0.8
-//                    smooth: true
-//                }
-//            }
-//        }
-//    }
+        Row {
+            anchors.centerIn: parent
+            spacing: 5
+            Repeater {
+                model: WidgetsPageListModelInstance.currentPage
+                delegate: Rectangle {
+                    width: 10; height: 10
+                    radius: 5
+                    opacity: 0.8
+                    smooth: true
+                }
+            }
+        }
+    }
 
-//    Item {
-//        id: rightDesktopCountcontainer
-//        height: parent.height
-//        anchors.left: bar.right; anchors.right: parent.right
+    Item {
+        id: rightDesktopCountcontainer
+        height: parent.height
+        anchors.left: bar.right; anchors.right: parent.right
 
-//        Row {
-//            anchors.centerIn: parent
-//            spacing: 5
-//            Repeater {
-//                model: api.pagesCount - api.currentPage - 1
-//                delegate: Rectangle {
-//                    width: 10; height: 10
-//                    radius: 5
-//                    opacity: 0.8
-//                    smooth: true
-//                }
-//            }
-//        }
-//    }
+        Row {
+            anchors.centerIn: parent
+            spacing: 5
+            Repeater {
+                model: WidgetsPageListModelInstance.count
+                       - WidgetsPageListModelInstance.currentPage - 1
+                delegate: Rectangle {
+                    width: 10; height: 10
+                    radius: 5
+                    opacity: 0.8
+                    smooth: true
+                }
+            }
+        }
+    }
 }

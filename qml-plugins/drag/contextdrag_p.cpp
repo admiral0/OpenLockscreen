@@ -38,7 +38,7 @@ namespace Drag
 
 DragManager * ContextDragPrivate::dragManager(QDeclarativeContext *context, QObject *parent)
 {
-    QVariant dragManagerVariant = context->property("DragManagerInstance");
+    QVariant dragManagerVariant = context->contextProperty("DragManagerInstance");
     QObject *dragManagerObject = dragManagerVariant.value<QObject *>();
     DragManager *dragManager = qobject_cast<DragManager *>(dragManagerObject);
 

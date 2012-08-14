@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsextrapkgmgr
+TARGET =        widgetsextrapkgm
 QT +=           declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../base/lib/
@@ -8,7 +8,7 @@ INCLUDEPATH +=  ../../docks/lib/
 INCLUDEPATH +=  ../../provider/packagemanager/lib/
 LIBS +=         -L../../base/lib/ -lwidgetsbase
 LIBS +=         -L../../docks/lib/ -lwidgetsdocks
-LIBS +=         -L../../provider/packagemanager/lib/ -lwidgetsproviderpkgmgr
+LIBS +=         -L../../provider/packagemanager/lib/ -lwidgetsproviderpackagemanager
 
 HEADERS +=      widgets_extra_packagemanager_plugin.h \
                 packageinformationmodel.h \

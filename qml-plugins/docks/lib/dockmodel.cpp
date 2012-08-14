@@ -139,7 +139,8 @@ void DockModelPrivate::refreshProvider()
     }
 
     WidgetProviderBase *widgetProvider = providerManager->provider();
-    MixedProviderBase *mixedProvider = static_cast<MixedProviderBase *>(widgetProvider);
+    MixedProviderBase *mixedProvider = qobject_cast<MixedProviderBase *>(widgetProvider);
+
     if (!mixedProvider) {
         return;
     }

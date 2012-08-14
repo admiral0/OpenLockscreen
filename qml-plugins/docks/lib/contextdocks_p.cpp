@@ -39,7 +39,7 @@ namespace Docks
 
 DockModel * ContextDocksPrivate::dockModel(QDeclarativeContext *context, QObject *parent)
 {
-    QVariant modelVariant = context->property("DockModelInstance");
+    QVariant modelVariant = context->contextProperty("DockModelInstance");
     QObject *modelObject = modelVariant.value<QObject *>();
     DockModel *model = qobject_cast<DockModel *>(modelObject);
 
@@ -58,7 +58,7 @@ DockModel * ContextDocksPrivate::dockModel(QDeclarativeContext *context, QObject
 DockedViewManager * ContextDocksPrivate::dockedViewManager(QDeclarativeContext *context,
                                                            QObject *parent)
 {
-    QVariant managerVariant = context->property("DockedViewManagerInstance");
+    QVariant managerVariant = context->contextProperty("DockedViewManagerInstance");
     QObject *managerObject = managerVariant.value<QObject *>();
     DockedViewManager *manager = qobject_cast<DockedViewManager *>(managerObject);
 

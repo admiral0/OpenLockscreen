@@ -3,7 +3,7 @@ include(../../../../globals.pri)
 TEMPLATE = lib
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
-TARGET = widgetsproviderpkgmgr
+TARGET = widgetsproviderpackagemanager
 QT = core gui sql
 
 contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch

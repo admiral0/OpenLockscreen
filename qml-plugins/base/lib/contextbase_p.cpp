@@ -30,13 +30,14 @@
 #include "contextbase_p.h"
 
 #include <QtDeclarative/QDeclarativeContext>
+#include <QtCore/QDebug>
 
 namespace Widgets
 {
 
 ProviderManager * ContextBase::providerManager(QDeclarativeContext *context, QObject *parent)
 {
-    QVariant providerManagerVariant = context->property("ProviderManagerInstance");
+    QVariant providerManagerVariant = context->contextProperty("ProviderManagerInstance");
     QObject *providerManagerObject = providerManagerVariant.value<QObject *>();
     ProviderManager *providerManager = qobject_cast<ProviderManager *>(providerManagerObject);
 
@@ -46,13 +47,14 @@ ProviderManager * ContextBase::providerManager(QDeclarativeContext *context, QOb
 
     providerManager = new ProviderManager(parent);
     context->setContextProperty("ProviderManagerInstance", providerManager);
+
     return providerManager;
 }
 
 WidgetsPageListModel * ContextBase::widgetsPageListModel(QDeclarativeContext *context,
                                                          QObject *parent)
 {
-    QVariant modelVariant = context->property("WidgetsPageListModelInstance");
+    QVariant modelVariant = context->contextProperty("WidgetsPageListModelInstance");
     QObject *modelObject = modelVariant.value<QObject *>();
     WidgetsPageListModel *model = qobject_cast<WidgetsPageListModel *>(modelObject);
 
@@ -69,7 +71,7 @@ WidgetsPageListModel * ContextBase::widgetsPageListModel(QDeclarativeContext *co
 WidgetConfigurationHelper * ContextBase::widgetConfigurationHelper(QDeclarativeContext *context,
                                                                      QObject *parent)
 {
-    QVariant managerVariant = context->property("WidgetConfigurationHelperInstance");
+    QVariant managerVariant = context->contextProperty("WidgetConfigurationHelperInstance");
     QObject *managerObject = managerVariant.value<QObject *>();
     WidgetConfigurationHelper *manager = qobject_cast<WidgetConfigurationHelper *>(managerObject);
 
