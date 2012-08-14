@@ -143,12 +143,17 @@ public Q_SLOTS:
      */
     void load();
     /**
-     * @short Add a dock
+     * @short Add a dock base
+     *
+     * This method is used to add a dock base properties. It
+     * should not be used when adding a dock
+     * properties.
+     *
      * @param dock base properties of the dock to add.
      * @param settings settings.
      * @param identifier identifier.
      */
-    void addDock(Widgets::Docks::DockBaseProperties *dock,
+    void addBaseDock(Widgets::Docks::DockBaseProperties *dock,
                  const QVariantMap &settings = QVariantMap(),
                  const QString &identifier = QString());
     /**

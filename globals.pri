@@ -53,7 +53,7 @@ isEmpty(INCLUDEDIR) {
 SYSTEM_WIDGETS_FOLDER = $${SHAREDIR}/widgets/
 USER_WIDGETS_FOLDER =   $${OPTDIR}/widgets/
 
-# Application folder
+# Application + data + qml folders
 contains(MEEGO_EDITION,harmattan):{
     APPLICATION_FOLDER  = $${OPTDIR}/bin/
     DATA_FOLDER = $${OPTDIR}/data/
@@ -67,8 +67,16 @@ contains(MEEGO_EDITION,harmattan):{
 # Test folder
 TEST_FOLDER = $${SHAREDIR}/tests/
 
+# Harmattan specific
+contains(MEEGO_EDITION,harmattan):{
+#    IMPORTDIR=/opt/widgets/
+#    LIBDIR=/opt/widgets/lib/
+    SYSTEM_WIDGETS_FOLDER = $${USER_WIDGETS_FOLDER}
+}
+
 # QML include folder
 QML_PLUGIN_PATH = $${IMPORTDIR}/org/SfietKonstantin/$${NAME}
+
 
 # Useful defines
 DEFINES += 'SYSTEM_WIDGETS=\'\"$${SYSTEM_WIDGETS_FOLDER}\"\''

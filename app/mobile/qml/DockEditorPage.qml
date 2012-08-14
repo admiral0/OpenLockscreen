@@ -74,7 +74,7 @@ AbstractPage {
 
                     var dock = ProviderManagerInstance.provider.dock(model.file,
                                                                      model.disambiguation)
-                    DockModelInstance.addDock(dock)
+                    DockModelInstance.addBaseDock(dock)
                     addDockSheet.accept()
                 }
             }

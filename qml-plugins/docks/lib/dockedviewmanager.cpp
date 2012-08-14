@@ -109,25 +109,28 @@ void DockedViewManagerPrivate::recomputeMargins()
 
     for (int i = 0; i < dockModel->count(); i++) {
         QVariant dockVariant = dockModel->data(dockModel->index(i), DockModel::DockRole);
-        DockProperties * dock = dockVariant.value<DockProperties *>();
+        QObject *dockObject = dockVariant.value<QObject *>();
+        DockProperties *dock = qobject_cast<Widgets::Docks::DockProperties *>(dockObject);
 
-        // Dock has width set
-        if (dock->width() > 0 && dock->height() <= 0) {
-            if (dock->anchorsLeft()) {
-                leftMargin = qMax(leftMargin, dock->width());
+        if (dock) {
+            // Dock has width set
+            if (dock->width() > 0 && dock->height() <= 0) {
+                if (dock->anchorsLeft()) {
+                    leftMargin = qMax(leftMargin, dock->width());
+                }
+                if (dock->anchorsRight()) {
+                    rightMargin = qMax(rightMargin, dock->width());
+                }
             }
-            if (dock->anchorsRight()) {
-                rightMargin = qMax(rightMargin, dock->width());
-            }
-        }
 
-        // Dock has height set
-        if (dock->width() <= 0 && dock->height() > 0) {
-            if (dock->anchorsTop()) {
-                topMargin = qMax(topMargin, dock->height());
-            }
-            if (dock->anchorsBottom()) {
-                bottomMargin = qMax(bottomMargin, dock->height());
+            // Dock has height set
+            if (dock->width() <= 0 && dock->height() > 0) {
+                if (dock->anchorsTop()) {
+                    topMargin = qMax(topMargin, dock->height());
+                }
+                if (dock->anchorsBottom()) {
+                    bottomMargin = qMax(bottomMargin, dock->height());
+                }
             }
         }
     }

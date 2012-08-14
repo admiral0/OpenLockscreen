@@ -298,7 +298,7 @@ void DockModel::load()
     d->load();
 }
 
-void DockModel::addDock(DockBaseProperties *dock, const QVariantMap &settings,
+void DockModel::addBaseDock(DockBaseProperties *dock, const QVariantMap &settings,
                         const QString &identifier)
 {
     if(dock == 0) {

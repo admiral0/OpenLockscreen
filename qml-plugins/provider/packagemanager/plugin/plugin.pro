@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsproviderpackagemanager
+TARGET =        widgetsproviderpkgmgr
 QT +=           core gui sql declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../lib/
@@ -8,7 +8,7 @@ INCLUDEPATH +=  ../../../base/lib
 INCLUDEPATH += ../../../docks/lib
 LIBS += -L../../../base/lib/ -lwidgetsbase
 LIBS += -L../../../docks/lib/ -lwidgetsdocks
-LIBS += -L ../lib/ -lwidgetspackagemanagerprovider
+LIBS += -L ../lib/ -lwidgetsproviderpkgmgr
 
 HEADERS +=      widgets_provider_packagemanager_plugin.h \
 
