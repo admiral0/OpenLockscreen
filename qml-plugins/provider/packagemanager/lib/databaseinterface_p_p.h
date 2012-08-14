@@ -24,6 +24,12 @@
 // file may change from version to version
 // without notice or even be removed.
 
+/**
+ * @internal
+ * @file databaseinterface_p_p.h
+ * @short Definition of Widgets::Provider::PackageManager::DatabaseInterfacePrivate
+ */
+
 #include <QtCore/QString>
 #include <QtCore/QVariantHash>
 #include <QtSql/QSqlDatabase>
@@ -117,9 +123,6 @@ public:
      * @return database id associated to a component type.
      */
     static qlonglong componentTypeId(const char *type);
-//    static bool localizedInformationExists(const char *type, qlonglong componentId,
-//                                           const QString &language, const QString &name,
-//                                           const QString &description);
     /**
      * @internal
      * @brief Add localized information
@@ -187,8 +190,15 @@ public:
      * @internal
      * @brief Add a package
      * @param package the package to add.
+     * @param path absolute path of the package.
      */
     static void addPackage(Package *package, const QString &path);
+    /**
+     * @internal
+     * @brief Database id of the package
+     * @param packageIdentifier package identifier.
+     * @return database id of the package.
+     */
     static qlonglong packageId(const QString &packageIdentifier);
     /**
      * @internal
@@ -226,7 +236,19 @@ public:
      * @return a package corresponding to the identifier.
      */
     static Package * package(const QString &identifier, QObject *parent = 0);
+    /**
+     * @internal
+     * @brief Registered widgets identifiers
+     * @param packageIdentifier package identifier.
+     * @return all the registered widgets identifiers.
+     */
     static QStringList registeredWidgets(const QString &packageIdentifier);
+    /**
+     * @internal
+     * @brief Registered docks identifiers
+     * @param packageIdentifier package identifier.
+     * @return all the registered docks identifiers.
+     */
     static QStringList registeredDocks(const QString &packageIdentifier);
     /**
      * @short Get a widget
@@ -249,35 +271,55 @@ public:
     static Docks::DockBaseProperties * dock(const QString &packageIdentifier,
                                             const QString &fileName,
                                             QObject *parent = 0);
+    /**
+     * @brief Absolute widget folder
+     * @param packageIdentifier package identifier.
+     * @param fileName filename.
+     * @return absolute widget folder.
+     */
     static QString widgetAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);
     /**
      * @internal
      * @brief Absolute path to the widget file
-     *
-     * This method is used to get the absolute file path
-     * to a widget file provided the package identifier and the
-     * widget filename.
      *
      * @param packageIdentifier package identifier.
      * @param fileName widget filename.
      * @return absolute path to the widget file.
      */
     static QString widgetFile(const QString &packageIdentifier, const QString &fileName);
+    /**
+     * @internal
+     * @brief Absolute path to the widget settings file
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName widget filename.
+     * @return absolute path to the widget settings file.
+     */
     static QString widgetSettingsFile(const QString &packageIdentifier, const QString &fileName);
+    /**
+     * @brief Absolute dock folder
+     * @param packageIdentifier package identifier.
+     * @param fileName filename.
+     * @return absolute dock folder.
+     */
     static QString dockAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);
     /**
      * @internal
      * @brief Absolute path to the dock file
-     *
-     * This method is used to get the absolute file path
-     * to a dock file provided the package identifier and the
-     * dock filename.
      *
      * @param packageIdentifier package identifier.
      * @param fileName dock filename.
      * @return absolute path to the dock file.
      */
     static QString dockFile(const QString &packageIdentifier, const QString &fileName);
+    /**
+     * @internal
+     * @brief Absolute path to the dock settings file
+     *
+     * @param packageIdentifier package identifier.
+     * @param fileName dock filename.
+     * @return absolute path to the dock settings file.
+     */
     static QString dockSettingsFile(const QString &packageIdentifier, const QString &fileName);
 
     /**
@@ -288,9 +330,44 @@ public:
      * from the database.
      */
     static void clean();
+    /**
+     * @internal
+     * @brief Scan a folder for packages
+     *
+     * This method is used to search for packages
+     * in a given folder, and returns the package identifier
+     * if a package was found.
+     *
+     * @param path absolute path to the folder.
+     * @return package identifier.
+     */
     static QString scanFolderForPackage(const QString &path);
+    /**
+     * @internal
+     * @brief Scan a folder for widgets
+     *
+     * This method is used to search for widgets
+     * in a given folder. It scans all subfolders
+     * inside a folder and check if there are widgets.
+     *
+     * @param path absolute path to the folder.
+     * @param packageIdentifier package identifier.
+     * @param packageId database id of the package.
+     */
     static void scanFolderForWidgets(const QString &path, const QString &packageIdentifier,
                                      qlonglong packageId);
+    /**
+     * @internal
+     * @brief Scan a folder for docks
+     *
+     * This method is used to search for docks
+     * in a given folder. It scans all subfolders
+     * inside a folder and check if there are docks.
+     *
+     * @param path absolute path to the folder.
+     * @param packageIdentifier package identifier.
+     * @param packageId database id of the package.
+     */
     static void scanFolderForDocks(const QString &path, const QString &packageIdentifier,
                                    qlonglong packageId);
 };

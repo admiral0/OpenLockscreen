@@ -27,7 +27,7 @@
 /**
  * @internal
  * @file desktopfileparser_p.h
- * @short Definition of Widgets::Provider::PackageManager::DesktopParser
+ * @short Definition of Widgets::Provider::PackageManager::DesktopFileParser
  */
 
 #include <QtCore/QScopedPointer>
@@ -131,7 +131,6 @@ protected:
      * @internal
      * @brief Constructor for D-pointer
      * @param dd parent D-pointer.
-     * @param parent parent object.
      */
     DesktopFileParser(DesktopFileParserPrivate * dd);
     /**

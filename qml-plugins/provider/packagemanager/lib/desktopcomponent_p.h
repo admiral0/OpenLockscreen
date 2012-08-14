@@ -183,8 +183,16 @@ public:
      */
     QString icon() const;
 protected:
+    /**
+     * @internal
+     * @brief Desktop file parser
+     */
     DesktopFileParser *desktopFileParser;
 private:
+    /**
+     * @internal
+     * @brief Parent object
+     */
     QObject *m_parent;
 };
 

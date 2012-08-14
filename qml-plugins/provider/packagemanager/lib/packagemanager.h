@@ -106,7 +106,7 @@ public:
      * @brief Destructor
      */
     virtual ~PackageManager();
-    /**
+    /*
      * @brief Get a package
      *
      * This method is used to get a package through an identifier.
@@ -117,7 +117,7 @@ public:
      * @return a package corresponding to the identifier.
      */
 //    Package * package(const QString &identifier);
-    /**
+    /*
      * @brief Registered packages identifiers
      *
      * This method is used to get a list of the registered packages
@@ -128,10 +128,6 @@ public:
 //    QStringList registeredPackages() const;
     /**
      * @brief List of disambiguation parameters
-     *
-     * The disambiguation parameters associates
-     * "identifier" to the package identifier.
-     *
      * @return a list of disambiguation parameters.
      */
     QList<QVariantHash> disambiguationList() const;
@@ -154,84 +150,52 @@ public:
     Q_INVOKABLE QString dockSettingsFile(const QString &fileName,
                                          const QVariantHash &disambiguation) const;
     /**
-     * @short Dock
+     * @short Get a dock
      *
-     * This method is used to get the information about a dock, providing
-     * the package identifier and the dock file name.
-     *
-     * If the dock is not found, a null pointer is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param dockFileName dock file name.
+     * @param fileName the dock filename.
+     * @param disambiguation disambiguation parameter.
      * @return information about the dock.
      */
     Q_INVOKABLE Widgets::Docks::DockBaseProperties * dock(const QString &fileName,
                                                           const QVariantHash &disambiguation);
     /**
-     * @brief Registered docks
-     *
-     * This method is used to get the list of registered docks through their
-     * identifiers, corresponding to a package, that is provided through
-     * it's identifier.
-     *
-     * @param packageIdentifier package identifier.
-     * @return all the registered docks identifiers for a given package.
+     * @brief Registered docks identifiers
+     * @param disambiguation disambiguation parameter.
+     * @return all the registered docks identifiers.
      */
     QStringList registeredDocks(const QVariantHash &disambiguation) const;
     /**
-     * @short Widget file
+     * @internal
+     * @brief Absolute path to the widget file
      *
-     * This method is used to get the absolute file path to the QML file
-     * corresponding to a widget, providing the package identifier and
-     * the widget file name.
-     *
-     * If the widget is not found, an empty string is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param widgetFileName widget file name.
-     * @return absolute file path to the QML file.
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return absolute path to the widget file.
      */
     Q_INVOKABLE QString widgetFile(const QString &fileName,
                                    const QVariantHash &disambiguation) const;
     /**
-     * @short Widget settings file
+     * @brief Absolute path to the widget settings file
      *
-     * This method is used to get the absolute file path to the QML file
-     * corresponding to the component that is used to setup a widget, providing
-     * the package identifier, the widget file name, and the component file name.
-     *
-     * If the component is not found, an empty string is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param widgetFileName widget file name.
-     * @param widgetSettingsFileName widget settings component file name.
-     * @return absolute file path to the QML file.
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
+     * @return absolute path to the widget settings file.
      */
     Q_INVOKABLE QString widgetSettingsFile(const QString &fileName,
                                            const QVariantHash &disambiguation) const;
     /**
-     * @short Widget
+     * @short Get a widget
      *
-     * This method is used to get the information about a widget, providing
-     * the package identifier and the widget file name.
-     *
-     * If the widget is not found, a null pointer is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param widgetFileName widget file name.
+     * @param fileName the widget filename.
+     * @param disambiguation disambiguation parameter.
      * @return information about the widget.
      */
     Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &fileName,
                                                        const QVariantHash &disambiguation);
     /**
-     * @brief Registered widgets
-     *
-     * This method is used to get the list of registered widgets through their
-     * identifiers, corresponding to a package, that is provided through
-     * it's identifier.
-     *
-     * @param packageIdentifier package identifier.
-     * @return all the registered widgets identifiers for a given package.
+     * @brief Registered widgets identifiers
+     * @param disambiguation disambiguation parameter.
+     * @return all the registered widgets identifiers.
      */
     QStringList registeredWidgets(const QVariantHash &disambiguation) const;
     /**

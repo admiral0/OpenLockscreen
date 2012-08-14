@@ -32,7 +32,7 @@
 #endif
 
 #include "desktopfileparser_p.h"
-#include "desktopparserdefines.h"
+#include "desktopfileparserdefines_p.h"
 
 namespace Widgets
 {

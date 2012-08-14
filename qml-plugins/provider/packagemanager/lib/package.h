@@ -67,8 +67,6 @@ class PackagePrivate;
  *
  * The page about \ref packageCreationMetaSubsection "desktop file creation" provides more
  * information about how desktop files should be written.
- *
- * @see Widgets::PackageManager
  */
 class Package: public DesktopComponent
 {
@@ -107,6 +105,24 @@ public:
      * @param parent parent object.
      */
     explicit Package(QObject *parent = 0);
+    /**
+     * @brief Default constructor
+     * @param icon icon of the component.
+     * @param defaultName default name of the component.
+     * @param defaultDescription default description of the component.
+     * @param names a list of names associated to the language.
+     * @param descriptions a list of descriptions associated to the language.
+     * @param identifier package identifier.
+     * @param directory package directory.
+     * @param plugin package plugin.
+     * @param author author of the package.
+     * @param email email of the package.
+     * @param website website of the package.
+     * @param version version of the package.
+     * @param visible if the package is visible.
+     * @param tags tags of the package.
+     * @param parent parent object.
+     */
     explicit Package(const QString &icon,
                      const QString &defaultName, const QString &defaultDescription,
                      const QHash<QString, QString> &names,
@@ -174,8 +190,8 @@ public:
      * @brief Create a package from a desktop file
      *
      * @param desktopFile path to the desktop file to parse.
-     * @param parent parent object for the created Widgets::Package.
-     * @return a Widgets::Package.
+     * @param parent parent object for the created package.
+     * @return a package.
      */
     static Package * fromDesktopFile(const QString &desktopFile, QObject *parent = 0);
 protected:

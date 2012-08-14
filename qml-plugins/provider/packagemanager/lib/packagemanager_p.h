@@ -17,14 +17,20 @@
 #ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_P_H
 #define WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_P_H
 
-#include "packagemanager.h"
-
 // Warning
 //
 // This file exists for the convenience
 // of other Widgets classes. This header
 // file may change from version to version
 // without notice or even be removed.
+
+/**
+ * @file packagemanager_p.h
+ * @short Definition of Widgets::PackageManagerPrivate
+ */
+
+#include "packagemanager.h"
+
 
 #include <QtCore/QVariantMap>
 #include <QtSql/QSqlQuery>
@@ -50,13 +56,26 @@ class FilterConditionList;
 class PackageManagerPrivate: public WidgetProviderBasePrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q parent object.
+     */
     explicit PackageManagerPrivate(PackageManager *q);
     /**
      * @internal
      * @brief Destructor
      */
     virtual ~PackageManagerPrivate();
+    /**
+     * @internal
+     * @brief Database interface
+     */
     DatabaseInterface *interface;
+    /**
+     * @internal
+     * @brief Filter
+     */
     FilterConditionList *filter;
 private:
     Q_DECLARE_PUBLIC(PackageManager)

@@ -14,8 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H
-#define WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPFILEPARSERDEFINES_P_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPFILEPARSERDEFINES_P_H
+
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+/**
+ * @internal
+ * @file desktopfileparserdefines_p.h
+ * @short Some defines
+ */
 
 namespace Widgets
 {
@@ -26,6 +39,12 @@ namespace Provider
 namespace PackageManager
 {
 
+/**
+ * @internal
+ * @brief SERVICE_TYPE
+ *
+ * Used in many classes of Widgets::Provider::PackageManager.
+ */
 static const char *SERVICE_TYPE = "X-Widgets-ServiceType";
 
 }
@@ -34,4 +53,4 @@ static const char *SERVICE_TYPE = "X-Widgets-ServiceType";
 
 }
 
-#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPFILEPARSERDEFINES_P_H

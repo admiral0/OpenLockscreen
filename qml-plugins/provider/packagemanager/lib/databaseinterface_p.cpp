@@ -14,6 +14,19 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+/**
+ * @internal
+ * @file databaseinterface_p.cpp
+ * @short Implementation of Widgets::Provider::PackageManager::DatabaseInterface
+ */
+
 #include "databaseinterface_p.h"
 #include "databaseinterface_p_p.h"
 
@@ -40,41 +53,198 @@ namespace PackageManager
 {
 
 // DB strings
+/**
+ * @internal
+ * @brief COMPONENT_TYPE_PACKAGE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_TYPE_PACKAGE = "package";
+/**
+ * @internal
+ * @brief COMPONENT_TYPE_DOCK
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_TYPE_DOCK = "dock";
+/**
+ * @internal
+ * @brief COMPONENT_TYPE_WIDGET
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_TYPE_WIDGET = "widget";
 
+/**
+ * @internal
+ * @brief COMPONENT_INFORMATION_ICON
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_INFORMATION_ICON = "icon";
+/**
+ * @internal
+ * @brief COMPONENT_INFORMATION_SETTINGS_FILE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_INFORMATION_SETTINGS_FILE = "settings_file";
+/**
+ * @internal
+ * @brief COMPONENT_INFORMATION_DEFAULT_LANGUAGE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *COMPONENT_INFORMATION_DEFAULT_LANGUAGE = "default";
 
+/**
+ * @internal
+ * @brief PACKAGE_INFORMATION_AUTHOR
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_INFORMATION_AUTHOR = "package_author";
+/**
+ * @internal
+ * @brief PACKAGE_INFORMATION_EMAIL
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_INFORMATION_EMAIL = "package_email";
+/**
+ * @internal
+ * @brief PACKAGE_INFORMATION_WEBSITE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_INFORMATION_WEBSITE = "package_website";
+/**
+ * @internal
+ * @brief PACKAGE_INFORMATION_VERSION
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_INFORMATION_VERSION = "package_version";
+/**
+ * @internal
+ * @brief PACKAGE_INFORMATION_VISIBLE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_INFORMATION_VISIBLE = "package_visible";
 
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_WIDTH
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_WIDTH = "width";
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_HEIGHT
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_HEIGHT = "height";
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_ANCHORS_TOP
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_ANCHORS_TOP = "dock_anchors_top";
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_ANCHORS_BOTTOM
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_ANCHORS_BOTTOM = "dock_anchors_bottom";
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_ANCHORS_LEFT
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_ANCHORS_LEFT = "dock_anchors_left";
+/**
+ * @internal
+ * @brief DOCK_INFORMATION_ANCHORS_RIGHT
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCK_INFORMATION_ANCHORS_RIGHT = "dock_anchors_right";
 
+/**
+ * @internal
+ * @brief WIDGET_INFORMATION_MINIMUM_WIDTH
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *WIDGET_INFORMATION_MINIMUM_WIDTH = "minimum_width";
+/**
+ * @internal
+ * @brief WIDGET_INFORMATION_MINIMUM_HEIGHT
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *WIDGET_INFORMATION_MINIMUM_HEIGHT = "minimum_height";
+/**
+ * @internal
+ * @brief WIDGET_INFORMATION_MAXIMUM_WIDTH
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *WIDGET_INFORMATION_MAXIMUM_WIDTH = "maximum_width";
+/**
+ * @internal
+ * @brief WIDGET_INFORMATION_MAXIMUM_HEIGHT
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *WIDGET_INFORMATION_MAXIMUM_HEIGHT = "maximum_height";
 
 // Folder strings
+/**
+ * @internal
+ * @brief WIDGETS_FOLDER
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *WIDGETS_FOLDER = "widgets";
+/**
+ * @internal
+ * @brief DOCKS_FOLDER
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *DOCKS_FOLDER = "docks";
 
 // File strings
+/**
+ * @internal
+ * @brief PACKAGE_FILE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_FILE = "package.desktop";
+/**
+ * @internal
+ * @brief METADATA_FILE
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *METADATA_FILE = "metadata.desktop";
 
+
 // Disambiguation strings
+/**
+ * @internal
+ * @brief PACKAGE_IDENTIFIER_KEY
+ *
+ * Used in Widgets::Provider::PackageManager::DatabaseInterface.
+ */
 static const char *PACKAGE_IDENTIFIER_KEY = "identifier";
 
 
@@ -330,35 +500,6 @@ qlonglong DatabaseInterfacePrivate::componentTypeId(const char *type)
     QSqlDatabase::removeDatabase("get_component_type_id");
     return id;
 }
-
-//bool DatabaseInterfacePrivate::localizedInformationExists(const char *type,
-//                                                          qlonglong componentId,
-//                                                          const QString &language,
-//                                                          const QString &name,
-//                                                          const QString &description)
-//{
-//    qlonglong id = tagId(tag);
-//    bool exists = false;
-
-//    {
-//        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "localized_information_exists");
-//        db.setDatabaseName(databasePath());
-//        W_ASSERT(db.open());
-
-//        QSqlQuery query = QSqlQuery(db);
-//        query.prepare("SELECT COUNT(*) FROM componentLocalizedInformation \
-//                      WHERE componentTypeId=:componentTypeId AND componentId=:componentId");
-//        query.bindValue(":componentTypeId", componentTypeId);
-//        query.bindValue(":componentId", componentId);
-//        int count = executeQueryCount(&query);
-//        exists = (count > 0);
-
-//        query.finish();
-//    }
-//    QSqlDatabase::removeDatabase("localized_information_exists");
-
-//    return exists;
-//}
 
 void DatabaseInterfacePrivate::addLocalizedInformation(const char *type, qlonglong componentId,
                                                        const QStringList &languages,
@@ -1389,10 +1530,10 @@ void DatabaseInterface::prepareDatabase()
     d->prepareDatabase();
 }
 
-QVariantHash DatabaseInterface::disambiguation(const QString &value)
+QVariantHash DatabaseInterface::disambiguation(const QString &packageIdentifier)
 {
     QVariantHash data;
-    data.insert(PACKAGE_IDENTIFIER_KEY, value);
+    data.insert(PACKAGE_IDENTIFIER_KEY, packageIdentifier);
     return data;
 }
 
@@ -1401,7 +1542,7 @@ QString DatabaseInterface::packageIdentifier(const QVariantHash &disambiguation)
     return disambiguation.value(PACKAGE_IDENTIFIER_KEY).toString();
 }
 
-void DatabaseInterface::clean()
+void DatabaseInterface::cleanDatabase()
 {
     Q_D(DatabaseInterface);
     d->clean();
@@ -1418,19 +1559,22 @@ void DatabaseInterface::scan()
 
     foreach (QFileInfo folder, folders) {
         QString packageIdentifier = d->scanFolderForPackage(folder.absoluteFilePath());
-        qlonglong packageId = d->packageId(packageIdentifier);
+        if (!packageIdentifier.isEmpty()) {
+            qlonglong packageId = d->packageId(packageIdentifier);
 
-        // Search for widgets
-        QDir widgetsFolder (folder.absoluteFilePath());
-        if (widgetsFolder.cd(WIDGETS_FOLDER)) {
-            d->scanFolderForWidgets(widgetsFolder.absolutePath(), packageIdentifier, packageId);
+            // Search for widgets
+            QDir widgetsFolder (folder.absoluteFilePath());
+            if (widgetsFolder.cd(WIDGETS_FOLDER)) {
+                d->scanFolderForWidgets(widgetsFolder.absolutePath(), packageIdentifier, packageId);
+            }
+
+            // Search for docks
+            QDir docksFolder (folder.absoluteFilePath());
+            if (docksFolder.cd(DOCKS_FOLDER)) {
+                d->scanFolderForDocks(docksFolder.absolutePath(), packageIdentifier, packageId);
+            }
         }
 
-        // Search for docks
-        QDir docksFolder (folder.absoluteFilePath());
-        if (docksFolder.cd(DOCKS_FOLDER)) {
-            d->scanFolderForDocks(docksFolder.absolutePath(), packageIdentifier, packageId);
-        }
     }
 }
 

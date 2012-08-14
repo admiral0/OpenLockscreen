@@ -82,6 +82,9 @@ public:
      */
     QStringList tags() const;
 Q_SIGNALS:
+    /**
+     * @brief Condition list changed
+     */
     void conditionListChanged();
 protected:
     /**

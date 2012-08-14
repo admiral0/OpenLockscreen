@@ -153,7 +153,7 @@ FilterConditionList * PackageManager::filter() const
 void PackageManager::update()
 {
     Q_D(const PackageManager);
-    d->interface->clean();
+    d->interface->cleanDatabase();
     d->interface->scan();
 }
 

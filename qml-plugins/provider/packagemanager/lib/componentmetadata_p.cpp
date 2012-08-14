@@ -14,13 +14,26 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
+/**
+ * @internal
+ * @file componentmetadata_p.cpp
+ * @short Implementation of Widgets::Provider::PackageManager::ComponentMetadata
+ */
+
 #include "componentmetadata_p.h"
 #include "desktopcomponent_p.h"
 
 #include <QtCore/QVariant>
 
 #include "desktopfileparser_p.h"
-#include "desktopparserdefines.h"
+#include "desktopfileparserdefines_p.h"
 
 namespace Widgets
 {
@@ -60,12 +73,33 @@ static const char *COMPONENT_INFO_FILE = "X-Widgets-ComponentInfo-File";
  */
 static const char *COMPONENT_INFO_SETTINGS_FILE = "X-Widgets-ComponentInfo-SettingsFile";
 
+/**
+ * @internal
+ * @brief Private class for Widgets::Provider::PackageManager::DesktopComponentPrivate
+ */
 class ComponentMetadataPrivate: public DesktopComponentPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Default constructor
+     * @param q Q-pointer.
+     */
     ComponentMetadataPrivate(DesktopComponent *q);
+    /**
+     * @internal
+     * @brief Filename
+     */
     QString fileName;
+    /**
+     * @internal
+     * @brief Settings filename
+     */
     QString settingsFileName;
+    /**
+     * @internal
+     * @brief Component type
+     */
     ComponentMetadata::ComponentType type;
 };
 
@@ -92,8 +126,23 @@ public:
      * @return if the XML element is valid.
      */
     virtual bool isValid() const;
+    /**
+     * @internal
+     * @brief Filename
+     * @return filename.
+     */
     QString fileName() const;
+    /**
+     * @internal
+     * @brief Settings filename
+     * @return settings filename.
+     */
     QString settingsFileName() const;
+    /**
+     * @internal
+     * @brief Type
+     * @return type.
+     */
     ComponentMetadata::ComponentType type() const;
 };
 

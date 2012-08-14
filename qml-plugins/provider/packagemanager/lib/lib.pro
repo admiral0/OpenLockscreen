@@ -13,7 +13,8 @@ INCLUDEPATH += ../../../docks/lib
 LIBS += -L../../../base/lib/ -lwidgetsbase
 LIBS += -L../../../docks/lib/ -lwidgetsdocks
 
-HEADERS +=      desktopfileparser_p.h \
+HEADERS +=      desktopfileparserdefines_p.h \
+                desktopfileparser_p.h \
                 desktopcomponent_p.h \
                 desktopcomponent.h \
                 package.h \

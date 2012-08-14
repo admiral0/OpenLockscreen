@@ -24,7 +24,7 @@
 /**
  * @internal
  * @file desktopfileparser_p.cpp
- * @short Implementation of Widgets::Provider::PackageManager::DesktopParser
+ * @short Implementation of Widgets::Provider::PackageManager::DesktopFileParser
  */
 
 #include "desktopfileparser_p.h"
@@ -49,7 +49,8 @@ class DesktopFileParserPrivate
 public:
     /**
      * @internal
-     * @brief Private class for Widgets::Provider::PackageManager::DesktopFileParserPrivate
+     * @brief Default constructor
+     * @param file the file to parse.
      */
     DesktopFileParserPrivate(const QString &file);
     /**

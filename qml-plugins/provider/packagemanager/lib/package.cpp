@@ -27,7 +27,7 @@
 #include "desktopcomponent_p.h"
 #include "desktopfileparser_p.h"
 
-#include "desktopparserdefines.h"
+#include "desktopfileparserdefines_p.h"
 #include "tools.h"
 
 namespace Widgets
