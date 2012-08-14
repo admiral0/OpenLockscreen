@@ -8,5 +8,5 @@ Comment[fr]=Affiche un texte brut
 Icon=
 Type=Service
 X-Widgets-ServiceType=widget
-X-Widgets-WidgetInfo-File=PlainText.qml
+X-Widgets-ComponentInfo-File=PlainText.qml
 X-Widgets-ComponentInfo-SettingsFile=PlainTextSettings.qml

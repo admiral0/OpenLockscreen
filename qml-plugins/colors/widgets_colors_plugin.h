@@ -28,7 +28,7 @@ namespace Widgets
 {
 
 /**
- * @short Namespace for colors plugin in libwidgets
+ * @short Namespace for colors
  */
 namespace Colors
 {

@@ -8,4 +8,4 @@ Comment[fr]=Le dock classique Android Gingerbread
 Icon=
 Type=Service
 X-Widgets-ServiceType=dock
-X-Widgets-DockInfo-File=AndroidDock.qml
+X-Widgets-ComponentInfo-File=AndroidDock.qml

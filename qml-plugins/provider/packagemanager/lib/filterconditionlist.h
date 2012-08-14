@@ -14,8 +14,14 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_FILTERCONDITIONLIST_H
-#define WIDGETS_FILTERCONDITIONLIST_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITIONLIST_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITIONLIST_H
+
+/**
+ * @file filterconditionlist.h
+ * @short Definition of Widgets::Provider::PackageManager::FilterConditionList
+ */
+
 
 #include <QtCore/QObject>
 #include <QtDeclarative/QDeclarativeListProperty>
@@ -25,22 +31,62 @@
 namespace Widgets
 {
 
+namespace Provider
+{
+
+namespace PackageManager
+{
+
 class FilterConditionListPrivate;
+
+/**
+ * @brief Filters for the packagemanager
+ *
+ * This class is used to provides some filters
+ * for the package manager. It is used to group
+ * a set of Widgets::Provider::PackageManager::FilterConditionList
+ * in order to create a list.
+ */
 class FilterConditionList: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<Widgets::FilterCondition> conditions
-               READ conditions)
-    Q_CLASSINFO("DefaultProperty", "conditions")
+    /**
+     * @short Filter
+     */
+    Q_PROPERTY(QDeclarativeListProperty<Widgets::Provider::PackageManager::FilterCondition>
+               filter READ filter)
+    Q_CLASSINFO("DefaultProperty", "filter")
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit FilterConditionList(QObject *parent = 0);
+    /**
+     * @brief Destructors
+     */
     virtual ~FilterConditionList();
-    QDeclarativeListProperty<FilterCondition> conditions();
+    /**
+     * @brief Filter
+     * @return A declarative list property that is used to manage the filter.
+     */
+    QDeclarativeListProperty<FilterCondition> filter();
+    /**
+     * @brief Tags
+     *
+     * This method is used to convert the filter list to
+     * a list of tags, that are used in the package manager
+     * to filter the entries.
+     *
+     * @return tags.
+     */
     QStringList tags() const;
 Q_SIGNALS:
     void conditionListChanged();
 protected:
-    explicit FilterConditionList(FilterConditionListPrivate *dd, QObject *parent = 0);
+    /**
+     * @brief D-pointer
+     */
     const QScopedPointer<FilterConditionListPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(FilterConditionList)
@@ -48,4 +94,8 @@ private:
 
 }
 
-#endif // WIDGETS_FILTERCONDITIONLIST_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITIONLIST_H

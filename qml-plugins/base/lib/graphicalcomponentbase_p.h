@@ -123,7 +123,7 @@ public:
      * @internal
      * @brief If the XML element is valid
      *
-     * This method is used in buildElement() in
+     * This method is used in AbstractBuilder::buildElement() in
      * order to check if the XML element contains
      * valid information.
      *

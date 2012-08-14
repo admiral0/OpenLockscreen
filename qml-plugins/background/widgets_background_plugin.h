@@ -18,27 +18,39 @@
 #define WIDGETS_BACKGROUND_PLUGIN_H
 
 /**
+ * @internal
  * @file widgets_background_plugin.h
- * @short Definition of WidgetsPlugin
+ * @short Definition of Widgets::Background::WidgetsBackgroundPlugin
  */
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-class WidgetsBackgroundPlugin : public QDeclarativeExtensionPlugin
+namespace Widgets
+{
+
+namespace Background
+{
+
+/**
+ * @internal
+ * @brief QML plugin for background
+ */
+class WidgetsBackgroundPlugin: public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 
 public:
     /**
+     * @internal
      * @short Register types
-     *
-     * This method is used to register C++ classes
-     * into the QML context.
-     *
      * @param uri uri used in the import.
      */
     void registerTypes(const char *uri);
 };
+
+}
+
+}
 
 #endif // WIDGETS_BACKGROUND_PLUGIN_H
 

@@ -18,23 +18,15 @@
 #define WIDGETS_PROVIDER_PACKAGEMANAGER_PLUGIN_H
 
 /**
+ * @internal
  * @file widgets_provider_packagemanager_plugin.h
  * @short Definition of Widgets::Provider::PackageManager::WidgetsProviderPlugin
  */
 
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-namespace Widgets
-{
-
-namespace Provider
-{
-
-namespace PackageManager
-{
-
 /**
- * @page pluginProviderPackageManager QML plugin for a package manager based widget provider
+ * @page pluginProviderPackageManager %Package manager based provider
  *
  * @todo write this page
  *
@@ -117,7 +109,7 @@ namespace PackageManager
  * be identified by the package manager. Other QML files that are used in this dock can be
  * declared if needed.
  *
- * @section Configuring a widget or a dock
+ * @section configuringWidgetDock Configuring a widget or a dock
  *
  * @todo write this
  *
@@ -218,6 +210,20 @@ namespace PackageManager
  * - \b X-Widgets-DockInfo-File that is used to provide the QML file for a dock.
  * @see Widgets::PackageManager
  */
+
+namespace Widgets
+{
+
+namespace Provider
+{
+
+/**
+ * @short Namespace for package manager based providers
+ */
+namespace PackageManager
+{
+
+
 /**
  * @internal
  * @brief QML plugin for package manager based widget provider

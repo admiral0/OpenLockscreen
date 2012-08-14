@@ -8,5 +8,4 @@ Comment[fr]=Le dock de Maemo, comme celui du N900
 Icon=
 Type=Service
 X-Widgets-ServiceType=dock
-X-Widgets-ComponentInfo-SettingsEnabled=false
-X-Widgets-DockInfo-File=MaemoDock.qml
+X-Widgets-ComponentInfo-File=MaemoDock.qml

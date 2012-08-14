@@ -49,7 +49,7 @@ static const char *DOCK_ELEMENT = "dock";
  * @internal
  * @short Private class for Widgets::Docks::DockModelPrivate
  */
-class DockModelPrivate: public AbstractSettingsPrivate
+class DockModelPrivate: public AbstractSettings
 {
 public:
     /**
@@ -119,7 +119,7 @@ private:
 };
 
 DockModelPrivate::DockModelPrivate(DockModel *q):
-    AbstractSettingsPrivate(q), q_ptr(q)
+    AbstractSettings(q), q_ptr(q)
 {
     componentName = "dock";
     providerManager = 0;

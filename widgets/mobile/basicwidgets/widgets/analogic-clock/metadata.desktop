@@ -8,4 +8,4 @@ Comment[fr]=Une horloge analogique stylisée empruntée du bureau KDE
 Icon=
 Type=Service
 X-Widgets-ServiceType=widget
-X-Widgets-WidgetInfo-File=AnalogicClock.qml
+X-Widgets-ComponentInfo-File=AnalogicClock.qml

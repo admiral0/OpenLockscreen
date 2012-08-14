@@ -16,12 +16,30 @@
 
 #include "filtercondition.h"
 
+/**
+ * @file filtercondition.cpp
+ * @short Implementation of Widgets::Provider::PackageManager::FilterCondition
+ */
+
 namespace Widgets
 {
 
-class FilterConditionPrivate
+namespace Provider
 {
-public:
+
+namespace PackageManager
+{
+
+/**
+ * @internal
+ * @brief Private struct for Widgets::Provider::PackageManager::FilterCondition
+ */
+struct FilterConditionPrivate
+{
+    /**
+     * @internal
+     * @brief Tag
+     */
     QString tag;
 };
 
@@ -29,11 +47,6 @@ public:
 
 FilterCondition::FilterCondition(QObject *parent) :
     QObject(parent), d_ptr(new FilterConditionPrivate())
-{
-}
-
-FilterCondition::FilterCondition(FilterConditionPrivate *dd, QObject *parent):
-    QObject(parent), d_ptr(dd)
 {
 }
 
@@ -52,8 +65,12 @@ void FilterCondition::setTag(const QString &tag)
     Q_D(FilterCondition);
     if (d->tag != tag) {
         d->tag = tag;
-        emit tagChanged(tag);
+        emit tagChanged();
     }
+}
+
+}
+
 }
 
 }

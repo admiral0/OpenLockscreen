@@ -96,6 +96,7 @@ public:
     QRect previousPosition;
 private:
     /**
+     * @internal
      * @brief Q-pointer
      */
     DragManager * const q_ptr;

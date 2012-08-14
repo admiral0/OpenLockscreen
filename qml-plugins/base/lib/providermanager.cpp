@@ -88,11 +88,11 @@ void ProviderManagerPrivate::slotAvailable(bool available)
     }
 }
 
-void ProviderManagerPrivate::setStatus(ProviderManager::ProviderStatus statusToSet)
+void ProviderManagerPrivate::setStatus(ProviderManager::ProviderStatus status)
 {
     Q_Q(ProviderManager);
-    if (status != statusToSet) {
-        status = statusToSet;
+    if (this->status != status) {
+        this->status = status;
         emit q->providerStatusChanged();
     }
 }

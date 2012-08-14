@@ -17,6 +17,13 @@
 #ifndef WIDGETS_CONTEXTBASE_P_H
 #define WIDGETS_CONTEXTBASE_P_H
 
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
+
 /**
  * @internal
  * @file contextbase_p.h

@@ -14,29 +14,71 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_FILTERCONDITION_H
-#define WIDGETS_FILTERCONDITION_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITION_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITION_H
+
+/**
+ * @file filtercondition.h
+ * @short Definition of Widgets::Provider::PackageManager::FilterCondition
+ */
 
 #include <QtCore/QObject>
 
 namespace Widgets
 {
 
+namespace Provider
+{
+
+namespace PackageManager
+{
+
 class FilterConditionPrivate;
+
+/**
+ * @brief An entry in the package manager filter
+ *
+ * This container class is used to provide filter entries in
+ * the package manager. It is available in QML, and should be
+ * provided as lists, inside a FilterConditionList.
+ */
 class FilterCondition : public QObject
 {
     Q_OBJECT
+    /**
+     * @short Tag
+     */
     Q_PROPERTY(QString tag READ tag WRITE setTag NOTIFY tagChanged)
 public:
+    /**
+     * @brief Default constructor
+     * @param parent parent object.
+     */
     explicit FilterCondition(QObject *parent = 0);
+    /**
+     * @brief Destructor
+     */
     virtual ~FilterCondition();
+    /**
+     * @brief Tag
+     * @return tag.
+     */
     QString tag() const;
 signals:
-    void tagChanged(const QString &tag);
+    /**
+     * @brief Tag changed
+     */
+    void tagChanged();
 public slots:
+    /**
+     * @brief Set tag
+     * @param tag tag.
+     */
     void setTag(const QString &tag);
 protected:
-    FilterCondition(FilterConditionPrivate *dd, QObject *parent = 0);
+    /**
+     * @brief D-pointer
+     */
     const QScopedPointer<FilterConditionPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(FilterCondition)
@@ -44,4 +86,8 @@ private:
 
 }
 
-#endif // WIDGETS_FILTERCONDITION_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_FILTERCONDITION_H

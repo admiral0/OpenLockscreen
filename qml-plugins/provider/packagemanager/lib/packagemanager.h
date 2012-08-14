@@ -14,22 +14,29 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_PACKAGEMANAGER_H
-#define WIDGETS_PACKAGEMANAGER_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_H
 
 /**
  * @file packagemanager.h
  * @short Definition of Widgets::PackageManager
  */
 
-#include <QtCore/QObject>
+#include "mixedproviderbase.h"
 
 #include "package.h"
-#include "dockbaseproperties.h"
-#include "widgetbaseproperties.h"
 #include "filterconditionlist.h"
 
+#include "widgetbaseproperties.h"
+#include "dockbaseproperties.h"
+
 namespace Widgets
+{
+
+namespace Provider
+{
+
+namespace PackageManager
 {
 
 class PackageManagerPrivate;
@@ -40,8 +47,8 @@ class PackageManagerPrivate;
  * uses a database to store all packages that are installed
  * on a device.
  *
- * The package manager is also used to provide informations
- * about the installed packages, including widgets and docks.
+ * It is also a mixed provider and implements the methods
+ * to provide information about docks and widgets.
  *
  * Finally, the package manager can make use of filters to
  * get rid of widgets that should not be used on the device.
@@ -57,19 +64,22 @@ class PackageManagerPrivate;
  * knowing the identifier. The second lists The third is used to perform a
  * full rescan of the device to find packages and register them.
  *
- * Querying the registered packages is done using
+ * The provider capabilities are brought by these reimplemented
+ * methods
+ * - disambiguationList()
  * - registeredDocks()
  * - registeredWidgets()
  * - dockFile()
+ * - dockSettingsFile()
  * - dock()
  * - widgetFile()
+ * - widgetSettingsFile()
  * - widget()
  *
- * The first two methods are used to list the registered widgets
- * and docks that are contained in a specific package. The other
- * methods are used to either get the absolute path to the QML file
- * that is used to create a dock or a widget, or to get more
- * information about this dock or widget.
+ * The disambiguation paramters are a variant hash that associate the key
+ * "identifier" to the package identifier. Therefore, these methods will
+ * only retrieve the dock or widget properties that corresponds to
+ * a filename in a given package.
  *
  * Finally, managing the filter is done through
  * - filter()
@@ -77,20 +87,15 @@ class PackageManagerPrivate;
  *
  * The page about \ref packageCreationSection "package creation" provides more
  * information about how packages are managed, and created.
- *
- * @see Widgets::Package
- * @see Widgets::DockBaseProperties
- * @see Widgets::WidgetBaseProperties
- * @see Widgets::FilterConditionList
  */
-class PackageManager : public QObject
+class PackageManager : public Docks::MixedProviderBase
 {
     Q_OBJECT
     /**
      * @short %Package manager filter
      */
-    Q_PROPERTY(Widgets::FilterConditionList * filter READ filter WRITE setFilter
-               NOTIFY filterChanged)
+    Q_PROPERTY(Widgets::Provider::PackageManager::FilterConditionList * filter
+               READ filter WRITE setFilter NOTIFY filterChanged)
 public:
     /**
      * @brief Default constructor
@@ -111,7 +116,7 @@ public:
      * @param identifier the identifier of the package.
      * @return a package corresponding to the identifier.
      */
-    Package * package(const QString &identifier);
+//    Package * package(const QString &identifier);
     /**
      * @brief Registered packages identifiers
      *
@@ -120,38 +125,34 @@ public:
      *
      * @return all the registered packages identifiers.
      */
-    QStringList registeredPackages() const;
+//    QStringList registeredPackages() const;
     /**
-     * @short Dock file
+     * @brief List of disambiguation parameters
      *
-     * This method is used to get the absolute file path to the QML file
-     * corresponding to a dock, providing the package identifier and
-     * the dock file name.
+     * The disambiguation parameters associates
+     * "identifier" to the package identifier.
      *
-     * If the dock is not found, an empty string is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param dockFileName dock file name.
-     * @return absolute file path to the QML file.
+     * @return a list of disambiguation parameters.
      */
-    Q_INVOKABLE QString dockFile(const QString &packageIdentifier, const QString &dockFileName);
+    QList<QVariantHash> disambiguationList() const;
     /**
-     * @short Dock settings file
+     * @short Absolute path to the dock file
      *
-     * This method is used to get the absolute file path to the QML file
-     * corresponding to the component that is used to setup a dock, providing
-     * the package identifier, the dock file name, and the component file name.
-     *
-     * If the component is not found, an empty string is returned.
-     *
-     * @param packageIdentifier package identifier.
-     * @param dockFileName dock file name.
-     * @param dockSettingsFileName dock settings component file name.
-     * @return absolute file path to the QML file.
+     * @param fileName the dock filename.
+     * @param disambiguation disambiguation parameter.
+     * @return absolute path to the dock file.
      */
-    Q_INVOKABLE QString dockSettingsFile(const QString &packageIdentifier,
-                                         const QString &dockFileName,
-                                         const QString &dockSettingsFileName);
+    Q_INVOKABLE QString dockFile(const QString &fileName,
+                                 const QVariantHash &disambiguation) const;
+    /**
+     * @short Absolute path to the dock configuration component file
+     *
+     * @param fileName the dock filename.
+     * @param disambiguation disambiguation parameter.
+     * @return absolute path to the dock configuration component file.
+     */
+    Q_INVOKABLE QString dockSettingsFile(const QString &fileName,
+                                         const QVariantHash &disambiguation) const;
     /**
      * @short Dock
      *
@@ -164,8 +165,8 @@ public:
      * @param dockFileName dock file name.
      * @return information about the dock.
      */
-    Q_INVOKABLE Widgets::DockBaseProperties * dock(const QString &packageIdentifier,
-                                                   const QString &dockFileName);
+    Q_INVOKABLE Widgets::Docks::DockBaseProperties * dock(const QString &fileName,
+                                                          const QVariantHash &disambiguation);
     /**
      * @brief Registered docks
      *
@@ -176,7 +177,7 @@ public:
      * @param packageIdentifier package identifier.
      * @return all the registered docks identifiers for a given package.
      */
-    QStringList registeredDocks(const QString &packageIdentifier) const;
+    QStringList registeredDocks(const QVariantHash &disambiguation) const;
     /**
      * @short Widget file
      *
@@ -190,7 +191,8 @@ public:
      * @param widgetFileName widget file name.
      * @return absolute file path to the QML file.
      */
-    Q_INVOKABLE QString widgetFile(const QString &packageIdentifier, const QString &widgetFileName);
+    Q_INVOKABLE QString widgetFile(const QString &fileName,
+                                   const QVariantHash &disambiguation) const;
     /**
      * @short Widget settings file
      *
@@ -205,9 +207,8 @@ public:
      * @param widgetSettingsFileName widget settings component file name.
      * @return absolute file path to the QML file.
      */
-    Q_INVOKABLE QString widgetSettingsFile(const QString &packageIdentifier,
-                                           const QString &widgetFileName,
-                                           const QString &widgetSettingsFileName);
+    Q_INVOKABLE QString widgetSettingsFile(const QString &fileName,
+                                           const QVariantHash &disambiguation) const;
     /**
      * @short Widget
      *
@@ -220,8 +221,8 @@ public:
      * @param widgetFileName widget file name.
      * @return information about the widget.
      */
-    Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &packageIdentifier,
-                                                       const QString &widgetFileName);
+    Q_INVOKABLE Widgets::WidgetBaseProperties * widget(const QString &fileName,
+                                                       const QVariantHash &disambiguation);
     /**
      * @brief Registered widgets
      *
@@ -232,7 +233,7 @@ public:
      * @param packageIdentifier package identifier.
      * @return all the registered widgets identifiers for a given package.
      */
-    QStringList registeredWidgets(const QString &packageIdentifier) const;
+    QStringList registeredWidgets(const QVariantHash &disambiguation) const;
     /**
      * @brief %Package manager filter
      * @return the package manager filter.
@@ -266,14 +267,14 @@ protected:
      * @param parent parent object.
      */
     PackageManager(PackageManagerPrivate *dd, QObject *parent = 0);
-    /**
-     * @brief D-pointer
-     */
-    const QScopedPointer<PackageManagerPrivate> d_ptr;
 private:
     Q_DECLARE_PRIVATE(PackageManager)
 };
 
 }
 
-#endif // WIDGETS_PACKAGEMANAGER_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_H

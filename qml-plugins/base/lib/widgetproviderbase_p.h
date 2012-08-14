@@ -17,18 +17,18 @@
 #ifndef WIDGETS_WIDGETPROVIDERBASE_P_H
 #define WIDGETS_WIDGETPROVIDERBASE_P_H
 
-/**
- * @internal
- * @file widgetproviderbase_p.h
- * @short Definition Widgets::WidgetProviderBasePrivate
- */
-
 // Warning
 //
 // This file exists for the convenience
 // of other Widgets classes. This header
 // file may change from version to version
 // without notice or even be removed.
+
+/**
+ * @internal
+ * @file widgetproviderbase_p.h
+ * @short Definition Widgets::WidgetProviderBasePrivate
+ */
 
 namespace Widgets
 {

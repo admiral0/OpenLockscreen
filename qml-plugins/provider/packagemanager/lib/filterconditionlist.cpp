@@ -14,6 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+/**
+ * @file filterconditionlist.cpp
+ * @short Implementation of Widgets::Provider::PackageManager::FilterConditionList
+ */
+
 #include "filterconditionlist.h"
 
 #include <QtCore/QStringList>
@@ -22,11 +27,34 @@
 namespace Widgets
 {
 
+namespace Provider
+{
+
+namespace PackageManager
+{
+
+/**
+ * @internal
+ * @brief Private class for Widgets::Provider::PackageManager::FilterConditionList
+ */
 class FilterConditionListPrivate
 {
 public:
+    /**
+     * @internal
+     * @brief Filter condition
+     *
+     * This method is here for interfacing with QML.
+     *
+     * @param list declarative list property.
+     * @param entry filter condition.
+     */
     static void appendCondition(QDeclarativeListProperty<FilterCondition> *list,
                                 FilterCondition *entry);
+    /**
+     * @internal
+     * @brief Filters
+     */
     QList<FilterCondition *> conditions;
 };
 
@@ -47,33 +75,32 @@ FilterConditionList::FilterConditionList(QObject *parent):
 {
 }
 
-FilterConditionList::FilterConditionList(FilterConditionListPrivate *dd, QObject *parent):
-    QObject(parent), d_ptr(dd)
-{
-}
-
 FilterConditionList::~FilterConditionList()
 {
 }
 
-QDeclarativeListProperty<FilterCondition> FilterConditionList::conditions()
+QDeclarativeListProperty<FilterCondition> FilterConditionList::filter()
 {
-    return QDeclarativeListProperty<FilterCondition>(
-                this, 0, Widgets::FilterConditionListPrivate::appendCondition);
+    return QDeclarativeListProperty<FilterCondition>(this, 0,
+                                                     FilterConditionListPrivate::appendCondition);
 }
 
 
 QStringList FilterConditionList::tags() const
 {
     Q_D(const FilterConditionList);
-    QStringList subrequests;
+    QStringList values;
 
     foreach (FilterCondition *condition, d->conditions) {
         if (!condition->tag().isEmpty()) {
-            subrequests.append(condition->tag());
+            values.append(condition->tag());
         }
     }
-    return subrequests;
+    return values;
+}
+
+}
+
 }
 
 }

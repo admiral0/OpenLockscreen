@@ -116,7 +116,7 @@
  */
 
 /**
- * @short Namespace for libwidgets
+ * @short Namespace for base plugin
  */
 namespace Widgets
 {

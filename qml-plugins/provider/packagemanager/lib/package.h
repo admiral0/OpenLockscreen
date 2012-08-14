@@ -14,15 +14,15 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_PACKAGE_H
-#define WIDGETS_PACKAGE_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGE_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGE_H
 
 /**
  * @file package.h
- * @short Definition of Widgets::Package
+ * @short Definition of Widgets::Provider::PackageManager::Package
  */
 
-#include "componentbase.h"
+#include "desktopcomponent.h"
 
 #include <QtCore/QPair>
 #include <QtCore/QScopedPointer>
@@ -33,7 +33,12 @@
 namespace Widgets
 {
 
-class PackageManager;
+namespace Provider
+{
+
+namespace PackageManager
+{
+
 class PackagePrivate;
 /**
  * @brief A package
@@ -65,43 +70,57 @@ class PackagePrivate;
  *
  * @see Widgets::PackageManager
  */
-class Package: public ComponentBase
+class Package: public DesktopComponent
 {
     Q_OBJECT
     /**
      * @short Package identifier
      */
-    Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(QString identifier READ identifier CONSTANT)
     /**
      * @short Package directory
      */
-    Q_PROPERTY(QString directory READ directory NOTIFY directoryChanged)
+    Q_PROPERTY(QString directory READ directory CONSTANT)
     /**
      * @short Package plugin
      */
-    Q_PROPERTY(QString plugin READ plugin NOTIFY pluginChanged)
+    Q_PROPERTY(QString plugin READ plugin CONSTANT)
     /**
      * @short Authors of the package
      */
-    Q_PROPERTY(QString author READ author NOTIFY authorChanged)
+    Q_PROPERTY(QString author READ author CONSTANT)
     /**
      * @short Email of the authors of the package
      */
-    Q_PROPERTY(QString email READ email NOTIFY emailChanged)
+    Q_PROPERTY(QString email READ email CONSTANT)
     /**
      * @short Website of the package
      */
-    Q_PROPERTY(QString website READ website NOTIFY websiteChanged)
+    Q_PROPERTY(QString website READ website CONSTANT)
     /**
      * @short %Version of the package
      */
-    Q_PROPERTY(Version version READ version NOTIFY versionChanged)
+    Q_PROPERTY(Version version READ version CONSTANT)
 public:
     /**
-     * @brief Default constructor
+     * @brief Invalid constructor
      * @param parent parent object.
      */
     explicit Package(QObject *parent = 0);
+    explicit Package(const QString &icon,
+                     const QString &defaultName, const QString &defaultDescription,
+                     const QHash<QString, QString> &names,
+                     const QHash<QString, QString> &descriptions,
+                     const QString &identifier,
+                     const QString &directory,
+                     const QString &plugin,
+                     const QString &author,
+                     const QString &email,
+                     const QString &website,
+                     const Version &version,
+                     bool visible = true,
+                     const QStringList &tags = QStringList(),
+                     QObject *parent = 0);
     /**
      * @brief Destructor
      */
@@ -154,44 +173,11 @@ public:
     /**
      * @brief Create a package from a desktop file
      *
-     * This method is used to create a Widgets::Package from desktop files.
-     * If the desktop file could not be parsed, this method will return
-     * a null pointer.
-     *
      * @param desktopFile path to the desktop file to parse.
      * @param parent parent object for the created Widgets::Package.
      * @return a Widgets::Package.
      */
     static Package * fromDesktopFile(const QString &desktopFile, QObject *parent = 0);
-Q_SIGNALS:
-    /**
-     * @brief Identifier changed
-     */
-    void identifierChanged();
-    /**
-     * @brief Directory changed
-     */
-    void directoryChanged();
-    /**
-     * @brief Plugin changed
-     */
-    void pluginChanged();
-    /**
-     * @brief Author changed
-     */
-    void authorChanged();
-    /**
-     * @brief Email changed
-     */
-    void emailChanged();
-    /**
-     * @brief Website changed
-     */
-    void websiteChanged();
-    /**
-     * @brief %Version changed
-     */
-    void versionChanged();
 protected:
     /**
      * @brief Constructor for D-pointer
@@ -200,65 +186,13 @@ protected:
      */
     Package(PackagePrivate *dd, QObject *parent = 0);
 private:
-    /**
-     * @brief Private constructor
-     *
-     * This private constructor is used to parse a desktop
-     * file and extract the information.
-     *
-     * @param desktopFile path to the desktop file to parse.
-     * @param parent parent object.
-     */
-    explicit Package(const QString &desktopFile, QObject *parent = 0);
-    /**
-     * @brief Set the package identifier
-     * @param identifier package identifier.
-     */
-    void setIdentifier(const QString &identifier);
-    /**
-     * @brief Set the package directory
-     * @param directory package directory.
-     */
-    void setDirectory(const QString &directory);
-    /**
-     * @brief Set the package plugin
-     * @param plugin package plugin.
-     */
-    void setPlugin(const QString &plugin);
-    /**
-     * @brief Set the authors of the package
-     * @param author authors of the package.
-     */
-    void setAuthor(const QString &author);
-    /**
-     * @brief Set the email of the authors of the package
-     * @param email email of the authors of the package.
-     */
-    void setEmail(const QString &email);
-    /**
-     * @brief Set the website of the package
-     * @param website website of the package.
-     */
-    void setWebsite(const QString &website);
-    /**
-     * @brief Set the version of the package
-     * @param version version of the package.
-     */
-    void setVersion(const Version &version);
-    /**
-     * @brief Set if the package is visible
-     * @param isVisible if the package is visible.
-     */
-    void setVisible(bool isVisible);
-    /**
-     * @brief Set the tags of this package
-     * @param tags tags of this package.
-     */
-    void setTags(const QStringList tags);
     W_DECLARE_PRIVATE(Package)
-    friend class PackageManager;
 };
 
 }
 
-#endif // WIDGETS_PACKAGE_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGE_H

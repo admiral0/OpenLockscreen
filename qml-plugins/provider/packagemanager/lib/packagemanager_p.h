@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_PACKAGEMANAGER_P_H
-#define WIDGETS_PACKAGEMANAGER_P_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_P_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_P_H
 
 #include "packagemanager.h"
 
@@ -29,45 +29,48 @@
 #include <QtCore/QVariantMap>
 #include <QtSql/QSqlQuery>
 
+#include "widgetproviderbase_p.h"
 
 namespace Widgets
 {
 
-class DockBaseProperties;
-class WidgetBaseProperties;
-class PackageManagerPrivate
+namespace Provider
+{
+
+namespace PackageManager
+{
+
+class ComponentMetadata;
+class DatabaseInterface;
+class FilterConditionList;
+/**
+ * @internal
+ * @brief Private class for Widgets::Provider::PackageManager::PackageManager
+ */
+class PackageManagerPrivate: public WidgetProviderBasePrivate
 {
 public:
-    PackageManagerPrivate(PackageManager *q);
+    explicit PackageManagerPrivate(PackageManager *q);
+    /**
+     * @internal
+     * @brief Destructor
+     */
     virtual ~PackageManagerPrivate();
-    virtual QString databasePath() const;
-    QString searchForDockFile(const QString &packageIdentifier, const QString &dockFileName,
-                              const QString &dockSearchedFileName);
-    QString searchForWidgetFile(const QString &packageIdentifier, const QString &widgetFileName,
-                                const QString &widgetSearchedFileName);
-
-    bool executeQuery(QSqlQuery *query) const;
-    bool executeQueryBatch(QSqlQuery *query) const;
-    void addComponentType(const QStringList &names);
-    void addComponentInformationProperties(const QStringList &names);
-    void prepareDatabase();
-    int componentTypeId(const char *type) const;
-    void addInformation(const char *type, int componentId, const QVariantMap &informations);
-    void addLocalizedInformation(const char *type, int componentId,
-                                 const QStringList &languages, const QStringList &names,
-                                 const QStringList &descriptions);
-    int tagId(const QString &tag);
-    void addTags(int packageId, const QStringList &tags);
-    void addPackage(const QString &path);
-    void scanPackageFolder(int packageId, const QString &path, const QString &packageIdentifier);
-    void addDock(int packageId, const QString &subdirectory, DockBaseProperties *dock);
-    void addWidget(int packageId, const QString &subdirectory, WidgetBaseProperties *widget);
+    DatabaseInterface *interface;
     FilterConditionList *filter;
 private:
     Q_DECLARE_PUBLIC(PackageManager)
+    /**
+     * @internal
+     * @brief Q-pointer
+     */
     PackageManager * const q_ptr;
 };
 
 }
 
-#endif // WIDGETS_PACKAGEMANAGER_P_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_PACKAGEMANAGER_P_H

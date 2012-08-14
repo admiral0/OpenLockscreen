@@ -40,12 +40,12 @@
 namespace Widgets
 {
 
-AbstractSettingsPrivate::AbstractSettingsPrivate(QObject *settingsObject):
+AbstractSettings::AbstractSettings(QObject *settingsObject):
     settingsObject(settingsObject)
 {
 }
 
-QString AbstractSettingsPrivate::settingsFilePath() const
+QString AbstractSettings::settingsFilePath() const
 {
     QString settingsFileName = QString("settings-%1.xml").arg(componentName);
 
@@ -55,7 +55,7 @@ QString AbstractSettingsPrivate::settingsFilePath() const
     return dir.absoluteFilePath(settingsFileName);
 }
 
-void AbstractSettingsPrivate::load()
+void AbstractSettings::load()
 {
     if (componentName.isEmpty()) {
         return;
@@ -78,12 +78,12 @@ void AbstractSettingsPrivate::load()
     input->deleteLater();
 }
 
-void AbstractSettingsPrivate::requestSave()
+void AbstractSettings::requestSave()
 {
     QCoreApplication::postEvent(settingsObject, new QEvent(QEvent::UpdateRequest));
 }
 
-void AbstractSettingsPrivate::save()
+void AbstractSettings::save()
 {
     if (componentName.isEmpty()) {
         return;

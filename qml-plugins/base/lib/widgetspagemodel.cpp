@@ -50,7 +50,7 @@ static const char *WIDGET_ELEMENT = "widget";
  * @internal
  * @short Private class for Widgets::WidgetsPageModelPrivate
  */
-class WidgetsPageModelPrivate: public AbstractSettingsPrivate
+class WidgetsPageModelPrivate: public AbstractSettings
 {
 public:
     /**
@@ -130,7 +130,7 @@ private:
 };
 
 WidgetsPageModelPrivate::WidgetsPageModelPrivate(WidgetsPageModel *q):
-    AbstractSettingsPrivate(q), q_ptr(q)
+    AbstractSettings(q), q_ptr(q)
 {
     pageIndex = -1;
     provider = 0;

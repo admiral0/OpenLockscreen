@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef WIDGETS_DOCKBASEPROPERTIES_P_H
-#define WIDGETS_DOCKBASEPROPERTIES_P_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_COMPONENTMETADATA_P_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_COMPONENTMETADATA_P_H
 
 // Warning
 //
@@ -24,33 +24,52 @@
 // file may change from version to version
 // without notice or even be removed.
 
-#include <QtCore/QSize>
 
-#include "graphicalcomponentbase_p.h"
-#include "dockbaseproperties.h"
+#include "desktopcomponent.h"
 
 namespace Widgets
 {
 
-class DockBasePropertiesPrivate: public GraphicalComponentBasePrivate
+namespace Provider
 {
+
+namespace PackageManager
+{
+
+class ComponentMetadataPrivate;
+class ComponentMetadata: public DesktopComponent
+{
+    Q_OBJECT
+    Q_ENUMS(ComponentType)
+    Q_PROPERTY(ComponentType type READ type CONSTANT)
+    Q_PROPERTY(QString fileName READ fileName CONSTANT)
+    Q_PROPERTY(QString settingsFileName READ settingsFileName CONSTANT)
 public:
-    DockBasePropertiesPrivate(DockBaseProperties *q);
-    DockBasePropertiesPrivate(const QString &fileName,
-                              const QString &packageIdentifier,
-                              DockBaseProperties *q);
-    virtual bool checkValid(const DesktopParser &parser);
-    virtual void parseDesktopFile(const DesktopParser &parser);
-    void checkAnchorsValid();
-    QSize size;
-    bool anchorsTop;
-    bool anchorsBottom;
-    bool anchorsLeft;
-    bool anchorsRight;
+    enum ComponentType {
+        InvalidComponentType,
+        WidgetComponentType,
+        DockComponentType
+    };
+    explicit ComponentMetadata(const QString &icon,
+                               const QString &defaultName, const QString &defaultDescription,
+                               const QHash<QString, QString> &names,
+                               const QHash<QString, QString> &descriptions,
+                               ComponentType type,
+                               const QString fileName, const QString settingsFileName,
+                               QObject *parent = 0);
+
+    ComponentType type() const;
+    QString fileName() const;
+    QString settingsFileName() const;
+    static ComponentMetadata * fromDesktopFile(const QString &desktopFile, QObject *parent = 0);
 private:
-    Q_DECLARE_PUBLIC(DockBaseProperties)
+    W_DECLARE_PRIVATE(ComponentMetadata)
 };
 
 }
 
-#endif // WIDGETS_DOCKBASEPROPERTIES_P_H
+}
+
+}
+
+#endif // COMPONENTMETADATA_P_H

@@ -12,14 +12,26 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
-#ifndef WIDGETS_DESKTOPPARSERDEFINES_H
-#define WIDGETS_DESKTOPPARSERDEFINES_H
+#ifndef WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H
+#define WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H
 
 namespace Widgets
 {
-static const char *DESKTOP_FILE_SERVICE_TYPE = "X-Widgets-ServiceType";
+
+namespace Provider
+{
+
+namespace PackageManager
+{
+
+static const char *SERVICE_TYPE = "X-Widgets-ServiceType";
+
 }
 
-#endif // WIDGETS_DESKTOPPARSERDEFINES_H
+}
+
+}
+
+#endif // WIDGETS_PROVIDER_PACKAGEMANAGER_DESKTOPPARSERDEFINES_H

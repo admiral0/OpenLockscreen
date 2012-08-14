@@ -4,44 +4,34 @@ TEMPLATE = lib
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
 TARGET = widgetspackagemanagerprovider
-QT = core gui sql xml
+QT = core gui sql
 
 contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 
 INCLUDEPATH += ../../../base/lib
+INCLUDEPATH += ../../../docks/lib
+LIBS += -L../../../base/lib/ -lwidgetsbase
+LIBS += -L../../../docks/lib/ -lwidgetsdocks
 
-HEADERS +=      componentbase.h \
-                componentbase_p.h \
-                graphicalcomponent_p.h \
-                dockbaseproperties.h \
-                dockbaseproperties_p.h \
-                dockproperties.h \
-                desktopparser.h \
-                desktopparserdefines.h \
+HEADERS +=      desktopfileparser_p.h \
+                desktopcomponent_p.h \
+                desktopcomponent.h \
                 package.h \
+                componentmetadata_p.h \
+                filtercondition.h \
+                filterconditionlist.h \
                 packagemanager.h \
                 packagemanager_p.h \
-                filterconditionlist.h \
-                filtercondition.h \
-                packagemanagerdefines.h \
-                packagemanagerupdaterunnable.h \
-                widgetbaseproperties.h \
-                widgetbaseproperties_p.h \
-                widgetproperties.h \
+                databaseinterface_p.h \
+                databaseinterface_p_p.h \
 
-SOURCES +=      componentbase.cpp \
-                dockbaseproperties.cpp \
-                dockbaseproperties_p.cpp \
-                dockproperties.cpp \
-                desktopparser.cpp \
+SOURCES +=      desktopfileparser_p.cpp \
+                desktopcomponent.cpp \
                 package.cpp \
-                packagemanager.cpp \
-                packagemanager_p.cpp \
-                filterconditionlist.cpp \
+                componentmetadata_p.cpp \
                 filtercondition.cpp \
-                packagemanagerupdaterunnable.cpp \
-                widgetbaseproperties.cpp \
-                widgetbaseproperties_p.cpp \
-                widgetproperties.cpp \
+                filterconditionlist.cpp \
+                packagemanager.cpp \
+                databaseinterface_p.cpp \
 
 include(deployment.pri)

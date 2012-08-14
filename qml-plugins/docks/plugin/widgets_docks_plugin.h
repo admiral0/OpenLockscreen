@@ -62,7 +62,7 @@ namespace Widgets
 {
 
 /**
- * @short Namespace for providers
+ * @short Namespace for docks
  */
 namespace Docks
 {

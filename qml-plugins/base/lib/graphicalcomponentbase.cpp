@@ -31,18 +31,21 @@ namespace Widgets
 {
 
 /**
+ * @internal
  * @brief FILENAME_ATTRIBUTE
  *
  * Used in Widgets::GraphicalComponentBase.
  */
 static const char *FILENAME_ATTRIBUTE = "filename";
 /**
+ * @internal
  * @brief SETTINGS_FILENAME_ATTRIBUTE
  *
  * Used in Widgets::GraphicalComponentBase.
  */
 static const char *SETTINGS_FILENAME_ATTRIBUTE = "settings_filename";
 /**
+ * @internal
  * @brief DISAMBIGUATION_TAG
  *
  * Used in Widgets::GraphicalComponentBase.
@@ -64,9 +67,9 @@ GraphicalComponentBaseComponentBuilderHelper::~GraphicalComponentBaseComponentBu
 }
 
 void GraphicalComponentBaseComponentBuilderHelper::
-               setProperties(const QDomElement &xmlElementToSet, QObject *parent)
+               setProperties(const QDomElement &xmlElement, QObject *parent)
 {
-    xmlElement = xmlElementToSet;
+    this->xmlElement = xmlElement;
     m_parent = parent;
 }
 
@@ -138,13 +141,13 @@ GraphicalComponentBaseXmlBuilder::GraphicalComponentBaseXmlBuilder():
 {
 }
 
-void GraphicalComponentBaseXmlBuilder::setProperties(GraphicalComponentBase *componentToSet,
-                                                         const QString &tagNameToSet,
-                                                         QDomDocument *documentToSet)
+void GraphicalComponentBaseXmlBuilder::setProperties(GraphicalComponentBase *component,
+                                                         const QString &tagName,
+                                                         QDomDocument *document)
 {
-    m_component = componentToSet;
-    tagName = tagNameToSet;
-    document = documentToSet;
+    m_component = component;
+    this->tagName = tagName;
+    this->document = document;
 }
 
 void GraphicalComponentBaseXmlBuilder::buildElement()

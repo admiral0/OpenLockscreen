@@ -27,7 +27,7 @@
 /**
  * @internal
  * @file abstractsettings_p.h
- * @short Definition of Widgets::AbstractSettingsPrivate
+ * @short Definition of Widgets::AbstractSettings
  */
 
 #include <QtCore/QObject>
@@ -39,7 +39,7 @@ namespace Widgets
 /**
  * @brief SETTINGS_ELEMENT
  *
- * Used in Widgets::AbstractSettingsPrivate.
+ * Used in Widgets::AbstractSettings.
  */
 static const char *SETTINGS_ELEMENT = "settings";
 
@@ -76,7 +76,7 @@ static const char *SETTINGS_ELEMENT = "settings";
  * Triggering save requests is a nice way to save settings once when many
  * parameters were modified.
  */
-class AbstractSettingsPrivate
+class AbstractSettings
 {
 public:
     /**
@@ -84,7 +84,7 @@ public:
      * @brief Default constructor
      * @param settingsObject object that is used to react to the save request.
      */
-    AbstractSettingsPrivate(QObject *settingsObject);
+    AbstractSettings(QObject *settingsObject);
     /**
      * @internal
      * @brief Settings file path
@@ -149,7 +149,6 @@ private:
      */
     QObject *settingsObject;
 };
-
 
 }
 

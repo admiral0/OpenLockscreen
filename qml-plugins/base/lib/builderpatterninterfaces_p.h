@@ -17,18 +17,18 @@
 #ifndef WIDGETS_BUILDERPATTERNINTERFACES_P_H
 #define WIDGETS_BUILDERPATTERNINTERFACES_P_H
 
-/**
- * @internal
- * @file builderpatterninterfaces_p.h
- * @short Definition of builder pattern interfaces
- */
-
 // Warning
 //
 // This file exists for the convenience
 // of other Widgets classes. This header
 // file may change from version to version
 // without notice or even be removed.
+
+/**
+ * @internal
+ * @file builderpatterninterfaces_p.h
+ * @short Definition of builder pattern interfaces
+ */
 
 namespace Widgets
 {
@@ -89,9 +89,9 @@ public:
     /**
      * @internal
      * @brief Set builder
-     * @param builderToSet the builder to set.
+     * @param builder the builder to set.
      */
-    inline void setBuilder(AbstractBuilder<T> *builderToSet) {builder = builderToSet;}
+    inline void setBuilder(AbstractBuilder<T> *builder) {this->builder = builder;}
     /**
      * @internal
      * @brief Build

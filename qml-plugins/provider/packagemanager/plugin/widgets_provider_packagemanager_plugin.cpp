@@ -15,6 +15,7 @@
  ****************************************************************************************/
 
 /**
+ * @internal
  * @file widgets_provider_packagemanager_plugin.cpp
  * @short Implementation of Widgets::Colors::WidgetsColorsPlugin
  */
@@ -22,6 +23,11 @@
 #include "widgets_provider_packagemanager_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
+
+#include "package.h"
+#include "packagemanager.h"
+#include "filtercondition.h"
+#include "filterconditionlist.h"
 
 namespace Widgets
 {
@@ -40,6 +46,10 @@ void WidgetsProviderPlugin::initializeEngine(QDeclarativeEngine *engine, const c
 void WidgetsProviderPlugin::registerTypes(const char *uri)
 {
     // @uri org.SfietKonstantin.widgets.provider.packagemanager
+    qmlRegisterType<Package>(uri, 1, 0, "Package");
+    qmlRegisterType<PackageManager>(uri, 1, 0, "PackageManager");
+    qmlRegisterType<FilterCondition>(uri, 1, 0, "FilterCondition");
+    qmlRegisterType<FilterConditionList>(uri, 1, 0, "FilterConditionList");
 }
 
 }

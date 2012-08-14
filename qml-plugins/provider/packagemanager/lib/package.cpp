@@ -16,7 +16,7 @@
 
 /**
  * @file package.cpp
- * @short Implementation of Widgets::Package
+ * @short Implementation of Widgets::Provider::PackageManager::Package
  */
 
 #include "package.h"
@@ -24,65 +24,90 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QVariant>
 
-#include "componentbase_p.h"
-#include "desktopparser.h"
+#include "desktopcomponent_p.h"
+#include "desktopfileparser_p.h"
+
 #include "desktopparserdefines.h"
 #include "tools.h"
 
 namespace Widgets
 {
 
-/**
- * @internal
- * @brief DESKTOP_FILE_SERVICE_VALUE
- */
-static const char *DESKTOP_FILE_SERVICE_VALUE = "plugin";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_ID
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_ID = "X-Widgets-PluginInfo-Id";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_AUTHOR
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_AUTHOR = "X-Widgets-PluginInfo-Author";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_EMAIL
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_EMAIL = "X-Widgets-PluginInfo-Email";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_WEBSITE
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_WEBSITE = "X-Widgets-PluginInfo-Website";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_NAME
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_NAME = "X-Widgets-PluginInfo-Name";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_VERSION
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_VERSION = "X-Widgets-PluginInfo-Version";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_VISIBLE
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_VISIBLE = "X-Widgets-PluginInfo-Visible";
-/**
- * @internal
- * @brief DESKTOP_FILE_PLUGIN_INFO_TAGS
- */
-static const char *DESKTOP_FILE_PLUGIN_INFO_TAGS = "X-Widgets-PluginInfo-Tags";
+namespace Provider
+{
+
+namespace PackageManager
+{
 
 /**
  * @internal
- * @brief Private class for Widgets::Package
+ * @brief SERVICE_VALUE
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
  */
-class PackagePrivate: public ComponentBasePrivate
+static const char *SERVICE_VALUE = "plugin";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_ID
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_ID = "X-Widgets-PluginInfo-Id";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_AUTHOR
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_AUTHOR = "X-Widgets-PluginInfo-Author";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_EMAIL
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_EMAIL = "X-Widgets-PluginInfo-Email";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_WEBSITE
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_WEBSITE = "X-Widgets-PluginInfo-Website";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_NAME
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_NAME = "X-Widgets-PluginInfo-Name";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_VERSION
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_VERSION = "X-Widgets-PluginInfo-Version";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_VISIBLE
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_VISIBLE = "X-Widgets-PluginInfo-Visible";
+/**
+ * @internal
+ * @brief PLUGIN_INFO_TAGS
+ *
+ * Used in Widgets::Provider::PackageManager::Package.
+ */
+static const char *PLUGIN_INFO_TAGS = "X-Widgets-PluginInfo-Tags";
+
+/**
+ * @internal
+ * @brief Private class for Widgets::Provider::PackageManager::Package
+ */
+class PackagePrivate: public DesktopComponentPrivate
 {
 public:
     /**
@@ -136,75 +161,278 @@ public:
      * @brief Tags
      */
     QStringList tags;
-protected:
-    /**
-     * @internal
-     * @brief Parse the desktop file
-     * @param parser parser used to parse the desktop file.
-     */
-    virtual void parseDesktopFile(const DesktopParser &parser);
-    virtual bool checkValid(const DesktopParser &parser);
 private:
     Q_DECLARE_PUBLIC(Package)
 };
 
+/**
+ * @internal
+ * @brief Helper class for component builder for Widgets::Provider::PackageManager::Package
+ *
+ * In extend to Widgets::Provider::Package::DesktopComponentBuilderHelper,
+ * this class also takes care of extracting properties related
+ * to package.
+ */
+class PackageBuilderHelper: public DesktopComponentBuilderHelper
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit PackageBuilderHelper();
+    /**
+     * @internal
+     * @brief If the XML element is valid
+     * @return if the XML element is valid.
+     */
+    virtual bool isValid() const;
+    /**
+     * @internal
+     * @brief Identifier
+     * @return identifier.
+     */
+    QString identifier() const;
+    /**
+     * @internal
+     * @short Directory
+     * @return directory.
+     */
+    QString directory() const;
+    /**
+     * @internal
+     * @short Plugin
+     * @return plugin.
+     */
+    QString plugin() const;
+    /**
+     * @internal
+     * @short Author
+     * @return author.
+     */
+    QString author() const;
+    /**
+     * @internal
+     * @short Email
+     * @return email.
+     */
+    QString email() const;
+    /**
+     * @internal
+     * @short Website
+     * @return website.
+     */
+    QString website() const;
+    /**
+     * @internal
+     * @short Version
+     * @return version.
+     */
+    Version version() const;
+    /**
+     * @internal
+     * @brief Is visible
+     * @return is visible.
+     */
+    bool isVisible() const;
+    /**
+     * @internal
+     * @brief Tags
+     * @return tags.
+     */
+    QStringList tags() const;
+};
+
+/**
+ * @internal
+ * @brief Component builder for Widgets::Provider::PackageManager::Package
+ *
+ * This class is used to get a Widgets::Provider::PackageManager::Package
+ * from a desktop file.
+ *
+ * This class build the component in 2 steps.
+ * - call to setProperties() to get the desktop file path and parent object.
+ * - call to buildElement() to build the component.
+ */
+class PackageBuilder: public AbstractBuilder<Package *>
+{
+public:
+    /**
+     * @internal
+     * @brief Default constructor
+     */
+    explicit PackageBuilder();
+    /**
+     * @internal
+     * @brief Destructor
+     */
+    virtual ~PackageBuilder();
+    /**
+     * @internal
+     * @brief Set properties
+     *
+     * @param desktopFile Desktop file to parse.
+     * @param parent parent object.
+     */
+    virtual void setProperties(const QString &desktopFile, QObject *parent = 0);
+    /**
+     * @internal
+     * @brief Built the component
+     */
+    virtual void buildElement();
+private:
+    /**
+     * @internal
+     * @brief Helper class
+     */
+    PackageBuilderHelper *m_helper;
+};
+
+
 PackagePrivate::PackagePrivate(Package *q):
-    ComponentBasePrivate(q)
+    DesktopComponentPrivate(q)
 {
     visible = true;
 }
 
-void PackagePrivate::parseDesktopFile(const DesktopParser &parser)
+PackageBuilderHelper::PackageBuilderHelper():
+    DesktopComponentBuilderHelper()
 {
-    Q_Q(Package);
-    ComponentBasePrivate::parseDesktopFile(parser);
+}
 
-    QFileInfo fileInfo (parser.file());
-    q->setDirectory(fileInfo.absolutePath());
-    q->setIdentifier(parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString());
-    q->setPlugin(parser.value(DESKTOP_FILE_PLUGIN_INFO_NAME).toString());
-    q->setAuthor(parser.value(DESKTOP_FILE_PLUGIN_INFO_AUTHOR).toString());
-    q->setEmail(parser.value(DESKTOP_FILE_PLUGIN_INFO_EMAIL).toString());
-    q->setWebsite(parser.value(DESKTOP_FILE_PLUGIN_INFO_WEBSITE).toString());
-    QString version = parser.value(DESKTOP_FILE_PLUGIN_INFO_VERSION).toString();
-    QString tagString = parser.value(DESKTOP_FILE_PLUGIN_INFO_TAGS).toString();
-    QStringList tags = tagString.split(";", QString::SkipEmptyParts);
-    q->setTags(tags);
-    q->setVersion(Version::fromString(version));
-    if (parser.contains(DESKTOP_FILE_PLUGIN_INFO_VISIBLE)) {
-        q->setVisible(
-                    Tools::stringToBool(parser.value(DESKTOP_FILE_PLUGIN_INFO_VISIBLE).toString()));
+bool PackageBuilderHelper::isValid() const
+{
+    if (desktopFileParser->value(SERVICE_TYPE).toString() != SERVICE_VALUE) {
+        return false;
+    }
+    if (desktopFileParser->value(PLUGIN_INFO_ID).toString().isEmpty()) {
+        return false;
+    }
+
+    return DesktopComponentBuilderHelper::isValid();
+}
+
+QString PackageBuilderHelper::identifier() const
+{
+    return desktopFileParser->value(PLUGIN_INFO_ID).toString();
+}
+
+QString PackageBuilderHelper::directory() const
+{
+    QFileInfo fileInfo (desktopFileParser->file());
+    return fileInfo.absolutePath();
+}
+
+QString PackageBuilderHelper::plugin() const
+{
+    return desktopFileParser->value(PLUGIN_INFO_NAME).toString();
+}
+
+QString PackageBuilderHelper::author() const
+{
+    return desktopFileParser->value(PLUGIN_INFO_AUTHOR).toString();
+}
+
+QString PackageBuilderHelper::email() const
+{
+    return desktopFileParser->value(PLUGIN_INFO_EMAIL).toString();
+}
+
+QString PackageBuilderHelper::website() const
+{
+    return desktopFileParser->value(PLUGIN_INFO_WEBSITE).toString();
+}
+
+Version PackageBuilderHelper::version() const
+{
+    QString versionString = desktopFileParser->value(PLUGIN_INFO_VERSION).toString();
+    return Version::fromString(versionString);
+}
+
+bool PackageBuilderHelper::isVisible() const
+{
+    if (desktopFileParser->contains(PLUGIN_INFO_VISIBLE)) {
+        QVariant visibleVariant = desktopFileParser->value(PLUGIN_INFO_VISIBLE);
+        return Tools::stringToBool(visibleVariant.toString());
+    } else {
+        return true;
     }
 }
 
-bool PackagePrivate::checkValid(const DesktopParser &parser)
+QStringList PackageBuilderHelper::tags() const
 {
-    if (parser.value(DESKTOP_FILE_SERVICE_TYPE).toString() != DESKTOP_FILE_SERVICE_VALUE) {
-        return false;
-    }
-    if (parser.value(DESKTOP_FILE_PLUGIN_INFO_ID).toString().isEmpty()) {
-        return false;
+    QString tagString = desktopFileParser->value(PLUGIN_INFO_TAGS).toString();
+    return tagString.split(";", QString::SkipEmptyParts);
+}
+
+PackageBuilder::PackageBuilder():
+    AbstractBuilder<Package *>()
+{
+    m_helper = new PackageBuilderHelper();
+}
+
+PackageBuilder::~PackageBuilder()
+{
+    delete m_helper;
+}
+
+void PackageBuilder::setProperties(const QString &desktopFile, QObject *parent)
+{
+    m_helper->setProperties(desktopFile, parent);
+}
+
+void PackageBuilder::buildElement()
+{
+    if (!m_helper->isValid()) {
+        builtElement = 0;
+        return;
     }
 
-    return ComponentBasePrivate::checkValid(parser);
+    builtElement = new Package(m_helper->icon(), m_helper->defaultName(),
+                               m_helper->defaultDescription(),
+                               m_helper->names(), m_helper->descriptions(),
+                               m_helper->identifier(), m_helper->directory(), m_helper->plugin(),
+                               m_helper->author(), m_helper->email(), m_helper->website(),
+                               m_helper->version(), m_helper->isVisible(), m_helper->tags(),
+                               m_helper->parent());
 }
 
 ////// End of private class //////
 
 Package::Package(QObject *parent):
-    ComponentBase(new PackagePrivate(this), parent)
+    DesktopComponent(new PackagePrivate(this), parent)
 {
 }
 
-Package::Package(const QString &desktopFile, QObject *parent):
-    ComponentBase(new PackagePrivate(this), parent)
+Package::Package(const QString &icon,
+                 const QString &defaultName, const QString &defaultDescription,
+                 const QHash<QString, QString> &names, const QHash<QString, QString> &descriptions,
+                 const QString &identifier,
+                 const QString &directory, const QString &plugin,
+                 const QString &author, const QString &email, const QString &website,
+                 const Version &version, bool visible, const QStringList &tags,
+                 QObject *parent):
+    DesktopComponent(new PackagePrivate(this), parent)
 {
     W_D(Package);
-    d->fromDesktopFile(desktopFile);
+    d->icon = icon;
+    d->defaultName = defaultName;
+    d->defaultDescription = defaultDescription;
+    d->names = names;
+    d->descriptions = descriptions;
+    d->identifier = identifier;
+    d->directory = directory;
+    d->plugin = plugin;
+    d->author = author;
+    d->email = email;
+    d->website = website;
+    d->version = version;
+    d->visible = visible;
+    d->tags = tags;
 }
 
 Package::Package(PackagePrivate *dd, QObject *parent):
-    ComponentBase(dd, parent)
+    DesktopComponent(dd, parent)
 {
 }
 
@@ -266,86 +494,25 @@ QStringList Package::tags() const
     return d->tags;
 }
 
-void Package::setIdentifier(const QString &identifier)
-{
-    W_D(Package);
-    d->valid = !identifier.isEmpty() && !directory().isEmpty();
-    if (d->identifier != identifier) {
-        d->identifier = identifier;
-        emit identifierChanged();
-    }
-}
-
-void Package::setDirectory(const QString &directory)
-{
-    W_D(Package);
-    d->valid = !identifier().isEmpty() && !directory.isEmpty();
-    if (d->directory != directory) {
-        d->directory = directory;
-        emit directoryChanged();
-    }
-}
-
-void Package::setPlugin(const QString &plugin)
-{
-    W_D(Package);
-    if (d->plugin != plugin) {
-        d->plugin = plugin;
-        emit pluginChanged();
-    }
-}
-
-void Package::setAuthor(const QString &author)
-{
-    W_D(Package);
-    if (d->author != author) {
-        d->author = author;
-        emit authorChanged();
-    }
-}
-
-void Package::setEmail(const QString &email)
-{
-    W_D(Package);
-    if (d->email != email) {
-        d->email = email;
-        emit emailChanged();
-    }
-}
-
-void Package::setWebsite(const QString &website)
-{
-    W_D(Package);
-    if (d->website != website) {
-        d->website = website;
-        emit websiteChanged();
-    }
-}
-
-void Package::setVersion(const Version &version)
-{
-    W_D(Package);
-    if (d->version != version) {
-        d->version = version;
-        emit versionChanged();
-    }
-}
-
-void Package::setVisible(bool visible)
-{
-    W_D(Package);
-    d->visible = visible;
-}
-
-void Package::setTags(const QStringList tags)
-{
-    W_D(Package);
-    d->tags = tags;
-}
-
 Package * Package::fromDesktopFile(const QString &desktopFile, QObject *parent)
 {
-    return new Package(desktopFile, parent);
+    PackageBuilder *builder = new PackageBuilder();
+    BuildManager<Package *> *buildManager = new BuildManager<Package *>();
+    buildManager->setBuilder(builder);
+
+    builder->setProperties(desktopFile, parent);
+    buildManager->build();
+
+    Package *package = buildManager->element();
+
+    delete builder;
+    delete buildManager;
+
+    return package;
+}
+
+}
+
 }
 
 }

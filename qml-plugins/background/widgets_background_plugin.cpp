@@ -15,8 +15,9 @@
  ****************************************************************************************/
 
 /**
- * @file widgets_plugin.cpp
- * @short Implementation of WidgetsPlugin
+ * @internal
+ * @file widgets_background_plugin.cpp
+ * @short Implementation of Widgets::Background::WidgetsBackgroundPlugin
  */
 
 
@@ -26,6 +27,14 @@
 
 #include "backgroundmanager.h"
 
+namespace Widgets
+{
+
+/**
+ * @short Namespace for backgrounds
+ */
+namespace Background
+{
 
 void WidgetsBackgroundPlugin::registerTypes(const char *uri)
 {
@@ -33,5 +42,9 @@ void WidgetsBackgroundPlugin::registerTypes(const char *uri)
     qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
 }
 
-Q_EXPORT_PLUGIN2(Widgets, WidgetsBackgroundPlugin)
+}
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Background::WidgetsBackgroundPlugin)
 

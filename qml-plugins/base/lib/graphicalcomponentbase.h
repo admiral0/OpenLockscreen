@@ -44,6 +44,10 @@ class GraphicalComponentBasePrivate;
  * - disambiguation(), that is a disambiguation parameter.
  * - settingsEnabled() that check if this graphical have settings dialog.
  * - settingsFileName(), that is the filename of the settings component for this component.
+ *
+ * Please note that all the filename should not be path.
+ * The role of providers is to be capable of retrieving
+ * file path from filenames.
  */
 class GraphicalComponentBase: public QObject
 {
