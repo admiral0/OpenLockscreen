@@ -67,7 +67,7 @@
  * - \subpage pluginBase
  * - \subpage pluginDocks
  * - \subpage pluginDrag
- * - \subpage pluginExtra
+ * - \subpage pluginInfo
  * - \subpage providers
  *   - \ref pluginProviderBasic
  *   - \ref pluginProviderPackageManager

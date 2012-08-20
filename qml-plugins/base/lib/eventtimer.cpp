@@ -26,6 +26,12 @@
 namespace Widgets
 {
 
+/**
+ * @internal
+ * @brief DEFAULT_INTERVAL
+ *
+ * Used in Widgets::EventTimer.
+ */
 static const int DEFAULT_INTERVAL = 15;
 
 /**

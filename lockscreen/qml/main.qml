@@ -16,15 +16,17 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.provider.packagemanager 1.0
 
 
 
-Image {
+Rectangle {
     id: container
     anchors.fill: parent
-    source: "/home/user/.wallpapers/wallpaper.png"
+    color: "black"
+//    source: "/home/user/.wallpapers/wallpaper.png"
 
     Component.onCompleted: {
         WidgetsPageListModelInstance.settings = widgetsSettings
@@ -43,6 +45,21 @@ Image {
                 group: "widgets"
                 key: "initialPage"
                 value: 2
+            },
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperWidth"
+                value: 1440
+            },
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperHeight"
+                value: 900
+            },
+            SettingsEntry {
+                group: "background"
+                key: "wallpaperSource"
+                value: "/opt/widgets/data/wallpaper-1.png"
             }
         ]
     }
@@ -57,6 +74,13 @@ Image {
         FilterCondition {
             tag: "mobile-harmattan"
         }
+    }
+
+    HorizontalParallaxBackground {
+        id: background
+        anchors.fill: parent
+        settings: widgetsSettings
+        horizontalPageView: widgetsPage
     }
 
     DockedView {

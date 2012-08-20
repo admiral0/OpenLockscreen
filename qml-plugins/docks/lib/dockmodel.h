@@ -81,6 +81,9 @@ public:
      */
     enum DockModelRole
     {
+        /**
+         * @short Dock role
+         */
         DockRole = Qt::UserRole + 1
     };
     /**

@@ -15,38 +15,54 @@
  ****************************************************************************************/
 
 /**
- * @internal
- * @file widgets_background_plugin.cpp
- * @short Implementation of Widgets::Background::WidgetsBackgroundPlugin
+ * @file applicationsmodel.h
+ * @short Definition of Widgets::ApplicationsModel
+ *
+ * This file contains the definition of the
+ * Widgets::ApplicationsModel class.
  */
 
+#ifndef WIDGETS_APPLICATIONSMODEL_H
+#define WIDGETS_APPLICATIONSMODEL_H
 
-#include "widgets_background_plugin.h"
-
-#include <QtDeclarative/QtDeclarative>
-
-#include "backgroundmanager.h"
-#include "parallaxmanager.h"
-
-namespace Widgets
-{
+#include "foldermodel.h"
 
 /**
- * @short Namespace for backgrounds
+ * @short Model for applications launcher
+ *
+ * This class is the model that manages the content
+ * of the applications launcher.
+ *
+ * This class is responsible of populating the parent
+ * FolderModel. It parse contents of configuration
+ * file to find the applications to display, and
+ * populates both folder and subfolders.
+ *
+ * This class is used in QML context. Accessing
+ * it is done using the "applicationsModel" global object.
+ *
+ * @see FolderModel
  */
-namespace Background
+class ApplicationsModel: public FolderModel
 {
+    Q_OBJECT
+public:
+    /**
+     * @short Default constructor
+     *
+     * @param parent parent object.
+     */
+    explicit ApplicationsModel(QObject *parent = 0);
+    /**
+     * @short Destructor
+     */
+    virtual ~ApplicationsModel();
+private:
+    class ApplicationsModelPrivate;
+    /**
+     * @short D-pointer
+     */
+    ApplicationsModelPrivate * const d;
+};
 
-void WidgetsBackgroundPlugin::registerTypes(const char *uri)
-{
-    // @uri org.SfietKonstantin.widgets.background
-    qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
-    qmlRegisterType<Widgets::Background::ParallaxManager>(uri, 1, 0, "ParallaxManager");
-}
-
-}
-
-}
-
-Q_EXPORT_PLUGIN2(Widgets, Widgets::Background::WidgetsBackgroundPlugin)
-
+#endif // WIDGETS_APPLICATIONSMODEL_H

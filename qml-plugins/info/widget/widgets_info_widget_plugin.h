@@ -14,39 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
+#ifndef WIDGETS_INFO_WIDGET_PLUGIN_H
+#define WIDGETS_INFO_WIDGET_PLUGIN_H
+
 /**
- * @internal
- * @file widgets_background_plugin.cpp
- * @short Implementation of Widgets::Background::WidgetsBackgroundPlugin
+ * @file widgets_info_widget_plugin.h
+ * @short Definition of Widgets::Info::WidgetsInfoWidgetPlugin
  */
 
-
-#include "widgets_background_plugin.h"
-
-#include <QtDeclarative/QtDeclarative>
-
-#include "backgroundmanager.h"
-#include "parallaxmanager.h"
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
 namespace Widgets
 {
 
 /**
- * @short Namespace for backgrounds
+ * @short Namespace for information models
  */
-namespace Background
+namespace Info
 {
 
-void WidgetsBackgroundPlugin::registerTypes(const char *uri)
+/**
+ * @internal
+ * @brief QML plugin for widget informations
+ */
+class WidgetsInfoWidgetPlugin : public QDeclarativeExtensionPlugin
 {
-    // @uri org.SfietKonstantin.widgets.background
-    qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
-    qmlRegisterType<Widgets::Background::ParallaxManager>(uri, 1, 0, "ParallaxManager");
-}
+    Q_OBJECT
+
+public:
+    /**
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
 
 }
 
 }
 
-Q_EXPORT_PLUGIN2(Widgets, Widgets::Background::WidgetsBackgroundPlugin)
+#endif // WIDGETS_INFO_WIDGET_PLUGIN_H
 

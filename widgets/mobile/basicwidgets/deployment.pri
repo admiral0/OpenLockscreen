@@ -39,6 +39,10 @@ PLAIN_TEXT_FILES =      widgets/plain-text/metadata.desktop \
                         widgets/plain-text/PlainText.qml \
                         widgets/plain-text/PlainTextSettings.qml \
 
+PICTURE_FRAME_FILES =   widgets/picture-frame/metadata.desktop \
+                        widgets/picture-frame/PictureFrame.qml \
+                        widgets/picture-frame/PictureFrameSettings.qml \
+
 androidDockFiles.path = $${installPath}/docks/android-dock
 androidDockFiles.files = $${ANDROID_DOCK_FILES}
 export(androidDockFiles.path)
@@ -59,4 +63,9 @@ plainTextFiles.files = $${PLAIN_TEXT_FILES}
 export(plainTextFiles.path)
 export(plainTextFiles.files)
 
-INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles plainTextFiles
+pictureFrameFiles.path = $${installPath}/widgets/picture-frame
+pictureFrameFiles.files = $${PICTURE_FRAME_FILES}
+export(pictureFrameFiles.path)
+export(pictureFrameFiles.files)
+
+INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles plainTextFiles pictureFrameFiles

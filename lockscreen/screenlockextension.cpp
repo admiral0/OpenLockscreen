@@ -112,6 +112,7 @@ QObject * ScreenLockExtension::qObject()
 
 void ScreenLockExtension::setMode(ScreenLockMode mode)
 {
+
 }
 
 bool ScreenLockExtension::initialize(const QString &interface)

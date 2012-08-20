@@ -15,38 +15,31 @@
  ****************************************************************************************/
 
 /**
- * @internal
- * @file widgets_background_plugin.cpp
- * @short Implementation of Widgets::Background::WidgetsBackgroundPlugin
+ * @file widgets_info_widget_plugin.cpp
+ * @short Implementation of Widgets::Info::WidgetsInfoWidgetPlugin
  */
 
-
-#include "widgets_background_plugin.h"
+#include "widgets_info_widget_plugin.h"
 
 #include <QtDeclarative/QtDeclarative>
 
-#include "backgroundmanager.h"
-#include "parallaxmanager.h"
+#include "widgetinformationmodel.h"
 
 namespace Widgets
 {
 
-/**
- * @short Namespace for backgrounds
- */
-namespace Background
+namespace Info
 {
 
-void WidgetsBackgroundPlugin::registerTypes(const char *uri)
+void WidgetsInfoWidgetPlugin::registerTypes(const char *uri)
 {
-    // @uri org.SfietKonstantin.widgets.background
-    qmlRegisterType<Widgets::Background::BackgroundManager>(uri, 1, 0, "BackgroundManager");
-    qmlRegisterType<Widgets::Background::ParallaxManager>(uri, 1, 0, "ParallaxManager");
+    // @uri org.SfietKonstantin.widgets.info.widget
+    qmlRegisterType<WidgetInformationModel>(uri, 1, 0, "WidgetInformationModel");
 }
 
 }
 
 }
 
-Q_EXPORT_PLUGIN2(Widgets, Widgets::Background::WidgetsBackgroundPlugin)
+Q_EXPORT_PLUGIN2(Widgets, Widgets::Info::WidgetsInfoWidgetPlugin)
 

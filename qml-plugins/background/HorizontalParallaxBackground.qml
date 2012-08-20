@@ -22,7 +22,7 @@ Item {
     id: container
     property Item horizontalPageView
     property QtObject settings
-    property QtObject scrollingManagerInstance: scrollingManager
+    property QtObject parallaxManagerInstance: parallaxManager
     clip: true
 
     anchors.fill: parent
@@ -39,7 +39,7 @@ Item {
                backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
                0
         color: "black"
-        x: - scrollingManager.position * (background.width - container.width)
+        x: - parallaxManager.position * (background.width - container.width)
 
         Image {
             id: backgroundImage
@@ -54,20 +54,20 @@ Item {
         }
     }
 
-    ScrollingManager {
-        id: scrollingManager
-        x: horizontalPageView.view.contentX
-        pageWidth: horizontalPageView.view.width
-        width: horizontalPageView.view.contentWidth
+    ParallaxManager {
+        id: parallaxManager
+        contentX: horizontalPageView.view.contentX
+        viewWidth: horizontalPageView.view.width
+        contentWidth: horizontalPageView.view.contentWidth
     }
 
     Connections {
         target: horizontalPageView
         onInitialized: {
-            var initialX =
+            var initialContentX =
                     horizontalPageView.view.contentX - WidgetsPageListModelInstance.currentPage
                                                        * horizontalPageView.width
-            scrollingManager.initialX = initialX
+            parallaxManager.initialContentX = initialContentX
         }
     }
 }

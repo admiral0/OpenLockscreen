@@ -10,9 +10,15 @@ DEFINES +=          'MAIN_QML_PATH=\'\"$${QML_FOLDER}/main.qml\"\''
 CONFIG(noqtimport):DEFINES += 'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
 
 HEADERS +=          webandmailhandler.h \
+#                    applicationinformations.h \
+#                    foldermodel.h \
+#                    applicationsmodel.h \
 
 SOURCES +=          main.cpp \
-                    webandmailhandler.cpp
+                    webandmailhandler.cpp \
+#                    applicationinformations.cpp \
+#                    foldermodel.cpp \
+#                    applicationsmodel.cpp \
 
 QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \

@@ -109,8 +109,7 @@ void DockedViewManagerPrivate::recomputeMargins()
 
     for (int i = 0; i < dockModel->count(); i++) {
         QVariant dockVariant = dockModel->data(dockModel->index(i), DockModel::DockRole);
-        QObject *dockObject = dockVariant.value<QObject *>();
-        DockProperties *dock = qobject_cast<Widgets::Docks::DockProperties *>(dockObject);
+        DockProperties *dock = dockVariant.value<Widgets::Docks::DockProperties *>();
 
         if (dock) {
             // Dock has width set

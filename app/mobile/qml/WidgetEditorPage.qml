@@ -20,7 +20,7 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.drag 1.0
-import org.SfietKonstantin.widgets.extra.widget 1.0
+import org.SfietKonstantin.widgets.info.widget 1.0
 import "UiConstants.js" as Ui
 
 Page {

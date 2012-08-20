@@ -88,11 +88,11 @@ DEFINES += 'WIDGETS_VERSION_PATCH=$${VERSION_PATCH}'
 
 # Config overriding
 contains(CONFIG, mobile)|contains(CONFIG, desktop) {
-    CONFIG += plugincolors pluginbackground plugindocks pluginextra plugindrag
+    CONFIG += plugincolors pluginbackground plugindocks plugininfo plugindrag
     CONFIG += pluginproviderpackagemanager
 }
 
 contains(CONFIG, tests) {
-    CONFIG += plugincolors pluginbackground plugindocks pluginextra plugindrag
+    CONFIG += plugincolors pluginbackground plugindocks plugininfo plugindrag
     CONFIG += pluginproviderbasic pluginproviderpackagemanager
 }

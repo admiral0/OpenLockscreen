@@ -1,0 +1,160 @@
+/****************************************************************************************
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ *                                                                                      *
+ * This program is free software; you can redistribute it and/or modify it under        *
+ * the terms of the GNU General Public License as published by the Free Software        *
+ * Foundation; either version 3 of the License, or (at your option) any later           *
+ * version.                                                                             *
+ *                                                                                      *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
+ *                                                                                      *
+ * You should have received a copy of the GNU General Public License along with         *
+ * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
+ ****************************************************************************************/
+
+#ifndef WIDGETS_INFO_WIDGETINFORMATIONMODEL_H
+#define WIDGETS_INFO_WIDGETINFORMATIONMODEL_H
+
+/**
+ * @file widgetinformationmodel.h
+ * @short Definition of Widgets::Info::WidgetInformationModel
+ */
+
+#include <QtCore/QAbstractListModel>
+#include <QtCore/QScopedPointer>
+
+#include "providermanager.h"
+#include "widgetproviderbase.h"
+
+namespace Widgets
+{
+
+namespace Info
+{
+
+class WidgetInformationModelPrivate;
+/**
+ * @short Model for widget information
+ *
+ * This class is used to display information about
+ * available widgets. It uses information that
+ * Widgets::WidgetProviderBase provides.
+ *
+ * Provided informations are
+ * - file, that is the filename.
+ * - disambiguation, that is the disambiguation paramters.
+ * - name, that is the name of the widget.
+ * - description, that is a description of the widget.
+ *
+ * In order to get the informations, you should set
+ * the providerManager() property.
+ */
+class WidgetInformationModel : public QAbstractListModel
+{
+    Q_OBJECT
+    /**
+     * @short Provider manager
+     */
+    Q_PROPERTY(Widgets::ProviderManager * providerManager READ providerManager
+               WRITE setProviderManager NOTIFY providerManagerChanged)
+    /**
+     * @short Count
+     */
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+public:
+    /**
+     * @short Model roles
+     */
+    enum WidgetInformationModelRole
+    {
+        /**
+         * @short File role
+         */
+        FileRole,
+        /**
+         * @short Disambiguation role
+         */
+        DisambiguationRole,
+        /**
+         * @short Name role
+         */
+        NameRole,
+        /**
+         * @short Description role
+         */
+        DescriptionRole
+    };
+    /**
+     * @short Default constructor
+     * @param parent parent object.
+     */
+    explicit WidgetInformationModel(QObject *parent = 0);
+    /**
+     * @brief Destructor
+     */
+    virtual ~WidgetInformationModel();
+    /**
+     * @brief Provider manager
+     * @return provider manager.
+     */
+    ProviderManager * providerManager() const;
+    /**
+     * @short Reimplementation of rowCount
+     *
+     * @param parent parent model index.
+     * @return the number of rows in this model.
+     */
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    /**
+     * @short Count
+     * @return count.
+     */
+    int count() const;
+    /**
+     * @short Reimplementation of data
+     *
+     * @param index model index where retrieve the data.
+     * @param role role to retrieve.
+     * @return retrieved data as a variant.
+     */
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    /**
+     * @brief Clear the model
+     */
+    void clear();
+Q_SIGNALS:
+    /**
+     * @brief Provider manager changed
+     */
+    void providerManagerChanged();
+    /**
+     * @short Count changed
+     */
+    void countChanged();
+public Q_SLOTS:
+    /**
+     * @brief Set the provider manager
+     * @param providerManager provider manager.
+     */
+    void setProviderManager(ProviderManager *providerManager);
+    /**
+     * @brief Update the model
+     */
+    void update();
+protected:
+    /**
+     * @brief D-pointer
+     */
+    const QScopedPointer<WidgetInformationModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(WidgetInformationModel)
+    Q_PRIVATE_SLOT(d_func(), void slotProviderStatusChanged())
+};
+
+}
+
+}
+
+#endif // WIDGETS_EXTRA_WIDGETINFORMATIONMODEL_H

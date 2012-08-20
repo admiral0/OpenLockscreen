@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Picture frame
+Name[en_GB]=Picture frame
+Name[fr]=Cadre photo
+Comment=A simple picture frame
+Comment[en_GB]=A simple picture frame
+Comment[fr]=Un cadre photo simple
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-ComponentInfo-File=PictureFrame.qml
+X-Widgets-ComponentInfo-SettingsFile=PictureFrameSettings.qml

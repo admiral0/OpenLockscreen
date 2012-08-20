@@ -11,4 +11,4 @@ contains(CONFIG, plugindrag): SUBDIRS += drag
 
 SUBDIRS += provider
 
-contains(CONFIG, pluginextra): SUBDIRS += extra
+contains(CONFIG, plugininfo): SUBDIRS += info

@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
 import QtMobility.systeminfo 1.2
 
