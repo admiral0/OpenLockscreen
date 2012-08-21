@@ -14,42 +14,51 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.mobile.launcher 1.0
+#ifndef MOBILE_LAUNCHER_PLUGIN_H
+#define MOBILE_LAUNCHER_PLUGIN_H
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+/**
+ * @file mobile_launcher_plugin.h
+ * @short Definition of Mobile::Launcher::MobileLauncherPlugin
+ */
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
 
-    Background {
-        anchors.fill: parent
-        id: background
-        horizontalPageView: widgetsPage
-    }
+namespace Mobile
+{
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+/**
+ * @short Namespace for mobile extra
+ */
+namespace Launcher
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }
-
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
+/**
+ * @internal
+ * @brief QML plugin for mobile extra
+ */
+class MobileLauncherPlugin : public QDeclarativeExtensionPlugin
+{
+    Q_OBJECT
+public:
+    /**
+     * @internal
+     * @brief Initialize engine
+     * @param engine QML engine.
+     * @param uri uri used in the import.
+     */
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+    /**
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
+     */
+    void registerTypes(const char *uri);
+};
 
 }
+
+}
+
+#endif // MOBILE_LAUNCHER_PLUGIN_H
+

@@ -14,42 +14,59 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.mobile.launcher 1.0
+// Warning
+//
+// This file exists for the convenience
+// of other Widgets classes. This header
+// file may change from version to version
+// without notice or even be removed.
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+/**
+ * @internal
+ * @file foldermodel_p.h
+ * @short Definition of Mobile::Launcher::FolderModelPrivate
+ */
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#ifndef WIDGETS_MOBILEEXTRA_FOLDERMODEL_P_H
+#define WIDGETS_MOBILEEXTRA_FOLDERMODEL_P_H
 
-    Background {
-        anchors.fill: parent
-        id: background
-        horizontalPageView: widgetsPage
-    }
+#include <QtCore/QAbstractListModel>
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+namespace Mobile
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }
+namespace Launcher
+{
 
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
+class FolderModelItem;
+/**
+ * @internal
+ * @short Private class for Widgets::MobileExtra::FolderModel
+ */
+class FolderModelPrivate
+{
+public:
+    /**
+     * @internal
+     * @short Destructor
+     */
+    ~FolderModelPrivate();
+    /**
+     * @internal
+     * @short Helper method used to delete FolderModelItem
+     *
+     * @param item the FolderModelItem to delete.
+     */
+    void deleteItem(FolderModelItem * item);
+    /**
+     * @internal
+     * @short Data
+     */
+    QList<FolderModelItem *> data;
+};
 
 }
+
+}
+
+#endif // WIDGETS_MOBILEEXTRA_FOLDERMODEL_H

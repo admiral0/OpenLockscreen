@@ -75,7 +75,8 @@ contains(MEEGO_EDITION,harmattan):{
 }
 
 # QML include folder
-QML_PLUGIN_PATH = $${IMPORTDIR}/org/SfietKonstantin/$${NAME}
+QML_PLUGIN_BASE_PATH = $${IMPORTDIR}/org/SfietKonstantin/
+QML_PLUGIN_PATH = $${QML_PLUGIN_BASE_PATH}/$${NAME}
 
 
 # Useful defines

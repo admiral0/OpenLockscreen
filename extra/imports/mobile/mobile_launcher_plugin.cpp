@@ -14,42 +14,43 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.mobile.launcher 1.0
+/**
+ * @file mobile_launcher_plugin.cpp
+ * @short Implementation of Mobile::Launcher::MobileLauncherPlugin
+ */
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+#include "mobile_launcher_plugin.h"
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include <QtDeclarative/QtDeclarative>
 
-    Background {
-        anchors.fill: parent
-        id: background
-        horizontalPageView: widgetsPage
-    }
+#include "applicationinformations.h"
+#include "applicationsmodel.h"
+#include "foldermodel.h"
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+namespace Mobile
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }
+namespace Launcher
+{
 
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
+void MobileLauncherPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri)
+
+    // @uri org.SfietKonstantin.mobile.launcher
+    engine->rootContext()->setContextProperty("ApplicationsModel", new ApplicationsModel(this));
+}
+
+void MobileLauncherPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.mobile.launcher
+    qmlRegisterType<ApplicationInformations>(uri, 1, 0, "ApplicationInformations");
+    qmlRegisterType<FolderModel>(uri, 1, 0, "FolderModel");
+}
 
 }
+
+}
+
+Q_EXPORT_PLUGIN2(Mobile, Mobile::Launcher::MobileLauncherPlugin)
+

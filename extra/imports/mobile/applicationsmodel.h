@@ -14,42 +14,57 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.mobile.launcher 1.0
+/**
+ * @file applicationsmodel.h
+ * @short Definition of Mobile::Launcher::ApplicationsModel
+ *
+ * This file contains the definition of the
+ * Widgets::ApplicationsModel class.
+ */
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+#ifndef MOBILE_LAUNCHER_APPLICATIONSMODEL_H
+#define MOBILE_LAUNCHER_APPLICATIONSMODEL_H
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include "foldermodel.h"
 
-    Background {
-        anchors.fill: parent
-        id: background
-        horizontalPageView: widgetsPage
-    }
+namespace Mobile
+{
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+namespace Launcher
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }
-
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
+class ApplicationsModelPrivate;
+/**
+ * @short Model for applications launcher
+ *
+ * This class is the model that manages the content
+ * of the applications launcher.
+ *
+ * This class is responsible of populating the parent
+ * FolderModel. It parse contents of configuration
+ * file to find the applications to display, and
+ * populates both folder and subfolders.
+ */
+class ApplicationsModel: public FolderModel
+{
+    Q_OBJECT
+public:
+    /**
+     * @short Default constructor
+     *
+     * @param parent parent object.
+     */
+    explicit ApplicationsModel(QObject *parent = 0);
+    /**
+     * @short Destructor
+     */
+    virtual ~ApplicationsModel();
+private:
+    Q_DECLARE_PRIVATE(ApplicationsModel)
+};
 
 }
+
+}
+
+#endif // MOBILE_LAUNCHER_APPLICATIONSMODEL_H

@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = imports
+SUBDIRS = mobile
