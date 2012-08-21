@@ -16,25 +16,24 @@
 
 /**
  * @file launchermanager.cpp
- * @short Implementation of Widgets::LauncherManager
- *
- * This file contains the implemetation of the
- * Widgets::LauncherManager class and the declaration and
- * implementation of Widgets::LauncherManager::LauncherManagerPrivate.
+ * @short Implementation of Mobile::Launcher::LauncherManager
  */
 
 #include "launchermanager.h"
 
 #include <QtCore/QProcess>
 
-namespace Widgets
+namespace Mobile
+{
+
+namespace Launcher
 {
 
 /**
  * @internal
  * @short Private class for LauncherManager
  */
-class LauncherManager::LauncherManagerPrivate
+class LauncherManagerPrivate
 {
 public:
     /**
@@ -44,42 +43,51 @@ public:
     /**
      * @short If the launcher is visible
      */
-    bool launcherVisible;
+    bool visible;
 };
 
-LauncherManager::LauncherManagerPrivate::LauncherManagerPrivate()
+LauncherManagerPrivate::LauncherManagerPrivate()
 {
-    launcherVisible = false;
+    visible = false;
 }
 
 ////// End of private class //////
 
 LauncherManager::LauncherManager(QObject *parent) :
-    QObject(parent), d(new LauncherManagerPrivate())
+    QObject(parent), d_ptr(new LauncherManagerPrivate())
 {
 }
 
 LauncherManager::~LauncherManager()
 {
-    delete d;
 }
 
-bool LauncherManager::isLauncherVisible() const
+bool LauncherManager::isVisible() const
 {
-    return d->launcherVisible;
+    Q_D(const LauncherManager);
+    return d->visible;
 }
 
-void LauncherManager::setLauncherVisible(bool launcherVisible)
+void LauncherManager::setVisible(bool visible)
 {
-    if(launcherVisible != d->launcherVisible) {
-        d->launcherVisible = launcherVisible;
-        emit launcherVisibleChanged(launcherVisible);
+    Q_D(LauncherManager);
+    if(visible != d->visible) {
+        d->visible = visible;
+        emit visibleChanged();
     }
 }
 
 void LauncherManager::launchApplication(const QString &command)
 {
     QProcess::startDetached(command);
+    emit applicationLaunched(command);
+}
+
+void LauncherManager::unlock()
+{
+    emit unlocked();
+}
+
 }
 
 }

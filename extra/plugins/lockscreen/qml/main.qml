@@ -19,14 +19,13 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.provider.packagemanager 1.0
-
+import org.SfietKonstantin.mobile.launcher 1.0
 
 
 Rectangle {
     id: container
     anchors.fill: parent
     color: "black"
-//    source: "/home/user/.wallpapers/wallpaper.png"
 
     Component.onCompleted: {
         WidgetsPageListModelInstance.settings = widgetsSettings
@@ -94,6 +93,11 @@ Rectangle {
         }
     }
 
+    Launcher {
+        id: launcher
+        anchors.fill: parent
+    }
+
     MouseArea {
         id: unlocker
         anchors.left: parent.left
@@ -101,6 +105,12 @@ Rectangle {
         anchors.bottom: parent.bottom
         height: 20
         onClicked: LockScreenManager.unlock()
+    }
+
+    Connections {
+        target: LauncherManagerInstance
+        onUnlocked: LockScreenManager.unlock()
+        onApplicationLaunched: LockScreenManager.unlock()
     }
 
 }

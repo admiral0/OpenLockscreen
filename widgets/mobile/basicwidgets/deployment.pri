@@ -27,6 +27,10 @@ MAEMO_DOCK_FILES =      docks/maemo-dock/metadata.desktop \
                         docks/maemo-dock/MaemoDockButton.qml \
                         docks/maemo-dock/maemo-menu.png \
 
+SWIPE_UNLOCK_FILES =    docks/swipe-unlock/metadata.desktop \
+                        docks/swipe-unlock/SwipeUnlock.qml \
+                        docks/swipe-unlock/arrow.png \
+
 ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
                         widgets/analogic-clock/AnalogicClock.qml \
                         widgets/analogic-clock/analogic-clock-background.png \
@@ -53,6 +57,11 @@ maemoDockFiles.files = $${MAEMO_DOCK_FILES}
 export(maemoDockFiles.path)
 export(maemoDockFiles.files)
 
+swipeUnlockFiles.path = $${installPath}/docks/swipe-unlock
+swipeUnlockFiles.files = $${SWIPE_UNLOCK_FILES}
+export(swipeUnlockFiles.path)
+export(swipeUnlockFiles.files)
+
 analogicClockFiles.path = $${installPath}/widgets/analogic-clock
 analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
 export(analogicClockFiles.path)
@@ -68,4 +77,5 @@ pictureFrameFiles.files = $${PICTURE_FRAME_FILES}
 export(pictureFrameFiles.path)
 export(pictureFrameFiles.files)
 
-INSTALLS += androidDockFiles maemoDockFiles analogicClockFiles plainTextFiles pictureFrameFiles
+INSTALLS += androidDockFiles maemoDockFiles swipeUnlockFiles
+INSTALLS += analogicClockFiles plainTextFiles pictureFrameFiles

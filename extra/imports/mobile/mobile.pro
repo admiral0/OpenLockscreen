@@ -9,11 +9,13 @@ HEADERS +=      mobile_launcher_plugin.h \
                 foldermodel.h \
                 foldermodel_p.h \
                 applicationsmodel.h \
+                launchermanager.h \
 
 SOURCES +=      mobile_launcher_plugin.cpp \
                 applicationinformations.cpp \
                 foldermodel.cpp \
                 applicationsmodel.cpp \
+                launchermanager.cpp \
 
 OTHER_FILES =   qmldir \
                 UiConstants.js \

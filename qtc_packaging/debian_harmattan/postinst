@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#mv /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop
-#ln -s /opt/widgets/lockscreen/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
+mv /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop
+ln -s /opt/widgets/lockscreen/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
 
-#initctl restart xsession/sysuid
+initctl restart xsession/sysuid

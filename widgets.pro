@@ -2,10 +2,10 @@ include(globals.pri)
 
 TEMPLATE =      subdirs
 
-#SUBDIRS +=      qml-plugins app widgets
-SUBDIRS +=      src extra app widgets
+SUBDIRS +=      src widgets app
 
 contains(CONFIG, tests):SUBDIRS += tests
+contains(CONFIG, extra):SUBDIRS += extra
 
 OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \
                 qtc_packaging/debian_harmattan/README \

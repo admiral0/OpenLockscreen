@@ -16,38 +16,39 @@
 
 /**
  * @file launchermanager.h
- * @short Definition of Widgets::LauncherManager
- *
- * This file contains the definition of the
- * Widgets::PackageManager class.
+ * @short Definition of Mobile::Launcher::LauncherManager
  */
 
-#ifndef WIDGETS_LAUNCHERMANAGER_H
-#define WIDGETS_LAUNCHERMANAGER_H
+#ifndef MOBILE_LAUNCHER_LAUNCHERMANAGER_H
+#define MOBILE_LAUNCHER_LAUNCHERMANAGER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
-namespace Widgets
+namespace Mobile
 {
 
+namespace Launcher
+{
+
+class LauncherManagerPrivate;
 /**
  * @short Launcher manager
- * 
+ *
  * This class is used to manage the application
  * launcher. It is used to show or hide the
- * application launcher, as well as launching 
+ * application launcher, as well as launching
  * applications.
- * 
- * This class uses the attribute launcherVisible()
+ *
+ * This class uses the property visible()
  * to control the visibility of the launcher. Any
  * QML component that needs to show the launcher
  * should set this property to true.
- * 
+ *
  * This class also provides the method launchApplication()
- * for running commands.
- * 
- * This class is used in QML context. Accessing
- * it is done using the "launcherManager" global object.
+ * for running commands, and unlock(), to trigger an
+ * unlock screen gesture. These methods emits a signal
+ * that allow the view to react. The signals are applicationLaunched()
+ * and unlocked().
  */
 class LauncherManager : public QObject
 {
@@ -55,8 +56,8 @@ class LauncherManager : public QObject
     /**
      * @short If the launcher is visible
      */
-    Q_PROPERTY(bool launcherVisible READ isLauncherVisible WRITE setLauncherVisible
-               NOTIFY launcherVisibleChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible
+               NOTIFY visibleChanged)
 public:
     /**
      * @short Default constructor
@@ -70,51 +71,56 @@ public:
     virtual ~LauncherManager();
     /**
      * @short If the launcher is visible
-     *
-     * This method is used to check if the
-     * application launcher is visible.
-     *
-     * @return if the application launcher is visible.
+     * @return if the launcher is visible.
      */
-    bool isLauncherVisible() const;
+    bool isVisible() const;
 Q_SIGNALS:
     /**
      * @short Launcher visibility changed
-     *
-     * Notify that the application launcher 
-     * visibility has changed.
-     *
-     * @param launcherVisible if the application launcher is visible.
      */
-    void launcherVisibleChanged(bool launcherVisible);
+    void visibleChanged();
+    /**
+     * @brief Unlocked
+     */
+    void unlocked();
+    /**
+     * @brief Application launched
+     * @param command command used to launch the application.
+     */
+    void applicationLaunched(const QString &command);
 public Q_SLOTS:
     /**
-     * @short Set the visibility of the launcher
-     *
-     * This method is used to set the
-     * visibility of the application launcher.
-     *
-     * @param launcherVisible if the application launcher is visible.
+     * @short Set if the launcher is visible
+     * @param visible if the launcher is visible.
      */
-    void setLauncherVisible(bool launcherVisible);
+    void setVisible(bool visible);
     /**
      * @short Launch an application
-     * 
+     *
      * This method is used to launch an application
      * by passing the command that is used to launch
      * it.
-     * 
+     *
      * @param command the command used to launch the application.
      */
     void launchApplication(const QString &command);
-private:
-    class LauncherManagerPrivate;
     /**
-     * @short D-pointer
+     * @brief Unlock
+     *
+     * This method is used to trigger an unlock. It
+     * do not do anything but can be used in a QML context
+     * to trigger a screen unlock.
      */
-    LauncherManagerPrivate * const d;
+    void unlock();
+protected:
+    QScopedPointer<LauncherManagerPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(LauncherManager)
+
 };
 
 }
 
-#endif // WIDGETS_LAUNCHERMANAGER_H
+}
+
+#endif // MOBILE_LAUNCHER_LAUNCHERMANAGER_H

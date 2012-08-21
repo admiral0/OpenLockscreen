@@ -25,6 +25,7 @@
 
 #include "applicationinformations.h"
 #include "applicationsmodel.h"
+#include "launchermanager.h"
 #include "foldermodel.h"
 
 namespace Mobile
@@ -38,7 +39,9 @@ void MobileLauncherPlugin::initializeEngine(QDeclarativeEngine *engine, const ch
     Q_UNUSED(uri)
 
     // @uri org.SfietKonstantin.mobile.launcher
-    engine->rootContext()->setContextProperty("ApplicationsModel", new ApplicationsModel(this));
+    engine->rootContext()->setContextProperty("ApplicationsModelInstance",
+                                              new ApplicationsModel(this));
+    engine->rootContext()->setContextProperty("LauncherManagerInstance", new LauncherManager(this));
 }
 
 void MobileLauncherPlugin::registerTypes(const char *uri)
@@ -46,6 +49,10 @@ void MobileLauncherPlugin::registerTypes(const char *uri)
     // @uri org.SfietKonstantin.mobile.launcher
     qmlRegisterType<ApplicationInformations>(uri, 1, 0, "ApplicationInformations");
     qmlRegisterType<FolderModel>(uri, 1, 0, "FolderModel");
+    QString reason = "Only one instance of ApplicationsModel is allowed";
+    qmlRegisterUncreatableType<ApplicationsModel>(uri, 1, 0, "ApplicationsModel", reason);
+    reason = "Only one instance of LauncherManager is allowed";
+    qmlRegisterUncreatableType<LauncherManager>(uri, 1, 0, "LauncherManager", reason);
 }
 
 }

@@ -52,4 +52,9 @@ Page {
         anchors.fill: parent
     }
 
+    Connections {
+        target: LauncherManagerInstance
+        onUnlocked: window.pageStack.pop()
+    }
+
 }

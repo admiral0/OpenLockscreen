@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Swipe to unlock
+Name[en_GB]=Swipe to unlock
+Name[fr]=Glisser pour déverouiller
+Comment=A unlock dock that mimic the iPhone
+Comment[en_GB]=A unlock dock that mimic the iPhone
+Comment[fr]=Un dock pour déverouiller qui ressemble à l'iPhone
+Icon=
+Type=Service
+X-Widgets-ServiceType=dock
+X-Widgets-ComponentInfo-File=SwipeUnlock.qml

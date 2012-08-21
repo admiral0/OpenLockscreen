@@ -17,6 +17,7 @@
 import QtQuick 1.1
 import org.SfietKonstantin.widgets.docks 1.0
 import org.SfietKonstantin.widgets.colors 1.0
+import org.SfietKonstantin.mobile.launcher 1.0
 
 Dock {
     id: container
@@ -45,9 +46,9 @@ Dock {
             width: 90
             height: 90
             icon: "android-call.png"
-//            onClicked: {
-//                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/call-history")
-//            }
+            onClicked: {
+                LauncherManagerInstance.launchApplication("/usr/bin/invoker --type=m /usr/bin/call-history")
+            }
         }
 
         AndroidDockButton {
@@ -56,7 +57,7 @@ Dock {
             width: 90
             height: 90
             icon: "android-menu.png"
-//            onClicked: launcherManager.launcherVisible = true
+            onClicked: LauncherManagerInstance.visible = true
         }
         AndroidDockButton {
             id: internetButton
@@ -64,9 +65,9 @@ Dock {
             width: 90
             height: 90
             icon: "android-internet.png"
-//            onClicked: {
-//                launcherManager.launchApplication("/usr/bin/invoker --type=m /usr/bin/grob")
-//            }
+            onClicked: {
+                LauncherManagerInstance.launchApplication("/usr/bin/invoker --type=m /usr/bin/grob")
+            }
         }
     }
 

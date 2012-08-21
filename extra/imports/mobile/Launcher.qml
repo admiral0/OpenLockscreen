@@ -29,8 +29,8 @@ import "LauncherButtonIconFunctions.js" as LBIFunctions
 // an animation when opened or closed
 Item  {
     id: container
-//    opacity: 0
-//    scale: 2
+    opacity: 0
+    scale: 2
     property int launcherWidth: Ui.APPLICATION_LAUNCHER_WIDTH + 2 * Ui.MARGIN_XSMALL
     property int launcherHeight: Ui.APPLICATION_LAUNCHER_HEIGHT + 2 * Ui.MARGIN_MLARGE
 
@@ -46,8 +46,7 @@ Item  {
         anchors.left: container.left; anchors.leftMargin: Ui.MARGIN_XSMALL
         anchors.right: container.right; anchors.rightMargin: Ui.MARGIN_XSMALL
         anchors.top: container.top; anchors.topMargin: Ui.MARGIN_XSMALL
-//        anchors.bottom: toolbar.top; anchors.bottomMargin: Ui.MARGIN_LARGE
-        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
+        anchors.bottom: toolbar.top; anchors.bottomMargin: Ui.MARGIN_LARGE
 
         LauncherGrid {
             id: view
@@ -101,14 +100,14 @@ Item  {
                 subfolderView.height = 0
             }
 
-            model: ApplicationsModel
+            model: ApplicationsModelInstance
             cellWidth:container.launcherWidth
             cellHeight:container.launcherHeight
             onClicked: {
                 if(view.openedFolderIndex == -1) {
                     if(type == FolderModel.ApplicationType) {
-                        launcherManager.launchApplication(properties.command)
-                        launcherManager.launcherVisible = false
+                        LauncherManagerInstance.launchApplication(properties.command)
+                        LauncherManagerInstance.visible = false
                     } else {
                         view.openFolder(index, name, properties)
                     }
@@ -154,8 +153,8 @@ Item  {
                     cellHeight: container.launcherHeight
                     onClicked: {
                         if(type == FolderModel.ApplicationType) {
-                            launcherManager.launchApplication(properties.command)
-                            launcherManager.launcherVisible = false
+                            LauncherManagerInstance.launchApplication(properties.command)
+                            LauncherManagerInstance.visible = false
                         }
                     }
                 }
@@ -175,20 +174,20 @@ Item  {
     }
 
 
-//    ToolBar {
-//        id: toolbar
-//        anchors.bottom: parent.bottom
-//        tools: ToolBarLayout {
-//            ToolIcon {
-//                anchors.centerIn: parent
-//                iconId: "toolbar-home"
-//                onClicked: launcherManager.launcherVisible = false
-//            }
-//        }
-//    }
+    ToolBar {
+        id: toolbar
+        anchors.bottom: parent.bottom
+        tools: ToolBarLayout {
+            ToolIcon {
+                anchors.centerIn: parent
+                iconId: "toolbar-home"
+                onClicked: LauncherManagerInstance.visible = false
+            }
+        }
+    }
 
     states: State {
-        name: "visible"; when: launcherManager.launcherVisible
+        name: "visible"; when: LauncherManagerInstance.visible
         PropertyChanges {
             target: container
             opacity: 1
