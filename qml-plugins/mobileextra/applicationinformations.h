@@ -16,33 +16,32 @@
 
 /**
  * @file applicationinformations.h
- * @short Definition of ApplicationInformations
+ * @short Definition of Widgets::MobileExtra::ApplicationInformations
  */
 
-#ifndef WIDGETS_APPLICATIONINFORMATIONS_H
-#define WIDGETS_APPLICATIONINFORMATIONS_H
+#ifndef WIDGETS_MOBILEEXTRA_APPLICATIONINFORMATIONS_H
+#define WIDGETS_MOBILEEXTRA_APPLICATIONINFORMATIONS_H
 
 #include <QtCore/QObject>
 #include <QtCore/QMetaType>
 
+namespace Widgets
+{
+
+namespace MobileExtra
+{
+
+class ApplicationInformationsPrivate;
 /**
  * @short Application informations
  *
  * This class is used to store informations
  * about an application.
  *
- * This class stores these properties
- * - name of the application
- * - path to the icon of the application
- * - command line used to run the application
- *
- * Each of these properties can be access
- * either using getter methods or using
- * properties, in a QML context.
- *
- * Please note that all the properties
- * are constant and they should be passed
- * through the constructor.
+ * These informations are
+ * - name(), that is the name of the application
+ * - icon(), that is the path to the icon of the application
+ * - command(), that is the command line used to run the application
  */
 class ApplicationInformations : public QObject
 {
@@ -94,14 +93,20 @@ public:
      * @return command line used to run the application.
      */
     QString command() const;
-private:
-    class ApplicationInformationsPrivate;
+protected:
     /**
      * @short D-pointer
      */
-    ApplicationInformationsPrivate * const d;
+    QScopedPointer<ApplicationInformationsPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(ApplicationInformations)
 };
 
-Q_DECLARE_METATYPE(ApplicationInformations *)
+}
 
-#endif // WIDGETS_APPLICATIONINFORMATIONS_H
+}
+
+Q_DECLARE_METATYPE(Widgets::MobileExtra::ApplicationInformations *)
+
+
+#endif // WIDGETS_MOBILEEXTRA_APPLICATIONINFORMATIONS_H

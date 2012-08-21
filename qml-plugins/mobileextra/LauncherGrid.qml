@@ -15,8 +15,9 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.sk.widgets 1.0
-import "UiConstants.js" as UI
+import org.SfietKonstantin.widgets.mobileextra 1.0
+//import org.sk.widgets 1.0
+import "UiConstants.js" as Ui
 import "LauncherButtonIconFunctions.js" as LBIFunctions
 
 // Launcher grid
@@ -54,14 +55,14 @@ GridView {
             }
 
             Behavior on opacity {
-                NumberAnimation { duration: UI.ANIMATION_DURATION_FAST }
+                NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
             }
         }
     }
 
     Behavior on contentY {
         NumberAnimation {
-            duration: UI.ANIMATION_DURATION_FAST
+            duration: Ui.ANIMATION_DURATION_FAST
             easing.type: Easing.InOutQuad
         }
     }

@@ -16,44 +16,40 @@
 
 /**
  * @file foldermodel.h
- * @short Definition of Widgets::FolderModel
- *
- * This file contains the definition of the
- * Widgets::FolderModel class.
+ * @short Definition of Widgets::MobileExtra::FolderModel
  */
 
-#ifndef WIDGETS_FOLDERMODEL_H
-#define WIDGETS_FOLDERMODEL_H
+#ifndef WIDGETS_MOBILEEXTRA_FOLDERMODEL_H
+#define WIDGETS_MOBILEEXTRA_FOLDERMODEL_H
 
 #include <QtCore/QAbstractListModel>
-#include <QtCore/QMetaType>
+
+namespace Widgets
+{
+
+namespace MobileExtra
+{
 
 class ApplicationInformations;
-
-
+class FolderModelPrivate;
 /**
  * @short Model for applications folder
  *
  * This class is the model that manages the content
  * of an applications folder.
  *
- * Each item of this model is either an ApplicationInformations
+ * Each item of this model is either an
+ * Widgets::MobileExtra::ApplicationInformations
  * that is used to provide all informations about
- * an application or a FolderModel, that is used to
+ * an application or a
+ * Widgets::MobileExtra::FolderModel, that is used to
  * provide the subfolder model.
  */
 class FolderModel : public QAbstractListModel
 {
     Q_OBJECT
     /**
-     * @short Number of rows in the model
-     *
-     * This property is mainly used in QML context
-     * and is used by the views to track the number
-     * of elements in the model.
-     *
-     * This property is nearly equivalent to
-     * rowCount().
+     * @short Count
      */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_ENUMS(Type)
@@ -94,7 +90,6 @@ public:
     };
     /**
      * @short Default constructor
-     *
      * @param parent parent object.
      */
     explicit FolderModel(QObject *parent = 0);
@@ -105,30 +100,17 @@ public:
     /**
      * @short Reimplementation of rowCount
      *
-     * This method is the reimplementation of
-     * QAbstractListModel::rowCount(). It
-     * simply returns the number of rows in this model.
-     *
      * @param parent parent model index.
-     * @return the number of rows in this model.
+     * @return number of rows in this model.
      */
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     /**
-     * @short Number of rows in this model
-     *
-     * This method is used to retrieve the number
-     * of rows in this model.
-     *
+     * @short Count
      * @return number of rows in this model.
      */
     int count() const;
     /**
      * @short Reimplementation of data
-     *
-     * This method is the reimplementation of
-     * QAbstractListModel::data(). It is used
-     * by views to retrieve the different
-     * roles of the model, based on the row.
      *
      * @param index model index where retrieve the data.
      * @param role role to retrieve.
@@ -149,13 +131,8 @@ public:
 Q_SIGNALS:
     /**
      * @short Count changed
-     *
-     * Notify that the row count
-     * has changed.
-     *
-     * @param count value of the new row count.
      */
-    void countChanged(int count);
+    void countChanged();
 public Q_SLOTS:
     /**
      * @short Add application
@@ -181,14 +158,25 @@ public Q_SLOTS:
      * @param subfolderModel model that describes the subfolder.
      */
     void addSubfolder(const QString &name, FolderModel *subfolderModel);
-private:
-    class FolderModelPrivate;
+protected:
+    /**
+     * @brief Constructor for D-pointer
+     * @param dd parent D-pointer.
+     * @param parent parent object.
+     */
+    FolderModel(FolderModelPrivate *dd, QObject *parent = 0);
     /**
      * @short D-pointer
      */
-    FolderModelPrivate * const d;
+    QScopedPointer<FolderModelPrivate> d_ptr;
+private:
+    Q_DECLARE_PRIVATE(FolderModel)
 };
 
-Q_DECLARE_METATYPE(FolderModel *)
+}
 
-#endif // WIDGETS_FOLDERMODEL_H
+}
+
+Q_DECLARE_METATYPE(Widgets::MobileExtra::FolderModel *)
+
+#endif // WIDGETS_MOBILEEXTRA_FOLDERMODEL_H

@@ -14,55 +14,51 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file applicationsmodel.h
- * @short Definition of Widgets::ApplicationsModel
- *
- * This file contains the definition of the
- * Widgets::ApplicationsModel class.
- */
-
-#ifndef WIDGETS_APPLICATIONSMODEL_H
-#define WIDGETS_APPLICATIONSMODEL_H
-
-#include "foldermodel.h"
+#ifndef WIDGETS_MOBILEEXTRA_PLUGIN_H
+#define WIDGETS_MOBILEEXTRA_PLUGIN_H
 
 /**
- * @short Model for applications launcher
- *
- * This class is the model that manages the content
- * of the applications launcher.
- *
- * This class is responsible of populating the parent
- * FolderModel. It parse contents of configuration
- * file to find the applications to display, and
- * populates both folder and subfolders.
- *
- * This class is used in QML context. Accessing
- * it is done using the "applicationsModel" global object.
- *
- * @see FolderModel
+ * @file widgets_mobileextra_plugin.h
+ * @short Definition of Widgets::MobileExtra::WidgetsMobileExtraPlugin
  */
-class ApplicationsModel: public FolderModel
+
+#include <QtDeclarative/QDeclarativeExtensionPlugin>
+
+namespace Widgets
+{
+
+/**
+ * @short Namespace for mobile extra
+ */
+namespace MobileExtra
+{
+
+/**
+ * @internal
+ * @brief QML plugin for mobile extra
+ */
+class WidgetsMobileExtraPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 public:
     /**
-     * @short Default constructor
-     *
-     * @param parent parent object.
+     * @internal
+     * @brief Initialize engine
+     * @param engine QML engine.
+     * @param uri uri used in the import.
      */
-    explicit ApplicationsModel(QObject *parent = 0);
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     /**
-     * @short Destructor
+     * @internal
+     * @short Register types
+     * @param uri uri used in the import.
      */
-    virtual ~ApplicationsModel();
-private:
-    class ApplicationsModelPrivate;
-    /**
-     * @short D-pointer
-     */
-    ApplicationsModelPrivate * const d;
+    void registerTypes(const char *uri);
 };
 
-#endif // WIDGETS_APPLICATIONSMODEL_H
+}
+
+}
+
+#endif // WIDGETS_MOBILEEXTRA_PLUGIN_H
+

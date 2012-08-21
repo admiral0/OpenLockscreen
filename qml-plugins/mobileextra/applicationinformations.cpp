@@ -16,78 +16,85 @@
 
 /**
  * @file applicationinformations.cpp
- * @short Implementation of Widgets::ApplicationInformations
+ * @short Implementation of Widgets::MobileExtra::ApplicationInformations
  */
 
 #include "applicationinformations.h"
 
+namespace Widgets
+{
+
+namespace MobileExtra
+{
 
 /**
  * @internal
- * @short Private class for ApplicationInformations
+ * @short Private class for Widgets::MobileExtra::ApplicationInformations
  */
-class ApplicationInformations::ApplicationInformationsPrivate
+class ApplicationInformationsPrivate
 {
 public:
     /**
      * @internal
      * @short Default constructor
-     *
-     * @param name name of the application.
-     * @param icon icon of the application.
-     * @param command command line used to run the application.
      */
-    ApplicationInformationsPrivate(const QString &name, const QString &icon,
-                                   const QString &command);
+    ApplicationInformationsPrivate();
     /**
      * @internal
      * @short Name
      */
-    const QString name;
+    QString name;
     /**
      * @internal
      * @short Icon
      */
-    const QString icon;
+    QString icon;
     /**
      * @internal
      * @short Command line used to run the application
      */
-    const QString command;
+    QString command;
 };
 
 ////// End of private class //////
 
-ApplicationInformations::ApplicationInformationsPrivate::
-                         ApplicationInformationsPrivate(const QString &name, const QString &icon,
-                                                        const QString &command):
-    name(name), icon(icon), command(command)
+ApplicationInformationsPrivate::ApplicationInformationsPrivate()
 {
 }
 
 ApplicationInformations::ApplicationInformations(const QString &name, const QString &icon,
                                                  const QString &command, QObject *parent):
-    QObject(parent), d(new ApplicationInformationsPrivate(name, icon, command))
+    QObject(parent), d_ptr(new ApplicationInformationsPrivate())
 
 {
+    Q_D(ApplicationInformations);
+    d->name = name;
+    d->icon = icon;
+    d->command = command;
 }
 
 ApplicationInformations::~ApplicationInformations()
 {
-    delete d;
 }
 
 QString ApplicationInformations::name() const
 {
+    Q_D(const ApplicationInformations);
     return d->name;
 }
 
 QString ApplicationInformations::icon() const
 {
+    Q_D(const ApplicationInformations);
     return d->icon;
 }
 
 QString ApplicationInformations::command() const
 {
+    Q_D(const ApplicationInformations);
     return d->command;
+}
+
+}
+
 }

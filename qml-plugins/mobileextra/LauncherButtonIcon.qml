@@ -15,14 +15,14 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import "UiConstants.js" as UI
+import "UiConstants.js" as Ui
 
 // Icon used in launcher button
 // This icon is used to represent either
 // an application or a folder.
 Item {
     id: container
-    width: UI.ICON_SIZE_XLARGE; height: UI.ICON_SIZE_XLARGE
+    width: Ui.ICON_SIZE_XLARGE; height: Ui.ICON_SIZE_XLARGE
     property alias source: background.source
     property alias sub1Source: sub1.source
     property alias sub2Source: sub2.source
@@ -32,7 +32,7 @@ Item {
     Rectangle {
         id: backgroundRectangle
         anchors.fill: icon
-        color: colors.green5
+        color: Colors.green5
         radius: 32
         opacity: 1
 
@@ -45,14 +45,14 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 
     Image {
         id: background
         anchors.fill: parent
-        sourceSize.width: UI.ICON_SIZE_XLARGE; sourceSize.height: UI.ICON_SIZE_XLARGE
+        sourceSize.width: Ui.ICON_SIZE_XLARGE; sourceSize.height: Ui.ICON_SIZE_XLARGE
         opacity: 0
 
         states: State {
@@ -64,16 +64,16 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 
     Image {
         id: sub1
-        anchors.top: parent.top; anchors.topMargin: UI.ICON_FOLDER_MARGIN
-        anchors.left: parent.left; anchors.leftMargin: UI.ICON_FOLDER_MARGIN
-        width: UI.ICON_SIZE_SMALL; height: UI.ICON_SIZE_SMALL
-        sourceSize.width: UI.ICON_SIZE_XLARGE; sourceSize.height: UI.ICON_SIZE_XLARGE
+        anchors.top: parent.top; anchors.topMargin: Ui.ICON_FOLDER_MARGIN
+        anchors.left: parent.left; anchors.leftMargin: Ui.ICON_FOLDER_MARGIN
+        width: Ui.ICON_SIZE_SMALL; height: Ui.ICON_SIZE_SMALL
+        sourceSize.width: Ui.ICON_SIZE_XLARGE; sourceSize.height: Ui.ICON_SIZE_XLARGE
         opacity: 0
 
         states: State {
@@ -85,16 +85,16 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 
     Image {
         id: sub2
-        anchors.top: parent.top; anchors.topMargin: UI.ICON_FOLDER_MARGIN
-        anchors.right: parent.right; anchors.rightMargin: UI.ICON_FOLDER_MARGIN
-        width: UI.ICON_SIZE_SMALL; height: UI.ICON_SIZE_SMALL
-        sourceSize.width: UI.ICON_SIZE_XLARGE; sourceSize.height: UI.ICON_SIZE_XLARGE
+        anchors.top: parent.top; anchors.topMargin: Ui.ICON_FOLDER_MARGIN
+        anchors.right: parent.right; anchors.rightMargin: Ui.ICON_FOLDER_MARGIN
+        width: Ui.ICON_SIZE_SMALL; height: Ui.ICON_SIZE_SMALL
+        sourceSize.width: Ui.ICON_SIZE_XLARGE; sourceSize.height: Ui.ICON_SIZE_XLARGE
         opacity: 0
 
         states: State {
@@ -106,16 +106,16 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 
     Image {
         id: sub3
-        anchors.bottom: parent.bottom; anchors.bottomMargin: UI.ICON_FOLDER_MARGIN
-        anchors.left: parent.left; anchors.leftMargin: UI.ICON_FOLDER_MARGIN
-        width: UI.ICON_SIZE_SMALL; height: UI.ICON_SIZE_SMALL
-        sourceSize.width: UI.ICON_SIZE_XLARGE; sourceSize.height: UI.ICON_SIZE_XLARGE
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.ICON_FOLDER_MARGIN
+        anchors.left: parent.left; anchors.leftMargin: Ui.ICON_FOLDER_MARGIN
+        width: Ui.ICON_SIZE_SMALL; height: Ui.ICON_SIZE_SMALL
+        sourceSize.width: Ui.ICON_SIZE_XLARGE; sourceSize.height: Ui.ICON_SIZE_XLARGE
         opacity: 0
 
         states: State {
@@ -127,16 +127,16 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 
     Image {
         id: sub4
-        anchors.bottom: parent.bottom; anchors.bottomMargin: UI.ICON_FOLDER_MARGIN
-        anchors.right: parent.right; anchors.rightMargin: UI.ICON_FOLDER_MARGIN
-        width: UI.ICON_SIZE_SMALL; height: UI.ICON_SIZE_SMALL
-        sourceSize.width: UI.ICON_SIZE_XLARGE; sourceSize.height: UI.ICON_SIZE_XLARGE
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.ICON_FOLDER_MARGIN
+        anchors.right: parent.right; anchors.rightMargin: Ui.ICON_FOLDER_MARGIN
+        width: Ui.ICON_SIZE_SMALL; height: Ui.ICON_SIZE_SMALL
+        sourceSize.width: Ui.ICON_SIZE_XLARGE; sourceSize.height: Ui.ICON_SIZE_XLARGE
         opacity: 0
 
         states: State {
@@ -148,7 +148,7 @@ Item {
         }
 
         Behavior on opacity {
-            NumberAnimation {duration: UI.ANIMATION_DURATION_FAST}
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
         }
     }
 }

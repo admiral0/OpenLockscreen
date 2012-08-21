@@ -75,10 +75,13 @@ For additional widgets library
 - CONFIG+=plugindocks enable the docks plugin.
 - CONFIG+=pluginbackground enable the background plugin.
 - CONFIG+=plugindrag enable the drag plugin.
-- CONFIG+=pluginextra enable the extra plugin.
+- CONFIG+=plugininfo enable the info plugin.
+- CONFIG+=pluginproviderbasic enable the basic provider manager.
+- CONFIG+=pluginproviderpackagemanager enable the package manager.
 
 Experimental features
 - CONFIG+=lockscreen enable the lock screen widgets
+- CONFIG+=mobileextra enable mobile extra components.
 
 
 Note that if both mobile and desktop switches are set at the same

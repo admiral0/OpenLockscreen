@@ -16,8 +16,10 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import org.sk.widgets 1.0
-import "UiConstants.js" as UI
+import org.SfietKonstantin.widgets.mobileextra 1.0
+import org.SfietKonstantin.widgets.colors 1.0
+//import org.sk.widgets 1.0
+import "UiConstants.js" as Ui
 import "LauncherButtonIconFunctions.js" as LBIFunctions
 
 // Application launcher
@@ -28,24 +30,25 @@ import "LauncherButtonIconFunctions.js" as LBIFunctions
 // an animation when opened or closed
 Item  {
     id: container
-    opacity: 0
-    scale: 2
-    property int launcherWidth: UI.APPLICATION_LAUNCHER_WIDTH + 2 * UI.MARGIN_XSMALL
-    property int launcherHeight: UI.APPLICATION_LAUNCHER_HEIGHT + 2 * UI.MARGIN_MLARGE
+//    opacity: 0
+//    scale: 2
+    property int launcherWidth: Ui.APPLICATION_LAUNCHER_WIDTH + 2 * Ui.MARGIN_XSMALL
+    property int launcherHeight: Ui.APPLICATION_LAUNCHER_HEIGHT + 2 * Ui.MARGIN_MLARGE
 
     Rectangle {
         id: background
         anchors.fill: parent
         opacity: 0.8
-        color: colors.gray6
+        color: Colors.gray6
     }
 
     Item {
         id: launcherContainer
-        anchors.left: container.left; anchors.leftMargin: UI.MARGIN_XSMALL
-        anchors.right: container.right; anchors.rightMargin: UI.MARGIN_XSMALL
-        anchors.top: container.top; anchors.topMargin: UI.MARGIN_XSMALL
-        anchors.bottom: toolbar.top; anchors.bottomMargin: UI.MARGIN_LARGE
+        anchors.left: container.left; anchors.leftMargin: Ui.MARGIN_XSMALL
+        anchors.right: container.right; anchors.rightMargin: Ui.MARGIN_XSMALL
+        anchors.top: container.top; anchors.topMargin: Ui.MARGIN_XSMALL
+//        anchors.bottom: toolbar.top; anchors.bottomMargin: Ui.MARGIN_LARGE
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Ui.MARGIN_DEFAULT
 
         LauncherGrid {
             id: view
@@ -60,23 +63,23 @@ Item  {
                 var position = cellHeight * Math.ceil((index + 1)/ 4)
                 var subMenuHeight = Math.min(container.launcherHeight *
                                              Math.ceil(subfolderModel.count / 4) +
-                                             UI.FONT_SIZE_LARGE + 2 * UI.MARGIN_DEFAULT,
-                                             view.height - UI.SUBFOLDER_BOTTOM_MARGIN)
+                                             Ui.FONT_SIZE_LARGE + 2 * Ui.MARGIN_DEFAULT,
+                                             view.height - Ui.SUBFOLDER_BOTTOM_MARGIN)
                 var subMenuY = Math.min(position - contentY - container.launcherHeight +
-                                        UI.ICON_SIZE_XLARGE + UI.MARGIN_MLARGE,
-                                        view.height - subMenuHeight - UI.SUBFOLDER_BOTTOM_MARGIN)
+                                        Ui.ICON_SIZE_XLARGE + Ui.MARGIN_MLARGE,
+                                        view.height - subMenuHeight - Ui.SUBFOLDER_BOTTOM_MARGIN)
 
                 if(position - (contentY + container.launcherHeight) < 0) {
                     contentY = position - container.launcherHeight
                 }
 
-                if(position - contentY + subMenuHeight + UI.SUBFOLDER_BOTTOM_MARGIN -
-                        view.height - container.launcherHeight + UI.ICON_SIZE_XLARGE +
-                        UI.MARGIN_MLARGE > 0) {
+                if(position - contentY + subMenuHeight + Ui.SUBFOLDER_BOTTOM_MARGIN -
+                        view.height - container.launcherHeight + Ui.ICON_SIZE_XLARGE +
+                        Ui.MARGIN_MLARGE > 0) {
                     oldContentY = contentY
-                    contentY = position + subMenuHeight + UI.SUBFOLDER_BOTTOM_MARGIN -
-                            view.height - container.launcherHeight + UI.ICON_SIZE_XLARGE +
-                            UI.MARGIN_MLARGE
+                    contentY = position + subMenuHeight + Ui.SUBFOLDER_BOTTOM_MARGIN -
+                            view.height - container.launcherHeight + Ui.ICON_SIZE_XLARGE +
+                            Ui.MARGIN_MLARGE
                 }
 
                 subfolderLabel.text = subfolderName
@@ -99,7 +102,7 @@ Item  {
                 subfolderView.height = 0
             }
 
-            model: applicationsModel
+            model: ApplicationsModel
             cellWidth:container.launcherWidth
             cellHeight:container.launcherHeight
             onClicked: {
@@ -128,23 +131,23 @@ Item  {
             height: 0
             width: container.width
             anchors.horizontalCenter: parent.horizontalCenter
-            color: colors.black
+            color: Colors.black
             clip: true
 
             Label {
                 id: subfolderLabel
-                anchors.top: parent.top; anchors.topMargin: UI.MARGIN_DEFAULT
-                anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_DEFAULT
-                anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_DEFAULT
-                font.pixelSize: UI.FONT_SIZE_DEFAULT
+                anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
+                anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+                anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+                font.pixelSize: Ui.FONT_SIZE_DEFAULT
             }
 
             Item {
                 id: subfolderGridContainer
-                anchors.top: subfolderLabel.bottom; anchors.topMargin: UI.MARGIN_DEFAULT
+                anchors.top: subfolderLabel.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
                 anchors.bottom: parent.bottom
-                anchors.left: parent.left; anchors.leftMargin: UI.MARGIN_XSMALL
-                anchors.right: parent.right; anchors.rightMargin: UI.MARGIN_XSMALL
+                anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_XSMALL
+                anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_XSMALL
 
                 LauncherGrid {
                     id: subfolderGrid
@@ -160,7 +163,7 @@ Item  {
             }
 
             Behavior on height {
-                NumberAnimation { duration: UI.ANIMATION_DURATION_FAST }
+                NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
             }
         }
 
@@ -173,17 +176,17 @@ Item  {
     }
 
 
-    ToolBar {
-        id: toolbar
-        anchors.bottom: parent.bottom
-        tools: ToolBarLayout {
-            ToolIcon {
-                anchors.centerIn: parent
-                iconId: "toolbar-home"
-                onClicked: launcherManager.launcherVisible = false
-            }
-        }
-    }
+//    ToolBar {
+//        id: toolbar
+//        anchors.bottom: parent.bottom
+//        tools: ToolBarLayout {
+//            ToolIcon {
+//                anchors.centerIn: parent
+//                iconId: "toolbar-home"
+//                onClicked: launcherManager.launcherVisible = false
+//            }
+//        }
+//    }
 
     states: State {
         name: "visible"; when: launcherManager.launcherVisible
@@ -198,10 +201,10 @@ Item  {
     }
 
     Behavior on opacity {
-        NumberAnimation { duration: UI.ANIMATION_DURATION_FAST }
+        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
     }
 
     Behavior on scale {
-        NumberAnimation { duration: UI.ANIMATION_DURATION_FAST; easing.type: Easing.OutQuad }
+        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST; easing.type: Easing.OutQuad }
     }
 }

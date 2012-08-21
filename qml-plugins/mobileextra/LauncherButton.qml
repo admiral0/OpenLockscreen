@@ -16,7 +16,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "UiConstants.js" as UI
+import "UiConstants.js" as Ui
 
 // Button used for a launcher
 // This button is used to represent an
@@ -31,13 +31,13 @@ Item  {
     property alias sub4Icon: icon.sub4Source
     property alias name: text.text
     signal clicked
-    width: UI.APPLICATION_LAUNCHER_WIDTH
-    height: UI.APPLICATION_LAUNCHER_HEIGHT
+    width: Ui.APPLICATION_LAUNCHER_WIDTH
+    height: Ui.APPLICATION_LAUNCHER_HEIGHT
 
     Item {
         id: iconContainer
         width: parent.width
-        height: icon.height + UI.MARGIN_DEFAULT + text.height
+        height: icon.height + Ui.MARGIN_DEFAULT + text.height
 
         LauncherButtonIcon {
             id: icon
@@ -48,10 +48,10 @@ Item  {
         Label {
             id: text
             anchors.top: icon.bottom
-            anchors.topMargin: UI.MARGIN_SMALL
+            anchors.topMargin: Ui.MARGIN_SMALL
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: UI.FONT_SIZE_XXSMALL
+            font.pixelSize: Ui.FONT_SIZE_XXSMALL
             wrapMode: Text.NoWrap
             elide: Text.ElideRight
         }
@@ -72,6 +72,6 @@ Item  {
     }
 
     Behavior on scale {
-        NumberAnimation { duration: UI.ANIMATION_DURATION_XFAST }
+        NumberAnimation { duration: Ui.ANIMATION_DURATION_XFAST }
     }
 }

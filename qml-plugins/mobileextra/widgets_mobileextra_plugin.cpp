@@ -14,42 +14,45 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
-import org.SfietKonstantin.widgets 1.0
-import org.SfietKonstantin.widgets.background 1.0
-import org.SfietKonstantin.widgets.docks 1.0
-import org.SfietKonstantin.widgets.mobileextra 1.0
+/**
+ * @file widgets_mobileextra_plugin.cpp
+ * @short Implementation of Widgets::MobileExtra::WidgetsMobileExtraPlugin
+ */
 
-Page {
-    id: mainPage
-    orientationLock: PageOrientation.LockPortrait
+#include "widgets_mobileextra_plugin.h"
 
-    PinchArea {
-        anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
-    }
+#include <QtDeclarative/QtDeclarative>
 
-    Background {
-        anchors.fill: parent
-        id: background
-        horizontalPageView: widgetsPage
-    }
+#include "applicationinformations.h"
+#include "applicationsmodel.h"
+#include "foldermodel.h"
 
-    DockedView {
-        content: Item {
-            id: widgets
-            anchors.fill: parent
+namespace Widgets
+{
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
-            }
-        }
-    }
+namespace MobileExtra
+{
 
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
+void WidgetsMobileExtraPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
+{
+    Q_UNUSED(uri)
+
+    // @uri org.SfietKonstantin.widgets.mobileextra
+    engine->rootContext()->setContextProperty("ApplicationsModel", new ApplicationsModel(this));
+}
+
+void WidgetsMobileExtraPlugin::registerTypes(const char *uri)
+{
+    // @uri org.SfietKonstantin.widgets.mobileextra
+//    QString reason = "Only one instance of Colors is allowed.";
+//    qmlRegisterUncreatableType<OxygenColors>(uri, 1, 0, "OxygenColors", reason);
+    qmlRegisterType<ApplicationInformations>(uri, 1, 0, "ApplicationInformations");
+    qmlRegisterType<FolderModel>(uri, 1, 0, "FolderModel");
+}
 
 }
+
+}
+
+Q_EXPORT_PLUGIN2(Widgets, Widgets::MobileExtra::WidgetsMobileExtraPlugin)
+

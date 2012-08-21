@@ -27,7 +27,7 @@
 /**
  * @internal
  * @file contextbase_p.h
- * @short Definition of Widgets::ContextBasePrivate
+ * @short Definition of Widgets::ContextBase
  */
 
 #include "providermanager.h"

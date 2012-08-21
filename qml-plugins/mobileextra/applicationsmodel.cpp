@@ -24,11 +24,19 @@
  */
 
 #include "applicationsmodel.h"
+#include "foldermodel_p.h"
 #include "applicationinformations.h"
+
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+
+namespace Widgets
+{
+
+namespace MobileExtra
+{
 
 /**
  * @short Path to the launchers file
@@ -56,23 +64,22 @@ static const char *DEFAULT_ICON_PATH = "/usr/share/icons/hicolor/%1/apps/";
  * @internal
  * @short Private class for ViewWidgetsModel
  */
-class ApplicationsModel::ApplicationsModelPrivate
+class ApplicationsModelPrivate: public FolderModelPrivate
 {
 public:
     /**
+     * @internal
      * @short Default constructor
-     *
-     * @param parent parent Q-pointer.
+     * @param q Q-pointer.
      */
-    ApplicationsModelPrivate(ApplicationsModel *parent);
+    ApplicationsModelPrivate(ApplicationsModel *q);
     /**
+     * @internal
      * @short Initialize the model
-     *
-     * This method is used to parse settings file, create
-     * folder tree and create content of the tree.
      */
     void init();
     /**
+     * @internal
      * @short Application informations
      *
      * This method parse a given .desktop file and
@@ -84,6 +91,7 @@ public:
      */
     ApplicationInformations * applicationInformations(const QString &desktopFile);
     /**
+     * @internal
      * @short Folder name
      *
      * This method parse a given .folder file and
@@ -94,6 +102,7 @@ public:
      */
     QString folderName(const QString &folderFile);
     /**
+     * @internal
      * @short Find the path of an icon
      *
      * Icons that are not defined with their absolute
@@ -112,16 +121,19 @@ private:
     /**
      * @short Q-pointer
      */
-    ApplicationsModel * const q;
+    ApplicationsModel * q_ptr;
+    Q_DECLARE_PUBLIC(ApplicationsModel)
 };
 
-ApplicationsModel::ApplicationsModelPrivate::ApplicationsModelPrivate(ApplicationsModel *parent):
-    q(parent)
+ApplicationsModelPrivate::ApplicationsModelPrivate(ApplicationsModel *q):
+    FolderModelPrivate(), q_ptr(q)
 {
 }
 
-void ApplicationsModel::ApplicationsModelPrivate::init()
+void ApplicationsModelPrivate::init()
 {
+    Q_Q(ApplicationsModel);
+
     // The application tree is a 2 level list.
     // The 1st level is a list of list that contains content of folders
     // The 2nd level is a list of strings that contains path to desktop
@@ -198,7 +210,7 @@ void ApplicationsModel::ApplicationsModelPrivate::init()
     }
 }
 
-QString ApplicationsModel::ApplicationsModelPrivate::folderName(const QString &folderFile)
+QString ApplicationsModelPrivate::folderName(const QString &folderFile)
 {
     if (folderFile.isEmpty()) {
         return QString();
@@ -224,9 +236,11 @@ QString ApplicationsModel::ApplicationsModelPrivate::folderName(const QString &f
     return name;
 }
 
-ApplicationInformations * ApplicationsModel::ApplicationsModelPrivate::
-                                             applicationInformations(const QString &desktopFile)
+ApplicationInformations * ApplicationsModelPrivate
+                          ::applicationInformations(const QString &desktopFile)
 {
+    Q_Q(ApplicationsModel);
+
     if (desktopFile.isEmpty()) {
         return 0;
     }
@@ -276,8 +290,9 @@ ApplicationInformations * ApplicationsModel::ApplicationsModelPrivate::
 
 
 
-QString ApplicationsModel::ApplicationsModelPrivate::findIconPath(const QString &iconName,
-                                                                  const QString &executable) {
+QString ApplicationsModelPrivate::findIconPath(const QString &iconName,
+                                               const QString &executable)
+{
     // Check if it is in theme directories
     QString iconNamePng = iconName + ".png";
     QString iconNameSvg = iconName + ".svg";
@@ -346,12 +361,16 @@ QString ApplicationsModel::ApplicationsModelPrivate::findIconPath(const QString 
 ////// End of private class //////
 
 ApplicationsModel::ApplicationsModel(QObject *parent):
-    FolderModel(parent), d(new ApplicationsModelPrivate(this))
+    FolderModel(new ApplicationsModelPrivate(this), parent)
 {
+    Q_D(ApplicationsModel);
     d->init();
 }
 
 ApplicationsModel::~ApplicationsModel()
 {
-    delete d;
+}
+
+}
+
 }
