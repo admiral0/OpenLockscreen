@@ -49,12 +49,13 @@ class WidgetPropertiesPrivate;
  * - height()
  * - settings()
  * - visible()
+ * - enabled()
  *
  * The identifier is an unique identifier, using an UUID, that
  * is used to uniquely identify a widget. x, y, z, width and height
  * are related the the geometry of the widget. Settings is a parameter
- * that widgets can use to store and retrieve some settings. Finally,
- * visible stores the visibility of the widget.
+ * that widgets can use to store and retrieve some settings. Visible stores
+ * the visibility of the widget and enabled if the widget should be enabled.
  */
 class WidgetProperties: public WidgetBaseProperties, private IdentifiedElementInterface
 {
@@ -87,6 +88,10 @@ class WidgetProperties: public WidgetBaseProperties, private IdentifiedElementIn
      * @short Visibility
      */
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
+    /**
+     * @short Enabled
+     */
+    Q_PROPERTY(bool enabled READ isEnabled NOTIFY enabledChanged)
     /**
      * @short Settings
      */
@@ -178,6 +183,16 @@ public:
      */
     bool isVisible() const;
     /**
+     * @brief Enabled
+     * @return enabled.
+     */
+    bool isEnabled() const;
+    /**
+     * @short Set if it is enabled
+     * @param enabled if the widget is enabled.
+     */
+    void setEnabled(bool enabled);
+    /**
      * @short Settings
      * @return settings.
      */
@@ -243,6 +258,10 @@ Q_SIGNALS:
      * @short Visibility changed
      */
     void visibleChanged();
+    /**
+     * @brief Enable changed
+     */
+    void enabledChanged();
     /**
      * @short Settings changed changed
      */

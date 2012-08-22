@@ -311,17 +311,26 @@ QString ApplicationsModelPrivate::findIconPath(const QString &iconName,
     QDir dirBase = QDir(BASE_ICON_PATH);
     QDir dirSvg = QDir(BASE_SVG_PATH);
 
-    // Check the folders
-    if (dirBlanco.exists(iconNamePng) || dirBlanco.exists(iconNameSvg) ||
-       dirBase.exists(iconNamePng) || dirBase.exists(iconNameSvg) ||
-       dirSvg.exists(iconNamePng) || dirSvg.exists(iconNameSvg)) {
-
-        // If the icon is in the theme directories, we need to
-        // add a specific prefix
-        QString iconPath = iconName;
-        iconPath.prepend("image://theme/");
-        return iconPath;
+    // Check base folders
+    if (dirBlanco.exists(iconNamePng)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
     }
+    if (dirBlanco.exists(iconNameSvg)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
+    }
+    if (dirBase.exists(iconNamePng)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
+    }
+    if (dirBase.exists(iconNameSvg)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
+    }
+    if (dirSvg.exists(iconNamePng)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
+    }
+    if (dirSvg.exists(iconNameSvg)) {
+        return dirBlanco.absoluteFilePath(iconNamePng);
+    }
+
 
     // If not, check the default icons folders
     QStringList iconSizes = QStringList();
@@ -366,7 +375,7 @@ QString ApplicationsModelPrivate::findIconPath(const QString &iconName,
 
 
     // Failed to found the icon
-    return "/usr/share/themes/blanco/meegotouch/icons/icon-l-default-application";
+    return "/usr/share/themes/blanco/meegotouch/icons/icon-l-default-application.png";
 }
 
 ////// End of private class //////

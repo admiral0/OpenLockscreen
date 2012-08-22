@@ -39,10 +39,6 @@ ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
                         widgets/analogic-clock/analogic-clock-hour.png \
                         widgets/analogic-clock/analogic-clock-minute.png \
 
-PLAIN_TEXT_FILES =      widgets/plain-text/metadata.desktop \
-                        widgets/plain-text/PlainText.qml \
-                        widgets/plain-text/PlainTextSettings.qml \
-
 PICTURE_FRAME_FILES =   widgets/picture-frame/metadata.desktop \
                         widgets/picture-frame/PictureFrame.qml \
                         widgets/picture-frame/PictureFrameSettings.qml \
@@ -67,15 +63,10 @@ analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
 export(analogicClockFiles.path)
 export(analogicClockFiles.files)
 
-plainTextFiles.path = $${installPath}/widgets/plain-text
-plainTextFiles.files = $${PLAIN_TEXT_FILES}
-export(plainTextFiles.path)
-export(plainTextFiles.files)
-
 pictureFrameFiles.path = $${installPath}/widgets/picture-frame
 pictureFrameFiles.files = $${PICTURE_FRAME_FILES}
 export(pictureFrameFiles.path)
 export(pictureFrameFiles.files)
 
 INSTALLS += androidDockFiles maemoDockFiles swipeUnlockFiles
-INSTALLS += analogicClockFiles plainTextFiles pictureFrameFiles
+INSTALLS += analogicClockFiles pictureFrameFiles

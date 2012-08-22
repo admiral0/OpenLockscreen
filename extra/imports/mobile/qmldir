@@ -1,2 +1,3 @@
 plugin mobilelauncher
 Launcher 1.0 Launcher.qml
+LauncherButton 1.0 LauncherButton.qml

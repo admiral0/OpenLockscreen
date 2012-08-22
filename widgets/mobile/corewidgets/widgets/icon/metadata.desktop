@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Icon
+Name[en_GB]=Icon
+Name[fr]=Icon
+Comment=An icon
+Comment[en_GB]=An icon
+Comment[fr]=Une icône
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-ComponentInfo-File=Icon.qml

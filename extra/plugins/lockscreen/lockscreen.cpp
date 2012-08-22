@@ -15,11 +15,16 @@
  ****************************************************************************************/
 
 #include "lockscreen.h"
-#include "lockscreenmanager.h"
-#include "notificationsmodel.h"
+
+
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeError>
 #include <QtCore/QCoreApplication>
+#include <QtDBus/QDBusConnection>
+
+#include "lockscreenmanager.h"
+#include "notificationsmodel.h"
+#include "settingsmanager.h"
 
 LockScreen::LockScreen(NotificationsModel *notificationsModel, QGraphicsWidget *parent):
     QGraphicsProxyWidget(parent)
@@ -29,10 +34,17 @@ LockScreen::LockScreen(NotificationsModel *notificationsModel, QGraphicsWidget *
     QCoreApplication::instance()->setOrganizationName("SfietKonstantin");
     QCoreApplication::instance()->setApplicationName("Widgets");
 
+    SettingsManager *settingsManager = new SettingsManager(this);
+
+    QDBusConnection::sessionBus().registerService("org.SfietKonstantin.widgets");
+    QDBusConnection::sessionBus().registerObject("/org/SfietKonstantin/widgets", settingsManager,
+                                                 QDBusConnection::ExportAllSlots);
+
     view = new QDeclarativeView();
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     view->rootContext()->setContextProperty("LockScreenManager", manager);
     view->rootContext()->setContextProperty("NotificationsModel", notificationsModel);
+    view->rootContext()->setContextProperty("SettingsManagerInstance", settingsManager);
     view->setSource(QUrl("/opt/widgets/lockscreen/qml/main.qml"));
 
     setWidget(view);

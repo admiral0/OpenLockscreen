@@ -18,6 +18,7 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.provider.packagemanager 1.0
+import org.SfietKonstantin.widgets.app 1.0
 
 PageStackWindow {
     id: window
@@ -29,7 +30,10 @@ PageStackWindow {
     }
 
 
-
+    Connections {
+        target: screen
+        onMinimizedChanged: WidgetsPageListModelInstance.setEnabled(!screen.minimized)
+    }
 
     Settings {
         id: widgetsSettings
@@ -61,6 +65,10 @@ PageStackWindow {
         FilterCondition {
             tag: "mobile-harmattan"
         }
+    }
+
+    RemoteSettingsManager {
+        id: remoteSettingsManager
     }
 
 }

@@ -29,6 +29,11 @@ Item {
                 content.settings = widget.settings
             }
         }
+        onEnabledChanged: {
+            if (content != null) {
+                content.enabled = widget.enabled
+            }
+        }
     }
 
     // Load content
@@ -40,7 +45,7 @@ Item {
             if (component.status == Component.Ready) {
                 content = component.createObject(container ,
                                                  {"anchors.centerIn": container,
-                                                  "enabled": true,
+                                                  "enabled": container.widget.enabled,
                                                   "settings": container.widget.settings});
             } else {
                 console.debug("Cannot create the widget from file " + qmlFile +

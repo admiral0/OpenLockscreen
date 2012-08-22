@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,42 +14,32 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import org.SfietKonstantin.mobile.launcher 1.0
-import org.SfietKonstantin.widgets.colors 1.0
-import "UiConstants.js" as Ui
+#include "remotesettingsmanager.h"
 
-Item  {
-    width: Ui.TOOLBAR_WIDTH
-    height: Ui.TOOLBAR_HEIGNT
+#include <QtDBus/QDBusInterface>
+#include <QtCore/QDebug>
 
-    Image {
-        anchors.fill: parent
-        source: "toolbar.png"
-    }
+RemoteSettingsManager::RemoteSettingsManager(QObject *parent) :
+    QObject(parent)
+{
+}
 
-    Item {
-        anchors.centerIn: parent
-        width: Ui.ICON_SIZE_DEFAULT
-        height: Ui.ICON_SIZE_DEFAULT
+void RemoteSettingsManager::reloadDocks()
+{
+    QDBusInterface interface ("org.SfietKonstantin.widgets",
+                              "/org/SfietKonstantin/widgets",
+                              "org.SfietKonstantin.widgets",
+                              QDBusConnection::sessionBus());
 
-        Rectangle {
-            visible: mouseArea.pressed
-            anchors.fill: parent
-            radius: 5
-            color: Colors.aluminiumGray4
-        }
+    interface.call("reloadDocks");
+}
 
-        Image {
-            anchors.fill: parent
-            source: "home.png"
-        }
+void RemoteSettingsManager::reloadWidgets()
+{
+    QDBusInterface interface ("org.SfietKonstantin.widgets",
+                              "/org/SfietKonstantin/widgets",
+                              "org.SfietKonstantin.widgets",
+                              QDBusConnection::sessionBus());
 
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onClicked: LauncherManagerInstance.visible = false
-    }
+    interface.call("reloadWidgets");
 }

@@ -50,7 +50,7 @@ Widget {
     property bool night: false
     property string dayBackgroundSource: "analogic-clock-background.png"
     property string nightBackgroundSource: "analogic-clock-night-background.png"
-    
+
     Component.onCompleted: changeTime()
     function changeTime() {
         var date = new Date
@@ -62,6 +62,7 @@ Widget {
     height: 200
 
     AlignedTimer {
+        id: timer
         minimumInterval: 1
         maximumInterval: 1
         singleShot: false

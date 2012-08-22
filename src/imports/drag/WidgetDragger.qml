@@ -95,16 +95,16 @@ Item {
 
     WidgetDraggerButton {
         id: removeButton
-        anchors.top: container.top
-        anchors.right: container.right
+        anchors.top: container.top; anchors.topMargin: -10
+        anchors.right: container.right; anchors.rightMargin: -10
         source: DragParametersInstance.removeButtonSource
         onClicked: container.removeWidget(container.widget)
     }
 
     WidgetDraggerButton {
         id: settingsButton
-        anchors.bottom: container.bottom
-        anchors.left: container.left
+        anchors.bottom: container.bottom; anchors.bottomMargin: -10
+        anchors.left: container.left; anchors.leftMargin: -10
         source: DragParametersInstance.editButtonSource
         visible: container.widget.settingsEnabled
         onClicked: container.showWidgetSettings(container.widget)

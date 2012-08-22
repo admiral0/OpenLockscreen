@@ -24,7 +24,13 @@ AbstractPage {
     id: container
     title: qsTr("Edit docks")
     tools: ToolBarLayout {
-        ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: {
+                window.pageStack.pop()
+                remoteSettingsManager.reloadDocks()
+            }
+        }
         ToolButton {
             anchors.centerIn: parent
             text: qsTr("Add dock")
@@ -86,7 +92,9 @@ AbstractPage {
         MenuLayout {
             MenuItem {
                 text: qsTr("Delete dock")
-                onClicked: DockModelInstance.removeDock(listView.selectedDock)
+                onClicked: {
+                    DockModelInstance.removeDock(listView.selectedDock)
+                }
             }
         }
     }

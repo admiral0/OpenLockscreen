@@ -33,6 +33,7 @@
 #include <QtDeclarative/QDeclarativeEngine>
 #endif
 
+#include "remotesettingsmanager.h"
 #include "webandmailhandler.h"
 
 /**
@@ -59,13 +60,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app->setOrganizationName("SfietKonstantin");
 
 
+    qmlRegisterType<RemoteSettingsManager>("org.SfietKonstantin.widgets.app", 1, 0,
+                                           "RemoteSettingsManager");
     qmlRegisterType<WebAndMailHandler>("org.SfietKonstantin.widgets.app", 1, 0,
                                        "WebAndMailHandler");
 
 #ifdef IMPORT_DIR
     view->engine()->addImportPath(IMPORT_DIR);
 #endif
-
     view->setSource(QUrl(MAIN_QML_PATH));
 
     QObject::connect(view->engine(), SIGNAL(quit()), view, SLOT(close()));

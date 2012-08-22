@@ -55,30 +55,10 @@ Page {
         }
     }
 
-    Sheet {
+    WidgetEditorSelectorSheet {
         id: addWidgetSheet
-        rejectButtonText: qsTr("Cancel")
-        content: ListView {
-            id: view
-            anchors.fill: parent
-            model: WidgetInformationModel {
-                providerManager: ProviderManagerInstance
-            }
-            clip: true
-            delegate: ClickableEntry {
-                text: model.name
-                subText: model.description
-                indicatorIcon: ""
-                onClicked: {
-                    var widget = ProviderManagerInstance.provider.widget(model.file,
-                                                                         model.disambiguation)
-                    WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                                           widget, widgetsPage.gridManagerInstance)
-                    addWidgetSheet.accept()
-                }
-            }
-        }
     }
+
 
     Sheet {
         id: configureWidgetSheet
@@ -148,6 +128,7 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             onClicked: {
                 window.pageStack.pop()
+                remoteSettingsManager.reloadWidgets()
             }
         }
 

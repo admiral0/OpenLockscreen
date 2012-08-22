@@ -110,7 +110,8 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: 15
+        height: 10
+        color: Colors.aluminiumGray5
 
         MouseArea {
             anchors.fill: parent
@@ -122,6 +123,20 @@ Rectangle {
         target: LauncherManagerInstance
         onUnlocked: LockScreenManager.unlock()
         onApplicationLaunched: LockScreenManager.unlock()
+    }
+
+    Connections {
+        target: LockScreenManager
+        onVisibleChanged: {
+            LauncherManagerInstance.visible = false
+            WidgetsPageListModelInstance.setEnabled(LockScreenManager.visible)
+        }
+    }
+
+    Connections {
+        target: SettingsManagerInstance
+        onWidgetsChanged: WidgetsPageListModelInstance.load()
+        onDocksChanged: DockModelInstance.load()
     }
 
 }

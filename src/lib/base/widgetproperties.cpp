@@ -85,6 +85,7 @@ WidgetPropertiesPrivate::WidgetPropertiesPrivate(WidgetProperties *q):
     WidgetBasePropertiesPrivate(q)
 {
     visible = true;
+    enabled = true;
 }
 
 void WidgetPropertiesPrivate::copyFromBase(WidgetBaseProperties *base)
@@ -328,6 +329,21 @@ bool WidgetProperties::isVisible() const
 {
     W_D(const WidgetProperties);
     return d->visible;
+}
+
+bool WidgetProperties::isEnabled() const
+{
+    W_D(const WidgetProperties);
+    return d->enabled;
+}
+
+void WidgetProperties::setEnabled(bool enabled)
+{
+    W_D(WidgetProperties);
+    if (d->enabled != enabled) {
+        d->enabled = enabled;
+        emit enabledChanged();
+    }
 }
 
 QVariantMap WidgetProperties::settings() const

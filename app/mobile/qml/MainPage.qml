@@ -22,6 +22,7 @@ import "UiConstants.js" as Ui
 AbstractNavigationPage {
     id: container
     orientationLock: PageOrientation.LockPortrait
+    property bool enabled: true
 
     title: qsTr("Widgets settings")
     onShow: {
@@ -32,10 +33,10 @@ AbstractNavigationPage {
         if (page == "showSettings") {
             window.pageStack.push(settingsPage)
         }
-        if(page == "showInfo") {
+        if (page == "showInfo") {
             window.pageStack.push(infoPage)
         }
-        if(page == "showAbout") {
+        if (page == "showAbout") {
             window.pageStack.push(aboutPage)
         }
     }

@@ -14,42 +14,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-import QtQuick 1.1
-import org.SfietKonstantin.mobile.launcher 1.0
-import org.SfietKonstantin.widgets.colors 1.0
-import "UiConstants.js" as Ui
+#ifndef COREWIDGETS_PLUGIN_H
+#define COREWIDGETS_PLUGIN_H
 
-Item  {
-    width: Ui.TOOLBAR_WIDTH
-    height: Ui.TOOLBAR_HEIGNT
-
-    Image {
-        anchors.fill: parent
-        source: "toolbar.png"
-    }
-
-    Item {
-        anchors.centerIn: parent
-        width: Ui.ICON_SIZE_DEFAULT
-        height: Ui.ICON_SIZE_DEFAULT
-
-        Rectangle {
-            visible: mouseArea.pressed
-            anchors.fill: parent
-            radius: 5
-            color: Colors.aluminiumGray4
-        }
-
-        Image {
-            anchors.fill: parent
-            source: "home.png"
-        }
-
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onClicked: LauncherManagerInstance.visible = false
-    }
-}
+#endif // COREWIDGETS_PLUGIN_H

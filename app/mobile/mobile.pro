@@ -3,22 +3,18 @@ include(../../globals.pri)
 TEMPLATE =          app
 TARGET =            widgets
 
-QT =                core gui declarative xml
+QT =                core gui declarative xml dbus
 CONFIG +=           qdeclarative-boostable
 
 DEFINES +=          'MAIN_QML_PATH=\'\"$${QML_FOLDER}/main.qml\"\''
 CONFIG(noqtimport):DEFINES += 'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
 
 HEADERS +=          webandmailhandler.h \
-#                    applicationinformations.h \
-#                    foldermodel.h \
-#                    applicationsmodel.h \
+                    remotesettingsmanager.h
 
 SOURCES +=          main.cpp \
                     webandmailhandler.cpp \
-#                    applicationinformations.cpp \
-#                    foldermodel.cpp \
-#                    applicationsmodel.cpp \
+                    remotesettingsmanager.cpp
 
 QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \
@@ -33,6 +29,7 @@ QML_FILES +=        qml/main.qml \
                     qml/SettingsPage.qml \
                     qml/DockEditorPage.qml \
                     qml/WidgetEditorPage.qml \
+                    qml/WidgetEditorSelectorSheet.qml \
                     qml/Background.qml \
                     qml/InformationsPage.qml \
                     qml/PackageListPage.qml \
@@ -45,5 +42,3 @@ DATA_FILES +=       data/wallpaper-1.png \
 
 
 include(deployment.pri)
-
-

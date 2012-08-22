@@ -294,6 +294,22 @@ void WidgetsPageListModel::setSettings(Settings *settings)
     }
 }
 
+void WidgetsPageListModel::load()
+{
+    Q_D(WidgetsPageListModel);
+    foreach (WidgetsPageModel *page, d->items) {
+        page->load();
+    }
+}
+
+void WidgetsPageListModel::setEnabled(bool enabled)
+{
+    Q_D(WidgetsPageListModel);
+    foreach (WidgetsPageModel *page, d->items) {
+        page->setEnabled(enabled);
+    }
+}
+
 void WidgetsPageListModel::setCurrentPage(int currentPage)
 {
     Q_D(WidgetsPageListModel);

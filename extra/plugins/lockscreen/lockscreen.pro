@@ -2,7 +2,7 @@ TEMPLATE =      lib
 
 TARGET =        sysuid-screenlock
 
-QT +=           declarative
+QT +=           dbus declarative
 CONFIG +=       qt plugin gui meegotouch system-ui qmsystem2
 
 HEADERS +=      screenlockextensioninterface.h \
@@ -16,13 +16,15 @@ HEADERS +=      screenlockextensioninterface.h \
 #                notification/eventtypestore.h \
 #                notification/notificationparameter.h \
 #                notification/notificationparameters.h \
-                notificationsmodel.h
+                notificationsmodel.h \
+    settingsmanager.h
 
 
 SOURCES +=      screenlockextension.cpp \
                 lockscreen.cpp \
                 lockscreenmanager.cpp \
-                notificationsmodel.cpp
+                notificationsmodel.cpp \
+    settingsmanager.cpp
 
 DESKTOP_FILE += sysuid-screenlock.desktop
 

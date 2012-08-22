@@ -55,6 +55,10 @@ class WidgetsPageModelPrivate;
  * The second removes a widget based on a
  * Widgets::WidgetProperties.
  *
+ * Managing the state of the widgets in a global way
+ * can also be done with
+ * - setEnabled()
+ *
  * Please note that Widget::WidgetProperties objects
  * created with addWidget are automatically linked to
  * the real QML widget, and also to settings. If the properties
@@ -139,6 +143,11 @@ public:
      * this page.
      */
     void load();
+    /**
+     * @brief Set if the widgets are enabled
+     * @param enabled if the widgets are enabled.
+     */
+    void setEnabled(bool enabled);
     /**
      * @short Add a widget
      * @param widget base properties of the widget to add.

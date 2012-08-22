@@ -15,41 +15,20 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
+import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.mobile.launcher 1.0
-import org.SfietKonstantin.widgets.colors 1.0
-import "UiConstants.js" as Ui
 
-Item  {
-    width: Ui.TOOLBAR_WIDTH
-    height: Ui.TOOLBAR_HEIGNT
+Widget  {
+    id: container
+    width: 100
+    height: 100
 
-    Image {
+    LauncherButton {
         anchors.fill: parent
-        source: "toolbar.png"
-    }
-
-    Item {
-        anchors.centerIn: parent
-        width: Ui.ICON_SIZE_DEFAULT
-        height: Ui.ICON_SIZE_DEFAULT
-
-        Rectangle {
-            visible: mouseArea.pressed
-            anchors.fill: parent
-            radius: 5
-            color: Colors.aluminiumGray4
-        }
-
-        Image {
-            anchors.fill: parent
-            source: "home.png"
-        }
-
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onClicked: LauncherManagerInstance.visible = false
+        property string command: container.settings.command == undefined
+                                 ? "" : container.settings.command
+        icon: container.settings.icon == undefined ? "" : container.settings.icon
+        name: container.settings.name == undefined ? "" : container.settings.name
+        onClicked: api.launchApplication(command)
     }
 }

@@ -82,6 +82,11 @@ public:
      * @brief Visibility
      */
     bool visible;
+    /**
+     * @internal
+     * @brief Enabled
+     */
+    bool enabled;
 private:
     Q_DECLARE_PUBLIC(WidgetBaseProperties)
 };

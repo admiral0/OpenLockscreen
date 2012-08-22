@@ -360,6 +360,14 @@ void WidgetsPageModel::load()
     d->load();
 }
 
+void WidgetsPageModel::setEnabled(bool enabled)
+{
+    Q_D(WidgetsPageModel);
+    foreach (WidgetProperties *widget, d->data) {
+        widget->setEnabled(enabled);
+    }
+}
+
 bool WidgetsPageModel::addWidget(WidgetBaseProperties *widget,
                                  Widgets::GridManager *gridManager,
                                  const QVariantMap &settings,

@@ -65,6 +65,10 @@ class WidgetsPageListModelPrivate;
  * the necessary properties. The second remove a widget
  * on a given page.
  *
+ * Managing the state of the widgets in a global way
+ * can also be done with
+ * - setEnabled()
+ *
  * This class needs a Widgets::Settings object to be provided
  * since the models needs to save settings. Important settings
  * keys are widgets/pageCount and widgets/initialPage, that sets
@@ -203,6 +207,17 @@ public Q_SLOTS:
      * @param settings settings.
      */
     void setSettings(Settings *settings);
+    /**
+     * @brief Load
+     *
+     * Load all the pages.
+     */
+    void load();
+    /**
+     * @brief Set if the widgets are enabled
+     * @param enabled if the widgets are enabled.
+     */
+    void setEnabled(bool enabled);
     /**
      * @brief Set current page
      * @param currentPage current page.
