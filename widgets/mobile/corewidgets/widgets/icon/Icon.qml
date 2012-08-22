@@ -29,6 +29,6 @@ Widget  {
                                  ? "" : container.settings.command
         icon: container.settings.icon == undefined ? "" : container.settings.icon
         name: container.settings.name == undefined ? "" : container.settings.name
-        onClicked: api.launchApplication(command)
+        onClicked: LauncherManagerInstance.launchApplication(command)
     }
 }
