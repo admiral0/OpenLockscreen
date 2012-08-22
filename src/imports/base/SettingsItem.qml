@@ -18,7 +18,6 @@ import QtQuick 1.1
 
 Item {
    id: container
-   anchors.centerIn: parent
    property variant settings
 }
 

@@ -15,7 +15,6 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import org.SfietKonstantin.mobile.launcher 1.0
 import org.SfietKonstantin.widgets.colors 1.0
 import "UiConstants.js" as Ui
@@ -27,6 +26,7 @@ import "LauncherButtonIconFunctions.js" as LBIFunctions
 // launcher.
 // It features folders as well as
 // an animation when opened or closed
+
 Item  {
     id: container
     opacity: 0
@@ -46,7 +46,7 @@ Item  {
         anchors.left: container.left; anchors.leftMargin: Ui.MARGIN_XSMALL
         anchors.right: container.right; anchors.rightMargin: Ui.MARGIN_XSMALL
         anchors.top: container.top; anchors.topMargin: Ui.MARGIN_XSMALL
-        anchors.bottom: toolbar.top; anchors.bottomMargin: Ui.MARGIN_LARGE
+        anchors.bottom: toolbar.top; anchors.bottomMargin: Ui.MARGIN_XSMALL
 
         LauncherGrid {
             id: view
@@ -132,12 +132,13 @@ Item  {
             color: Colors.black
             clip: true
 
-            Label {
+            Text {
                 id: subfolderLabel
                 anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
                 anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
                 anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
                 font.pixelSize: Ui.FONT_SIZE_DEFAULT
+                color: Colors.white
             }
 
             Item {
@@ -174,16 +175,9 @@ Item  {
     }
 
 
-    ToolBar {
+    LauncherToolbar {
         id: toolbar
         anchors.bottom: parent.bottom
-        tools: ToolBarLayout {
-            ToolIcon {
-                anchors.centerIn: parent
-                iconId: "toolbar-home"
-                onClicked: LauncherManagerInstance.visible = false
-            }
-        }
     }
 
     states: State {
@@ -191,9 +185,6 @@ Item  {
         PropertyChanges {
             target: container
             opacity: 1
-        }
-        PropertyChanges {
-            target: container
             scale: 1
         }
     }

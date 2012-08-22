@@ -10,6 +10,7 @@ contains(MEEGO_EDITION,harmattan):CONFIG += meegotouch
 
 HEADERS +=      widgets_global.h \
                 contextbase_p.h \
+                qmltree_p.h \
                 builderpatterninterfaces_p.h \
                 tools.h \
                 version.h \
@@ -33,6 +34,7 @@ HEADERS +=      widgets_global.h \
                 eventtimer.h \
 
 SOURCES +=      contextbase_p.cpp \
+                qmltree_p.cpp \
                 tools.cpp \
                 version.cpp \
                 identifiedelementinterface.cpp \

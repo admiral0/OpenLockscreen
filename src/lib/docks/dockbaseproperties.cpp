@@ -28,6 +28,7 @@
 #include <QtCore/QStringList>
 
 #include "tools.h"
+#include "qmltree_p.h"
 
 namespace Widgets
 {
@@ -152,99 +153,154 @@ DockBaseProperties * DockBaseProperties::fromQmlFile(const QString &qmlFile,
 
     QString fileName = fileInfo.fileName();
 
-    QFile file (qmlFile);
-    if (!file.open(QIODevice::ReadOnly)) {
+//    QFile file (qmlFile);
+//    if (!file.open(QIODevice::ReadOnly)) {
+//        return 0;
+//    }
+
+//    // Cleaned version of the file
+//    QString data;
+
+//    bool haveBlockComment = false;
+//    QRegExp commentLine ("//(.+)");
+//    QRegExp blockCommentLineStart ("/\\*.*");
+//    QRegExp blockCommentLineEnd ("[^*/]*\\*/");
+//    while (!file.atEnd()) {
+//        QString line = file.readLine();
+//        line = line.remove(commentLine);
+
+//        if (line.indexOf(blockCommentLineStart) != -1) {
+//            haveBlockComment = true;
+//            line = line.remove(blockCommentLineStart);
+//        }
+
+//        if (haveBlockComment) {
+//            int indexOfBlockCommentLineEnd = line.indexOf(blockCommentLineEnd);
+//            if (indexOfBlockCommentLineEnd != -1) {
+//                line = line.right(line.size() - indexOfBlockCommentLineEnd);
+//                line = line.remove(blockCommentLineEnd);
+
+//                haveBlockComment = false;
+//            } else {
+//                line = "";
+//            }
+//        }
+
+//        line = line.trimmed();
+//        if (!line.isEmpty()) {
+//            line = line.append("\n");
+//            line = line.replace(";", "\n");
+//            line = line.replace("{", "\n{\n");
+//            line = line.replace("}", "\n}\n");
+//            data.append(line);
+//        }
+//    }
+
+//    // Prevent anchors brackets to be discarded
+//    QRegExp anchorsReplaceRegExp ("anchors\\s*\\{([^\\{]*)\\}");
+//    data.replace(anchorsReplaceRegExp, QString("anchors <\\1>"));
+
+//    int firstBracket = data.indexOf("{");
+//    firstBracket = data.indexOf("{", firstBracket + 1);
+
+//    int lastBracket = data.lastIndexOf("}");
+//    lastBracket = data.lastIndexOf("}", lastBracket - data.size());
+
+//    data = data.remove(firstBracket, lastBracket - firstBracket - 1);
+
+
+//    // Check if the document is valid
+//    if (!data.contains("import org.SfietKonstantin.widgets.docks")) {
+//        return 0;
+//    }
+
+//    bool haveDock = false;
+//    QRegExp dockRegExp ("Dock(\\s*)\\{");
+//    if (data.indexOf(dockRegExp) != -1) {
+//        haveDock = true;
+//    }
+
+//    if (!haveDock) {
+//        return 0;
+//    }
+
+//    // Width and height
+//    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
+//    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
+
+//    int width = -1;
+//    int height = -1;
+//    if (widthRegExp.indexIn(data) != -1) {
+//        width = widthRegExp.cap(1).toInt();
+//    }
+//    if (heightRegExp.indexIn(data) != -1) {
+//        height = heightRegExp.cap(1).toInt();
+//    }
+//    QSize size (width, height);
+
+//    // Anchors
+//    QStringList anchors;
+//    anchors << "top" << "bottom" << "left" << "right";
+//    QHash<QString, bool> anchorsOk;
+//    foreach (QString anchor, anchors) {
+//        QString anchorsRegExpString = QString("anchors[^>]*%1\\s*:\\s*parent\\s*\\.\\s*%1");
+//        QRegExp anchorsRegExp (anchorsRegExpString.arg(anchor));
+//        bool ok = (anchorsRegExp.indexIn(data) != -1);
+//        anchorsOk.insert(anchor, ok);
+//    }
+
+//    bool anchorsTop = anchorsOk.value("top");
+//    bool anchorsBottom = anchorsOk.value("bottom");
+//    bool anchorsLeft = anchorsOk.value("left");
+//    bool anchorsRight = anchorsOk.value("right");
+
+//    if (!DockBasePropertiesPrivate::checkAnchorsValid(anchorsTop, anchorsBottom,
+//                                                      anchorsLeft, anchorsRight,
+//                                                      size)) {
+//        return 0;
+//    }
+
+    QmlTree *tree = QmlTree::fromQml(qmlFile);
+
+    if (!tree) {
         return 0;
     }
 
-    // Cleaned version of the file
-    QString data;
-
-    bool haveBlockComment = false;
-    QRegExp commentLine ("//(.+)");
-    QRegExp blockCommentLineStart ("/\\*.*");
-    QRegExp blockCommentLineEnd ("[^*/]*\\*/");
-    while (!file.atEnd()) {
-        QString line = file.readLine();
-        line = line.remove(commentLine);
-
-        if (line.indexOf(blockCommentLineStart) != -1) {
-            haveBlockComment = true;
-            line = line.remove(blockCommentLineStart);
-        }
-
-        if (haveBlockComment) {
-            int indexOfBlockCommentLineEnd = line.indexOf(blockCommentLineEnd);
-            if (indexOfBlockCommentLineEnd != -1) {
-                line = line.right(line.size() - indexOfBlockCommentLineEnd);
-                line = line.remove(blockCommentLineEnd);
-
-                haveBlockComment = false;
-            } else {
-                line = "";
-            }
-        }
-
-        line = line.trimmed();
-        if (!line.isEmpty()) {
-            line = line.append("\n");
-            line = line.replace(";", "\n");
-            line = line.replace("{", "\n{\n");
-            line = line.replace("}", "\n}\n");
-            data.append(line);
+    // Import
+    bool importOk = false;
+    foreach (QString import, tree->imports()) {
+        if (import.contains("org.SfietKonstantin.widgets.docks")) {
+            importOk = true;
         }
     }
 
-    // Prevent anchors brackets to be discarded
-    QRegExp anchorsReplaceRegExp ("anchors\\s*\\{([^\\{]*)\\}");
-    data.replace(anchorsReplaceRegExp, QString("anchors <\\1>"));
-
-    int firstBracket = data.indexOf("{");
-    firstBracket = data.indexOf("{", firstBracket + 1);
-
-    int lastBracket = data.lastIndexOf("}");
-    lastBracket = data.lastIndexOf("}", lastBracket - data.size());
-
-    data = data.remove(firstBracket, lastBracket - firstBracket - 1);
-
-
-    // Check if the document is valid
-    if (!data.contains("import org.SfietKonstantin.widgets.docks")) {
+    if (!importOk) {
+        delete tree;
         return 0;
     }
 
-    bool haveDock = false;
-    QRegExp dockRegExp ("Dock(\\s*)\\{");
-    if (data.indexOf(dockRegExp) != -1) {
-        haveDock = true;
-    }
-
-    if (!haveDock) {
+    // Name
+    if (tree->name() != "Dock") {
+        delete tree;
         return 0;
     }
 
-    // Width and height
-    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
-    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
-
+    // Size and anchors
     int width = -1;
     int height = -1;
-    if (widthRegExp.indexIn(data) != -1) {
-        width = widthRegExp.cap(1).toInt();
+    if (tree->hasProperty("width")) {
+        width = tree->property("width").toInt();
     }
-    if (heightRegExp.indexIn(data) != -1) {
-        height = heightRegExp.cap(1).toInt();
+    if (tree->hasProperty("height")) {
+        height = tree->property("height").toInt();
     }
-    QSize size (width, height);
 
-    // Anchors
     QStringList anchors;
     anchors << "top" << "bottom" << "left" << "right";
-    QHash<QString, bool> anchorsOk;
+    QMap<QString, bool> anchorsOk;
     foreach (QString anchor, anchors) {
-        QString anchorsRegExpString = QString("anchors[^>]*%1\\s*:\\s*parent\\s*\\.\\s*%1");
-        QRegExp anchorsRegExp (anchorsRegExpString.arg(anchor));
-        bool ok = (anchorsRegExp.indexIn(data) != -1);
+        bool ok = (tree->property(QString("anchors.%1").arg(anchor))
+                   == QString("parent.%1").arg(anchor));
         anchorsOk.insert(anchor, ok);
     }
 
@@ -253,14 +309,10 @@ DockBaseProperties * DockBaseProperties::fromQmlFile(const QString &qmlFile,
     bool anchorsLeft = anchorsOk.value("left");
     bool anchorsRight = anchorsOk.value("right");
 
-    if (!DockBasePropertiesPrivate::checkAnchorsValid(anchorsTop, anchorsBottom,
-                                                      anchorsLeft, anchorsRight,
-                                                      size)) {
-        return 0;
-    }
+    delete tree;
 
     return new DockBaseProperties(fileName, disambiguation, settingsFileName,
-                                  size.width(), size.height(),
+                                  width, height,
                                   anchorsTop, anchorsBottom, anchorsLeft, anchorsRight,
                                   parent);
 

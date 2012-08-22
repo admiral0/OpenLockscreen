@@ -40,6 +40,7 @@
  *
  * Getting started
  * - \subpage tutorials
+ * - \subpage createWidgetsAndDocks
  * - \subpage pluginList
  */
 /**
@@ -57,6 +58,11 @@
  *
  * A widgets view is composed of a display, and a model.
  * @todo continue this.
+ */
+/**
+ * \page createWidgetsAndDocks Create widgets and docks
+ *
+ * \todo continue this page
  */
 /** \page pluginList List of all the plugins
  *
@@ -103,18 +109,231 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
- * While imported, this plugin provides a global model that is used to represent
- * the widgets in different screens. This model have loading and saving capabilities,
- * and can be edited easliy. The model can be accessed through the global
- * variable \e WidgetsPageListModelInstance.
+ * \section pluginBaseDeclaredComponents Declared components
  *
- * You can use the @e WidgetsPageListModelInstance in any view, but we recommand
- * using provided views such as @e WidgetsHorizontalPageView, or subclassing the
- * provided @e WidgetsView.
+ * \subsection pluginBaseComponents Components
  *
- * @see Widgets::WidgetsPageListModel.
+ * This plugin provides several components, that are all related to
+ * basic widgets management. The following C++ components are declared
+ *
+ * - Widgets::Settings
+ * - Widgets::SettingsEntry
+ * - Widgets::GridManager
+ * - Widgets::WidgetBaseProperties
+ * - Widgets::WidgetProperties
+ * - Widgets::EventTimer
+ *
+ * And the following QML components are declared
+ *
+ * - \ref qmlWidget
+ * - \ref qmlSettingsItem
+ * - \ref qmlWidgetsPage
+ * - \ref qmlWidgetsView
+ * - \ref qmlWidgetsHorizontalPageView
+ *
+ * See also \subpage pluginBaseQmlComponents for the list of declared QML
+ * components.
+ *
+ * \subsection pluginBaseGlobalInstance Global instance
+ *
+ * In addition to those components, importing this plugin also set
+ * some global instances of important classes.
+ *
+ * - \b WidgetsPageListModelInstance
+ * - \b ProviderManagerInstance
+ * - \b WidgetConfigurationHelperInstance
+ *
+ * \section pluginBaseWidgetsSystem The widgets system
+ *
+ * Instances of widgets are controlled by models, that
+ * contains the type, the position, and some settings of
+ * all widgets in a given page.
+ *
+ * The global \b WidgetsPageListModelInstance is the model
+ * that represents all the pages in the widgets view. It is
+ * an instance of Widgets::WidgetsPageListModel and
+ * is actually used to store models, that are instances of
+ * Widgets::WidgetsPageModel.
+ *
+ * The page model stores widgets properties using
+ * Widgets::WidgetProperties, that contains all information
+ * required to create widgets.
+ *
+ * These models are also used to store settings related to
+ * widgets, and do this in an automated way. Settings are
+ * stored using QDesktopServices::DataLocation.
+ *
+ * \section pluginBaseWriteWidget Writing your widget
+ *
+ * \subsection pluginBaseWriteWidgetWidget Write a widget
+ *
+ * A widget is very simple to write, since it is a simple QML Item
+ * component. It have a some more properties, that are used to
+ * make them customizable (see \ref qmlWidget).
+ *
+ * Be sure to set either the size or the minimum and maximum
+ * size of the widget, or the widget would not be correct, and
+ * would not be recognized.
+ *
+ * You can use several files for your widget, but be sure to
+ * register the base widget file to a provider (see \ref providers
+ * for more information).
+ *
+ * \subsection pluginBaseWriteWidgetSettings Write a widget settings
+ *
+ * Writing a widget settings is a bit trickier. Since QML do not
+ * manage complex C++ types very nicely, it is hard to pass variant-map
+ * to the property system.
+ *
+ * To avoid that, a helper system has been made, and the global
+ * instance WidgetConfigurationHelperInstance is used to help
+ * managing settings.
+ *
+ * When you create a widget settings components, you have to
+ * subclass the \ref qmlSettingsItem element. This element have
+ * a property where current settings are passed.
+ *
+ * When you want to save settings, you have to ask the configuration
+ * helper using Widgets::WidgetConfigurationHelper::saveSettings().
+ * You might also react from Widgets::WidgetConfigurationHelper::saveSettingsRequested()
+ * signal to save your settings.
  */
-
+/**
+ * @page pluginBaseQmlComponents QML components
+ *
+ * Documentation for components that are declared in QML.
+ *
+ * \section qmlWidget Widget
+ *
+ * \b Widget is the base QML component that is used to
+ * represent a widget. All widgets used in libwidgets have
+ * to have this component as a parent.
+ *
+ * While writing a widget, you should always provide at least
+ * the size of the widget, using \b width and \b height. You
+ * might also provide the minimum and maximum size, but this
+ * feature is not yet used, and the widget will take the minimum
+ * size.
+ *
+ * Widget inherits from Item, so you should also see documentation
+ * for Item.
+ *
+ * \subsection qmlWidgetProperties Properties
+ *
+ * - \b enabled
+ *
+ * This property is used to notify if the widget should be enabled
+ * and thus, do heavy processing or should be suspended.
+ *
+ * - \b settings
+ *
+ * This property holds the widget properties, that are passed as
+ * a variant-map. On QML side, settings can be accessed as an object.
+ *
+ * - \b minimumWidth
+ * - \b minimumHeight
+ * - \b maximumWidth
+ * - \b maximumHeight
+ *
+ * These properties hold the range of size that the widget can
+ * take. They are currently unused.
+ *
+ * \section qmlSettingsItem SettingsItem
+ *
+ * This component is used as a base for components that are used
+ * to represent settings panel, and that provides settings to
+ * the widget.
+ *
+ * SettingsItem inherits from Item, so you should also see documentation
+ * for Item.
+ *
+ * \subsection qmlSettingsItemProperties Properties
+ *
+ * - \b settings
+ *
+ * This property hold the current settings that the widget have. They
+ * cannot be modified on their own, so you should use the helper to
+ * set them. See \ref pluginBaseWriteWidgetSettings for more information.
+ *
+ * \section qmlWidgetsPage WidgetsPage
+ *
+ * The widget page is used to hold a page of widgets. It can be used to
+ * implement a view with ease.
+ *
+ * WidgetsPage inherits from Item, so you should also see documentation
+ * for Item.
+ *
+ * \subsection qmlWidgetsPageProperties Properties
+ *
+ * - \b pageModel
+ *
+ * This property is the model used to draw the widgets. It should be
+ * a Widgets::WidgetsPageModel.
+ *
+ * \section qmlWidgetsView WidgetsView
+ *
+ * The widgets view is a view that provide some important components
+ * for displaying widgets. It manages a grid manager and provides
+ * settings to setup it.
+ *
+ * It also creates an item that is used to contain the widgets view,
+ * and take the size of the grid in account.
+ *
+ * WidgetsView inherits from Item, so you should also see documentation
+ * for Item.
+ *
+ * \subsection qmlWidgetsViewProperties Properties
+ *
+ * - \b gridManagerInstance
+ *
+ * This property holds the grid manager instance that this view uses
+ * to manage the grid. It can be very useful for layouting widgets. It
+ * is used, for example, by the drag manager to compute the correct
+ * position of widgets.
+ *
+ * - \b content
+ *
+ * Content of the view. This property should be set to an item that
+ * contains the implementation of the widgets view.
+ *
+ * - \b contentItem
+ *
+ * This property holds the item that is used to contain the widgets view.
+ * It is provided only for indicating the position of the content. In
+ * order to set a content, the \e content property should be used.
+ *
+ * - \b busy
+ *
+ * This property is used to indicate that the view is busy, for example
+ * if it is scrolled. While busy, some indicators, like the drag indicators,
+ * should not be displayed.
+ *
+ * While implementing a view, this property should be set while the view
+ * is busy, in order to avoid some graphical glitches, like drag indicators
+ * that are not synced with the view.
+ *
+ * \section qmlWidgetsHorizontalPageView WidgetsHorizontalPageView
+ *
+ * Inherits from \ref qmlWidgetsView.
+ *
+ * The horizontal page view is an implementation of a view, providing
+ * many pages that can be scrolled horizontally. In most of the cases,
+ * this component should be used to display widgets.
+ *
+ * \subsection qmlWidgetsHorizontalPageViewProperties Properties
+ *
+ * - \b view
+ *
+ * This property provides the QML ListView that is used to display the
+ * different pages. This view can be used, for example, by a background
+ * that have a parallax effect.
+ *
+ * - \b initialized() [signal]
+ *
+ * This signal is emitted when the view is initialized. It can be used, for
+ * example, by a background that have a parallax effect, in order to take
+ * in account the initialX offset.
+ */
 /**
  * @short Namespace for base plugin
  */

@@ -1,4 +1,4 @@
-AutoGenerateAegisFile
+<!--AutoGenerateAegisFile-->
 <!-- Aegis manifest declares the security credentials required by an
      application to run correctly. By default, a manifest file will be
      created or updated automatically as a part of build.
@@ -29,7 +29,7 @@ AutoGenerateAegisFile
 
 -->
 <aegis>
-    <request policy="add">
+    <!--<request policy="add">-->
 
         <!-- Make a GSM call, send text messages (SMS). -->
     <!--
@@ -42,7 +42,7 @@ AutoGenerateAegisFile
     -->
 
         <!-- Read access to data stored in tracker. -->
-    <credential name="TrackerReadAccess" />
+    <!--<credential name="TrackerReadAccess" />-->
 
         <!-- Read and write access to data stored in tracker. -->
     <!--
@@ -61,8 +61,22 @@ AutoGenerateAegisFile
         <credential name="GRP::audio" />
     -->
 
-    </request>
+    <!--</request>
 
     <for path="/opt/widgets/bin/widgets" />
+    <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" id="" />-->
+    <request policy="add">
+        <credential name="Cellular" />
+        <credential name="TrackerReadAccess" />
+        <credential name="TrackerWriteAccess" />
+        <credential name="mce::CallStateControl" />
+        <credential name="timed::TimeControl" />
+        <credential name="dsme::DeviceStateControl" />
+        <credential name="mce::TKLockControl" />
+        <credential name="mce::DeviceLockControl" />
+    </request>
+    
+    <for path="/opt/widgets/bin/widgets" />
     <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" id="" />
+    <for path="system-ui::/usr/bin/sysuid" />
 </aegis>

@@ -57,6 +57,7 @@ GridView {
                 NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
             }
         }
+
     }
 
     Behavior on contentY {

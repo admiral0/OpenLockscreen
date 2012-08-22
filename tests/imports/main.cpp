@@ -16,7 +16,7 @@
 
 /**
  * @internal
- * @file tests/qml-plugins/main.cpp
+ * @file tests/imports/main.cpp
  * @short Entry point of the tests for base
  */
 

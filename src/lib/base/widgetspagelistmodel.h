@@ -66,7 +66,10 @@ class WidgetsPageListModelPrivate;
  * on a given page.
  *
  * This class needs a Widgets::Settings object to be provided
- * since the models needs to save settings.
+ * since the models needs to save settings. Important settings
+ * keys are widgets/pageCount and widgets/initialPage, that sets
+ * the number of pages as well as the initial page when the
+ * widgets are presented at the first time.
  */
 class WidgetsPageListModel : public QAbstractListModel
 {

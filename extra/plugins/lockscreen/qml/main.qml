@@ -26,6 +26,7 @@ Rectangle {
     id: container
     anchors.fill: parent
     color: "black"
+    visible: LockScreenManager.visible
 
     Component.onCompleted: {
         WidgetsPageListModelInstance.settings = widgetsSettings
@@ -75,36 +76,46 @@ Rectangle {
         }
     }
 
-    HorizontalParallaxBackground {
-        id: background
-        anchors.fill: parent
-        settings: widgetsSettings
-        horizontalPageView: widgetsPage
-    }
+    Item {
+        id: content
+        anchors.top: parent.top; anchors.bottom: unlocker.top
+        anchors.left: parent.left; anchors.right: parent.right
 
-    DockedView {
-        content: Item {
-            id: widgets
+        HorizontalParallaxBackground {
+            id: background
             anchors.fill: parent
+            settings: widgetsSettings
+            horizontalPageView: widgetsPage
+        }
 
-            WidgetsHorizontalPageView {
-                id: widgetsPage
+        DockedView {
+            content: Item {
+                id: widgets
+                anchors.fill: parent
+
+                WidgetsHorizontalPageView {
+                    id: widgetsPage
+                }
             }
+        }
+
+        Launcher {
+            id: launcher
+            anchors.fill: parent
         }
     }
 
-    Launcher {
-        id: launcher
-        anchors.fill: parent
-    }
-
-    MouseArea {
+    Rectangle {
         id: unlocker
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: 20
-        onClicked: LockScreenManager.unlock()
+        height: 15
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: LockScreenManager.unlock()
+        }
     }
 
     Connections {

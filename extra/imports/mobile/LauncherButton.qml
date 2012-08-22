@@ -15,7 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import org.SfietKonstantin.widgets.colors 1.0
 import "UiConstants.js" as Ui
 
 // Button used for a launcher
@@ -45,7 +45,7 @@ Item  {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
-        Label {
+        Text {
             id: text
             anchors.top: icon.bottom
             anchors.topMargin: Ui.MARGIN_SMALL
@@ -54,6 +54,7 @@ Item  {
             font.pixelSize: Ui.FONT_SIZE_XXSMALL
             wrapMode: Text.NoWrap
             elide: Text.ElideRight
+            color: Colors.white
         }
     }
 

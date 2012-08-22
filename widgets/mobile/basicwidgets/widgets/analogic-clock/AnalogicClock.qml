@@ -44,22 +44,22 @@ import QtMobility.systeminfo 1.2
 
 Widget {
     id: clock
-    width: 200
-    height: 200
 
     property int hours
     property int minutes
     property bool night: false
     property string dayBackgroundSource: "analogic-clock-background.png"
     property string nightBackgroundSource: "analogic-clock-night-background.png"
-
+    
     Component.onCompleted: changeTime()
     function changeTime() {
-        var date = new Date;
+        var date = new Date
         hours = date.getHours()
         night = ( hours < 7 || hours > 19 )
         minutes = date.getMinutes()
     }
+    width: 200
+    height: 200
 
     AlignedTimer {
         minimumInterval: 1

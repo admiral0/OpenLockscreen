@@ -23,7 +23,10 @@ OTHER_FILES =   qmldir \
                 LauncherButtonIcon.qml \
                 LauncherButton.qml \
                 LauncherGrid.qml \
+                LauncherToolbar.qml \
                 Launcher.qml \
+                toolbar.png \
+                home.png \
 
 
 include(deployment.pri)

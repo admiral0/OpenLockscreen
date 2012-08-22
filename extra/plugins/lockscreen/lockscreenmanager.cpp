@@ -15,28 +15,53 @@
  ****************************************************************************************/
 
 #include "lockscreenmanager.h"
-
-#include <QTextStream>
-#include <QFile>
+#include <QtCore/QFile>
 
 LockScreenManager::LockScreenManager(QObject *parent) :
     QObject(parent)
 {
+    m_visible = true;
+    m_unlocked = false;
+    m_state = new MeeGo::QmDisplayState(this);
+
+    connect(m_state, SIGNAL(displayStateChanged(MeeGo::QmDisplayState::DisplayState)),
+            this, SLOT(slotDisplayStateChanged(MeeGo::QmDisplayState::DisplayState)));
+}
+
+bool LockScreenManager::isVisible() const
+{
+    return m_visible;
 }
 
 void LockScreenManager::unlock()
 {
-    debug("Unlocked");
+    setVisible(false);
+    m_unlocked = true;
     emit unlocked();
 }
 
-void LockScreenManager::debug(const QString &value)
+void LockScreenManager::setVisible(bool visible)
 {
-    QFile * outFile = new QFile("/home/developer/lockscreenlog", this);
-    if (!outFile->open(QIODevice::WriteOnly | QIODevice::Append)) {
-        return;
+    if (m_visible != visible) {
+        m_visible = visible;
+        emit visibleChanged();
     }
-    outFile->write(value.toAscii());
-    outFile->write("\n");
-    outFile->close();
+}
+
+
+void LockScreenManager::slotDisplayStateChanged(MeeGo::QmDisplayState::DisplayState state)
+{
+    switch(state) {
+    case MeeGo::QmDisplayState::On:
+        if (!m_unlocked) {
+            setVisible(true);
+        }
+        break;
+    case MeeGo::QmDisplayState::Off:
+        m_unlocked = false;
+        break;
+    default:
+        break;
+
+    }
 }

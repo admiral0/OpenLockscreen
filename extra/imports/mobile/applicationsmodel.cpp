@@ -366,7 +366,7 @@ QString ApplicationsModelPrivate::findIconPath(const QString &iconName,
 
 
     // Failed to found the icon
-    return "image://theme/icon-l-default-application";
+    return "/usr/share/themes/blanco/meegotouch/icons/icon-l-default-application";
 }
 
 ////// End of private class //////

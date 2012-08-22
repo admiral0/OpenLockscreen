@@ -17,6 +17,11 @@
 #include "widgetconfigurationhelper.h"
 #include <QtCore/QDebug>
 
+/**
+ * @file widgetconfigurationhelper.cpp
+ * @short Implementation of Widgets::WidgetConfigurationHelper
+ */
+
 namespace Widgets
 {
 

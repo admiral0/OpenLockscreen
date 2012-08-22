@@ -3,7 +3,7 @@ TEMPLATE =      lib
 TARGET =        sysuid-screenlock
 
 QT +=           declarative
-CONFIG +=       qt plugin gui meegotouch system-ui
+CONFIG +=       qt plugin gui meegotouch system-ui qmsystem2
 
 HEADERS +=      screenlockextensioninterface.h \
                 screenlockextension.h \

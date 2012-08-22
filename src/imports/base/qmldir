@@ -1,8 +1,7 @@
 plugin widgetsbase
-WidgetManager 1.0 WidgetManager.qml
-SettingsItem 1.0 SettingsItem.qml
 Widget 1.0 Widget.qml
+SettingsItem 1.0 SettingsItem.qml
 WidgetContainer 1.0 WidgetContainer.qml
-Dock 1.0 Dock.qml
+WidgetsPage 1.0 WidgetsPage.qml
 WidgetsView 1.0 WidgetsView.qml
 WidgetsHorizontalPageView 1.0 WidgetsHorizontalPageView.qml

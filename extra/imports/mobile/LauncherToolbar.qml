@@ -14,28 +14,42 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-.pragma library
+import QtQuick 1.1
+import org.SfietKonstantin.mobile.launcher 1.0
+import org.SfietKonstantin.widgets.colors 1.0
+import "UiConstants.js" as Ui
 
-function mainIcon(isApplication, properties) {
-    if(isApplication) {
-        return properties.icon
-    } else {
-        if(properties.count == 0) {
-            return "/usr/share/themes/blanco/meegotouch/icons/icon-l-folder-empty.png"
-        } else {
-            return "/usr/share/themes/blanco/meegotouch/icons/icon-l-folder.png"
+Item  {
+    width: Ui.TOOLBAR_WIDTH
+    height: Ui.TOOLBAR_HEIGNT
+
+    Image {
+        anchors.fill: parent
+        source: "toolbar.png"
+    }
+
+    Item {
+        anchors.centerIn: parent
+        width: Ui.ICON_SIZE_DEFAULT
+        height: Ui.ICON_SIZE_DEFAULT
+
+        Rectangle {
+            visible: mouseArea.pressed
+            anchors.fill: parent
+            radius: 5
+            color: Colors.aluminiumGray4
+        }
+
+        Image {
+            anchors.fill: parent
+            source: "home.png"
+        }
+
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            onClicked: LauncherManagerInstance.visible = false
         }
     }
-}
 
-function subIcon(isApplication, properties, index) {
-    if(isApplication) {
-        return ""
-    } else {
-        if(properties.count <= index) {
-            return ""
-        } else {
-            return properties.icon(index)
-        }
-    }
 }

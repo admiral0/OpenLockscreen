@@ -18,19 +18,27 @@
 #define LOCKSCEENMANAGER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <qmsystem2/qmdisplaystate.h>
 
 class LockScreenManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool visible READ isVisible NOTIFY visibleChanged)
 public:
     explicit LockScreenManager(QObject *parent = 0);
-
+    bool isVisible() const;
 Q_SIGNALS:
     void unlocked();
+    void visibleChanged();
 public Q_SLOTS:
-    void debug(const QString &value);
     void unlock();
+private:
+    void setVisible(bool visible);
+    MeeGo::QmDisplayState *m_state;
+    bool m_visible;
+    bool m_unlocked;
+private slots:
+    void slotDisplayStateChanged(MeeGo::QmDisplayState::DisplayState state);
 
 };
 

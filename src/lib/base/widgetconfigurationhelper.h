@@ -17,6 +17,11 @@
 #ifndef WIDGETS_WIDGETCONFIGURATIONHELPER_H
 #define WIDGETS_WIDGETCONFIGURATIONHELPER_H
 
+/**
+ * @file widgetconfigurationhelper.h
+ * @short Definition of Widgets::WidgetConfigurationHelper
+ */
+
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
 

@@ -17,30 +17,17 @@
 .pragma library
 
 // Margins
-//var MARGIN_XXLARGE              = 48
-//var MARGIN_XLARGE               = 32
 var MARGIN_LARGE                = 24
 var MARGIN_MLARGE               = 20
 var MARGIN_DEFAULT              = 16
-//var MARGIN_MSMALL               = 12
 var MARGIN_SMALL                = 8
 var MARGIN_XSMALL               = 4
 
-//// Headers
-//var HEADER_HEIGHT_PORTRAIT      = 72
-//var HEADER_HEIGHT_LANDSCAPE     = 46
-
-//// Icons
+// Icons
 var ICON_SIZE_XLARGE            = 80
-//var ICON_SIZE_LARGE             = 64
-//var ICON_SIZE_DEFAULT           = 48
+var ICON_SIZE_DEFAULT           = 40
 var ICON_SIZE_SMALL             = 26
 
-//// List
-//var LIST_ITEM_HEIGHT_DEFAULT    = 80
-
-//// Widget buttons
-//var WIDGET_BUTTON_SIZE          = 64
 
 // Application launcher
 var ICON_FOLDER_MARGIN          = 10
@@ -48,15 +35,13 @@ var APPLICATION_LAUNCHER_WIDTH  = 110
 var APPLICATION_LAUNCHER_HEIGHT = 110
 var SUBFOLDER_BOTTOM_MARGIN     = 90
 
+// Toolbar
+var TOOLBAR_WIDTH               = 480
+var TOOLBAR_HEIGNT              = 72
+
 //Font size
-//var FONT_SIZE_XXLARGE           = 48;
-//var FONT_SIZE_XLARGE            = 32;
 var FONT_SIZE_LARGE             = 28;
-//var FONT_SIZE_MLARGE            = 26;
 var FONT_SIZE_DEFAULT           = 24;
-//var FONT_SIZE_MSMALL            = 22;
-//var FONT_SIZE_SMALL             = 20;
-//var FONT_SIZE_XSMALL            = 18;
 var FONT_SIZE_XXSMALL           = 16;
 
 //// Font colors
@@ -65,8 +50,6 @@ var FONT_SIZE_XXSMALL           = 16;
 //var FONT_COLOR_SECONDARY        = "#8C8C8C"
 //var FONT_COLOR_INVERTED_SECONDARY = "#B2B2B4"
 
-////Animations
-//var ANIMATION_DURATION_SLOW     = 1200
-//var ANIMATION_DURATION_NORMAL   = 800
+//Animations
 var ANIMATION_DURATION_FAST     = 400
 var ANIMATION_DURATION_XFAST    = 100

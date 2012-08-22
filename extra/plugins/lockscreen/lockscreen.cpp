@@ -26,8 +26,6 @@ LockScreen::LockScreen(NotificationsModel *notificationsModel, QGraphicsWidget *
 {
     LockScreenManager *manager = new LockScreenManager(this);
 
-    manager->debug("Initialized");
-
     QCoreApplication::instance()->setOrganizationName("SfietKonstantin");
     QCoreApplication::instance()->setApplicationName("Widgets");
 
@@ -36,11 +34,6 @@ LockScreen::LockScreen(NotificationsModel *notificationsModel, QGraphicsWidget *
     view->rootContext()->setContextProperty("LockScreenManager", manager);
     view->rootContext()->setContextProperty("NotificationsModel", notificationsModel);
     view->setSource(QUrl("/opt/widgets/lockscreen/qml/main.qml"));
-
-    foreach (QDeclarativeError error, view->errors()) {
-        manager->debug(error.toString());
-    }
-
 
     setWidget(view);
 

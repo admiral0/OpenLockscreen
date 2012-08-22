@@ -25,6 +25,9 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
+#include <QtCore/QDebug>
+
+#include "qmltree_p.h"
 
 namespace Widgets
 {
@@ -98,109 +101,59 @@ WidgetBaseProperties * WidgetBaseProperties::fromQmlFile(const QString &qmlFile,
 
     QString fileName = fileInfo.fileName();
 
-    QFile file (qmlFile);
-    if (!file.open(QIODevice::ReadOnly)) {
+    QmlTree *tree = QmlTree::fromQml(qmlFile);
+
+    if (!tree) {
         return 0;
     }
 
-    // Cleaned version of the file
-    QString data;
-
-    bool haveBlockComment = false;
-    QRegExp commentLine ("//(.+)");
-    QRegExp blockCommentLineStart ("/\\*.*");
-    QRegExp blockCommentLineEnd ("[^*/]*\\*/");
-    while (!file.atEnd()) {
-        QString line = file.readLine();
-        line = line.remove(commentLine);
-
-        if (line.indexOf(blockCommentLineStart) != -1) {
-            haveBlockComment = true;
-            line = line.remove(blockCommentLineStart);
-        }
-
-        if (haveBlockComment) {
-            int indexOfBlockCommentLineEnd = line.indexOf(blockCommentLineEnd);
-            if (indexOfBlockCommentLineEnd != -1) {
-                line = line.right(line.size() - indexOfBlockCommentLineEnd);
-                line = line.remove(blockCommentLineEnd);
-
-                haveBlockComment = false;
-            } else {
-                line = "";
-            }
-        }
-
-        line = line.trimmed();
-        if (!line.isEmpty()) {
-            line = line.append("\n");
-            line = line.replace(";", "\n");
-            line = line.replace("{", "\n{\n");
-            line = line.replace("}", "\n}\n");
-            data.append(line);
+    // Import
+    bool importOk = false;
+    foreach (QString import, tree->imports()) {
+        if (import.contains("org.SfietKonstantin.widgets")) {
+            importOk = true;
         }
     }
 
-    int firstBracket = data.indexOf("{");
-    firstBracket = data.indexOf("{", firstBracket + 1);
-
-    int lastBracket = data.lastIndexOf("}");
-    lastBracket = data.lastIndexOf("}", lastBracket - data.size());
-
-    data = data.remove(firstBracket, lastBracket - firstBracket - 1);
-
-    // Check if the document is valid
-    if(!data.contains("import org.SfietKonstantin.widgets")) {
+    if (!importOk) {
+        delete tree;
         return 0;
     }
 
-    bool haveWidget = false;
-    QRegExp dockRegExp ("Widget(\\s*)\\{");
-    if (data.indexOf(dockRegExp) != -1) {
-        haveWidget = true;
-    }
-
-    if (!haveWidget) {
+    // Name
+    if (tree->name() != "Widget") {
+        delete tree;
         return 0;
     }
 
-    // Width and height
-    QRegExp minimumWidthRegExp ("minimumWidth\\s*:\\s*(\\d+)");
-    QRegExp minimumHeightRegExp ("minimumHeight\\s*:\\s*(\\d+)");
-
+    // Size
     int minimumWidth = -1;
     int minimumHeight = -1;
-    if (minimumWidthRegExp.indexIn(data) != -1) {
-        minimumWidth = minimumWidthRegExp.cap(1).toInt();
+    if (tree->hasProperty("minimumWidth")) {
+        minimumWidth = tree->property("minimumWidth").toInt();
     }
-    if (minimumHeightRegExp.indexIn(data) != -1) {
-        minimumHeight = minimumHeightRegExp.cap(1).toInt();
+    if (tree->hasProperty("minimumHeight")) {
+        minimumHeight = tree->property("minimumHeight").toInt();
     }
-
-    QRegExp maximumWidthRegExp ("maximumWidth\\s*:\\s*(\\d+)");
-    QRegExp maximumHeightRegExp ("maximumHeight\\s*:\\s*(\\d+)");
 
     int maximumWidth = -1;
     int maximumHeight = -1;
-    if (maximumWidthRegExp.indexIn(data) != -1) {
-        maximumWidth = maximumWidthRegExp.cap(1).toInt();
+    if (tree->hasProperty("maximumWidth")) {
+        maximumWidth = tree->property("maximumWidth").toInt();
     }
-    if (maximumHeightRegExp.indexIn(data) != -1) {
-        maximumHeight = maximumHeightRegExp.cap(1).toInt();
+    if (tree->hasProperty("maximumHeight")) {
+        maximumHeight = tree->property("maximumHeight").toInt();
     }
-
-    QRegExp widthRegExp ("width\\s*:\\s*(\\d+)");
-    QRegExp heightRegExp ("height\\s*:\\s*(\\d+)");
 
     if (minimumWidth == -1 && minimumHeight == -1
         && maximumWidth == -1 && maximumHeight == -1) {
-        if (widthRegExp.indexIn(data) != -1) {
-            int width = widthRegExp.cap(1).toInt();
+        if (tree->hasProperty("width")) {
+            int width = tree->property("width").toInt();
             minimumWidth = width;
             maximumWidth = width;
         }
-        if (heightRegExp.indexIn(data) != -1) {
-            int height = heightRegExp.cap(1).toInt();
+        if (tree->hasProperty("height")) {
+            int height = tree->property("height").toInt();
             minimumHeight = height;
             maximumHeight = height;
         }
@@ -209,8 +162,11 @@ WidgetBaseProperties * WidgetBaseProperties::fromQmlFile(const QString &qmlFile,
     bool sizeOk = (minimumWidth != -1 && minimumHeight != -1 &&
                    maximumWidth != -1 && maximumHeight != -1);
     if (!sizeOk) {
+        delete tree;
         return 0;
     }
+
+    delete tree;
 
     return new WidgetBaseProperties(fileName, disambiguation, settingsFileName,
                                     minimumWidth, minimumHeight, maximumWidth, maximumHeight,
