@@ -43,6 +43,9 @@ PICTURE_FRAME_FILES =   widgets/picture-frame/metadata.desktop \
                         widgets/picture-frame/PictureFrame.qml \
                         widgets/picture-frame/PictureFrameSettings.qml \
 
+ICLOCK_FILES =          widgets/iclock/metadata.desktop \
+                        widgets/iclock/iClock.qml \
+
 androidDockFiles.path = $${installPath}/docks/android-dock
 androidDockFiles.files = $${ANDROID_DOCK_FILES}
 export(androidDockFiles.path)
@@ -68,5 +71,10 @@ pictureFrameFiles.files = $${PICTURE_FRAME_FILES}
 export(pictureFrameFiles.path)
 export(pictureFrameFiles.files)
 
+iClockFiles.path = $${installPath}/widgets/iclock
+iClockFiles.files = $${ICLOCK_FILES}
+export(iClockFiles.path)
+export(iClockFiles.files)
+
 INSTALLS += androidDockFiles maemoDockFiles swipeUnlockFiles
-INSTALLS += analogicClockFiles pictureFrameFiles
+INSTALLS += analogicClockFiles pictureFrameFiles iClockFiles

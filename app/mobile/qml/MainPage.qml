@@ -16,7 +16,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-//import com.nokia.extras 1.1
+import com.nokia.extras 1.1
 import "UiConstants.js" as Ui
 
 AbstractNavigationPage {
@@ -27,7 +27,7 @@ AbstractNavigationPage {
     title: qsTr("Widgets settings")
     onShow: {
         if(page == "showPreview") {
-//            pinchToBackBanner.show()
+            pinchToBackBanner.show()
             window.pageStack.push(previewPage)
         }
         if (page == "showSettings") {
@@ -65,10 +65,10 @@ AbstractNavigationPage {
     PreviewPage {
         id: previewPage
 
-//        InfoBanner {
-//            id: pinchToBackBanner
-//            text: qsTr("Pinch the screen to exit the preview mode")
-//        }
+        InfoBanner {
+            id: pinchToBackBanner
+            text: qsTr("Pinch the screen to exit the preview mode")
+        }
     }
 
     SettingsPage {

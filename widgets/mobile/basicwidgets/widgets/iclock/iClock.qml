@@ -40,81 +40,70 @@
 
 import QtQuick 1.1
 import org.SfietKonstantin.widgets 1.0
+import org.SfietKonstantin.widgets.colors 1.0
 import QtMobility.systeminfo 1.2
 
 Widget {
     id: clock
-
-    property int hours
-    property int minutes
-    property bool night: false
-    property string dayBackgroundSource: "analogic-clock-background.png"
-    property string nightBackgroundSource: "analogic-clock-night-background.png"
     onEnabledChanged: {
         enabled ? timer.start() : timer.stop()
     }
-
     Component.onCompleted: changeTime()
     function changeTime() {
-        var date = new Date
-        hours = date.getHours()
-        night = ( hours < 7 || hours > 19 )
-        minutes = date.getMinutes()
+        var dateTime = new Date
+        time.text = Qt.formatTime(dateTime)
+        date.text = Qt.formatDate(dateTime, Qt.DefaultLocaleLongDate)
     }
-    width: 200
+    width: 460
     height: 200
 
-    AlignedTimer {
-        id: timer
-        minimumInterval: 1
-        maximumInterval: 1
-        singleShot: false
-        onTimeout: clock.changeTime()
-        Component.onCompleted: start()
-    }
+     AlignedTimer {
+         id: timer
+         minimumInterval: 1
+         maximumInterval: 1
+         singleShot: false
+         onTimeout: clock.changeTime()
+         Component.onCompleted: start()
+     }
 
-    Image {
+    Rectangle {
         id: background
-        source: !clock.night ? dayBackgroundSource : nightBackgroundSource
-    }
-
-    Image {
-        x: 92.5; y: 27
-        source: "analogic-clock-hour.png"
-        smooth: true
-        transform: Rotation {
-            id: hourRotation
-            origin.x: 7.5; origin.y: 73;
-            angle: (clock.hours * 30) + (clock.minutes * 0.5)
-            Behavior on angle {
-                SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-            }
+        anchors.fill: parent
+        radius: 10
+        border.color: Colors.aluminiumGray5
+        border.width: 3
+        opacity: 0.9
+        gradient: Gradient {
+            GradientStop {position: 0; color: Colors.aluminiumGray6}
+            GradientStop {position: 1; color: Colors.black}
         }
     }
 
-    Image {
-        x: 93.5; y: 17
-        source: "analogic-clock-minute.png"
-        smooth: true
-        transform: Rotation {
-            id: minuteRotation
-            origin.x: 6.5; origin.y: 83;
-            angle: clock.minutes * 6
-            Behavior on angle {
-                SpringAnimation { spring: 2; damping: 0.2; modulus: 360 }
-            }
+    Item {
+        width: background.width
+        height: time.height + 7 + date.height
+        anchors.centerIn: background
+
+        Text {
+            id: time
+            anchors.horizontalCenter: parent.horizontalCenter; anchors.top: parent.top
+            font.pixelSize: 85
+            color: Colors.white
+            style: Text.Outline
+            styleColor: Colors.black
+        }
+
+        Text {
+            id: date
+            anchors.horizontalCenter: parent.horizontalCenter; anchors.bottom: parent.bottom
+            font.pixelSize: 30
+            color: Colors.white
+            style: Text.Outline
+            styleColor: Colors.black
         }
     }
 
-    Image {
-        anchors.centerIn: background; source: "analogic-clock-center.png"
-    }
 
-    Text {
-        id: cityLabel
-        y: 200; anchors.horizontalCenter: parent.horizontalCenter
-        color: "white"
-        font.bold: true; font.pixelSize: 14
-        style: Text.Raised; styleColor: "black"
-    }
+
+
 }

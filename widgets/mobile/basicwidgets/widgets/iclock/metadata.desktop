@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=iClock
+Name[en_GB]=iClock
+Name[fr]=iClock
+Comment=A clock that mimics the iPhone one
+Comment[en_GB]=A clock that mimics the iPhone one
+Comment[fr]=Une horloge ressemblant à celui de l'iPhone
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-ComponentInfo-File=iClock.qml

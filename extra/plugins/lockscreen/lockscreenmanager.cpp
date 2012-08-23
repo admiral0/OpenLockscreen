@@ -59,6 +59,7 @@ void LockScreenManager::slotDisplayStateChanged(MeeGo::QmDisplayState::DisplaySt
         break;
     case MeeGo::QmDisplayState::Off:
         m_unlocked = false;
+        setVisible(false);
         break;
     default:
         break;

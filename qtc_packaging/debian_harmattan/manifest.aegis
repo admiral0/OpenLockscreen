@@ -74,9 +74,8 @@
         <credential name="dsme::DeviceStateControl" />
         <credential name="mce::TKLockControl" />
         <credential name="mce::DeviceLockControl" />
+        <for path="/opt/widgets/bin/widgets" />
+        <for path="applauncherd-launcher::/usr/bin/applauncherd.bin"/>
+        <for path="system-ui::/usr/bin/sysuid" />
     </request>
-
-    <for path="/opt/widgets/bin/widgets" />
-    <for path="applauncherd-launcher::/usr/bin/applauncherd.bin"/>
-    <for path="system-ui::/usr/bin/sysuid" />
 </aegis>

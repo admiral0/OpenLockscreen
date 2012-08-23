@@ -26,7 +26,6 @@ Rectangle {
     id: container
     anchors.fill: parent
     color: "black"
-    visible: LockScreenManager.visible
 
     Component.onCompleted: {
         WidgetsPageListModelInstance.settings = widgetsSettings
@@ -80,6 +79,7 @@ Rectangle {
         id: content
         anchors.top: parent.top; anchors.bottom: unlocker.top
         anchors.left: parent.left; anchors.right: parent.right
+        visible: LockScreenManager.visible
 
         HorizontalParallaxBackground {
             id: background
@@ -112,6 +112,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         height: 10
         color: Colors.aluminiumGray5
+        visible: LockScreenManager.visible
 
         MouseArea {
             anchors.fill: parent
