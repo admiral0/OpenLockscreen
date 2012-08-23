@@ -64,7 +64,9 @@ All config switch
 For the project
 - CONFIG+=noqtimport installs the QML in PREFIX/import/.
 - CONFIG+=mobile enables mobile app and mobile widgets.
+- CONFIG+=extra enables extra mobile components.
 - CONFIG+=desktop enables desktop app and desktop widgets.
+- CONFIG+=tests enable unittests
 
 For providers options
 - CONFIG+=pluginproviderbasic enable the basic provider.
@@ -87,10 +89,7 @@ Experimental features
 Note that if both mobile and desktop switches are set at the same
 time, nothing is built.
 
-Note that if enable nodocks switch and plugindocks, docks won't be
-built nevertheless.
-
-Note that if mobile or desktop switch are set, all additional plugins
+Note that if mobile, desktop or testsswitch are set, all additional plugins
 are also built.
 
 3. Documentation
