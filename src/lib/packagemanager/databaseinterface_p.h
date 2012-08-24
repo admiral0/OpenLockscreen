@@ -108,6 +108,15 @@ public:
      */
     virtual ~DatabaseInterface();
     /**
+     * @brief Set database path
+     *
+     * This method allows you to override the database path,
+     * and put the one you need.
+     *
+     * @param databasePath database path to set.
+     */
+    void setDatabasePath(const QString &databasePath);
+    /**
      * @internal
      * @brief Disambiguation
      *

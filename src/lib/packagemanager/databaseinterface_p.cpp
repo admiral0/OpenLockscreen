@@ -248,14 +248,18 @@ static const char *METADATA_FILE = "metadata.desktop";
 static const char *PACKAGE_IDENTIFIER_KEY = "identifier";
 
 
-QString DatabaseInterfacePrivate::databasePath()
+QString DatabaseInterfacePrivate::databasePath() const
 {
+    if (!overriddenDatabasePath.isEmpty()) {
+        return overriddenDatabasePath;
+    }
+
     QDir dir (QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
     QDir::root().mkpath(dir.absolutePath());
     return dir.absoluteFilePath("packagemanager.db");
 }
 
-bool DatabaseInterfacePrivate::executeQuery(QSqlQuery *query)
+bool DatabaseInterfacePrivate::executeQuery(QSqlQuery *query) const
 {
     if (!query->exec()) {
         qDebug() << query->lastQuery();
@@ -266,7 +270,7 @@ bool DatabaseInterfacePrivate::executeQuery(QSqlQuery *query)
     return true;
 }
 
-bool DatabaseInterfacePrivate::executeQuery(const QString &query, const QSqlDatabase &db)
+bool DatabaseInterfacePrivate::executeQuery(const QString &query, const QSqlDatabase &db) const
 {
     QSqlQuery sqlQuery (db);
     sqlQuery.prepare(query);
@@ -275,7 +279,7 @@ bool DatabaseInterfacePrivate::executeQuery(const QString &query, const QSqlData
     return ok;
 }
 
-bool DatabaseInterfacePrivate::executeQueryBatch(QSqlQuery *query)
+bool DatabaseInterfacePrivate::executeQueryBatch(QSqlQuery *query) const
 {
     if (!query->execBatch()) {
         qDebug() << query->lastQuery();
@@ -286,7 +290,7 @@ bool DatabaseInterfacePrivate::executeQueryBatch(QSqlQuery *query)
     return true;
 }
 
-int DatabaseInterfacePrivate::executeQueryCount(QSqlQuery *query)
+int DatabaseInterfacePrivate::executeQueryCount(QSqlQuery *query) const
 {
     W_ASSERT(executeQuery(query));
     W_ASSERT(query->next());
@@ -296,7 +300,7 @@ int DatabaseInterfacePrivate::executeQueryCount(QSqlQuery *query)
     return count;
 }
 
-void DatabaseInterfacePrivate::prepareDatabase()
+void DatabaseInterfacePrivate::prepareDatabase() const
 {
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "init");
@@ -421,7 +425,7 @@ void DatabaseInterfacePrivate::prepareDatabase()
     QSqlDatabase::removeDatabase("init");
 }
 
-void DatabaseInterfacePrivate::addComponentType(const QStringList &names)
+void DatabaseInterfacePrivate::addComponentType(const QStringList &names) const
 {
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "add_component_type");
@@ -448,7 +452,7 @@ void DatabaseInterfacePrivate::addComponentType(const QStringList &names)
     QSqlDatabase::removeDatabase("add_component_type");
 }
 
-void DatabaseInterfacePrivate::addComponentInformationProperties(const QStringList &names)
+void DatabaseInterfacePrivate::addComponentInformationProperties(const QStringList &names) const
 {
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE",
@@ -480,7 +484,7 @@ void DatabaseInterfacePrivate::addComponentInformationProperties(const QStringLi
     QSqlDatabase::removeDatabase("add_component_information_properties");
 }
 
-qlonglong DatabaseInterfacePrivate::componentTypeId(const char *type)
+qlonglong DatabaseInterfacePrivate::componentTypeId(const char *type) const
 {
     qlonglong id = -1;
     {
@@ -504,7 +508,7 @@ qlonglong DatabaseInterfacePrivate::componentTypeId(const char *type)
 void DatabaseInterfacePrivate::addLocalizedInformation(const char *type, qlonglong componentId,
                                                        const QStringList &languages,
                                                        const QStringList &names,
-                                                       const QStringList &descriptions)
+                                                       const QStringList &descriptions) const
 {
     Q_ASSERT(languages.count() == names.count());
     Q_ASSERT(languages.count() == descriptions.count());
@@ -547,7 +551,7 @@ void DatabaseInterfacePrivate::addLocalizedInformation(const char *type, qlonglo
 
 
 void DatabaseInterfacePrivate::addInformation(const char *type, qlonglong componentId,
-                                              const QVariantMap &informations)
+                                              const QVariantMap &informations) const
 {
     qlonglong typeId = componentTypeId(type);
     {
@@ -589,7 +593,7 @@ void DatabaseInterfacePrivate::addInformation(const char *type, qlonglong compon
     QSqlDatabase::removeDatabase("add_information");
 }
 
-qlonglong DatabaseInterfacePrivate::tagId(const QString &tag)
+qlonglong DatabaseInterfacePrivate::tagId(const QString &tag) const
 {
     qlonglong id = -1;
     {
@@ -619,7 +623,7 @@ qlonglong DatabaseInterfacePrivate::tagId(const QString &tag)
     return id;
 }
 
-bool DatabaseInterfacePrivate::tagExists(qlonglong packageId, const QString &tag)
+bool DatabaseInterfacePrivate::tagExists(qlonglong packageId, const QString &tag) const
 {
     qlonglong id = tagId(tag);
     bool exists = false;
@@ -644,7 +648,7 @@ bool DatabaseInterfacePrivate::tagExists(qlonglong packageId, const QString &tag
     return exists;
 }
 
-void DatabaseInterfacePrivate::addTags(qlonglong packageId, const QStringList &tags)
+void DatabaseInterfacePrivate::addTags(qlonglong packageId, const QStringList &tags) const
 {
     QVariantList packageIdList;
     QVariantList tagIdList;
@@ -670,7 +674,7 @@ void DatabaseInterfacePrivate::addTags(qlonglong packageId, const QStringList &t
     QSqlDatabase::removeDatabase("add_tag");
 }
 
-void DatabaseInterfacePrivate::addPackage(Package *package, const QString &path)
+void DatabaseInterfacePrivate::addPackage(Package *package, const QString &path) const
 {
     if (!package) {
         return;
@@ -734,7 +738,7 @@ void DatabaseInterfacePrivate::addPackage(Package *package, const QString &path)
     addTags(packageId, package->tags());
 }
 
-qlonglong DatabaseInterfacePrivate::packageId(const QString &packageIdentifier)
+qlonglong DatabaseInterfacePrivate::packageId(const QString &packageIdentifier) const
 {
     qlonglong returnedValue = -1;
     {
@@ -756,7 +760,8 @@ qlonglong DatabaseInterfacePrivate::packageId(const QString &packageIdentifier)
 }
 
 void DatabaseInterfacePrivate::addDock(qlonglong packageId, const QString &subdirectory,
-                                       Docks::DockBaseProperties *dock, ComponentMetadata *metadata)
+                                       Docks::DockBaseProperties *dock,
+                                       ComponentMetadata *metadata) const
 {
     if (!dock) {
         return;
@@ -826,7 +831,8 @@ void DatabaseInterfacePrivate::addDock(qlonglong packageId, const QString &subdi
 }
 
 void DatabaseInterfacePrivate::addWidget(qlonglong packageId, const QString &subdirectory,
-                                         WidgetBaseProperties *widget, ComponentMetadata *metadata)
+                                         WidgetBaseProperties *widget,
+                                         ComponentMetadata *metadata) const
 {
     if (!widget) {
         return;
@@ -895,7 +901,7 @@ void DatabaseInterfacePrivate::addWidget(qlonglong packageId, const QString &sub
     widget->deleteLater();
 }
 
-QStringList DatabaseInterfacePrivate::registeredPackages(FilterConditionList *filter)
+QStringList DatabaseInterfacePrivate::registeredPackages(FilterConditionList *filter) const
 {
     QStringList returnedValues;
     {
@@ -948,7 +954,7 @@ QStringList DatabaseInterfacePrivate::registeredPackages(FilterConditionList *fi
     return returnedValues;
 }
 
-Package * DatabaseInterfacePrivate::package(const QString &identifier, QObject *parent)
+Package * DatabaseInterfacePrivate::package(const QString &identifier, QObject *parent) const
 {
     Package *returnedValue = 0;
     qlonglong packageTypeId = componentTypeId(COMPONENT_TYPE_PACKAGE);
@@ -1045,7 +1051,7 @@ Package * DatabaseInterfacePrivate::package(const QString &identifier, QObject *
     return returnedValue;
 }
 
-QStringList DatabaseInterfacePrivate::registeredWidgets(const QString &packageIdentifier)
+QStringList DatabaseInterfacePrivate::registeredWidgets(const QString &packageIdentifier) const
 {
     QStringList values;
     {
@@ -1068,7 +1074,7 @@ QStringList DatabaseInterfacePrivate::registeredWidgets(const QString &packageId
     return values;
 }
 
-QStringList DatabaseInterfacePrivate::registeredDocks(const QString &packageIdentifier)
+QStringList DatabaseInterfacePrivate::registeredDocks(const QString &packageIdentifier) const
 {
     QStringList values;
     {
@@ -1094,7 +1100,7 @@ QStringList DatabaseInterfacePrivate::registeredDocks(const QString &packageIden
 
 ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &packageIdentifier,
                                                              const QString &fileName,
-                                                             QObject *parent)
+                                                             QObject *parent) const
 {
     ComponentMetadata *returnedValue = 0;
 
@@ -1183,7 +1189,7 @@ ComponentMetadata * DatabaseInterfacePrivate::widgetMetadata(const QString &pack
 
 ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packageIdentifier,
                                                            const QString &fileName,
-                                                           QObject *parent)
+                                                           QObject *parent) const
 {
     ComponentMetadata *returnedValue = 0;
 
@@ -1271,7 +1277,8 @@ ComponentMetadata * DatabaseInterfacePrivate::dockMetadata(const QString &packag
 }
 
 WidgetBaseProperties * DatabaseInterfacePrivate::widget(const QString &packageIdentifier,
-                                                        const QString &fileName, QObject *parent)
+                                                        const QString &fileName,
+                                                        QObject *parent) const
 {
     WidgetBaseProperties *returnedValue = 0;
 
@@ -1333,7 +1340,7 @@ WidgetBaseProperties * DatabaseInterfacePrivate::widget(const QString &packageId
 
 Docks::DockBaseProperties * DatabaseInterfacePrivate::dock(const QString &packageIdentifier,
                                                            const QString &fileName,
-                                                           QObject *parent)
+                                                           QObject *parent) const
 {
     Docks::DockBaseProperties *returnedValue = 0;
 
@@ -1400,7 +1407,7 @@ Docks::DockBaseProperties * DatabaseInterfacePrivate::dock(const QString &packag
 }
 
 QString DatabaseInterfacePrivate::widgetAbsoluteFolder(const QString &packageIdentifier,
-                                                       const QString &fileName)
+                                                       const QString &fileName) const
 {
     QString returnedValue;
     {
@@ -1432,7 +1439,7 @@ QString DatabaseInterfacePrivate::widgetAbsoluteFolder(const QString &packageIde
 }
 
 QString DatabaseInterfacePrivate::widgetFile(const QString &packageIdentifier,
-                                             const QString &fileName)
+                                             const QString &fileName) const
 {
     QString absoluteFolder = widgetAbsoluteFolder(packageIdentifier, fileName);
     if (absoluteFolder.isEmpty()) {
@@ -1448,7 +1455,7 @@ QString DatabaseInterfacePrivate::widgetFile(const QString &packageIdentifier,
 }
 
 QString DatabaseInterfacePrivate::widgetSettingsFile(const QString &packageIdentifier,
-                                                     const QString &fileName)
+                                                     const QString &fileName) const
 {
     QString returnedValue;
     QString absoluteFolder = widgetAbsoluteFolder(packageIdentifier, fileName);
@@ -1499,7 +1506,7 @@ QString DatabaseInterfacePrivate::widgetSettingsFile(const QString &packageIdent
 }
 
 QString DatabaseInterfacePrivate::dockAbsoluteFolder(const QString &packageIdentifier,
-                                                     const QString &fileName)
+                                                     const QString &fileName) const
 {
     QString returnedValue;
     {
@@ -1532,7 +1539,7 @@ QString DatabaseInterfacePrivate::dockAbsoluteFolder(const QString &packageIdent
 
 
 QString DatabaseInterfacePrivate::dockFile(const QString &packageIdentifier,
-                                           const QString &fileName)
+                                           const QString &fileName) const
 {
     QString absoluteFolder = dockAbsoluteFolder(packageIdentifier, fileName);
     if (absoluteFolder.isEmpty()) {
@@ -1548,7 +1555,7 @@ QString DatabaseInterfacePrivate::dockFile(const QString &packageIdentifier,
 }
 
 QString DatabaseInterfacePrivate::dockSettingsFile(const QString &packageIdentifier,
-                                                   const QString &fileName)
+                                                   const QString &fileName) const
 {
     QString returnedValue;
     QString absoluteFolder = dockAbsoluteFolder(packageIdentifier, fileName);
@@ -1597,7 +1604,7 @@ QString DatabaseInterfacePrivate::dockSettingsFile(const QString &packageIdentif
     return returnedValue;
 }
 
-void DatabaseInterfacePrivate::clean()
+void DatabaseInterfacePrivate::clean() const
 {
     {
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "clean");
@@ -1613,7 +1620,7 @@ void DatabaseInterfacePrivate::clean()
     QSqlDatabase::removeDatabase("clean");
 }
 
-QString DatabaseInterfacePrivate::scanFolderForPackage(const QString &path)
+QString DatabaseInterfacePrivate::scanFolderForPackage(const QString &path) const
 {
     QDir dir = QDir(path);
     if (!dir.exists(PACKAGE_FILE)) {
@@ -1636,7 +1643,7 @@ QString DatabaseInterfacePrivate::scanFolderForPackage(const QString &path)
 
 void DatabaseInterfacePrivate::scanFolderForWidgets(const QString &path,
                                                     const QString &packageIdentifier,
-                                                    qlonglong packageId)
+                                                    qlonglong packageId) const
 {
     QDir widgetFolder (path);
     QFileInfoList folders = widgetFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
@@ -1669,7 +1676,7 @@ void DatabaseInterfacePrivate::scanFolderForWidgets(const QString &path,
 
 void DatabaseInterfacePrivate::scanFolderForDocks(const QString &path,
                                                   const QString &packageIdentifier,
-                                                  qlonglong packageId)
+                                                  qlonglong packageId) const
 {
     QDir dockFolder (path);
     QFileInfoList folders = dockFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllDirs);
@@ -1711,6 +1718,12 @@ DatabaseInterface::DatabaseInterface(QObject *parent):
 
 DatabaseInterface::~DatabaseInterface()
 {
+}
+
+void DatabaseInterface::setDatabasePath(const QString &databasePath)
+{
+    Q_D(DatabaseInterface);
+    d->overriddenDatabasePath = databasePath;
 }
 
 QVariantMap DatabaseInterface::disambiguation(const QString &packageIdentifier)

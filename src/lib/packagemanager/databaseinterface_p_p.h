@@ -61,14 +61,14 @@ public:
      * @brief Database path
      * @return database path.
      */
-    static QString databasePath();
+    QString databasePath() const;
     /**
      * @internal
      * @brief Execute a query
      * @param query the query to execute.
      * @return if the query succeeded.
      */
-    static bool executeQuery(QSqlQuery *query);
+    bool executeQuery(QSqlQuery *query) const;
     /**
      * @internal
      * @brief Execute a query
@@ -80,14 +80,14 @@ public:
      * @param db database.
      * @return if the query succeeded.
      */
-    static bool executeQuery(const QString &query, const QSqlDatabase &db);
+    bool executeQuery(const QString &query, const QSqlDatabase &db) const;
     /**
      * @internal
      * @brief Execute a batch query
      * @param query the query to execute.
      * @return if the query succeeded.
      */
-    static bool executeQueryBatch(QSqlQuery *query);
+    bool executeQueryBatch(QSqlQuery *query) const;
     /**
      * @brief Execute a query for a count
      *
@@ -98,31 +98,31 @@ public:
      * @param query the query to execute.
      * @return the count.
      */
-    static int executeQueryCount(QSqlQuery *query);
+    int executeQueryCount(QSqlQuery *query) const;
     /**
      * @internal
      * @brief Prepare the database
      */
-    static void prepareDatabase();
+    void prepareDatabase() const;
     /**
      * @internal
      * @brief Add components types
      * @param names name of the components.
      */
-    static void addComponentType(const QStringList &names);
+    void addComponentType(const QStringList &names) const;
     /**
      * @internal
      * @brief Add components informations properties
      * @param names name of the properties.
      */
-    static void addComponentInformationProperties(const QStringList &names);
+    void addComponentInformationProperties(const QStringList &names) const;
     /**
      * @internal
      * @brief Database id associated to a component type
      * @param type component type
      * @return database id associated to a component type.
      */
-    static qlonglong componentTypeId(const char *type);
+    qlonglong componentTypeId(const char *type) const;
     /**
      * @internal
      * @brief Add localized information
@@ -138,9 +138,9 @@ public:
      * @param names list of names.
      * @param descriptions list of descriptions.
      */
-    static void addLocalizedInformation(const char *type, qlonglong componentId,
-                                        const QStringList &languages, const QStringList &names,
-                                        const QStringList &descriptions);
+    void addLocalizedInformation(const char *type, qlonglong componentId,
+                                 const QStringList &languages, const QStringList &names,
+                                 const QStringList &descriptions) const;
     /**
      * @internal
      * @brief Add information
@@ -154,15 +154,15 @@ public:
      * @param componentId database id of the component.
      * @param informations informations to add.
      */
-    static void addInformation(const char *type, qlonglong componentId,
-                               const QVariantMap &informations);
+    void addInformation(const char *type, qlonglong componentId,
+                        const QVariantMap &informations) const;
     /**
      * @internal
      * @brief Database id associated to a tag
      * @param tag tag.
      * @return database id associated to the tag.
      */
-    static qlonglong tagId(const QString &tag);
+    qlonglong tagId(const QString &tag) const;
     /**
      * @internal
      * @brief Check if a tag exists
@@ -174,7 +174,7 @@ public:
      * @param tag tag.
      * @return if the association between the package and the tag exists.
      */
-    static bool tagExists(qlonglong packageId, const QString &tag);
+    bool tagExists(qlonglong packageId, const QString &tag) const;
     /**
      * @internal
      * @brief Add tags
@@ -185,21 +185,21 @@ public:
      * @param packageId database id of the package.
      * @param tags list of tags to add.
      */
-    static void addTags(qlonglong packageId, const QStringList &tags);
+    void addTags(qlonglong packageId, const QStringList &tags) const;
     /**
      * @internal
      * @brief Add a package
      * @param package the package to add.
      * @param path absolute path of the package.
      */
-    static void addPackage(Package *package, const QString &path);
+    void addPackage(Package *package, const QString &path) const;
     /**
      * @internal
      * @brief Database id of the package
      * @param packageIdentifier package identifier.
      * @return database id of the package.
      */
-    static qlonglong packageId(const QString &packageIdentifier);
+    qlonglong packageId(const QString &packageIdentifier) const;
     /**
      * @internal
      * @brief Add a dock
@@ -208,8 +208,8 @@ public:
      * @param dock dock base properties.
      * @param metadata dock metadata.
      */
-    static void addDock(qlonglong packageId, const QString &subdirectory,
-                        Docks::DockBaseProperties *dock, ComponentMetadata *metadata);
+    void addDock(qlonglong packageId, const QString &subdirectory,
+                 Docks::DockBaseProperties *dock, ComponentMetadata *metadata) const;
     /**
      * @internal
      * @brief Add a widget
@@ -218,8 +218,8 @@ public:
      * @param widget widget base properties.
      * @param metadata dock metadata.
      */
-    static void addWidget(qlonglong packageId, const QString &subdirectory,
-                          WidgetBaseProperties *widget, ComponentMetadata *metadata);
+    void addWidget(qlonglong packageId, const QString &subdirectory,
+                   WidgetBaseProperties *widget, ComponentMetadata *metadata) const;
 
     /**
      * @internal
@@ -227,7 +227,7 @@ public:
      * @param filter filters.
      * @return all the registered packages identifiers.
      */
-    static QStringList registeredPackages(FilterConditionList *filter);
+    QStringList registeredPackages(FilterConditionList *filter) const;
     /**
      * @brief Get a package
      *
@@ -235,21 +235,21 @@ public:
      * @param parent parent object.
      * @return a package corresponding to the identifier.
      */
-    static Package * package(const QString &identifier, QObject *parent = 0);
+    Package * package(const QString &identifier, QObject *parent = 0) const;
     /**
      * @internal
      * @brief Registered widgets identifiers
      * @param packageIdentifier package identifier.
      * @return all the registered widgets identifiers.
      */
-    static QStringList registeredWidgets(const QString &packageIdentifier);
+    QStringList registeredWidgets(const QString &packageIdentifier) const;
     /**
      * @internal
      * @brief Registered docks identifiers
      * @param packageIdentifier package identifier.
      * @return all the registered docks identifiers.
      */
-    static QStringList registeredDocks(const QString &packageIdentifier);
+    QStringList registeredDocks(const QString &packageIdentifier) const;
     /**
      * @internal
      * @brief Widget metadata
@@ -258,8 +258,8 @@ public:
      * @param parent parent object.
      * @return widget metadata.
      */
-    static ComponentMetadata * widgetMetadata(const QString &packageIdentifier,
-                                              const QString &fileName, QObject *parent = 0);
+    ComponentMetadata * widgetMetadata(const QString &packageIdentifier,
+                                       const QString &fileName, QObject *parent = 0) const;
     /**
      * @internal
      * @brief Dock metadata
@@ -268,8 +268,8 @@ public:
      * @param parent parent object.
      * @return dock metadata.
      */
-    static ComponentMetadata * dockMetadata(const QString &packageIdentifier,
-                                            const QString &fileName, QObject *parent = 0);
+    ComponentMetadata * dockMetadata(const QString &packageIdentifier,
+                                     const QString &fileName, QObject *parent = 0) const;
     /**
      * @short Get a widget
      *
@@ -278,8 +278,8 @@ public:
      * @param parent parent object.
      * @return information about the widget.
      */
-    static WidgetBaseProperties * widget(const QString &packageIdentifier, const QString &fileName,
-                                         QObject *parent = 0);
+    WidgetBaseProperties * widget(const QString &packageIdentifier, const QString &fileName,
+                                  QObject *parent = 0) const;
     /**
      * @short Get a dock
      *
@@ -288,16 +288,15 @@ public:
      * @param parent parent object.
      * @return information about the dock.
      */
-    static Docks::DockBaseProperties * dock(const QString &packageIdentifier,
-                                            const QString &fileName,
-                                            QObject *parent = 0);
+    Docks::DockBaseProperties * dock(const QString &packageIdentifier, const QString &fileName,
+                                     QObject *parent = 0) const;
     /**
      * @brief Absolute widget folder
      * @param packageIdentifier package identifier.
      * @param fileName widget filename.
      * @return absolute widget folder.
      */
-    static QString widgetAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);
+    QString widgetAbsoluteFolder(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the widget file
@@ -306,7 +305,7 @@ public:
      * @param fileName widget filename.
      * @return absolute path to the widget file.
      */
-    static QString widgetFile(const QString &packageIdentifier, const QString &fileName);
+    QString widgetFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the widget settings file
@@ -315,14 +314,14 @@ public:
      * @param fileName widget filename.
      * @return absolute path to the widget settings file.
      */
-    static QString widgetSettingsFile(const QString &packageIdentifier, const QString &fileName);
+    QString widgetSettingsFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @brief Absolute dock folder
      * @param packageIdentifier package identifier.
      * @param fileName dock filename.
      * @return absolute dock folder.
      */
-    static QString dockAbsoluteFolder(const QString &packageIdentifier, const QString &fileName);
+    QString dockAbsoluteFolder(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the dock file
@@ -331,7 +330,7 @@ public:
      * @param fileName dock filename.
      * @return absolute path to the dock file.
      */
-    static QString dockFile(const QString &packageIdentifier, const QString &fileName);
+    QString dockFile(const QString &packageIdentifier, const QString &fileName) const;
     /**
      * @internal
      * @brief Absolute path to the dock settings file
@@ -340,7 +339,7 @@ public:
      * @param fileName dock filename.
      * @return absolute path to the dock settings file.
      */
-    static QString dockSettingsFile(const QString &packageIdentifier, const QString &fileName);
+    QString dockSettingsFile(const QString &packageIdentifier, const QString &fileName) const;
 
     /**
      * @internal
@@ -349,7 +348,7 @@ public:
      * This method removes everything
      * from the database.
      */
-    static void clean();
+    void clean() const;
     /**
      * @internal
      * @brief Scan a folder for packages
@@ -361,7 +360,7 @@ public:
      * @param path absolute path to the folder.
      * @return package identifier.
      */
-    static QString scanFolderForPackage(const QString &path);
+    QString scanFolderForPackage(const QString &path) const;
     /**
      * @internal
      * @brief Scan a folder for widgets
@@ -374,8 +373,8 @@ public:
      * @param packageIdentifier package identifier.
      * @param packageId database id of the package.
      */
-    static void scanFolderForWidgets(const QString &path, const QString &packageIdentifier,
-                                     qlonglong packageId);
+    void scanFolderForWidgets(const QString &path, const QString &packageIdentifier,
+                              qlonglong packageId) const;
     /**
      * @internal
      * @brief Scan a folder for docks
@@ -388,8 +387,16 @@ public:
      * @param packageIdentifier package identifier.
      * @param packageId database id of the package.
      */
-    static void scanFolderForDocks(const QString &path, const QString &packageIdentifier,
-                                   qlonglong packageId);
+    void scanFolderForDocks(const QString &path, const QString &packageIdentifier,
+                            qlonglong packageId) const;
+    /**
+     * @brief Database path
+     *
+     * If this attribute is set, the path
+     * stored in this variable will be used
+     * instead of the default path.
+     */
+    QString overriddenDatabasePath;
 };
 
 }
