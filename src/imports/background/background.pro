@@ -17,5 +17,6 @@ SOURCES +=      widgets_background_plugin.cpp \
 
 OTHER_FILES =   qmldir \
                 HorizontalParallaxBackground.qml \
+                HorizontalParallaxBackgroundImage.qml
 
 include(deployment.pri)

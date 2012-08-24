@@ -43,3 +43,13 @@ void RemoteSettingsManager::reloadWidgets()
 
     interface.call("reloadWidgets");
 }
+
+void RemoteSettingsManager::reloadSettings(const QString &group)
+{
+    QDBusInterface interface ("org.SfietKonstantin.widgets",
+                              "/org/SfietKonstantin/widgets",
+                              "org.SfietKonstantin.widgets",
+                              QDBusConnection::sessionBus());
+
+    interface.call("reloadSettings", group);
+}

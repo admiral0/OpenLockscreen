@@ -104,6 +104,15 @@ public Q_SLOTS:
      * @param value the settings value.
      */
     void setValue(const QString &group, const QString &key, const QVariant &value);
+    /**
+     * @brief Reload settings
+     *
+     * This method is used to reload settings and
+     * send notifications about settings changes.
+     *
+     * @param group group of settings to reload.
+     */
+    void reload(const QString &group);
 Q_SIGNALS:
     /**
      * @brief Settings value changed

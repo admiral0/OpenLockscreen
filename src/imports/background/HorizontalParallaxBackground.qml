@@ -34,23 +34,40 @@ Item {
 
     Rectangle {
         id: background
+        property Item image: null
+        function createImage() {
+            if (image != null) {
+                image.destroy()
+                image = null
+            }
+
+            var component = Qt.createComponent("HorizontalParallaxBackgroundImage.qml")
+            if (component.status == Component.Ready) {
+                image = component.createObject(background ,
+                                               {"source": backgroundManager.wallpaperSource,
+                                                "width": background.width,
+                                                "height": background.height,
+                                                "sourceSize.width": background.width})
+            } else {
+                console.debug("Cannot create the background image" +
+                              "\nerror : " + component.errorString())
+            }
+        }
+
+        Component.onCompleted: createImage()
+
         height: container.height
         width: backgroundManager.wallpaperHeight != 0 ?
                backgroundManager.wallpaperWidth / backgroundManager.wallpaperHeight * height :
                0
+        onWidthChanged: image.width = width
+        onHeightChanged: image.height = height
         color: "black"
         x: - parallaxManager.position * (background.width - container.width)
 
-        Image {
-            id: backgroundImage
-            height: background.height
-            width: background.width
-            sourceSize.width: background.width
-            anchors.centerIn: parent
-            clip: true
-            fillMode: Image.PreserveAspectCrop
-            asynchronous: true
-            source: backgroundManager.wallpaperSource
+        Connections {
+            target: backgroundManager
+            onWallpaperSourceChanged: background.createImage()
         }
     }
 

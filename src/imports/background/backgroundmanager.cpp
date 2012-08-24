@@ -145,6 +145,7 @@ void BackgroundManagerPrivate::slotValueChanged(const QString &group, const QStr
         return;
     }
 
+
     if(key == BACKGROUND_WALLPAPER_SOURCE) {
         QString newWallpaperSource = value.toString();
         if(wallpaperSource != newWallpaperSource) {

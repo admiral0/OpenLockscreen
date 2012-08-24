@@ -28,6 +28,7 @@ public:
 public Q_SLOTS:
     void reloadDocks();
     void reloadWidgets();
+    void reloadSettings(const QString &group);
 };
 
 #endif // REMOTESETTINGSMANAGER_H

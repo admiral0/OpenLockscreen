@@ -138,6 +138,7 @@ Rectangle {
         target: SettingsManagerInstance
         onWidgetsChanged: WidgetsPageListModelInstance.load()
         onDocksChanged: DockModelInstance.load()
+        onSettingsChanged: widgetsSettings.reload(group)
     }
 
 }

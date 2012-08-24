@@ -30,3 +30,8 @@ void SettingsManager::reloadDocks()
 {
     emit docksChanged();
 }
+
+void SettingsManager::reloadSettings(const QString &group)
+{
+    emit settingsChanged(group);
+}

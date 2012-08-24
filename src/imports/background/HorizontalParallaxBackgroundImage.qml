@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,26 +14,11 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+import QtQuick 1.1
 
-#include <QtCore/QObject>
-
-class SettingsManager : public QObject
-{
-    Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.SfietKonstantin.widgets")
-public:
-    explicit SettingsManager(QObject *parent = 0);
-
-Q_SIGNALS:
-    void widgetsChanged();
-    void docksChanged();
-    void settingsChanged(const QString &group);
-public Q_SLOTS:
-    void reloadWidgets();
-    void reloadDocks();
-    void reloadSettings(const QString &group);
-};
-
-#endif // SETTINGSMANAGER_H
+Image {
+    anchors.centerIn: parent
+    clip: true
+    fillMode: Image.PreserveAspectCrop
+    asynchronous: true
+}

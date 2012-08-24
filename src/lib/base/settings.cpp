@@ -148,6 +148,18 @@ void Settings::setValue(const QString &group, const QString &key, const QVariant
     d->settings.setValue(QString("%1/%2").arg(group).arg(key), value);
 }
 
+void Settings::reload(const QString &group)
+{
+
+    Q_D(Settings);
+    d->settings.sync();
+    d->settings.beginGroup(group);
+    foreach (QString key, d->settings.childKeys()) {
+        emit valueChanged(group, key, d->settings.value(key));
+    }
+    d->settings.endGroup();
+}
+
 }
 
 #include "moc_settings.cpp"
