@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Update the package list
+/opt/widgets/bin/widgets-packagemanagerhelper --rebuild
+
+# Setup the lockscreen
 mv /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock-nokia.desktop
 ln -s /opt/widgets/lockscreen/share/meegotouch/applicationextensions/sysuid-screenlock.desktop /usr/share/meegotouch/applicationextensions/sysuid-screenlock.desktop
 

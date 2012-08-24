@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = lib imports
+SUBDIRS = lib imports bin

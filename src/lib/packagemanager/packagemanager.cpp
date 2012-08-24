@@ -56,18 +56,12 @@ PackageManagerPrivate::~PackageManagerPrivate()
 PackageManager::PackageManager(QObject *parent) :
     Docks::MixedProviderBase(new PackageManagerPrivate(this), parent)
 {
-    Q_D(PackageManager);
-    d->interface->prepareDatabase();
-    d->interface->scan();
     setAvailable(true);
 }
 
 PackageManager::PackageManager(PackageManagerPrivate *dd, QObject *parent):
     Docks::MixedProviderBase(dd, parent)
 {
-    Q_D(PackageManager);
-    d->interface->prepareDatabase();
-    d->interface->scan();
     setAvailable(true);
 }
 

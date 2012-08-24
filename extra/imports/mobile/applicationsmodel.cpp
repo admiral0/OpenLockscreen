@@ -28,6 +28,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 
+/// @todo Refresh this model sometimes (otherwise it will not contain all the apps)
+
 namespace Mobile
 {
 

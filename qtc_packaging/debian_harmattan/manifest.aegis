@@ -67,15 +67,22 @@
     <for path="applauncherd-launcher::/usr/bin/applauncherd.bin" id="" />-->
     <request policy="add">
         <credential name="Cellular" />
-        <credential name="TrackerReadAccess" />
-        <credential name="TrackerWriteAccess" />
         <credential name="mce::CallStateControl" />
         <credential name="timed::TimeControl" />
         <credential name="dsme::DeviceStateControl" />
         <credential name="mce::TKLockControl" />
         <credential name="mce::DeviceLockControl" />
+        <for path="system-ui::/usr/bin/sysuid" />
+    </request>
+    <request policy="add">
+        <credential name="TrackerReadAccess" />
+        <credential name="TrackerWriteAccess" />
         <for path="/opt/widgets/bin/widgets" />
         <for path="applauncherd-launcher::/usr/bin/applauncherd.bin"/>
-        <for path="system-ui::/usr/bin/sysuid" />
+    </request>
+    <request policy="add">
+        <credential name="UID::user" />
+        <credential name="GID::users" />
+        <for path="/opt/widgets/bin/widgets-packagemanagerhelper" />
     </request>
 </aegis>

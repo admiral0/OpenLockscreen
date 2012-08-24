@@ -220,10 +220,10 @@ QString QmlTreePrivate::cleanedFile(QFile *file)
         return QString();
     }
 
+
     // Remove properties
     QRegExp propertyRegExp ("property[^;\\}]+(;|\\})");
     data = data.remove(propertyRegExp);
-
 
     // Remove signal handlers
     QRegExp bracketSignalHandlerRegExp(";([^;\\.]+\\.)?on[A-Z0-9_][^\\:]*\\:[^\\{]\\{");
@@ -234,7 +234,7 @@ QString QmlTreePrivate::cleanedFile(QFile *file)
         int openBracketIndex = data.indexOf("{", signalIndex);
         int closeBracketIndex = QmlTreePrivate::closingBracket(data, openBracketIndex);
         if (closeBracketIndex != -1) {
-            data = data.remove(signalIndex, closeBracketIndex - signalIndex + 1);
+            data = data.remove(signalIndex + 1, closeBracketIndex - signalIndex);
         } else {
             valid = false;
         }

@@ -16,5 +16,5 @@ contains(CONFIG, mobile):{
                     qtc_packaging/debian_harmattan/compat \
                     qtc_packaging/debian_harmattan/changelog \
                     qtc_packaging/debian_harmattan/postinst \
-                    qtc_packaging/debian_harmattan/postrm \
+                    qtc_packaging/debian_harmattan/prerm \
 }
