@@ -63,8 +63,6 @@ class SettingsPrivate;
  * The first method is used to get a settings value, providing a group
  * and the key that is associated to the settings. The second is used
  * to set the value, providing group, key and value.
- *
- * @todo Write on the global tuto that appname and orgname should be set.
  */
 class Settings : public QObject
 {

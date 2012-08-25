@@ -138,6 +138,8 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
+ * When using widgets, please check the \ref pluginBaseNotes.
+ *
  * \section pluginBaseContent Content
  *
  * \subsection pluginBaseComponents Components
@@ -206,6 +208,16 @@
  * helper using Widgets::WidgetConfigurationHelper::saveSettings().
  * You might also react from Widgets::WidgetConfigurationHelper::saveSettingsRequested()
  * signal to save your settings.
+ *
+ * \section pluginBaseNotes Notes for developers
+ *
+ * In order to use libwidgets, you have to check some points
+ * -# You have set an organization and application name. libwidgets uses a lot of standard
+ *    path that are provided by QDesktopServices to store settings. If you don't set these
+ *    information, the settings might conflict with other applications.
+ * -# You have passed a Widgets::Settings instance to the global instance
+ *    \b WidgetsPageListModelInstance. This model must have settings related to the
+ *    number of displayed pages, otherwise it will not have any page displayed.
  */
 /**
  * @page pluginBaseQmlComponents QML components
