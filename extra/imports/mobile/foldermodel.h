@@ -158,6 +158,7 @@ public Q_SLOTS:
      * @param subfolderModel model that describes the subfolder.
      */
     void addSubfolder(const QString &name, FolderModel *subfolderModel);
+    void clear();
 protected:
     /**
      * @brief Constructor for D-pointer

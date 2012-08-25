@@ -53,6 +53,11 @@ public:
     ~FolderModelPrivate();
     /**
      * @internal
+     * @brief Clear
+     */
+    void clear();
+    /**
+     * @internal
      * @short Helper method used to delete FolderModelItem
      *
      * @param item the FolderModelItem to delete.

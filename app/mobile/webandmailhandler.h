@@ -12,22 +12,19 @@
  *                                                                                      *
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/ 
+ ****************************************************************************************/
 
 #ifndef WEBANDMAILHANDLER_H
 #define WEBANDMAILHANDLER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class WebAndMailHandler : public QObject
 {
     Q_OBJECT
 public:
     explicit WebAndMailHandler(QObject *parent = 0);
-    
-signals:
-    
-public slots:
+public Q_SLOTS:
     void openWebpage(const QString &webpage);
     void openMailEditor(const QString &mail);
 };

@@ -34,6 +34,9 @@ AbstractNavigationPage {
         if(page == "showWidgetEditor") {
             window.pageStack.push(widgetEditorPage)
         }
+        if(page == "showBackgroundEditor") {
+            window.pageStack.push(backgroundEditorPage)
+        }
     }
     model: ListModel {
         ListElement {
@@ -44,6 +47,10 @@ AbstractNavigationPage {
             identifier: "showWidgetEditor"
             text: QT_TR_NOOP("Edit widgets")
         }
+        ListElement {
+            identifier: "showBackgroundEditor"
+            text: QT_TR_NOOP("Edit background")
+        }
     }
 
     DockEditorPage {
@@ -52,5 +59,14 @@ AbstractNavigationPage {
 
     WidgetEditorPage {
         id: widgetEditorPage
+    }
+
+    BackgroundEditorPage {
+        id: backgroundEditorPage
+        onBackgroundChanged: {
+            widgetEditorPage.updateBackground()
+            previewPage.updateBackground()
+            remoteSettingsManager.reloadSettings("background")
+        }
     }
 }

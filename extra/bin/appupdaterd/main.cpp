@@ -14,28 +14,25 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+#include <QtCore/QCoreApplication>
+#include <QtDBus/QDBusInterface>
 
-#include <QtCore/QObject>
-
-class SettingsManager : public QObject
+/**
+ * @brief Main
+ * @param argc argc.
+ * @param argv argv.
+ * @return exit code.
+ */
+int main(int argc, char **argv)
 {
-    Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.SfietKonstantin.widgets")
-public:
-    explicit SettingsManager(QObject *parent = 0);
+    QCoreApplication app (argc, argv);
+    Q_UNUSED(app)
 
-Q_SIGNALS:
-    void widgetsChanged();
-    void docksChanged();
-    void settingsChanged(const QString &group);
-    void applicationListChanged();
-public Q_SLOTS:
-    void reloadWidgets();
-    void reloadDocks();
-    void reloadSettings(const QString &group);
-    void reloadApplicationList();
-};
+    QDBusInterface interface ("org.SfietKonstantin.widgets",
+                              "/org/SfietKonstantin/widgets",
+                              "org.SfietKonstantin.widgets",
+                              QDBusConnection::sessionBus());
 
-#endif // SETTINGSMANAGER_H
+    interface.call("reloadApplicationList");
+    return 0;
+}

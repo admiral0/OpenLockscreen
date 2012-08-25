@@ -29,6 +29,7 @@ Sheet {
         WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
                                                widget, widgetsPage.gridManagerInstance)
         sheet.accept()
+        pageStack.pop(null)
     }
 
     function addIcon(properties) {
@@ -44,23 +45,14 @@ Sheet {
         WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
                                                widget, widgetsPage.gridManagerInstance, settings)
         sheet.accept()
+        pageStack.pop(null)
     }
-
-    onStatusChanged: {
-        if(status == DialogStatus.Closed) {
-            while(pageStack.depth > 1) {
-                pageStack.pop()
-            }
-        }
-    }
-
 
     content: PageStack {
         id: pageStack
         anchors.fill: parent
         Component.onCompleted: pageStack.push(mainPage)
         toolBar: toolBar
-
         Page {
             id: mainPage
             tools: null
@@ -181,6 +173,7 @@ Sheet {
 
             ToolBarLayout {
                 id: backLayout
+                visible: false
                 ToolIcon { iconId: "toolbar-back"; onClicked: pageStack.pop()}
             }
         }

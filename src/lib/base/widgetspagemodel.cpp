@@ -440,7 +440,7 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
 
     d->data.takeAt(widgetIndex)->deleteLater();
 
-    emit dataChanged(this->index(0), this->index(rowCount() - 1));
+//    emit dataChanged(this->index(0), this->index(rowCount() - 1));
 
     emit countChanged();
     endRemoveRows();

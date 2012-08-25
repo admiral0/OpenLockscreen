@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = imports plugins
+SUBDIRS = imports plugins bin

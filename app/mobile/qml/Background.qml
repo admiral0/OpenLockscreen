@@ -19,7 +19,12 @@ import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 
 HorizontalParallaxBackground {
+    function update() {
+        settings.reload("background")
+    }
+
     settings: Settings {
+        id: settings
         defaultSettings: [
             SettingsEntry {
                 group: "background"

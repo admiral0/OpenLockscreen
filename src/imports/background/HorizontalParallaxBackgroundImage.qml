@@ -21,4 +21,5 @@ Image {
     clip: true
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
+    sourceSize.height: 900
 }

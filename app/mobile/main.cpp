@@ -35,6 +35,7 @@
 
 #include "remotesettingsmanager.h"
 #include "webandmailhandler.h"
+#include "imagesupport.h"
 
 /**
  * @short Main
@@ -62,8 +63,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<RemoteSettingsManager>("org.SfietKonstantin.widgets.app", 1, 0,
                                            "RemoteSettingsManager");
+    qmlRegisterType<ImageSupport>("org.SfietKonstantin.widgets.app", 1, 0, "ImageSupport");
     qmlRegisterType<WebAndMailHandler>("org.SfietKonstantin.widgets.app", 1, 0,
                                        "WebAndMailHandler");
+    view->rootContext()->setContextProperty("BACKGROUND_FOLDER", BACKGROUND_FOLDER);
+
 
 #ifdef IMPORT_DIR
     view->engine()->addImportPath(IMPORT_DIR);

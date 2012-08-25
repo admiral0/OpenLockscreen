@@ -26,6 +26,9 @@ import "UiConstants.js" as Ui
 Page {
     id: container
     orientationLock: PageOrientation.LockPortrait
+    function updateBackground() {
+        background.update()
+    }
 
     Component.onCompleted: {
         DragParametersInstance.removeButtonSource = "image://theme/icon-m-framework-close-thumbnail"
@@ -33,8 +36,8 @@ Page {
     }
 
     Background {
-        anchors.fill: parent
         id: background
+        anchors.fill: parent
         horizontalPageView: widgetsPage
     }
 

@@ -90,7 +90,7 @@ public:
      * @internal
      * @short Initialize the model
      */
-    void init();
+    void update();
     /**
      * @internal
      * @short Application informations
@@ -143,9 +143,10 @@ ApplicationsModelPrivate::ApplicationsModelPrivate(ApplicationsModel *q):
 {
 }
 
-void ApplicationsModelPrivate::init()
+void ApplicationsModelPrivate::update()
 {
     Q_Q(ApplicationsModel);
+    q->clear();
 
     // The application tree is a 2 level list.
     // The 1st level is a list of list that contains content of folders
@@ -385,12 +386,17 @@ QString ApplicationsModelPrivate::findIconPath(const QString &iconName,
 ApplicationsModel::ApplicationsModel(QObject *parent):
     FolderModel(new ApplicationsModelPrivate(this), parent)
 {
-    Q_D(ApplicationsModel);
-    d->init();
+    update();
 }
 
 ApplicationsModel::~ApplicationsModel()
 {
+}
+
+void ApplicationsModel::update()
+{
+    Q_D(ApplicationsModel);
+    d->update();
 }
 
 }

@@ -35,3 +35,8 @@ void SettingsManager::reloadSettings(const QString &group)
 {
     emit settingsChanged(group);
 }
+
+void SettingsManager::reloadApplicationList()
+{
+    emit applicationListChanged();
+}

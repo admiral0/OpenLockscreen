@@ -23,6 +23,10 @@ import org.SfietKonstantin.mobile.launcher 1.0
 
 Page {
     id: mainPage
+    function updateBackground() {
+        background.update()
+    }
+
     orientationLock: PageOrientation.LockPortrait
 
     PinchArea {
@@ -31,8 +35,8 @@ Page {
     }
 
     Background {
-        anchors.fill: parent
         id: background
+        anchors.fill: parent
         horizontalPageView: widgetsPage
     }
 

@@ -38,10 +38,22 @@
  * - Docks to display tools
  * - Moving widgets
  *
- * Getting started
+ * \section gettingStarted Getting started
+ * - \subpage writeWidgetsAndDocks
  * - \subpage tutorials
- * - \subpage createWidgetsAndDocks
  * - \subpage pluginList
+ *
+ * \section Internals
+ *
+ * See \subpage internals for more information.
+ */
+/**
+ * \page writeWidgetsAndDocks Write widgets and docks
+ *
+ * Information about widgets and docks creation are in
+ * the main page of their respective plugin:
+ * - \ref pluginBaseWriteWidget
+ * - \ref pluginDocksWriteDock
  */
 /**
  * \page tutorials Tutorials
@@ -58,11 +70,6 @@
  *
  * A widgets view is composed of a display, and a model.
  * @todo continue this.
- */
-/**
- * \page createWidgetsAndDocks Create widgets and docks
- *
- * \todo continue this page
  */
 /** \page pluginList List of all the plugins
  *
@@ -109,7 +116,7 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
- * \section pluginBaseDeclaredComponents Declared components
+ * \section pluginBaseComponents Components
  *
  * \subsection pluginBaseComponents Components
  *
@@ -118,9 +125,6 @@
  *
  * - Widgets::Settings
  * - Widgets::SettingsEntry
- * - Widgets::GridManager
- * - Widgets::WidgetBaseProperties
- * - Widgets::WidgetProperties
  * - Widgets::EventTimer
  *
  * And the following QML components are declared
@@ -137,31 +141,9 @@
  * \subsection pluginBaseGlobalInstance Global instance
  *
  * In addition to those components, importing this plugin also set
- * some global instances of important classes.
+ * global instances of important classes.
  *
- * - \b WidgetsPageListModelInstance
- * - \b ProviderManagerInstance
  * - \b WidgetConfigurationHelperInstance
- *
- * \section pluginBaseWidgetsSystem The widgets system
- *
- * Instances of widgets are controlled by models, that
- * contains the type, the position, and some settings of
- * all widgets in a given page.
- *
- * The global \b WidgetsPageListModelInstance is the model
- * that represents all the pages in the widgets view. It is
- * an instance of Widgets::WidgetsPageListModel and
- * is actually used to store models, that are instances of
- * Widgets::WidgetsPageModel.
- *
- * The page model stores widgets properties using
- * Widgets::WidgetProperties, that contains all information
- * required to create widgets.
- *
- * These models are also used to store settings related to
- * widgets, and do this in an automated way. Settings are
- * stored using QDesktopServices::DataLocation.
  *
  * \section pluginBaseWriteWidget Writing your widget
  *
@@ -186,7 +168,7 @@
  * to the property system.
  *
  * To avoid that, a helper system has been made, and the global
- * instance WidgetConfigurationHelperInstance is used to help
+ * instance \b WidgetConfigurationHelperInstance is used to help
  * managing settings.
  *
  * When you create a widget settings components, you have to
@@ -199,9 +181,59 @@
  * signal to save your settings.
  */
 /**
- * @page pluginBaseQmlComponents QML components
+ * \page internals Internals
  *
- * Documentation for components that are declared in QML.
+ * This page list all the pages that describes the internals of
+ * the different plugins
+ *
+ * - \subpage pluginBaseInternals
+ */
+/**
+ *
+ * \page pluginBaseInternals Base QML plugin for widgets
+ *
+ * \section pluginBaseInternalComponents Internal components
+ *
+ * These components should not be used by the developer that want
+ * to take advantage of libwidgets, but by those that want to extend
+ * it.
+ *
+ * - Widgets::GridManager
+ * - Widgets::ProviderManager
+ * - Widgets::WidgetBaseProperties
+ * - Widgets::WidgetProperties
+ * - \ref qmlWidgetContainer
+ *
+ * These global instances are also set
+ * - \b WidgetsPageListModelInstance
+ * - \b ProviderManagerInstance
+ *
+ * \section pluginBaseInternalWidgetSystem The widgets system
+ *
+ * Instances of widgets are controlled by models, that
+ * contains the type, the position, and some settings of
+ * all widgets in a given page.
+ *
+ * The global \b WidgetsPageListModelInstance is the model
+ * that represents all the pages in the widgets view. It is
+ * an instance of Widgets::WidgetsPageListModel and
+ * is actually used to store models, that are instances of
+ * Widgets::WidgetsPageModel.
+ *
+ * The page model stores widgets properties using
+ * Widgets::WidgetProperties, that contains all information
+ * required to create widgets, including position and settings.
+ *
+ * These objects are created using Widgets::WidgetBaseProperties,
+ * that only contain the basic information of the widget, such as
+ * the size and the file name.
+ *
+ * All the models are also used to store settings related to
+ * widgets, and do this in an automated way. Settings are
+ * stored using QDesktopServices::DataLocation.
+ */
+/**
+ * @page pluginBaseQmlComponents QML components
  *
  * \section qmlWidget Widget
  *
@@ -333,6 +365,11 @@
  * This signal is emitted when the view is initialized. It can be used, for
  * example, by a background that have a parallax effect, in order to take
  * in account the initialX offset.
+ *
+ * \section qmlWidgetContainer [Internal] WidgetContainer
+ *
+ * This component is used internally to create the widget to display.
+ * It also creates a dummy widget when the widget failed to be loaded.
  */
 /**
  * @short Namespace for base plugin

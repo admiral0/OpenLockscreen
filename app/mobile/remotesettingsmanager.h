@@ -17,7 +17,7 @@
 #ifndef REMOTESETTINGSMANAGER_H
 #define REMOTESETTINGSMANAGER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class RemoteSettingsManager : public QObject
 {

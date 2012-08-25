@@ -14,28 +14,16 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+#include "imagesupport.h"
+#include <QtGui/QImageReader>
 
-#include <QtCore/QObject>
-
-class SettingsManager : public QObject
+ImageSupport::ImageSupport(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.SfietKonstantin.widgets")
-public:
-    explicit SettingsManager(QObject *parent = 0);
+}
 
-Q_SIGNALS:
-    void widgetsChanged();
-    void docksChanged();
-    void settingsChanged(const QString &group);
-    void applicationListChanged();
-public Q_SLOTS:
-    void reloadWidgets();
-    void reloadDocks();
-    void reloadSettings(const QString &group);
-    void reloadApplicationList();
-};
-
-#endif // SETTINGSMANAGER_H
+QSize ImageSupport::imageSize(const QString &path)
+{
+    QImageReader reader (path);
+    return reader.size();
+}

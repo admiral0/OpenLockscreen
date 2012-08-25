@@ -59,6 +59,8 @@ public:
      * @short Destructor
      */
     virtual ~ApplicationsModel();
+public Q_SLOTS:
+    void update();
 private:
     Q_DECLARE_PRIVATE(ApplicationsModel)
 };

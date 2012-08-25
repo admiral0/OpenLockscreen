@@ -46,8 +46,7 @@ Item {
                 image = component.createObject(background ,
                                                {"source": backgroundManager.wallpaperSource,
                                                 "width": background.width,
-                                                "height": background.height,
-                                                "sourceSize.width": background.width})
+                                                "height": background.height})
             } else {
                 console.debug("Cannot create the background image" +
                               "\nerror : " + component.errorString())

@@ -139,6 +139,7 @@ Rectangle {
         onWidgetsChanged: WidgetsPageListModelInstance.load()
         onDocksChanged: DockModelInstance.load()
         onSettingsChanged: widgetsSettings.reload(group)
+        onApplicationListChanged: ApplicationsModelInstance.update()
     }
 
 }

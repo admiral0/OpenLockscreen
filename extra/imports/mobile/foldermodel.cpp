@@ -65,7 +65,11 @@ struct FolderModelItem
 
 FolderModelPrivate::~FolderModelPrivate()
 {
-    // Delete allocated items
+    clear();
+}
+
+void FolderModelPrivate::clear()
+{
     while (!data.isEmpty()) {
         deleteItem(data.takeFirst());
     }
@@ -211,6 +215,17 @@ void FolderModel::addSubfolder(const QString &name, FolderModel *subfolderModel)
 
     emit countChanged();
     endInsertRows();
+}
+
+void FolderModel::clear()
+{
+    Q_D(FolderModel);
+    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
+
+    d->clear();
+
+    emit countChanged();
+    endRemoveRows();
 }
 
 }

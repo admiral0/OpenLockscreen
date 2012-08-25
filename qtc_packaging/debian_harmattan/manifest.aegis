@@ -85,4 +85,9 @@
         <credential name="GID::users" />
         <for path="/opt/widgets/bin/widgets-packagemanagerhelper" />
     </request>
+    <request policy="add">
+        <credential name="UID::user" />
+        <credential name="GID::users" />
+        <for path="/opt/widgets/bin/widgets-appupdaterd" />
+    </request>
 </aegis>
