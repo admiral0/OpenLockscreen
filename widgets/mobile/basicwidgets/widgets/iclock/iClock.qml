@@ -47,6 +47,9 @@ Widget {
     id: clock
     onEnabledChanged: {
         enabled ? timer.start() : timer.stop()
+        if (enabled) {
+            changeTime()
+        }
     }
     Component.onCompleted: changeTime()
     function changeTime() {

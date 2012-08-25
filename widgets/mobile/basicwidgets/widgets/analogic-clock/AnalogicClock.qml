@@ -52,6 +52,9 @@ Widget {
     property string nightBackgroundSource: "analogic-clock-night-background.png"
     onEnabledChanged: {
         enabled ? timer.start() : timer.stop()
+        if (enabled) {
+            changeTime()
+        }
     }
 
     Component.onCompleted: changeTime()

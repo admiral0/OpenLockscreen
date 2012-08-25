@@ -21,6 +21,10 @@ WidgetsView {
     id: container
     property Item view: view
     signal initialized()
+    function resetPosition() {
+        view.positionViewAtIndex(WidgetsPageListModelInstance.initialPage, ListView.visible)
+    }
+
     busy: view.moving
     clip: true
 

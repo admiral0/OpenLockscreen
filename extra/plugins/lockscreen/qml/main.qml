@@ -85,7 +85,7 @@ Rectangle {
             id: background
             anchors.fill: parent
             settings: widgetsSettings
-            horizontalPageView: widgetsPage
+            horizontalPageView: widgetsView
         }
 
         DockedView {
@@ -94,7 +94,7 @@ Rectangle {
                 anchors.fill: parent
 
                 WidgetsHorizontalPageView {
-                    id: widgetsPage
+                    id: widgetsView
                 }
             }
         }
@@ -131,6 +131,7 @@ Rectangle {
         onVisibleChanged: {
             LauncherManagerInstance.visible = false
             WidgetsPageListModelInstance.setEnabled(LockScreenManager.visible)
+            widgetsView.resetPosition()
         }
     }
 

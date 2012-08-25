@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = appupdaterd
+contains(MEEGO_EDITION,harmattan):SUBDIRS += appupdaterd

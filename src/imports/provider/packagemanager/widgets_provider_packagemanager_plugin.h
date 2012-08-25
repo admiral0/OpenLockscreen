@@ -26,16 +26,20 @@
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 
 /**
- * @page pluginProviderPackageManager %Package manager based provider
+ * @page pluginProviderPackageManager Package manager based provider
  *
- * @todo write this page
+ * The package manager based provider is more complex. It uses a cache for
+ * storing installed packages, and comes with a helper program that is used
+ * to update this cache and add new packages.
+ *
+ * %Widgets and docks should be "packaged", and installed in a defined hiearchy
+ * in order to be detected and included in the cache.
  *
  * @section packageCreationSection Package creation
  *
- * Extending libwidgets is done through packages, that are an organized filesystem
- * hiearchy. Each package is named with an unique identifier, and each component,
- * either widget or dock also have an identifier. The following organization should
- * be respected.
+ * A package is an organized filesystem hiearchy plus some information that are
+ * used for both information and organization. Each package is named with an
+ * unique identifier. The following organization should be respected.
  * @code{.txt}
  * |-- package.desktop
  * |-- widgets/
@@ -53,66 +57,6 @@
  *   |-- dock2/
  *   |-- ...
  * @endcode
- *
- * @subsection packageCreationWidgetSubsection Widget creation
- *
- * A widget is a declarative item that subclass \e Widget. It needs
- * to provide some informations about size. \e Widget is defined as follow
- *
- * @code{.qml}
- * Item {
- *     id: container
- *     property bool enabled
- *     property variant settings
- *     property int minimumWidth
- *     property int minimumHeight
- *     property int maximumWidth
- *     property int maximumHeight
- * }
- * @endcode
- *
- * Defining the size of the widget can be done in two ways. Either by setting \e width
- * and \e height, so the widget is fixed size, or providing  \e minimumWidth, \e minimumHeight,
- * \e maximumWidth and \e maximumHeight, that creates a resizable widget (in the future).
- *
- * \e enabled property is used to enable the widget. If it is disabled, the widget
- * should stop processing and heavy tasks. \e settings is used to communicate settings
- * to the widget. It uses a QVariantMap to store key / values pairs.
- *
- * @todo showSettings is not used, and should be replaced soon. Document these changes.
- *
- * Only one widget should be defined per folder. It have to be passed to the desktop file to
- * be identified by the package manager. Other QML files that are used in this widget can be
- * declared if needed.
- *
- * @subsection packageCreationDockSubsection Dock creation
- *
- * A dock is a declarative item that subclass \e Dock. It needs
- * to provide some informations about size and anchoring. \e Dock is defined as follow
- *
- * @code{.qml}
- * Item {
- *     id: container
- *     property bool enabled
- *     property variant settings
- * }
- * @endcode
- *
- * Size and anchors should be provided in such a fashion that the dock is well defined.
- * For example, the dock can be anchors top / left / right, and a specific height.
- *
- * \e enabled property is used to enable the dock. If it is disabled, the dock
- * should stop processing and heavy tasks. \e settings is used to communicate settings
- * to the widget. It uses a QVariantMap to store key / values pairs.
- *
- * Only one dock should be defined per folder. It have to be passed to the desktop file to
- * be identified by the package manager. Other QML files that are used in this dock can be
- * declared if needed.
- *
- * @section configuringWidgetDock Configuring a widget or a dock
- *
- * @todo write this
- *
  * @subsection packageCreationMetaSubsection Desktop file creation
  *
  * Two types of desktop files are used to provide metadata to the package. The first type
@@ -208,7 +152,6 @@
  * - \b X-Widgets-ServiceType that should be set either to widget or to dock.
  * - \b X-Widgets-WidgetInfo-File that is used to provide the QML file for a widget.
  * - \b X-Widgets-DockInfo-File that is used to provide the QML file for a dock.
- * @see Widgets::PackageManager
  */
 
 namespace Widgets

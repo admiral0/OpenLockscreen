@@ -35,10 +35,19 @@ Page {
         DragParametersInstance.editButtonSource = "image://theme/icon-l-settings"
     }
 
+    Connections {
+        target: window.pageStack
+        onBusyChanged: {
+            if (!window.pageStack.busy) {
+                widgetsView.resetPosition()
+            }
+        }
+    }
+
     Background {
         id: background
         anchors.fill: parent
-        horizontalPageView: widgetsPage
+        horizontalPageView: widgetsView
     }
 
     EmptyDockedView {
@@ -47,13 +56,13 @@ Page {
             anchors.fill: parent
 
             WidgetsHorizontalPageView {
-                id: widgetsPage
+                id: widgetsView
             }
 
             DragOverlay {
                 id: dragOverlay
                 onShowWidgetSettings: configureWidgetSheet.configure(widget)
-                widgetsView: widgetsPage
+                widgetsView: widgetsView
             }
         }
     }

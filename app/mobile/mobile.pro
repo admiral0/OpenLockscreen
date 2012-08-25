@@ -12,12 +12,12 @@ CONFIG(noqtimport):DEFINES += 'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
 
 HEADERS +=          webandmailhandler.h \
                     remotesettingsmanager.h \
-    imagesupport.h
+                    imagesupport.h
 
 SOURCES +=          main.cpp \
                     webandmailhandler.cpp \
                     remotesettingsmanager.cpp \
-    imagesupport.cpp
+                    imagesupport.cpp
 
 QML_FILES +=        qml/main.qml \
                     qml/UiConstants.js \

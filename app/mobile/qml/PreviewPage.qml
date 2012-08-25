@@ -29,15 +29,26 @@ Page {
 
     orientationLock: PageOrientation.LockPortrait
 
+    Connections {
+        target: window.pageStack
+        onBusyChanged: {
+            if (!window.pageStack.busy) {
+                widgetsView.resetPosition()
+            }
+        }
+    }
+
     PinchArea {
         anchors.fill: parent
-        onPinchFinished: window.pageStack.pop()
+        onPinchFinished: {
+            window.pageStack.pop()
+        }
     }
 
     Background {
         id: background
         anchors.fill: parent
-        horizontalPageView: widgetsPage
+        horizontalPageView: widgetsView
     }
 
     DockedView {
@@ -46,7 +57,7 @@ Page {
             anchors.fill: parent
 
             WidgetsHorizontalPageView {
-                id: widgetsPage
+                id: widgetsView
             }
         }
     }
@@ -58,7 +69,9 @@ Page {
 
     Connections {
         target: LauncherManagerInstance
-        onUnlocked: window.pageStack.pop()
+        onUnlocked: {
+            window.pageStack.pop()
+        }
     }
 
 }

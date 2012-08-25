@@ -90,17 +90,39 @@
 /**
  * @page providers Providers
  *
- * A widget engine must be used with a provider, that provides widget
- * to the widget engine. Providers are C++ components that have to be
- * implemented and registered to the \e WidgetsPageListModelInstance
- * when they are initialized.
+ * On different systems, widgets might be located at different
+ * positions. On a mobile system, they might be located in /opt/
+ * whereas on a desktop, they might be in /usr/share.
  *
- * Fortunately, some providers are alredy implemented :
+ * A developer using libwidgets might also want to allow
+ * 3rd party developers to bring widgets to his platform, and
+ * design an extensible system. That's why providers exists.
+ *
+ * A provider is an object that is used to give the absolute
+ * file path to a widget (the QML file declaring this widget),
+ * based only on the filename, and (optionally) a set of
+ * disambiguation parameters.
+ *
+ * When using libwidgets, a provider have to be registered to the
+ * global instance \b \b ProviderManagerInstance. This provider
+ * manager then gives the provider to all the other components
+ * that needs to get path to widgets.
+ *
+ * Some providers are alredy implemented :
  * - \subpage pluginProviderBasic
  * - \subpage pluginProviderPackageManager
  *
  * The documentation on implementing a provider is on the page of the
  * class Widgets::WidgetProviderInterface.
+ */
+/**
+ * \page internals Internals
+ *
+ * This page list all the pages that describes the internals of
+ * the different plugins
+ *
+ * - \subpage pluginBaseInternals
+ * - \subpage pluginDocksInternals
  */
 /**
  * @page pluginBase Base QML plugin for widgets
@@ -116,7 +138,7 @@
  * import org.SfietKonstantin.widgets 1.0
  * @endcode
  *
- * \section pluginBaseComponents Components
+ * \section pluginBaseContent Content
  *
  * \subsection pluginBaseComponents Components
  *
@@ -143,7 +165,12 @@
  * In addition to those components, importing this plugin also set
  * global instances of important classes.
  *
+ * - \b ProviderManagerInstance
  * - \b WidgetConfigurationHelperInstance
+ *
+ * The first instance is used to manage the provider (see \ref providers
+ * for more information) and the second is used to help providing settings
+ * to widgets.
  *
  * \section pluginBaseWriteWidget Writing your widget
  *
@@ -181,61 +208,11 @@
  * signal to save your settings.
  */
 /**
- * \page internals Internals
- *
- * This page list all the pages that describes the internals of
- * the different plugins
- *
- * - \subpage pluginBaseInternals
- */
-/**
- *
- * \page pluginBaseInternals Base QML plugin for widgets
- *
- * \section pluginBaseInternalComponents Internal components
- *
- * These components should not be used by the developer that want
- * to take advantage of libwidgets, but by those that want to extend
- * it.
- *
- * - Widgets::GridManager
- * - Widgets::ProviderManager
- * - Widgets::WidgetBaseProperties
- * - Widgets::WidgetProperties
- * - \ref qmlWidgetContainer
- *
- * These global instances are also set
- * - \b WidgetsPageListModelInstance
- * - \b ProviderManagerInstance
- *
- * \section pluginBaseInternalWidgetSystem The widgets system
- *
- * Instances of widgets are controlled by models, that
- * contains the type, the position, and some settings of
- * all widgets in a given page.
- *
- * The global \b WidgetsPageListModelInstance is the model
- * that represents all the pages in the widgets view. It is
- * an instance of Widgets::WidgetsPageListModel and
- * is actually used to store models, that are instances of
- * Widgets::WidgetsPageModel.
- *
- * The page model stores widgets properties using
- * Widgets::WidgetProperties, that contains all information
- * required to create widgets, including position and settings.
- *
- * These objects are created using Widgets::WidgetBaseProperties,
- * that only contain the basic information of the widget, such as
- * the size and the file name.
- *
- * All the models are also used to store settings related to
- * widgets, and do this in an automated way. Settings are
- * stored using QDesktopServices::DataLocation.
- */
-/**
  * @page pluginBaseQmlComponents QML components
  *
  * \section qmlWidget Widget
+ *
+ * Inherits from \b Item.
  *
  * \b Widget is the base QML component that is used to
  * represent a widget. All widgets used in libwidgets have
@@ -246,9 +223,6 @@
  * might also provide the minimum and maximum size, but this
  * feature is not yet used, and the widget will take the minimum
  * size.
- *
- * Widget inherits from Item, so you should also see documentation
- * for Item.
  *
  * \subsection qmlWidgetProperties Properties
  *
@@ -272,12 +246,11 @@
  *
  * \section qmlSettingsItem SettingsItem
  *
+ * Inherits from \b Item.
+ *
  * This component is used as a base for components that are used
  * to represent settings panel, and that provides settings to
  * the widget.
- *
- * SettingsItem inherits from Item, so you should also see documentation
- * for Item.
  *
  * \subsection qmlSettingsItemProperties Properties
  *
@@ -289,11 +262,10 @@
  *
  * \section qmlWidgetsPage WidgetsPage
  *
+ * Inherits from \b Item.
+ *
  * The widget page is used to hold a page of widgets. It can be used to
  * implement a view with ease.
- *
- * WidgetsPage inherits from Item, so you should also see documentation
- * for Item.
  *
  * \subsection qmlWidgetsPageProperties Properties
  *
@@ -304,15 +276,14 @@
  *
  * \section qmlWidgetsView WidgetsView
  *
+ * Inherits from \b Item.
+ *
  * The widgets view is a view that provide some important components
  * for displaying widgets. It manages a grid manager and provides
  * settings to setup it.
  *
  * It also creates an item that is used to contain the widgets view,
  * and take the size of the grid in account.
- *
- * WidgetsView inherits from Item, so you should also see documentation
- * for Item.
  *
  * \subsection qmlWidgetsViewProperties Properties
  *
@@ -350,7 +321,7 @@
  *
  * The horizontal page view is an implementation of a view, providing
  * many pages that can be scrolled horizontally. In most of the cases,
- * this component should be used to display widgets.
+ * this component should be the one that is used to display widgets.
  *
  * \subsection qmlWidgetsHorizontalPageViewProperties Properties
  *
@@ -370,6 +341,52 @@
  *
  * This component is used internally to create the widget to display.
  * It also creates a dummy widget when the widget failed to be loaded.
+ */
+/**
+ * \page pluginBaseInternals Base QML plugin for widgets
+ *
+ * \section pluginBaseInternalComponents Internal components
+ *
+ * These components should not be used by the developer that want
+ * to take advantage of libwidgets, but by those that want to extend
+ * it.
+ *
+ * - Widgets::WidgetProviderBase
+ * - Widgets::WidgetsPageListModel
+ * - Widgets::WidgetsPageModel
+ * - Widgets::WidgetBaseProperties
+ * - Widgets::WidgetProperties
+ * - Widgets::ProviderManager
+ * - Widgets::GridManager
+ * - \ref qmlWidgetContainer
+ *
+ * These global instances are also set
+ * - \b WidgetsPageListModelInstance
+ * - \b ProviderManagerInstance
+ *
+ * \section pluginBaseInternalWidgetSystem The widget system
+ *
+ * Instances of widgets are controlled by models, that
+ * contains the type, the position, and some settings of
+ * all widgets in a given page.
+ *
+ * The global \b WidgetsPageListModelInstance is the model
+ * that represents all the pages in the widgets view. It is
+ * an instance of Widgets::WidgetsPageListModel and
+ * is actually used to store models, that are instances of
+ * Widgets::WidgetsPageModel.
+ *
+ * The page model stores widgets properties using
+ * Widgets::WidgetProperties, that contains all information
+ * required to create widgets, including position and settings.
+ *
+ * These objects are created using Widgets::WidgetBaseProperties,
+ * that only contain the basic information of the widget, such as
+ * the size and the file name.
+ *
+ * All the models are also used to save settings related to
+ * widgets, and do this in an automated way. Settings are
+ * stored using QDesktopServices::DataLocation.
  */
 /**
  * @short Namespace for base plugin
