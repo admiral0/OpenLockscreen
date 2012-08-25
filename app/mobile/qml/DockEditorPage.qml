@@ -37,6 +37,11 @@ AbstractPage {
             onClicked: addDockSheet.open()
         }
     }
+    onVisibleChanged: {
+        if (!visible) {
+            listView.positionViewAtBeginning()
+        }
+    }
 
     content: ListView {
         id: listView

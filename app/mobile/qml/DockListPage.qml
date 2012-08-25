@@ -25,6 +25,11 @@ AbstractPage {
     tools: ToolBarLayout {
         ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
     }
+    onVisibleChanged: {
+        if (!visible) {
+            view.positionViewAtBeginning()
+        }
+    }
     content: ListView {
         id: view
         anchors.fill: parent

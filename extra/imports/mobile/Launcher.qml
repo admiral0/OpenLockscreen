@@ -189,11 +189,44 @@ Item  {
         }
     }
 
-    Behavior on opacity {
-        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST }
-    }
-
-    Behavior on scale {
-        NumberAnimation { duration: Ui.ANIMATION_DURATION_FAST; easing.type: Easing.OutQuad }
-    }
+    transitions: [
+        Transition {
+            from: ""
+            to: "visible"
+            ParallelAnimation {
+                NumberAnimation {
+                    target: container
+                    property: "opacity"
+                    duration: Ui.ANIMATION_DURATION_FAST
+                }
+                NumberAnimation {
+                    target: container
+                    property: "scale"
+                    duration: Ui.ANIMATION_DURATION_FAST
+                    easing.type: Easing.OutQuad
+                }
+            }
+        }, Transition {
+            from: "visible"
+            to: ""
+            SequentialAnimation {
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: container
+                        property: "opacity"
+                        duration: Ui.ANIMATION_DURATION_FAST
+                    }
+                    NumberAnimation {
+                        target: container
+                        property: "scale"
+                        duration: Ui.ANIMATION_DURATION_FAST
+                        easing.type: Easing.OutQuad
+                    }
+                }
+                ScriptAction {script: view.closeFolder()}
+                PauseAnimation {duration: Ui.ANIMATION_DURATION_FAST}
+                ScriptAction {script: view.positionViewAtBeginning()}
+            }
+        }
+    ]
 }

@@ -30,18 +30,15 @@ Page {
         background.update()
     }
 
+    onVisibleChanged: {
+        if (!visible) {
+            widgetsView.resetPosition()
+        }
+    }
+
     Component.onCompleted: {
         DragParametersInstance.removeButtonSource = "image://theme/icon-m-framework-close-thumbnail"
         DragParametersInstance.editButtonSource = "image://theme/icon-l-settings"
-    }
-
-    Connections {
-        target: window.pageStack
-        onBusyChanged: {
-            if (!window.pageStack.busy) {
-                widgetsView.resetPosition()
-            }
-        }
     }
 
     Background {
@@ -76,7 +73,8 @@ Page {
         id: configureWidgetSheet
         property Item settingsItem
         property variant widget
-        acceptButtonText: qsTr("Close")
+        acceptButtonText: qsTr("Save")
+        rejectButtonText: qsTr("cancel")
         content: Item {
             id: contentContainer
             anchors.fill: parent

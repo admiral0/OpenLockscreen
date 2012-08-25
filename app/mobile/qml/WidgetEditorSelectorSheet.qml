@@ -23,13 +23,20 @@ import "UiConstants.js" as Ui
 Sheet {
     id: sheet
     rejectButtonText: qsTr("Cancel")
-
+    onStatusChanged: {
+        if (sheet.status == DialogStatus.Closed) {
+            widgetsList.positionViewAtBeginning()
+            shortcutList.positionViewAtBeginning()
+            shortcutSubfolderList.positionViewAtBeginning()
+        }
+    }
+    onRejected: pageStack.pop(null)
     function addWidget(file, disambiguation) {
         var widget = ProviderManagerInstance.provider.widget(file, disambiguation)
         WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                               widget, widgetsPage.gridManagerInstance)
-        sheet.accept()
+                                               widget, widgetsView.gridManagerInstance)
         pageStack.pop(null)
+        sheet.accept()
     }
 
     function addIcon(properties) {
@@ -43,9 +50,9 @@ Sheet {
 
         var widget = ProviderManagerInstance.provider.widget("Icon.qml", disambiguation)
         WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                               widget, widgetsPage.gridManagerInstance, settings)
-        sheet.accept()
+                                               widget, widgetsView.gridManagerInstance, settings)
         pageStack.pop(null)
+        sheet.accept()
     }
 
     content: PageStack {
@@ -93,6 +100,7 @@ Sheet {
             orientationLock: PageOrientation.LockPortrait
 
             ListView {
+                id: widgetsList
                 anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Ui.MARGIN_DEFAULT + toolBar.height
@@ -118,6 +126,7 @@ Sheet {
             orientationLock: PageOrientation.LockPortrait
 
             ListView {
+                id: shortcutList
                 anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Ui.MARGIN_DEFAULT + toolBar.height
@@ -149,6 +158,7 @@ Sheet {
             orientationLock: PageOrientation.LockPortrait
             property variant model
             ListView {
+                id: shortcutSubfolderList
                 anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_DEFAULT
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Ui.MARGIN_DEFAULT + toolBar.height

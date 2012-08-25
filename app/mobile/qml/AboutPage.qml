@@ -20,11 +20,18 @@ import "UiConstants.js" as Ui
 
 AbstractPage {
     id: container
+    onVisibleChanged: {
+        if (!visible) {
+            flickable.contentY = 0
+        }
+    }
+
     title: qsTr("About")
     tools: ToolBarLayout {
         ToolIcon { iconId: "toolbar-back"; onClicked: window.pageStack.pop() }
     }
     content: Flickable {
+        id: flickable
         clip: true
         anchors.fill: parent
         contentWidth: container.width

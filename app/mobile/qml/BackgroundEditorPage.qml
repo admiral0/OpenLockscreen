@@ -27,6 +27,15 @@ AbstractPage {
     property int wallpaperHeight:widgetsSettings.value("background", "wallpaperHeight")
     property string selected: widgetsSettings.value("background", "wallpaperSource")
     signal backgroundChanged()
+    onVisibleChanged: {
+        if (!visible) {
+            imagesView.positionViewAtBeginning()
+            preloadedButton.checked = true
+            imagesButton.checked = false
+            preloaded.visible = true
+            images.visible = false
+        }
+    }
 
     title: qsTr("Edit background")
     tools: ToolBarLayout {
@@ -43,6 +52,7 @@ AbstractPage {
 
         ButtonRow {
             TabButton {
+                id: preloadedButton
                 text: qsTr("Preloaded")
                 onClicked: {
                     preloaded.visible = true
@@ -50,6 +60,7 @@ AbstractPage {
                 }
             }
             TabButton {
+                id: imagesButton
                 text: qsTr("Images")
                 onClicked: {
                     preloaded.visible = false
@@ -152,6 +163,7 @@ AbstractPage {
             }
 
             GridView {
+                id: imagesView
                 width: container.width
                 height: container.height - 70
                 clip: true

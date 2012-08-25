@@ -26,18 +26,13 @@ Page {
     function updateBackground() {
         background.update()
     }
-
-    orientationLock: PageOrientation.LockPortrait
-
-    Connections {
-        target: window.pageStack
-        onBusyChanged: {
-            if (!window.pageStack.busy) {
-                widgetsView.resetPosition()
-            }
+    onVisibleChanged: {
+        if (!visible) {
+            widgetsView.resetPosition()
         }
     }
 
+    orientationLock: PageOrientation.LockPortrait
     PinchArea {
         anchors.fill: parent
         onPinchFinished: {
