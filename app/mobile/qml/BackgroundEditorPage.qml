@@ -18,7 +18,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
-//import QtMobility.gallery 1.1
+import QtMobility.gallery 1.1
 import org.SfietKonstantin.widgets.app 1.0
 
 AbstractPage {
@@ -155,7 +155,7 @@ AbstractPage {
                 width: container.width
                 height: container.height - 70
                 clip: true
-//                model: imagesModel
+                model: imagesModel
                 cellHeight: 160
                 cellWidth: 160
                 delegate: Item {
@@ -207,7 +207,7 @@ AbstractPage {
                     }
                 }
             }
-            /*DocumentGalleryModel {
+            DocumentGalleryModel {
                 id: imagesModel
                 rootType: DocumentGallery.Image
                 properties: ["url"]
@@ -223,7 +223,7 @@ AbstractPage {
                         }
                     ]
                 }
-            }*/
+            }
         }
     }
 }
