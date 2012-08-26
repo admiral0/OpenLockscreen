@@ -45,7 +45,7 @@ namespace Colors
  * import org.SfietKonstantin.widgets.colors 1.0
  * @endcode
  *
- * This import creates a global object in the QML context called \e Colors.
+ * This import creates a global object in the QML context called \b %Colors.
  * To use the registered colors, you have to do as follow :
  *
  * @code{.qml}

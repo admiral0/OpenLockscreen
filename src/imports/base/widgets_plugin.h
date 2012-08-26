@@ -71,7 +71,7 @@
  * A widgets view is composed of a display, and a model.
  * @todo continue this.
  */
-/** \page pluginList List of all the plugins
+/** \page pluginList List of all plugins
  *
  * Here is a list of all the plugins that are provided by
  * libwidgets. Most of them can be disabled using compile-time
@@ -79,11 +79,12 @@
  *
  * - \subpage pluginBase
  * - \subpage pluginDocks
- * - \subpage pluginDrag
- * - \subpage pluginInfo
  * - \subpage providers
  *   - \ref pluginProviderBasic
  *   - \ref pluginProviderPackageManager
+ * - \subpage pluginDrag
+ * - \subpage pluginInfo
+ * - \subpage pluginBackground
  * - \subpage pluginColors
  *
  */
