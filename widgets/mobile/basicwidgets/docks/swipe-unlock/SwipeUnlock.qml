@@ -99,6 +99,7 @@ Dock {
 
                     MouseArea {
                         anchors.fill: parent
+                        anchors.margins: -10
                         drag.target: slider
                         drag.axis: Drag.XAxis
                         drag.minimumX: 0
@@ -117,6 +118,5 @@ Dock {
                 }
             }
         }
-
     }
 }

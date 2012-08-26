@@ -39,6 +39,9 @@ ANALOGIC_CLOCK_FILES =  widgets/analogic-clock/metadata.desktop \
                         widgets/analogic-clock/analogic-clock-hour.png \
                         widgets/analogic-clock/analogic-clock-minute.png \
 
+HARMATTAN_CLOCK_FILES = widgets/harmattan-clock/metadata.desktop \
+                        widgets/harmattan-clock/HarmattanClock.qml \
+
 PICTURE_FRAME_FILES =   widgets/picture-frame/metadata.desktop \
                         widgets/picture-frame/PictureFrame.qml \
                         widgets/picture-frame/PictureFrameSettings.qml \
@@ -66,6 +69,11 @@ analogicClockFiles.files = $${ANALOGIC_CLOCK_FILES}
 export(analogicClockFiles.path)
 export(analogicClockFiles.files)
 
+harmattanClockFiles.path = $${installPath}/widgets/harmattan-clock
+harmattanClockFiles.files = $${HARMATTAN_CLOCK_FILES}
+export(harmattanClockFiles.path)
+export(harmattanClockFiles.files)
+
 pictureFrameFiles.path = $${installPath}/widgets/picture-frame
 pictureFrameFiles.files = $${PICTURE_FRAME_FILES}
 export(pictureFrameFiles.path)
@@ -77,4 +85,4 @@ export(iClockFiles.path)
 export(iClockFiles.files)
 
 INSTALLS += androidDockFiles maemoDockFiles swipeUnlockFiles
-INSTALLS += analogicClockFiles pictureFrameFiles iClockFiles
+INSTALLS += analogicClockFiles harmattanClockFiles pictureFrameFiles iClockFiles

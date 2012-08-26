@@ -33,6 +33,7 @@ Page {
     onVisibleChanged: {
         if (!visible) {
             widgetsView.resetPosition()
+            DragManagerInstance.locked = true
         }
     }
 

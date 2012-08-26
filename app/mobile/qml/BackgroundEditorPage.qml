@@ -18,7 +18,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.1
-import QtMobility.gallery 1.1
+//import QtMobility.gallery 1.1
 import org.SfietKonstantin.widgets.app 1.0
 
 AbstractPage {
@@ -219,23 +219,23 @@ AbstractPage {
                     }
                 }
             }
-            DocumentGalleryModel {
-                id: imagesModel
-                rootType: DocumentGallery.Image
-                properties: ["url"]
-                filter: GalleryFilterUnion {
-                    filters: [
-                        GalleryWildcardFilter {
-                            property: "fileName"
-                            value: "*.jpg"
-                        },
-                        GalleryWildcardFilter {
-                            property: "fileName"
-                            value: "*.png"
-                        }
-                    ]
-                }
-            }
+//            DocumentGalleryModel {
+//                id: imagesModel
+//                rootType: DocumentGallery.Image
+//                properties: ["url"]
+//                filter: GalleryFilterUnion {
+//                    filters: [
+//                        GalleryWildcardFilter {
+//                            property: "fileName"
+//                            value: "*.jpg"
+//                        },
+//                        GalleryWildcardFilter {
+//                            property: "fileName"
+//                            value: "*.png"
+//                        }
+//                    ]
+//                }
+//            }
         }
     }
 }

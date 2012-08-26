@@ -33,52 +33,45 @@ Widget {
         time.text = Qt.formatTime(dateTime)
         date.text = Qt.formatDate(dateTime, Qt.DefaultLocaleLongDate)
     }
-    width: 460
+    width: 330
     height: 200
 
-     AlignedTimer {
-         id: timer
-         minimumInterval: 1
-         maximumInterval: 1
-         singleShot: false
-         onTimeout: clock.changeTime()
-         Component.onCompleted: start()
-     }
-
-    Rectangle {
-        id: background
-        anchors.fill: parent
-        radius: 10
-        border.color: Colors.aluminiumGray5
-        border.width: 3
-        opacity: 0.9
-        gradient: Gradient {
-            GradientStop {position: 0; color: Colors.aluminiumGray6}
-            GradientStop {position: 1; color: Colors.black}
-        }
+    AlignedTimer {
+//    Timer {
+        id: timer
+        minimumInterval: 1
+        maximumInterval: 1
+//        interval: 16
+        singleShot: false
+        onTimeout: clock.changeTime()
+//        onTriggered: clock.changeTime()
+        Component.onCompleted: start()
     }
 
+
     Item {
-        width: background.width
-        height: time.height + 7 + date.height
-        anchors.centerIn: background
+        width: clock.width
+        height: time.height + 4 + date.height
+        anchors.top: parent.top; anchors.topMargin: 15
 
         Text {
             id: time
-            anchors.horizontalCenter: parent.horizontalCenter; anchors.top: parent.top
-            font.pixelSize: 85
+            anchors.right: parent.right; anchors.rightMargin: 10
+            anchors.top: parent.top
+            font.pixelSize: 90
             color: Colors.white
             style: Text.Outline
-            styleColor: Colors.black
+            styleColor: Colors.aluminiumGray4
         }
 
         Text {
             id: date
-            anchors.horizontalCenter: parent.horizontalCenter; anchors.bottom: parent.bottom
-            font.pixelSize: 30
+            anchors.right: parent.right; anchors.rightMargin: 10
+            anchors.bottom: parent.bottom
+            font.pixelSize: 18
             color: Colors.white
             style: Text.Outline
-            styleColor: Colors.black
+            styleColor: Colors.aluminiumGray4
         }
     }
 

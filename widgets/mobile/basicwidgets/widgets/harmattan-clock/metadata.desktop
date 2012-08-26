@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=N9 clock
+Name[en_GB]=N9 clock
+Name[fr]=Horloge N9
+Comment=The simple clock that is on the N9 lockscreen
+Comment[en_GB]=The simple clock that is on the N9 lockscreen
+Comment[fr]=L'horloge simple de l'écran de verouillage du N9
+Icon=
+Type=Service
+X-Widgets-ServiceType=widget
+X-Widgets-ComponentInfo-File=HarmattanClock.qml
