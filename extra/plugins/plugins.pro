@@ -1,4 +1,7 @@
 include(../../globals.pri)
 
 TEMPLATE = subdirs
-contains(CONFIG, lockscreen):SUBDIRS += lockscreen
+
+contains(MEEGO_EDITION, harmattan):{
+    contains(CONFIG, lockscreen):SUBDIRS += lockscreen
+}

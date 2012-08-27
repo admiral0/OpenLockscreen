@@ -29,10 +29,6 @@
 #include <MDeclarativeCache>
 #endif
 
-#ifdef QML_PLUGIN_PATH
-#include <QtDeclarative/QDeclarativeEngine>
-#endif
-
 #include "remotesettingsmanager.h"
 #include "webandmailhandler.h"
 #include "imagesupport.h"

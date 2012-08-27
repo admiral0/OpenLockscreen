@@ -93,6 +93,11 @@ contains(CONFIG, mobile)|contains(CONFIG, desktop) {
     CONFIG += pluginproviderpackagemanager
 }
 
+contains(CONFIG, examples) {
+    CONFIG += plugincolors pluginbackground plugindocks plugininfo plugindrag
+    CONFIG += pluginproviderbasic
+}
+
 contains(CONFIG, tests) {
     CONFIG += plugincolors pluginbackground plugindocks plugininfo plugindrag extra
     CONFIG += pluginproviderbasic pluginproviderpackagemanager

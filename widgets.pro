@@ -6,8 +6,9 @@ SUBDIRS +=      src widgets app
 
 contains(CONFIG, tests):SUBDIRS += tests
 contains(CONFIG, extra):SUBDIRS += extra
+contains(CONFIG, examples): SUBDIRS += examples
 
-contains(CONFIG, mobile):{
+contains(MEEGO_EDITION, harmattan):{
     OTHER_FILES +=  qtc_packaging/debian_harmattan/rules \
                     qtc_packaging/debian_harmattan/README \
                     qtc_packaging/debian_harmattan/manifest.aegis \

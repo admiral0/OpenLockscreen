@@ -152,6 +152,25 @@
  * - \b X-Widgets-ServiceType that should be set either to widget or to dock.
  * - \b X-Widgets-WidgetInfo-File that is used to provide the QML file for a widget.
  * - \b X-Widgets-DockInfo-File that is used to provide the QML file for a dock.
+ *
+ * @section pluginProviderPackageManagerSupportApp Support application
+ *
+ * This provider comes with a supportive command line program, that is used to manage
+ * heavy tasks like refreshing, rebuilding or clearing the package cache. It is installed
+ * in the application folder (often /usr/bin or /opt/widgets/bin).
+ *
+ * When writing packages, it can be a good idea to call this program to update the cache
+ * when the package is installed, for example in an postinst script.
+ *
+ * \verbatim
+./widgets-packagemanagerhelper
+Widgets package manager helper, version 1.0.0
+
+Usage:
+    --clear       clear package manager cache
+    --update      update package manager cache
+    --rebuild     rebuild package manager cache (clear and update)
+\endverbatim
  */
 
 namespace Widgets

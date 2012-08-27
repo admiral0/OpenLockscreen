@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (C) 2011 Lucien XU <sfietkonstantin@free.fr>                               *
+ * Copyright (C) 2012 Lucien XU <sfietkonstantin@free.fr>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,37 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-/**
- * @file widgets_provider_basic_mixed_plugin.cpp
- * @short Implementation of Widgets::Provider::Basic::MixedProviderPlugin
- */
+#include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeView>
+#include <QtDeclarative/QDeclarativeEngine>
 
-#include "widgets_provider_basic_mixed_plugin.h"
-
-#include <QtDeclarative/QtDeclarative>
-
-#include "basicmixedprovider.h"
-
-namespace Widgets
+int main(int argc, char **argv)
 {
+    QApplication app (argc, argv);
 
-namespace Provider
-{
+    QDeclarativeView view;
+#ifdef IMPORT_DIR
+    view.engine()->addImportPath(IMPORT_DIR);
+#endif
 
-namespace Basic
-{
+    view.setSource(QUrl(MAIN_QML_PATH));
+    view.show();
 
-void MixedProviderPlugin::registerTypes(const char *uri)
-{
-    // @uri org.SfietKonstantin.widgets.provider.mixed.widget
-    qmlRegisterType<Widgets::Provider::Basic::BasicMixedProvider>(uri, 1, 0, "BasicMixedProvider");
+    return app.exec();
 }
-
-}
-
-}
-
-}
-
-Q_EXPORT_PLUGIN2(Widgets, Widgets::Provider::Basic::MixedProviderPlugin)
-

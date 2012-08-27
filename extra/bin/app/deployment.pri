@@ -1,4 +1,4 @@
-include(../../globals.pri)
+include(../../../globals.pri)
 
 contains(MEEGO_EDITION,harmattan): {
     # Path for the desktop file
@@ -31,5 +31,5 @@ target.path = $${APPLICATION_FOLDER}
 export(target.path)
 
 # Installs
-INSTALLS += target qmlFiles dataFiles
+INSTALLS += target qmlFiles dataFiles desktopfile icon
 contains(MEEGO_EDITION,harmattan):INSTALLS += desktopfile icon

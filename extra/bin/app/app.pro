@@ -1,7 +1,7 @@
-include(../../globals.pri)
+include(../../../globals.pri)
 
 TEMPLATE =          app
-TARGET =            widgets
+TARGET =            $${NAME}
 
 QT =                core gui declarative xml dbus
 CONFIG +=           qdeclarative-boostable
