@@ -2,7 +2,7 @@ include(globals.pri)
 
 TEMPLATE =      subdirs
 
-SUBDIRS +=      src widgets app
+SUBDIRS +=      src widgets
 
 contains(CONFIG, tests):SUBDIRS += tests
 contains(CONFIG, extra):SUBDIRS += extra
