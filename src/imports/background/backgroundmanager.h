@@ -35,7 +35,7 @@ namespace Background
 class BackgroundManagerPrivate;
 
 /**
- * @brief Background manager
+ * @brief %Background manager
  *
  * This class is used to manage background related
  * settings, inclding background sources, background
