@@ -61,9 +61,11 @@ class WidgetsPageListModelPrivate;
  * are used
  * - addWidget()
  * - removeWidget()
+ * - clearWidgets()
  * The first add a widget to a given page, by providing
  * the necessary properties. The second remove a widget
- * on a given page.
+ * on a given page and the third remove all widgets of
+ * a given page.
  *
  * Managing the state of the widgets in a global way
  * can also be done with
@@ -173,6 +175,11 @@ public:
      * @return if the operation is successful.
      */
     Q_INVOKABLE bool removeWidget(int pageIndex, Widgets::WidgetProperties *widget);
+    /**
+     * @short Clear widgets
+     * @param pageIndex page index.
+     */
+    Q_INVOKABLE void clearWidgets(int pageIndex);
     /**
      * @brief Set the provider manager
      *

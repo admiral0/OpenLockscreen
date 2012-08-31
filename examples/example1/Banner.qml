@@ -15,44 +15,27 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.SfietKonstantin.widgets 1.0
 
-Widget {
+Rectangle {
     id: container
-    width: 100
-    height: 100
+    property alias text: text.text
+    width: 200
+    height: 200
+    anchors.centerIn: parent
+    visible: false
 
-    Rectangle {
-        id: rectangle
+    Text {
+        id: text
         anchors.fill: parent
-        color: "red"
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: 20
+        wrapMode: Text.WordWrap
+        text: qsTr("No place left")
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                if (rectangle.state == "") {
-                    rectangle.state = "green"
-                } else {
-                    rectangle.state = ""
-                }
-            }
-        }
-
-        states: State {
-            name: "green"
-            PropertyChanges {
-                target: rectangle
-                color: "green"
-            }
-        }
-        transitions: [
-            Transition {
-                from: ""
-                to: "green"
-                reversible: true
-
-                ColorAnimation {duration: 400}
-            }
-        ]
+    MouseArea {
+        anchors.fill: parent
+        onClicked: container.visible = false
     }
 }

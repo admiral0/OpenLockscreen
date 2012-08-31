@@ -274,6 +274,16 @@ bool WidgetsPageListModel::removeWidget(int pageIndex, WidgetProperties *widget)
     return d->items[pageIndex]->removeWidget(widget);
 }
 
+void WidgetsPageListModel::clearWidgets(int pageIndex)
+{
+    Q_D(WidgetsPageListModel);
+    if (pageIndex < 0 || pageIndex >= rowCount()) {
+        return;
+    }
+
+    d->items[pageIndex]->clearWidgets();
+}
+
 void WidgetsPageListModel::setProviderManager(ProviderManager *providerManager)
 {
     Q_D(WidgetsPageListModel);

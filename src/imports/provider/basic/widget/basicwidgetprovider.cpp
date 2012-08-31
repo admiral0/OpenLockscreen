@@ -141,7 +141,7 @@ QString BasicWidgetProvider::widgetFile(const QString &fileName, const QVariantM
 
 
 QString BasicWidgetProvider::widgetSettingsFile(const QString &fileName,
-                                          const QVariantMap &disambiguation) const
+                                                const QVariantMap &disambiguation) const
 {
     Q_UNUSED(disambiguation);
     Q_D(const BasicWidgetProvider);

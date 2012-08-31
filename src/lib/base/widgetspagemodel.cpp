@@ -450,6 +450,15 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
     return true;
 }
 
+void WidgetsPageModel::clearWidgets()
+{
+    Q_D(WidgetsPageModel);
+    d->clear();
+    emit countChanged();
+
+    d->requestSave();
+}
+
 //void WidgetsPageModel::relayout(GridManager *gridManager)
 //{
 //    Q_UNUSED(gridManager)

@@ -22,6 +22,7 @@ import "UiConstants.js" as Ui
 
 Sheet {
     id: sheet
+    signal failed()
     rejectButtonText: qsTr("Cancel")
     onStatusChanged: {
         if (sheet.status == DialogStatus.Closed) {
@@ -33,8 +34,11 @@ Sheet {
     onRejected: pageStack.pop(null)
     function addWidget(file, disambiguation) {
         var widget = ProviderManagerInstance.provider.widget(file, disambiguation)
-        WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                               widget, widgetsView.gridManagerInstance)
+        if (!WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
+                                                    widget, widgetsView.gridManagerInstance)) {
+            sheet.failed()
+        }
+
         pageStack.pop(null)
         sheet.accept()
     }
@@ -49,8 +53,12 @@ Sheet {
         disambiguation.identifier = "org.SfietKonstantin.corewidgets"
 
         var widget = ProviderManagerInstance.provider.widget("Icon.qml", disambiguation)
-        WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                               widget, widgetsView.gridManagerInstance, settings)
+        if (WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
+                                                   widget, widgetsView.gridManagerInstance,
+                                                   settings)) {
+            sheet.failed()
+        }
+
         pageStack.pop(null)
         sheet.accept()
     }

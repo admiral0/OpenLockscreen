@@ -40,7 +40,7 @@
  *
  * \section gettingStarted Getting started
  * - \subpage writeWidgetsAndDocks
- * - \subpage tutorials
+ * - \subpage examples
  * - \subpage pluginList
  *
  * \section Internals
@@ -56,20 +56,10 @@
  * - \ref pluginDocksWriteDock
  */
 /**
- * \page tutorials Tutorials
+ * \page examples Examples
  *
- * - \subpage tutorial1
+ * - \subpage example1
  *
- */
-/**
- * \page tutorial1 Tutorial 1: create your first widgets view.
- *
- * Creating a widgets view can be done with only a few steps, but some
- * of them are tricky. This tutorial is here to show the different points
- * to pay attention when creating a widgets view.
- *
- * A widgets view is composed of a display, and a model.
- * @todo continue this.
  */
 /** \page pluginList List of all plugins
  *

@@ -19,7 +19,7 @@ import org.SfietKonstantin.widgets 1.0
 
 WidgetsView {
     id: container
-    property Item view: view
+    property ListView view: view
     signal initialized()
     function resetPosition() {
         view.positionViewAtIndex(WidgetsPageListModelInstance.initialPage, ListView.visible)

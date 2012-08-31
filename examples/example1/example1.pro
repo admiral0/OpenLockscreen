@@ -8,10 +8,13 @@ installPrefix = $${SHAREDIR}/examples/example1
 
 CONFIG(noqtimport):DEFINES += 'IMPORT_DIR=\'\"$${IMPORTDIR}\"\''
 DEFINES += 'MAIN_QML_PATH=\'\"$${installPrefix}/main.qml\"\''
+DEFINES += 'WIDGETS_PROVIDER_FILE=\'\"$${SYSTEM_WIDGETS_FOLDER}/widgets/\"\''
 
 SOURCES +=      main.cpp
 
-OTHER_FILES +=  main.qml
+OTHER_FILES +=  main.qml \
+                Banner.qml \
+    Button.qml
 
 # Deployment
 target.path = $${installPrefix}

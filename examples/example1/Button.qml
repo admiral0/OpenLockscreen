@@ -15,44 +15,24 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
-import org.SfietKonstantin.widgets 1.0
 
-Widget {
+Rectangle {
     id: container
-    width: 100
-    height: 100
+    property alias text: text.text
+    signal clicked()
+    width: 160
+    height: 40
 
-    Rectangle {
-        id: rectangle
+    Text {
+        id: text
+        anchors.centerIn: parent
+        font.pixelSize: 20
+    }
+
+    MouseArea {
         anchors.fill: parent
-        color: "red"
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                if (rectangle.state == "") {
-                    rectangle.state = "green"
-                } else {
-                    rectangle.state = ""
-                }
-            }
-        }
-
-        states: State {
-            name: "green"
-            PropertyChanges {
-                target: rectangle
-                color: "green"
-            }
-        }
-        transitions: [
-            Transition {
-                from: ""
-                to: "green"
-                reversible: true
-
-                ColorAnimation {duration: 400}
-            }
-        ]
+        onClicked: container.clicked()
+        onPressed: container.color = "grey"
+        onReleased: container.color = "white"
     }
 }

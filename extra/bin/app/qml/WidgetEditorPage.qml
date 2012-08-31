@@ -16,6 +16,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.1
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.background 1.0
 import org.SfietKonstantin.widgets.docks 1.0
@@ -67,6 +68,7 @@ Page {
 
     WidgetEditorSelectorSheet {
         id: addWidgetSheet
+        onFailed: noPlaceBanner.show()
     }
 
 
@@ -163,5 +165,10 @@ Page {
             enabled: ProviderManagerInstance.providerStatus == ProviderManager.ProviderAvailable
         }
 
+    }
+
+    InfoBanner {
+        id: noPlaceBanner
+        text: qsTr("No place left on this page")
     }
 }

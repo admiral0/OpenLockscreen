@@ -48,12 +48,14 @@ class WidgetsPageModelPrivate;
  * Modifying this model can be done using
  * - addWidget()
  * - removeWidget()
+ * - clearWidgets()
  *
  * The first build a Widgets::WidgetProperties based
  * on a Widgets::WidgetBaseProperties and assign
  * given properties to the new parameters.
  * The second removes a widget based on a
- * Widgets::WidgetProperties.
+ * Widgets::WidgetProperties and the third
+ * remove all widgets.
  *
  * Managing the state of the widgets in a global way
  * can also be done with
@@ -189,6 +191,10 @@ public:
      * @return if the operation is successful.
      */
     bool removeWidget(Widgets::WidgetProperties *widget);
+    /**
+     * @brief Clear widgets
+     */
+    void clearWidgets();
 public Q_SLOTS:
 
 //    void relayout(Widgets::GridManager *gridManager);
