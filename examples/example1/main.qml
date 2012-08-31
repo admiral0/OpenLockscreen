@@ -15,6 +15,7 @@
  ****************************************************************************************/
 
 import QtQuick 1.1
+import "../base/" 1.0
 import org.SfietKonstantin.widgets 1.0
 import org.SfietKonstantin.widgets.provider.basic.widget 1.0
 

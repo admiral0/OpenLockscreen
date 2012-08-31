@@ -13,8 +13,6 @@ DEFINES += 'WIDGETS_PROVIDER_FILE=\'\"$${SYSTEM_WIDGETS_FOLDER}/widgets/\"\''
 SOURCES +=      main.cpp
 
 OTHER_FILES +=  main.qml \
-                Banner.qml \
-    Button.qml
 
 # Deployment
 target.path = $${installPrefix}
