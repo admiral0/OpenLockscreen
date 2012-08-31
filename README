@@ -83,13 +83,12 @@ For additional widgets library
 
 Experimental features
 - CONFIG+=lockscreen enable the lock screen widgets
-- CONFIG+=mobileextra enable mobile extra components.
 
 
 Note that if both mobile and desktop switches are set at the same
 time, nothing is built.
 
-Note that if mobile, desktop or testsswitch are set, all additional plugins
+Note that if mobile, desktop or tests switch are set, all additional plugins
 are also built.
 
 3. Documentation
