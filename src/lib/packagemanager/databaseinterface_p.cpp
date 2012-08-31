@@ -469,7 +469,7 @@ void DatabaseInterfacePrivate::addComponentInformationProperties(const QStringLi
             W_ASSERT(query.next());
             int count = query.value(0).toInt();
             query.finish();
-            W_ASSERT(count == 0 || count == 1);
+            Q_ASSERT(count == 0 || count == 1);
             if (count == 0) {
                 trueNames.append(name);
             }
