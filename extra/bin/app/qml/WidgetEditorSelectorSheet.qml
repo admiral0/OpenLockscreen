@@ -53,9 +53,9 @@ Sheet {
         disambiguation.identifier = "org.SfietKonstantin.corewidgets"
 
         var widget = ProviderManagerInstance.provider.widget("Icon.qml", disambiguation)
-        if (WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
-                                                   widget, widgetsView.gridManagerInstance,
-                                                   settings)) {
+        if (!WidgetsPageListModelInstance.addWidget(WidgetsPageListModelInstance.currentPage,
+                                                    widget, widgetsView.gridManagerInstance,
+                                                    settings)) {
             sheet.failed()
         }
 
