@@ -1,3 +1,8 @@
+widgets (1.0.50) stable; urgency=low
+  * Instable branch opened
+
+ -- Lucien XU <sfietkonstantin@free.fr>  Tue, 04 Sep 2012 18:09:57 +0200
+
 widgets (1.0.0) stable; urgency=low
   * First full featured release.
 

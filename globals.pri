@@ -4,7 +4,7 @@ NAME = widgets
 # version
 VERSION_MAJOR = 1
 VERSION_MINOR = 0
-VERSION_PATCH = 0
+VERSION_PATCH = 50
 
 # 64 bits if needed
 contains(QMAKE_HOST.arch, x86_64):{
