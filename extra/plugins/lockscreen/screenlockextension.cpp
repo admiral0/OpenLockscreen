@@ -16,7 +16,6 @@
 
 #include "screenlockextension.h"
 #include "lockscreen.h"
-#include <QtCore/QFile>
 #include <QtGui/QGraphicsLinearLayout>
 #include "notification/notificationmanager.h"
 #include "notification/notificationparameter.h"
