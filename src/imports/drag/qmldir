@@ -1,2 +1,2 @@
-plugin widgetsdrag
+plugin dragplugin
 DragOverlay 1.0 DragOverlay.qml

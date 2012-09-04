@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsdrag
+TARGET =        dragplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../lib/base/

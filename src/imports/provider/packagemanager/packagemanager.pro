@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsproviderpkgm
+TARGET =        providerpkgmplugin
 QT +=           core gui sql declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../../lib/base/

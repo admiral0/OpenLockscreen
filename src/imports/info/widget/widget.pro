@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsinfowidget
+TARGET =        infowidgetplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../../lib/base/

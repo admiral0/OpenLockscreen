@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetscolors
+TARGET =        colorsplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 

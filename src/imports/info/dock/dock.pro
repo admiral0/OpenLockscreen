@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsinfodock
+TARGET =        infodockplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../../lib/base/

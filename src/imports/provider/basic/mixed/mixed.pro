@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsproviderbasicmixed
+TARGET =        providerbasicmixedplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 

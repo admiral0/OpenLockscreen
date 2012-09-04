@@ -1,4 +1,4 @@
-plugin widgetsbase
+plugin baseplugin
 Widget 1.0 Widget.qml
 SettingsItem 1.0 SettingsItem.qml
 WidgetContainer 1.0 WidgetContainer.qml

@@ -1,2 +1,2 @@
-plugin widgetsbackground
+plugin backgroundplugin
 HorizontalParallaxBackground 1.0 HorizontalParallaxBackground.qml

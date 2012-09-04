@@ -85,8 +85,8 @@ your phone easy to use.")
             anchors.top: separator1.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
-            text: "Oxygen icons <br/>(Plasma and System settings)<br/>(C) The Oxygen team : \
-<a href='http://www.oxygen-icons.org'>http://www.oxygen-icons.org/</a>"
+//            text: "Oxygen icons <br/>(Plasma and System settings)<br/>(C) The Oxygen team : \
+//<a href='http://www.oxygen-icons.org'>http://www.oxygen-icons.org/</a>"
         }
 
         HorizontalSeparator {

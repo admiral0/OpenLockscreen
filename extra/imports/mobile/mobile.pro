@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        mobilelauncher
+TARGET =        mobilelauncherplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 
