@@ -1,4 +1,4 @@
-plugin widgetsdocks
+plugin docksplugin
 Dock 1.0 Dock.qml
 DockedView 1.0 DockedView.qml
 EmptyDockedView 1.0 EmptyDockedView.qml

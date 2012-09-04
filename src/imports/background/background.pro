@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsbackground
+TARGET =        backgroundplugin
 QT +=           declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../lib/base/

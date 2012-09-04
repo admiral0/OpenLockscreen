@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsdocks
+TARGET =        docksplugin
 QT =            core gui xml declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../lib/base/

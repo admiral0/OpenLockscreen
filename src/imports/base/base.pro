@@ -1,6 +1,6 @@
 TEMPLATE =      lib
 
-TARGET =        widgetsbase
+TARGET =        baseplugin
 QT =            core gui xml declarative
 CONFIG +=       qt plugin
 INCLUDEPATH +=  ../../lib/base/
