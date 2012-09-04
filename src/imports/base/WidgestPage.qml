@@ -25,6 +25,7 @@ Item {
         delegate: WidgetContainer {
             x: model.widget.x
             y: model.widget.y
+            z: model.widget.z
             width: model.widget.width
             height: model.widget.height
             scale: 0

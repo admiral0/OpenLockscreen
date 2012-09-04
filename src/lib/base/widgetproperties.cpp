@@ -375,7 +375,7 @@ void WidgetProperties::setZ(int z)
     W_D(WidgetProperties);
     if (d->z != z) {
         d->z = z;
-        emit xChanged();
+        emit zChanged();
     }
 }
 

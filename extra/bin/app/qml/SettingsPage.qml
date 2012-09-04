@@ -61,12 +61,12 @@ AbstractNavigationPage {
         id: widgetEditorPage
     }
 
-    BackgroundEditorPage {
-        id: backgroundEditorPage
-        onBackgroundChanged: {
-            widgetEditorPage.updateBackground()
-            previewPage.updateBackground()
-            remoteSettingsManager.reloadSettings("background")
-        }
-    }
+//    BackgroundEditorPage {
+//        id: backgroundEditorPage
+//        onBackgroundChanged: {
+//            widgetEditorPage.updateBackground()
+//            previewPage.updateBackground()
+//            remoteSettingsManager.reloadSettings("background")
+//        }
+//    }
 }

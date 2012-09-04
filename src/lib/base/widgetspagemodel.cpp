@@ -46,6 +46,13 @@ namespace Widgets
  */
 static const char *WIDGET_ELEMENT = "widget";
 
+
+bool widgetsByZLessThan(WidgetProperties *widget1, WidgetProperties *widget2)
+{
+    return (widget1->z() < widget2->z());
+}
+
+
 /**
  * @internal
  * @short Private class for Widgets::WidgetsPageModelPrivate
@@ -102,6 +109,7 @@ public:
      * @return
      */
     QRect availableRect(Widgets::GridManager *gridManager, int width, int height) const;
+    void requestSaveWithUpdatedZ();
     /**
      * @internal
      * @short Page index
@@ -112,9 +120,6 @@ public:
      * @short Data
      */
     QList<WidgetProperties *> data;
-//    QList<WidgetProperties *> widgetsByZ;
-//    QMap<QString, WidgetProperties *> widgetsByIdentifier;
-//    QStringList identifiers;
     /**
      * @internal
      * @short Provider
@@ -259,6 +264,36 @@ QRect WidgetsPageModelPrivate::availableRect(GridManager *gridManager, int width
     } else {
         return QRect();
     }
+}
+
+void WidgetsPageModelPrivate::requestSaveWithUpdatedZ()
+{
+    Q_Q(WidgetsPageModel);
+
+    if (data.isEmpty()) {
+        return;
+    }
+
+    // Detect the sender if there is one
+    // If the sender is a widget, then it
+    // should be set to the top z
+    // If not, then the last widget is set
+    // to the top z
+    WidgetProperties *widget = qobject_cast<WidgetProperties *>(q->sender());
+
+    if (!widget) {
+        widget = data.last();
+    }
+
+    widget->setZ(data.size());
+    QList<WidgetProperties *> sortedData = data;
+    qStableSort(sortedData.begin(), sortedData.end(), widgetsByZLessThan);
+
+    for (int i = 0; i < sortedData.count(); i++) {
+        sortedData[i]->setZ(i);
+    }
+
+    requestSave();
 }
 
 ////// End of private class //////
@@ -416,10 +451,10 @@ bool WidgetsPageModel::addWidget(WidgetProperties *widget)
     emit countChanged();
     endInsertRows();
 
-    d->requestSave();
+    d->requestSaveWithUpdatedZ();
 
-    connect(widget, SIGNAL(xChanged()), this, SLOT(requestSave()));
-    connect(widget, SIGNAL(yChanged()), this, SLOT(requestSave()));
+    connect(widget, SIGNAL(xChanged()), this, SLOT(requestSaveWithUpdatedZ()));
+    connect(widget, SIGNAL(yChanged()), this, SLOT(requestSaveWithUpdatedZ()));
     connect(widget, SIGNAL(widthChanged()), this, SLOT(requestSave()));
     connect(widget, SIGNAL(heightChanged()), this, SLOT(requestSave()));
     connect(widget, SIGNAL(settingsChanged()), this, SLOT(requestSave()));
@@ -441,12 +476,10 @@ bool WidgetsPageModel::removeWidget(WidgetProperties *widget)
 
     d->data.takeAt(widgetIndex)->deleteLater();
 
-//    emit dataChanged(this->index(0), this->index(rowCount() - 1));
-
     emit countChanged();
     endRemoveRows();
 
-    d->requestSave();
+    d->requestSaveWithUpdatedZ();
 
     return true;
 }

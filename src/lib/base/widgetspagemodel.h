@@ -238,6 +238,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(WidgetsPageModel)
     Q_PRIVATE_SLOT(d_func(), void requestSave())
+    Q_PRIVATE_SLOT(d_func(), void requestSaveWithUpdatedZ())
 };
 
 }
