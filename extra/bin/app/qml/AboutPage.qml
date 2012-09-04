@@ -35,27 +35,28 @@ AbstractPage {
         clip: true
         anchors.fill: parent
         contentWidth: container.width
-        contentHeight: Ui.MARGIN_XLARGE + icon.height + Ui.MARGIN_LARGE + aboutText.height +
+        contentHeight: /*Ui.MARGIN_XLARGE + icon.height */+ Ui.MARGIN_LARGE + aboutText.height +
                        Ui.MARGIN_DEFAULT + copyrightText.height + Ui.MARGIN_DEFAULT +
-                       separator1.height + Ui.MARGIN_DEFAULT + oxygenText.height +
+                       /*separator1.height + Ui.MARGIN_DEFAULT + oxygenText.height +*/
                        Ui.MARGIN_DEFAULT + separator2.height + Ui.MARGIN_DEFAULT +
                        artworkText.height + Ui.MARGIN_DEFAULT + separator3.height +
                        Ui.MARGIN_DEFAULT + tangoText.height + Ui.MARGIN_LARGE
 
 
-        Image {
-            id: icon
-            width: 80; height: 80
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_XLARGE
+//        Image {
+//            id: icon
+//            width: 80; height: 80
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_XLARGE
 //            source: "/usr/share/icons/hicolor/80x80/apps/widgets.png"
-        }
+//        }
 
         Label {
             id: aboutText
             anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
             anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            anchors.top: icon.bottom; anchors.topMargin: Ui.MARGIN_LARGE
+//            anchors.top: icon.bottom; anchors.topMargin: Ui.MARGIN_LARGE
+            anchors.top: parent.top; anchors.topMargin: Ui.MARGIN_XLARGE
             wrapMode: Text.WordWrap
             text: qsTr("Widgets tries to bring you a better experience \
 for your Harmattan device. Developed to be extensible and reusable, it \
@@ -73,25 +74,25 @@ your phone easy to use.")
         }
 
 
-        HorizontalSeparator {
-            id: separator1
-            anchors.top: copyrightText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-        }
+//        HorizontalSeparator {
+//            id: separator1
+//            anchors.top: copyrightText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+//        }
 
-        Label {
-            id: oxygenText
-            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
-            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
-            anchors.top: separator1.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
-            wrapMode: Text.WordWrap
-            textFormat: Text.RichText
+//        Label {
+//            id: oxygenText
+//            anchors.left: parent.left; anchors.leftMargin: Ui.MARGIN_DEFAULT
+//            anchors.right: parent.right; anchors.rightMargin: Ui.MARGIN_DEFAULT
+//            anchors.top: separator1.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+//            wrapMode: Text.WordWrap
+//            textFormat: Text.RichText
 //            text: "Oxygen icons <br/>(Plasma and System settings)<br/>(C) The Oxygen team : \
 //<a href='http://www.oxygen-icons.org'>http://www.oxygen-icons.org/</a>"
-        }
+//        }
 
         HorizontalSeparator {
             id: separator2
-            anchors.top: oxygenText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
+            anchors.top: copyrightText.bottom; anchors.topMargin: Ui.MARGIN_DEFAULT
         }
 
         Label {
