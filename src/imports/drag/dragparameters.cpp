@@ -44,6 +44,11 @@ public:
      * @brief Edit button source
      */
     QString editButtonSource;
+    /**
+     * @internal
+     * @brief Resize button source
+     */
+    QString resizeButtonSource;
 };
 
 ////// End of private class //////
@@ -69,6 +74,12 @@ QString DragParameters::editButtonSource() const
     return d->editButtonSource;
 }
 
+QString DragParameters::resizeButtonSource() const
+{
+    Q_D(const DragParameters);
+    return d->resizeButtonSource;
+}
+
 void DragParameters::setRemoveButtonSource(const QString &removeButtonSource)
 {
     Q_D(DragParameters);
@@ -84,6 +95,15 @@ void DragParameters::setEditButtonSource(const QString &editButtonSource)
     if (d->editButtonSource != editButtonSource) {
         d->editButtonSource = editButtonSource;
         emit editButtonSourceChanged();
+    }
+}
+
+void DragParameters::setResizeButtonSource(const QString &resizeButtonSource)
+{
+    Q_D(DragParameters);
+    if (d->removeButtonSource != resizeButtonSource) {
+        d->resizeButtonSource = resizeButtonSource;
+        emit resizeButtonSourceChanged();
     }
 }
 

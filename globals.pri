@@ -6,10 +6,6 @@ VERSION_MAJOR = 1
 VERSION_MINOR = 0
 VERSION_PATCH = 50
 
-# 64 bits if needed
-contains(QMAKE_HOST.arch, x86_64):{
-    !contains(MEEGO_EDITION,harmattan):64_BITS = 64
-}
 
 isEmpty(DEPLOYMENT_PREFIX)
 {
@@ -28,7 +24,7 @@ isEmpty(BINDIR) {
     BINDIR = $${PREFIX}/bin
 }
 isEmpty(LIBDIR) {
-    LIBDIR = $${PREFIX}/lib$${64_BITS}
+    LIBDIR = $${PREFIX}/lib
 }
 isEmpty(IMPORTDIR) {
     CONFIG(noqtimport):{

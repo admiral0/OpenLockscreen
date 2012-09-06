@@ -458,7 +458,6 @@ bool WidgetsPageModel::addWidget(WidgetProperties *widget)
     connect(widget, SIGNAL(widthChanged()), this, SLOT(requestSave()));
     connect(widget, SIGNAL(heightChanged()), this, SLOT(requestSave()));
     connect(widget, SIGNAL(settingsChanged()), this, SLOT(requestSave()));
-    connect(widget, SIGNAL(visibleChanged()), this, SLOT(requestSaveWithUpdatedZ()));
     return true;
 }
 

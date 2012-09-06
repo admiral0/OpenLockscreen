@@ -45,6 +45,7 @@ class DragParametersPrivate;
  * These properties are
  * - removeButtonSource()
  * - editButtonSource()
+ * - resizeButtonSource()
  */
 class DragParameters : public QObject
 {
@@ -59,6 +60,11 @@ class DragParameters : public QObject
      */
     Q_PROPERTY(QString editButtonSource READ editButtonSource WRITE setEditButtonSource
                NOTIFY editButtonSourceChanged)
+    /**
+     * @short Resize button source
+     */
+    Q_PROPERTY(QString resizeButtonSource READ resizeButtonSource WRITE setResizeButtonSource
+               NOTIFY resizeButtonSourceChanged)
 public:
     /**
      * @brief Default constructor
@@ -79,6 +85,11 @@ public:
      * @return edit button source.
      */
     QString editButtonSource() const;
+    /**
+     * @brief Resize button source
+     * @return resize button source.
+     */
+    QString resizeButtonSource() const;
 Q_SIGNALS:
     /**
      * @brief Remove button source changed
@@ -88,6 +99,10 @@ Q_SIGNALS:
      * @brief Edit button source changed
      */
     void editButtonSourceChanged();
+    /**
+     * @brief Resize button source changed
+     */
+    void resizeButtonSourceChanged();
 public slots:
     /**
      * @brief Set the remove button source
@@ -99,6 +114,11 @@ public slots:
      * @param editButtonSource edit button source.
      */
     void setEditButtonSource(const QString &editButtonSource);
+    /**
+     * @brief Set the resize button source
+     * @param resizeButtonSource resize button source.
+     */
+    void setResizeButtonSource(const QString &resizeButtonSource);
 protected:
     /**
      * @brief D-pointer
